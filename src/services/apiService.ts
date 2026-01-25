@@ -1,7 +1,8 @@
 import { DataService } from './interfaces'
 import axios from 'axios'
 
-const apiBase = '/api'
+// API base path can be overridden via environment variable VITE_API_BASE
+const apiBase = (import.meta as any).env?.VITE_API_BASE || '/api'
 
 export const ApiDataService: DataService = {
   subjectAreas: {
