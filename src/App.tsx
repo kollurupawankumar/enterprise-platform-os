@@ -13,6 +13,11 @@ import { AuthProvider } from './auth/AuthContext'
 import ProtectedRoute from './auth/ProtectedRoute'
 import Login from './pages/Login'
 import { DataMode } from './types'
+import SourceEditor from './pages/SourceEditor'
+import TransformationEditor from './pages/TransformationEditor'
+import EnrichmentEditor from './pages/EnrichmentEditor'
+import Versions from './pages/Versions'
+import Activation from './pages/Activation'
 
 const App: React.FC = () => {
   // Dynamically determine mode from env; default to mock
@@ -27,14 +32,17 @@ const App: React.FC = () => {
             <div className="content-area">
               <Routes>
                 <Route path="/login" element={<Login />} />
-                <Route
-                  path="/*"
-                  element={
-                    <ProtectedRoute>
-                      <Dashboard />
-                    </ProtectedRoute>
-                  }
-                />
+                <Route path="/subject-areas" element={<SubjectAreas />} />
+                <Route path="/subject-areas/:saId/entities" element={<Entities />} />
+                <Route path="/subject-areas/:saId/versions" element={<Versions />} />
+                <Route path="/metadata/source" element={<SourceEditor />} />
+                <Route path="/metadata/transformation" element={<TransformationEditor />} />
+                <Route path="/metadata/enrichment" element={<EnrichmentEditor />} />
+                <Route path="/activation" element={<Activation />} />
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/runs" element={<Runs />} />
+                <Route path="/runs/:runId" element={<RunDetails />} />
+                <Route path="*" element={<Navigate to="/dashboard" />} />
               </Routes>
             </div>
           </div>
