@@ -1,0 +1,41 @@
+:root {
+  --ds-font-family-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --ds-font-family-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --ds-font-size-base: 1rem;
+  --ds-font-size-h1: 2.5rem;
+  --ds-font-size-h2: 2rem;
+  --ds-font-size-h3: 1.75rem;
+  --ds-font-size-h4: 1.5rem;
+  --ds-font-size-h5: 1.25rem;
+  --ds-font-size-h6: 1rem;
+  --ds-line-height-base: 1.5;
+  --ds-font-weight-regular: 400;
+  --ds-font-weight-medium: 500;
+  --ds-font-weight-bold: 700;
+
+  --ds-color-primary: #0d6efd;
+  --ds-color-secondary: #6c757d;
+  --ds-color-success: #198754;
+  --ds-color-danger: #dc3545;
+  --ds-color-warning: #ffc107;
+  --ds-color-info: #0dcaf0;
+  --ds-color-light: #f8f9fa;
+  --ds-color-dark: #212529;
+  --ds-color-text: #212529;
+  --ds-color-bg: #f7f7f7;
+  --ds-color-border: rgba(0,0,0,.12);
+}
+
+body {
+  font-family: var(--ds-font-family-sans);
+  font-size: var(--ds-font-size-base);
+  color: var(--ds-color-text);
+  background-color: var(--ds-color-bg);
+}
+
+h1 { font-size: var(--ds-font-size-h1); font-weight: var(--ds-font-weight-bold); }
+h2 { font-size: var(--ds-font-size-h2); font-weight: var(--ds-font-weight-bold); }
+h3 { font-size: var(--ds-font-size-h3); font-weight: var(--ds-font-weight-bold); }
+h4 { font-size: var(--ds-font-size-h4); font-weight: var(--ds-font-weight-bold); }
+h5 { font-size: var(--ds-font-size-h5); font-weight: var(--ds-font-weight-bold); }
+h6 { font-size: var(--ds-font-size-h6); font-weight: var(--ds-font-weight-bold); }
