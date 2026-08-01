@@ -1,30 +1,15 @@
 package com.society;
 
-import com.society.config.SocietyConfig;
+import com.society.app.Bootstrap;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class App extends Application {
 
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage primaryStage) throws Exception {
 
-        FXMLLoader loader =
-                new FXMLLoader(
-                        getClass().getResource("/fxml/MainLayout.fxml"));
-
-        Scene scene = new Scene(loader.load(), 1200, 700);
-
-        stage.setTitle(
-                SocietyConfig.appName()
-                        + " - "
-                        + SocietyConfig.shortName());
-
-        stage.setScene(scene);
-
-        stage.show();
+        Bootstrap.start(primaryStage);
 
     }
 

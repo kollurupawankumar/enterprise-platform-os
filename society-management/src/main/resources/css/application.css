@@ -1,0 +1,43 @@
+.root {
+
+    -fx-font-family: "Segoe UI";
+
+    -fx-background-color: #F4F6F8;
+
+}
+
+.tool-bar {
+
+    -fx-background-color: #1565C0;
+
+}
+
+.tool-bar .label {
+
+    -fx-text-fill: white;
+
+    -fx-font-size: 18px;
+
+    -fx-font-weight: bold;
+
+}
+
+.button {
+
+    -fx-pref-height: 40px;
+
+    -fx-font-size: 14px;
+
+}
+
+.button:hover {
+
+    -fx-background-color: #E3F2FD;
+
+}
+
+.label {
+
+    -fx-text-fill: #333333;
+
+}
