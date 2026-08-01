@@ -12,7 +12,9 @@ public enum View {
 
     REPORTS("/fxml/report/report.fxml"),
 
-    ADMINISTRATION("/fxml/admin/administration.fxml");
+    ADMINISTRATION("/fxml/admin/administration.fxml"),
+
+    SOCIETY_SETUP("/fxml/society/society-setup.fxml");
 
     private final String fxmlPath;
 

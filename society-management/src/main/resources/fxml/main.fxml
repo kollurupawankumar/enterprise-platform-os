@@ -23,7 +23,9 @@
                 <Insets top="10" right="15" bottom="10" left="15"/>
             </padding>
 
-            <Label text="Society Management System"
+            <Label
+                    fx:id="societyNameLabel"
+                    text=""
                    styleClass="header-title"/>
 
         </HBox>

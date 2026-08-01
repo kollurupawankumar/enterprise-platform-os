@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.society.society.controller.SocietySetupController"
+      spacing="15"
+      styleClass="form-container">
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <Label text="Society Setup"
+           styleClass="form-title"/>
+
+    <GridPane hgap="15" vgap="12">
+
+        <Label text="Society Name"/>
+        <TextField fx:id="societyNameField"
+                   GridPane.columnIndex="1"/>
+
+        <Label text="Short Name"
+               GridPane.rowIndex="1"/>
+        <TextField fx:id="shortNameField"
+                   GridPane.columnIndex="1"
+                   GridPane.rowIndex="1"/>
+
+        <Label text="Registration Number"
+               GridPane.rowIndex="2"/>
+        <TextField fx:id="registrationNumberField"
+                   GridPane.columnIndex="1"
+                   GridPane.rowIndex="2"/>
+
+        <Label text="Address Line 1"
+               GridPane.rowIndex="3"/>
+        <TextField fx:id="addressLine1Field"
+                   GridPane.columnIndex="1"
+                   GridPane.rowIndex="3"/>
+
+        <Label text="Address Line 2"
+               GridPane.rowIndex="4"/>
+        <TextField fx:id="addressLine2Field"
+                   GridPane.columnIndex="1"
+                   GridPane.rowIndex="4"/>
+
+        <Label text="City"
+               GridPane.rowIndex="5"/>
+        <TextField fx:id="cityField"
+                   GridPane.columnIndex="1"
+                   GridPane.rowIndex="5"/>
+
+        <Label text="State"
+               GridPane.rowIndex="6"/>
+        <TextField fx:id="stateField"
+                   GridPane.columnIndex="1"
+                   GridPane.rowIndex="6"/>
+
+        <Label text="PIN Code"
+               GridPane.rowIndex="7"/>
+        <TextField fx:id="pinCodeField"
+                   GridPane.columnIndex="1"
+                   GridPane.rowIndex="7"/>
+
+        <Label text="Phone"
+               GridPane.rowIndex="8"/>
+        <TextField fx:id="phoneField"
+                   GridPane.columnIndex="1"
+                   GridPane.rowIndex="8"/>
+
+        <Label text="Email"
+               GridPane.rowIndex="9"/>
+        <TextField fx:id="emailField"
+                   GridPane.columnIndex="1"
+                   GridPane.rowIndex="9"/>
+
+        <Label text="Website"
+               GridPane.rowIndex="10"/>
+        <TextField fx:id="websiteField"
+                   GridPane.columnIndex="1"
+                   GridPane.rowIndex="10"/>
+
+        <Label text="Financial Year"
+               GridPane.rowIndex="11"/>
+        <ComboBox fx:id="financialYearCombo"
+                  GridPane.columnIndex="1"
+                  GridPane.rowIndex="11"/>
+
+    </GridPane>
+
+    <Button text="Save"
+            onAction="#save"/>
+
+</VBox>

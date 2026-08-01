@@ -1,10 +1,13 @@
 package com.society.common.controller;
 
+import com.society.app.StartupCoordinator;
 import com.society.common.navigation.NavigationManager;
 import com.society.common.navigation.View;
+import com.society.society.context.SocietyContext;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import org.springframework.stereotype.Component;
@@ -33,16 +36,28 @@ public class MainController extends BaseController {
     @FXML
     private Button administrationButton;
 
-    public MainController(NavigationManager navigationManager) {
+    @FXML
+    private Label societyNameLabel;
+
+    private final StartupCoordinator startupCoordinator;
+
+    private final SocietyContext societyContext;
+
+    public MainController(NavigationManager navigationManager,
+                          StartupCoordinator startupCoordinator,
+                          SocietyContext societyContext) {
         super(navigationManager);
+        this.startupCoordinator = startupCoordinator;
+        this.societyContext = societyContext;
     }
 
     @FXML
     public void initialize() {
 
         navigationManager.setContentHost(contentHost);
-
-        navigationManager.navigate(View.DASHBOARD);
+        startupCoordinator.start();
+        refreshHeader();
+        //navigationManager.navigate(View.DASHBOARD);
 
     }
 
@@ -82,6 +97,22 @@ public class MainController extends BaseController {
         alert.setHeaderText(null);
         alert.setContentText(module + " module will be available in a future commit.");
         alert.showAndWait();
+    }
+
+    private void refreshHeader() {
+
+        if (societyContext.hasSociety()) {
+
+            societyNameLabel.setText(
+                    societyContext.getCurrentSociety().name());
+
+        } else {
+
+            societyNameLabel.setText(
+                    "Society Management System");
+
+        }
+
     }
 
 }
