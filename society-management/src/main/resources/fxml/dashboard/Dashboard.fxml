@@ -2,23 +2,119 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Priority?>
 <?import javafx.scene.layout.VBox?>
 
 <VBox xmlns="http://javafx.com/javafx/21"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.society.dashboard.controller.DashboardController"
-      spacing="15"
-      alignment="TOP_LEFT">
+      spacing="20"
+      styleClass="dashboard-root">
 
     <padding>
         <Insets top="20" right="20" bottom="20" left="20"/>
     </padding>
 
     <Label text="Dashboard"
-           style="-fx-font-size:28px;
-                  -fx-font-weight:bold;"/>
+           styleClass="page-title"/>
 
-    <Label text="Welcome to the Society Management System."
-           style="-fx-font-size:15px;"/>
+    <Label fx:id="welcomeLabel"
+           styleClass="page-subtitle"/>
+
+    <GridPane hgap="20"
+              vgap="20">
+
+        <columnConstraints>
+            <ColumnConstraints hgrow="ALWAYS"/>
+            <ColumnConstraints hgrow="ALWAYS"/>
+            <ColumnConstraints hgrow="ALWAYS"/>
+        </columnConstraints>
+
+        <!-- Members -->
+        <VBox GridPane.rowIndex="0" GridPane.columnIndex="0"
+              spacing="10"
+              styleClass="dashboard-card">
+
+            <Label text="Members"
+                   styleClass="card-title"/>
+
+            <Label fx:id="membersLabel"
+                   text="0"
+                   styleClass="card-value"/>
+
+        </VBox>
+
+        <!-- Shares -->
+        <VBox GridPane.rowIndex="0" GridPane.columnIndex="1"
+              spacing="10"
+              styleClass="dashboard-card">
+
+            <Label text="Shares"
+                   styleClass="card-title"/>
+
+            <Label fx:id="sharesLabel"
+                   text="0"
+                   styleClass="card-value"/>
+
+        </VBox>
+
+        <!-- Certificates -->
+        <VBox GridPane.rowIndex="0" GridPane.columnIndex="2"
+              spacing="10"
+              styleClass="dashboard-card">
+
+            <Label text="Certificates"
+                   styleClass="card-title"/>
+
+            <Label fx:id="certificatesLabel"
+                   text="0"
+                   styleClass="card-value"/>
+
+        </VBox>
+
+        <!-- Database -->
+        <VBox GridPane.rowIndex="1" GridPane.columnIndex="0"
+              spacing="10"
+              styleClass="dashboard-card">
+
+            <Label text="Database"
+                   styleClass="card-title"/>
+
+            <Label fx:id="databaseLabel"
+                   text="Not Connected"
+                   styleClass="card-status"/>
+
+        </VBox>
+
+        <!-- Backup -->
+        <VBox GridPane.rowIndex="1" GridPane.columnIndex="1"
+              spacing="10"
+              styleClass="dashboard-card">
+
+            <Label text="Last Backup"
+                   styleClass="card-title"/>
+
+            <Label fx:id="backupLabel"
+                   text="Never"
+                   styleClass="card-status"/>
+
+        </VBox>
+
+        <!-- Version -->
+        <VBox GridPane.rowIndex="1" GridPane.columnIndex="2"
+              spacing="10"
+              styleClass="dashboard-card">
+
+            <Label text="Version"
+                   styleClass="card-title"/>
+
+            <Label fx:id="versionLabel"
+                   styleClass="card-status"/>
+
+        </VBox>
+
+    </GridPane>
 
 </VBox>

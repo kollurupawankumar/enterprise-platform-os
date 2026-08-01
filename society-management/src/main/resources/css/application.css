@@ -41,3 +41,58 @@
     -fx-text-fill: #333333;
 
 }
+
+.dashboard-root {
+    -fx-background-color: #F5F7FA;
+}
+
+.page-title {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+}
+
+.page-subtitle {
+    -fx-font-size: 15px;
+    -fx-text-fill: #666666;
+}
+
+.dashboard-card {
+
+    -fx-padding: 15;
+
+    -fx-background-color: white;
+
+    -fx-background-radius: 10;
+
+    -fx-border-radius: 10;
+
+    -fx-border-color: #DDDDDD;
+
+    -fx-pref-height: 120;
+}
+
+.card-title {
+
+    -fx-font-size: 15;
+
+    -fx-text-fill: #666666;
+
+}
+
+.card-value {
+
+    -fx-font-size: 32;
+
+    -fx-font-weight: bold;
+
+    -fx-text-fill: #1565C0;
+
+}
+
+.card-status {
+
+    -fx-font-size: 16;
+
+    -fx-font-weight: bold;
+
+}
