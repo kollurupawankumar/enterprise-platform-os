@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.society.app.MainController">
+
+    <top>
+
+        <ToolBar>
+
+            <Label fx:id="societyNameLabel"/>
+
+        </ToolBar>
+
+    </top>
+
+    <left>
+
+        <VBox spacing="5"
+              prefWidth="220"
+              style="-fx-padding:10;">
+
+            <Button text="Dashboard"/>
+
+            <Button text="Members"/>
+
+            <Button text="Shares"/>
+
+            <Button text="Certificates"/>
+
+            <Button text="Reports"/>
+
+            <Button text="Administration"/>
+
+        </VBox>
+
+    </left>
+
+    <center>
+
+        <StackPane>
+
+            <Label text="Welcome"/>
+
+        </StackPane>
+
+    </center>
+
+    <bottom>
+
+        <HBox>
+
+            <Label fx:id="versionLabel"/>
+
+        </HBox>
+
+    </bottom>
+
+</BorderPane>
