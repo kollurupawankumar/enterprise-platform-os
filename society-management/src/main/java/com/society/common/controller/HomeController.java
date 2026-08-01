@@ -1,17 +1,18 @@
-package com.society.dashboard.controller;
+package com.society.common.controller;
+
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import org.springframework.stereotype.Component;
 
 @Component
-public class DashboardController {
+public class HomeController {
 
     @FXML
-    private Label welcomeLabel;
+    private Label titleLabel;
 
     @FXML
     public void initialize() {
-        welcomeLabel.setText("Welcome to Society Management System");
+        titleLabel.setText("Society Management System");
     }
 }
