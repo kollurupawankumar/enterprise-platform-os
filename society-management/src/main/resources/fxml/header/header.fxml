@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.society.header.controller.HeaderController"
+      spacing="3"
+      styleClass="app-header">
+
+    <padding>
+        <Insets top="12"
+                right="20"
+                bottom="12"
+                left="20"/>
+    </padding>
+
+    <Label fx:id="societyNameLabel"
+           styleClass="header-title"/>
+
+    <Label fx:id="registrationNumberLabel"
+           styleClass="header-subtitle"/>
+
+    <Label fx:id="financialYearLabel"
+           styleClass="header-subtitle"/>
+
+</VBox>

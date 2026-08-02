@@ -14,7 +14,10 @@
           alignment="TOP_LEFT">
 
         <padding>
-            <Insets top="20" right="20" bottom="20" left="20"/>
+            <Insets top="20"
+                    right="20"
+                    bottom="20"
+                    left="20"/>
         </padding>
 
         <Label fx:id="welcomeLabel"
@@ -23,42 +26,58 @@
         <GridPane hgap="20"
                   vgap="20">
 
+            <!-- Members -->
+
             <VBox GridPane.columnIndex="0"
                   GridPane.rowIndex="0"
                   styleClass="dashboard-card">
 
                 <Label text="Members"/>
-                <Label text="0"
+
+                <Label fx:id="membersCountLabel"
+                       text="0"
                        styleClass="dashboard-value"/>
 
             </VBox>
+
+            <!-- Shares -->
 
             <VBox GridPane.columnIndex="1"
                   GridPane.rowIndex="0"
                   styleClass="dashboard-card">
 
                 <Label text="Shares"/>
-                <Label text="0"
+
+                <Label fx:id="sharesCountLabel"
+                       text="0"
                        styleClass="dashboard-value"/>
 
             </VBox>
+
+            <!-- Certificates -->
 
             <VBox GridPane.columnIndex="0"
                   GridPane.rowIndex="1"
                   styleClass="dashboard-card">
 
                 <Label text="Certificates"/>
-                <Label text="0"
+
+                <Label fx:id="certificatesCountLabel"
+                       text="0"
                        styleClass="dashboard-value"/>
 
             </VBox>
+
+            <!-- Database -->
 
             <VBox GridPane.columnIndex="1"
                   GridPane.rowIndex="1"
                   styleClass="dashboard-card">
 
                 <Label text="Database"/>
-                <Label text="Not Connected"
+
+                <Label fx:id="databaseStatusLabel"
+                       text="Connected"
                        styleClass="dashboard-value"/>
 
             </VBox>

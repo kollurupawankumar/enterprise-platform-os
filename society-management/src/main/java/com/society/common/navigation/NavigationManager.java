@@ -15,8 +15,14 @@ public class NavigationManager {
 
     private StackPane contentHost;
 
-    public NavigationManager(FXMLLoaderFactory loaderFactory) {
+    private final NavigationState navigationState;
+
+    public NavigationManager(
+            FXMLLoaderFactory loaderFactory,
+            NavigationState navigationState) {
+
         this.loaderFactory = loaderFactory;
+        this.navigationState = navigationState;
     }
 
     public void setContentHost(StackPane contentHost) {
@@ -38,6 +44,8 @@ public class NavigationManager {
             Node content = loader.load();
 
             contentHost.getChildren().setAll(content);
+
+            navigationState.setCurrentView(view);
 
         } catch (IOException ex) {
 

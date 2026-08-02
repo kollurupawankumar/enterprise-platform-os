@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.society.member.controller.MemberRegistrationController">
+
+    <top>
+
+        <VBox spacing="10">
+
+            <padding>
+                <Insets top="20"
+                        right="20"
+                        bottom="20"
+                        left="20"/>
+            </padding>
+
+            <Label text="Register Member"
+                   styleClass="dashboard-title"/>
+
+        </VBox>
+
+    </top>
+
+    <center>
+
+        <GridPane hgap="15"
+                  vgap="15">
+
+            <padding>
+                <Insets top="20"
+                        right="20"
+                        bottom="20"
+                        left="20"/>
+            </padding>
+
+            <Label text="Member Number"/>
+            <TextField fx:id="memberNumberField"
+                       GridPane.columnIndex="1"/>
+
+            <Label text="Membership Number"
+                   GridPane.rowIndex="1"/>
+
+            <TextField fx:id="membershipNumberField"
+                       GridPane.columnIndex="1"
+                       GridPane.rowIndex="1"/>
+
+            <Label text="First Name *"
+                   GridPane.rowIndex="2"/>
+
+            <TextField fx:id="firstNameField"
+                       GridPane.columnIndex="1"
+                       GridPane.rowIndex="2"/>
+
+            <Label text="Last Name"
+                   GridPane.rowIndex="3"/>
+
+            <TextField fx:id="lastNameField"
+                       GridPane.columnIndex="1"
+                       GridPane.rowIndex="3"/>
+
+            <Label text="Mobile *"
+                   GridPane.rowIndex="4"/>
+
+            <TextField fx:id="mobileNumberField"
+                       GridPane.columnIndex="1"
+                       GridPane.rowIndex="4"/>
+
+            <Label text="Email"
+                   GridPane.rowIndex="5"/>
+
+            <TextField fx:id="emailField"
+                       GridPane.columnIndex="1"
+                       GridPane.rowIndex="5"/>
+
+            <Label text="Aadhaar"
+                   GridPane.rowIndex="6"/>
+
+            <TextField fx:id="aadhaarNumberField"
+                       GridPane.columnIndex="1"
+                       GridPane.rowIndex="6"/>
+
+            <Label text="PAN"
+                   GridPane.rowIndex="7"/>
+
+            <TextField fx:id="panNumberField"
+                       GridPane.columnIndex="1"
+                       GridPane.rowIndex="7"/>
+
+            <Label text="Status"
+                   GridPane.rowIndex="8"/>
+
+            <ComboBox fx:id="statusComboBox"
+                      GridPane.columnIndex="1"
+                      GridPane.rowIndex="8"/>
+
+        </GridPane>
+
+    </center>
+
+    <bottom>
+
+        <HBox spacing="10"
+              alignment="CENTER_RIGHT">
+
+            <padding>
+                <Insets top="15"
+                        right="20"
+                        bottom="20"
+                        left="20"/>
+            </padding>
+
+            <Button fx:id="cancelButton"
+                    text="Cancel"
+                    onAction="#cancel"/>
+
+            <Button fx:id="saveButton"
+                    text="Save"
+                    onAction="#save"/>
+
+        </HBox>
+
+    </bottom>
+
+</BorderPane>

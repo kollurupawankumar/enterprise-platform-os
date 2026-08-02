@@ -10,11 +10,15 @@ public enum View {
 
     CERTIFICATES("/fxml/certificate/certificate.fxml"),
 
+    MEMBER_REGISTRATION("/fxml/member/member-registration.fxml"),
+
     REPORTS("/fxml/report/report.fxml"),
 
     ADMINISTRATION("/fxml/admin/administration.fxml"),
 
     SOCIETY_SETUP("/fxml/society/society-setup.fxml");
+
+
 
     private final String fxmlPath;
 

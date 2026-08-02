@@ -3,9 +3,9 @@ package com.society.society.controller;
 import com.society.common.controller.BaseController;
 import com.society.common.navigation.NavigationManager;
 import com.society.common.navigation.View;
-import com.society.society.context.SocietyContext;
 import com.society.society.dto.SocietyDto;
 import com.society.society.entity.FinancialYearStartMonth;
+import com.society.society.runtime.SocietyProvider;
 import com.society.society.service.SocietyService;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -17,8 +17,7 @@ import org.springframework.stereotype.Component;
 public class SocietySetupController extends BaseController {
 
     private final SocietyService societyService;
-
-    private final SocietyContext societyContext;
+    private final SocietyProvider societyProvider;
 
     @FXML
     private TextField societyNameField;
@@ -58,11 +57,13 @@ public class SocietySetupController extends BaseController {
 
     public SocietySetupController(
             NavigationManager navigationManager,
-            SocietyService societyService, SocietyContext societyContext) {
+            SocietyService societyService,
+            SocietyProvider societyProvider) {
 
         super(navigationManager);
+
         this.societyService = societyService;
-        this.societyContext = societyContext;
+        this.societyProvider = societyProvider;
     }
 
     @FXML
@@ -74,25 +75,23 @@ public class SocietySetupController extends BaseController {
 
         financialYearCombo.getSelectionModel()
                 .select(FinancialYearStartMonth.APRIL);
-
     }
 
     @FXML
     private void save() {
 
         SocietyDto dto = new SocietyDto(
-                null,
-                societyNameField.getText(),
-                shortNameField.getText(),
-                registrationNumberField.getText(),
-                addressLine1Field.getText(),
-                addressLine2Field.getText(),
-                cityField.getText(),
-                stateField.getText(),
-                pinCodeField.getText(),
-                phoneField.getText(),
-                emailField.getText(),
-                websiteField.getText(),
+                societyNameField.getText().trim(),
+                shortNameField.getText().trim(),
+                registrationNumberField.getText().trim(),
+                addressLine1Field.getText().trim(),
+                addressLine2Field.getText().trim(),
+                cityField.getText().trim(),
+                stateField.getText().trim(),
+                pinCodeField.getText().trim(),
+                phoneField.getText().trim(),
+                emailField.getText().trim(),
+                websiteField.getText().trim(),
                 financialYearCombo.getValue(),
                 null,
                 null,
@@ -101,10 +100,8 @@ public class SocietySetupController extends BaseController {
 
         societyService.save(dto);
 
-        societyContext.refresh();
+        societyProvider.refresh();
 
         navigationManager.navigate(View.DASHBOARD);
-
     }
-
 }

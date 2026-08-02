@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Priority?>
+
+<HBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.society.footer.controller.FooterController"
+      spacing="15"
+      styleClass="footer">
+
+    <padding>
+        <Insets top="6"
+                right="12"
+                bottom="6"
+                left="12"/>
+    </padding>
+
+    <Label fx:id="statusLabel"/>
+
+    <Label text="|"/>
+
+    <Label fx:id="databaseLabel"/>
+
+    <HBox.hgrow>
+        <Priority fx:constant="ALWAYS"/>
+    </HBox.hgrow>
+
+    <Label fx:id="versionLabel"/>
+
+</HBox>

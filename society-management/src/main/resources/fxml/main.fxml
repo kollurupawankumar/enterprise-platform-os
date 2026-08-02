@@ -14,22 +14,7 @@
             fx:controller="com.society.common.controller.MainController">
 
     <top>
-
-        <HBox spacing="10"
-              alignment="CENTER_LEFT"
-              styleClass="header">
-
-            <padding>
-                <Insets top="10" right="15" bottom="10" left="15"/>
-            </padding>
-
-            <Label
-                    fx:id="societyNameLabel"
-                    text=""
-                   styleClass="header-title"/>
-
-        </HBox>
-
+        <fx:include source="/fxml/header/header.fxml"/>
     </top>
 
     <left>
@@ -42,22 +27,34 @@
                 <Insets top="15" right="10" bottom="15" left="10"/>
             </padding>
 
-            <Button text="Dashboard"
+            <Button
+                    fx:id="dashboardButton"
+                    text="Dashboard"
                     onAction="#openDashboard"/>
 
-            <Button text="Members"
+            <Button
+                    fx:id="membersButton"
+                    text="Members"
                     onAction="#openMembers"/>
 
-            <Button text="Shares"
+            <Button
+                    fx:id="sharesButton"
+                    text="Shares"
                     onAction="#openShares"/>
 
-            <Button text="Certificates"
+            <Button
+                    fx:id="certificatesButton"
+                    text="Certificates"
                     onAction="#openCertificates"/>
 
-            <Button text="Reports"
+            <Button
+                    fx:id="reportsButton"
+                    text="Reports"
                     onAction="#openReports"/>
 
-            <Button text="Administration"
+            <Button
+                    fx:id="administrationButton"
+                    text="Administration"
                     onAction="#openAdministration"/>
 
         </VBox>
@@ -72,22 +69,7 @@
 
     <bottom>
 
-        <HBox spacing="10"
-              styleClass="status-bar">
-
-            <padding>
-                <Insets top="6" right="10" bottom="6" left="10"/>
-            </padding>
-
-            <Label text="Ready"/>
-
-            <HBox.hgrow>
-                <Priority fx:constant="ALWAYS"/>
-            </HBox.hgrow>
-
-            <Label text="Version 1.0.0"/>
-
-        </HBox>
+        <fx:include source="/fxml/footer/footer.fxml"/>
 
     </bottom>
 

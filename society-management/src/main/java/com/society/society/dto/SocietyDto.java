@@ -4,8 +4,6 @@ import com.society.society.entity.FinancialYearStartMonth;
 
 public record SocietyDto(
 
-        Integer id,
-
         String name,
 
         String shortName,

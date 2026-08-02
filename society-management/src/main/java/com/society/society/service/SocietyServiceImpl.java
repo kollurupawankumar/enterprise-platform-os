@@ -49,7 +49,6 @@ public class SocietyServiceImpl implements SocietyService {
     private SocietyDto toDto(SocietyEntity entity) {
 
         return new SocietyDto(
-                entity.getId(),
                 entity.getName(),
                 entity.getShortName(),
                 entity.getRegistrationNumber(),
@@ -72,8 +71,6 @@ public class SocietyServiceImpl implements SocietyService {
     private SocietyEntity toEntity(SocietyDto dto) {
 
         SocietyEntity entity = new SocietyEntity();
-
-        entity.setId(dto.id());
         entity.setName(dto.name());
         entity.setShortName(dto.shortName());
         entity.setRegistrationNumber(dto.registrationNumber());

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.society.member.controller.MemberController">
+
+    <top>
+
+        <VBox spacing="15">
+
+            <padding>
+                <Insets top="20"
+                        right="20"
+                        bottom="20"
+                        left="20"/>
+            </padding>
+
+            <Label text="Member Management"
+                   styleClass="dashboard-title"/>
+
+            <HBox spacing="10">
+
+                <TextField fx:id="searchField"
+                           promptText="Search by Member Number, Name or Mobile"
+                           HBox.hgrow="ALWAYS"/>
+
+                <Button fx:id="searchButton"
+                        text="Search"
+                        onAction="#searchMembers"/>
+
+            </HBox>
+
+            <HBox spacing="10">
+
+                <Button fx:id="newButton"
+                        text="New"
+                        onAction="#addMember"/>
+
+                <Button fx:id="editButton"
+                        text="Edit"
+                        onAction="#editMember"/>
+
+                <Button fx:id="deleteButton"
+                        text="Delete"
+                        onAction="#deleteMember"/>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <Button fx:id="refreshButton"
+                        text="Refresh"
+                        onAction="#refresh"/>
+
+            </HBox>
+
+        </VBox>
+
+    </top>
+
+    <center>
+
+        <TableView fx:id="memberTable">
+
+            <columns>
+
+                <TableColumn fx:id="memberNumberColumn"
+                             text="Member No"
+                             prefWidth="140"/>
+
+                <TableColumn fx:id="membershipNumberColumn"
+                             text="Membership No"
+                             prefWidth="180"/>
+
+                <TableColumn fx:id="memberNameColumn"
+                             text="Member Name"
+                             prefWidth="250"/>
+
+                <TableColumn fx:id="mobileColumn"
+                             text="Mobile"
+                             prefWidth="160"/>
+
+                <TableColumn fx:id="statusColumn"
+                             text="Status"
+                             prefWidth="120"/>
+
+            </columns>
+
+        </TableView>
+
+    </center>
+
+    <bottom>
+
+        <HBox alignment="CENTER_LEFT"
+              spacing="10">
+
+            <padding>
+                <Insets top="10"
+                        right="20"
+                        bottom="10"
+                        left="20"/>
+            </padding>
+
+            <Label fx:id="totalMembersLabel"
+                   text="Total Members : 0"/>
+
+        </HBox>
+
+    </bottom>
+
+</BorderPane>

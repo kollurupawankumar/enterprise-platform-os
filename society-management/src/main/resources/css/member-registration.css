@@ -1,0 +1,17 @@
+.text-field {
+
+    -fx-pref-width: 300;
+
+}
+
+.combo-box {
+
+    -fx-pref-width: 300;
+
+}
+
+.button {
+
+    -fx-pref-width: 120;
+
+}

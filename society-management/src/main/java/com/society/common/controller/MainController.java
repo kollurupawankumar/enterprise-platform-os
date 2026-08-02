@@ -2,6 +2,7 @@ package com.society.common.controller;
 
 import com.society.app.StartupCoordinator;
 import com.society.common.navigation.NavigationManager;
+import com.society.common.navigation.NavigationState;
 import com.society.common.navigation.View;
 import com.society.society.context.SocietyContext;
 import javafx.fxml.FXML;
@@ -36,19 +37,26 @@ public class MainController extends BaseController {
     @FXML
     private Button administrationButton;
 
-    @FXML
-    private Label societyNameLabel;
 
     private final StartupCoordinator startupCoordinator;
 
     private final SocietyContext societyContext;
 
-    public MainController(NavigationManager navigationManager,
-                          StartupCoordinator startupCoordinator,
-                          SocietyContext societyContext) {
+    private final NavigationState navigationState;
+
+    private static final String ACTIVE_STYLE = "navigation-button-active";
+
+    public MainController(
+            NavigationManager navigationManager,
+            StartupCoordinator startupCoordinator,
+            SocietyContext societyContext,
+            NavigationState navigationState) {
+
         super(navigationManager);
+
         this.startupCoordinator = startupCoordinator;
         this.societyContext = societyContext;
+        this.navigationState = navigationState;
     }
 
     @FXML
@@ -56,7 +64,14 @@ public class MainController extends BaseController {
 
         navigationManager.setContentHost(contentHost);
         startupCoordinator.start();
-        refreshHeader();
+
+        updateNavigation();
+
+        //membersButton.setDisable(true);
+        sharesButton.setDisable(true);
+        certificatesButton.setDisable(true);
+        reportsButton.setDisable(true);
+        administrationButton.setDisable(true);
         //navigationManager.navigate(View.DASHBOARD);
 
     }
@@ -64,11 +79,13 @@ public class MainController extends BaseController {
     @FXML
     private void openDashboard() {
         navigationManager.navigate(View.DASHBOARD);
+        updateNavigation();
     }
 
     @FXML
     private void openMembers() {
-        showNotImplemented("Members");
+        navigationManager.navigate(View.MEMBERS);
+        updateNavigation();
     }
 
     @FXML
@@ -99,20 +116,33 @@ public class MainController extends BaseController {
         alert.showAndWait();
     }
 
-    private void refreshHeader() {
+    private void updateNavigation() {
 
-        if (societyContext.hasSociety()) {
+        dashboardButton.getStyleClass().remove(ACTIVE_STYLE);
+        membersButton.getStyleClass().remove(ACTIVE_STYLE);
+        sharesButton.getStyleClass().remove(ACTIVE_STYLE);
+        certificatesButton.getStyleClass().remove(ACTIVE_STYLE);
+        reportsButton.getStyleClass().remove(ACTIVE_STYLE);
+        administrationButton.getStyleClass().remove(ACTIVE_STYLE);
 
-            societyNameLabel.setText(
-                    societyContext.getCurrentSociety().name());
+        switch (navigationState.getCurrentView()) {
 
-        } else {
+            case DASHBOARD -> dashboardButton.getStyleClass().add(ACTIVE_STYLE);
 
-            societyNameLabel.setText(
-                    "Society Management System");
+            case MEMBERS -> membersButton.getStyleClass().add(ACTIVE_STYLE);
 
+            case SHARES -> sharesButton.getStyleClass().add(ACTIVE_STYLE);
+
+            case CERTIFICATES -> certificatesButton.getStyleClass().add(ACTIVE_STYLE);
+
+            case REPORTS -> reportsButton.getStyleClass().add(ACTIVE_STYLE);
+
+            case ADMINISTRATION -> administrationButton.getStyleClass().add(ACTIVE_STYLE);
+
+            default -> {
+            }
         }
-
     }
+
 
 }
