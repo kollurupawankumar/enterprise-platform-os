@@ -165,12 +165,14 @@ public class MainController extends BaseController {
 
     @FXML
     private void openReports() {
-        showNotImplemented("Reports");
+        navigationManager.navigate(View.REPORTS);
+        updateNavigation();
     }
 
     @FXML
     private void openAdministration() {
-        showNotImplemented("Administration");
+        navigationManager.navigate(View.ADMINISTRATION);
+        updateNavigation();
     }
 
     private void showNotImplemented(String module) {

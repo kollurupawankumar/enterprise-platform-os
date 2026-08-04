@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="20"
+      xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.society.report.controller.ReportController"
+      styleClass="main-content">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <Label text="Statutory Reports &amp; Exports Center" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #1F4E79;"/>
+
+    <GridPane hgap="15" vgap="15" style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;">
+        <columnConstraints>
+            <ColumnConstraints prefWidth="250"/>
+            <ColumnConstraints hgrow="ALWAYS"/>
+        </columnConstraints>
+
+        <!-- Report Type Selection -->
+        <Label text="Select Report Type:" style="-fx-font-weight: bold;"/>
+        <ComboBox fx:id="reportTypeCombo" prefWidth="300" GridPane.columnIndex="1"/>
+
+        <!-- Date Filters -->
+        <Label text="Start Date (Optional):" style="-fx-font-weight: bold;" GridPane.rowIndex="1"/>
+        <DatePicker fx:id="startDatePicker" prefWidth="300" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+        <Label text="End Date (Optional):" style="-fx-font-weight: bold;" GridPane.rowIndex="2"/>
+        <DatePicker fx:id="endDatePicker" prefWidth="300" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+        <!-- Export Format -->
+        <Label text="Export Format:" style="-fx-font-weight: bold;" GridPane.rowIndex="3"/>
+        <HBox spacing="15" alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="3">
+            <RadioButton fx:id="pdfRadio" text="PDF Document" selected="true">
+                <toggleGroup>
+                    <ToggleGroup fx:id="formatGroup"/>
+                </toggleGroup>
+            </RadioButton>
+            <RadioButton fx:id="excelRadio" text="Excel Spreadsheet" toggleGroup="$formatGroup"/>
+        </HBox>
+
+        <Button text="Generate Report" onAction="#handleGenerateReport" styleClass="button-primary" prefWidth="200" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+    </GridPane>
+
+    <!-- Recent Exports Table -->
+    <VBox spacing="10" VBox.vgrow="ALWAYS">
+        <Label text="Recent Export Logs" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+        <TableView fx:id="exportsTable" VBox.vgrow="ALWAYS" style="-fx-background-radius: 8;">
+            <columns>
+                <TableColumn fx:id="nameCol" text="Report Name" prefWidth="350"/>
+                <TableColumn fx:id="formatCol" text="Format" prefWidth="120"/>
+                <TableColumn fx:id="dateCol" text="Generated Date" prefWidth="200"/>
+            </columns>
+        </TableView>
+    </VBox>
+</VBox>
