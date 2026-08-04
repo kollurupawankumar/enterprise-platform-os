@@ -1,0 +1,20 @@
+- [x] Create Flyway database migration file for secondary tables (V10)
+- [x] Create Jpa entities and repositories:
+  - [x] KnowledgeEntity & KnowledgeRepository
+  - [x] BudgetEntity & BudgetRepository
+  - [x] AuditObservationEntity & AuditObservationRepository
+- [x] Declare new views in View.java
+- [x] Modify main.fxml and MainController.java to include and wire new sidebar buttons
+- [x] Implement Document Management UI:
+  - [x] document.fxml
+  - [x] DocumentController.java
+- [x] Implement Knowledge Base UI:
+  - [x] knowledge.fxml
+  - [x] KnowledgeController.java
+- [x] Implement Budgets & Audits UI:
+  - [x] budget_audit.fxml
+  - [x] BudgetAuditController.java
+- [x] Enhance Administration UI with Backup & Restore wizard:
+  - [x] Modify administration.fxml
+  - [x] Modify AdministrationController.java
+- [x] Run verification tests and build validation
