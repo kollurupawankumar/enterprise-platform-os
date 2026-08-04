@@ -16,6 +16,12 @@ import javafx.scene.layout.GridPane;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 @Component
@@ -60,6 +66,9 @@ public class AdministrationController extends BaseController {
     @FXML
     private TableColumn<UserEntity, String> emailCol;
 
+    @FXML
+    private ListView<String> backupListView;
+
     private final ObservableList<UserEntity> users = FXCollections.observableArrayList();
     private SocietyEntity activeSociety;
 
@@ -82,6 +91,7 @@ public class AdministrationController extends BaseController {
 
         loadSocietyDetails();
         loadUsers();
+        loadBackups();
     }
 
     private void loadSocietyDetails() {
@@ -190,5 +200,96 @@ public class AdministrationController extends BaseController {
                 loadUsers();
             }
         });
+    }
+
+    private void loadBackups() {
+        File dir = new File("backups");
+        if (!dir.exists()) {
+            dir.mkdir();
+        }
+        ObservableList<String> list = FXCollections.observableArrayList();
+        File[] files = dir.listFiles((d, name) -> name.endsWith(".db"));
+        if (files != null) {
+            for (File f : files) {
+                list.add(f.getName());
+            }
+        }
+        backupListView.setItems(list);
+    }
+
+    @FXML
+    private void handleTriggerBackup() {
+        File src = new File("database/society.db");
+        if (!src.exists()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Backup Failed");
+            alert.setHeaderText(null);
+            alert.setContentText("Source SQLite database file 'database/society.db' not found.");
+            alert.showAndWait();
+            return;
+        }
+
+        File dir = new File("backups");
+        if (!dir.exists()) {
+            dir.mkdir();
+        }
+
+        String ts = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
+        File dest = new File(dir, "backup_" + ts + ".db");
+
+        try {
+            Files.copy(src.toPath(), dest.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Backup Completed");
+            alert.setHeaderText(null);
+            alert.setContentText("Database snapshot successfully copied to " + dest.getPath());
+            alert.showAndWait();
+            loadBackups();
+        } catch (IOException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Backup Failed");
+            alert.setHeaderText(null);
+            alert.setContentText("Error creating database backup: " + e.getMessage());
+            alert.showAndWait();
+        }
+    }
+
+    @FXML
+    private void handleRestoreBackup() {
+        String selected = backupListView.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("No Selection");
+            alert.setHeaderText(null);
+            alert.setContentText("Please select a restore point from the list first.");
+            alert.showAndWait();
+            return;
+        }
+
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        confirm.setTitle("Confirm Restore");
+        confirm.setHeaderText("Caution: Restoring will overwrite current database!");
+        confirm.setContentText("Are you sure you want to restore the selected database snapshot?");
+        Optional<ButtonType> click = confirm.showAndWait();
+
+        if (click.isPresent() && click.get() == ButtonType.OK) {
+            File src = new File("backups", selected);
+            File dest = new File("database/society.db");
+
+            try {
+                Files.copy(src.toPath(), dest.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Restore Completed");
+                alert.setHeaderText(null);
+                alert.setContentText("Database successfully restored. Please restart the application to apply all changes.");
+                alert.showAndWait();
+            } catch (IOException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Restore Failed");
+                alert.setHeaderText(null);
+                alert.setContentText("Error restoring database snapshot: " + e.getMessage());
+                alert.showAndWait();
+            }
+        }
     }
 }

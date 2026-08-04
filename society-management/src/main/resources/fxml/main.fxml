@@ -79,6 +79,21 @@
                     onAction="#openReports"/>
 
             <Button
+                    fx:id="documentsButton"
+                    text="Documents"
+                    onAction="#openDocuments"/>
+
+            <Button
+                    fx:id="knowledgeBaseButton"
+                    text="Knowledge Base"
+                    onAction="#openKnowledgeBase"/>
+
+            <Button
+                    fx:id="budgetAuditButton"
+                    text="Budgets &amp; Audits"
+                    onAction="#openBudgetAudit"/>
+
+            <Button
                     fx:id="administrationButton"
                     text="Administration"
                     onAction="#openAdministration"/>

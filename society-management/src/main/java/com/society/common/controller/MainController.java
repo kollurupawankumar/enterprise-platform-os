@@ -55,6 +55,15 @@ public class MainController extends BaseController {
     @FXML
     private Button administrationButton;
 
+    @FXML
+    private Button documentsButton;
+
+    @FXML
+    private Button knowledgeBaseButton;
+
+    @FXML
+    private Button budgetAuditButton;
+
 
     private final StartupCoordinator startupCoordinator;
 
@@ -104,9 +113,6 @@ public class MainController extends BaseController {
         });
 
         startupCoordinator.start();
-
-        reportsButton.setDisable(true);
-        administrationButton.setDisable(true);
     }
 
     @FXML
@@ -175,6 +181,24 @@ public class MainController extends BaseController {
         updateNavigation();
     }
 
+    @FXML
+    private void openDocuments() {
+        navigationManager.navigate(View.DOCUMENTS);
+        updateNavigation();
+    }
+
+    @FXML
+    private void openKnowledgeBase() {
+        navigationManager.navigate(View.KNOWLEDGE_BASE);
+        updateNavigation();
+    }
+
+    @FXML
+    private void openBudgetAudit() {
+        navigationManager.navigate(View.BUDGET_AUDIT);
+        updateNavigation();
+    }
+
     private void showNotImplemented(String module) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Module");
@@ -196,6 +220,9 @@ public class MainController extends BaseController {
         certificatesButton.getStyleClass().remove(ACTIVE_STYLE);
         reportsButton.getStyleClass().remove(ACTIVE_STYLE);
         administrationButton.getStyleClass().remove(ACTIVE_STYLE);
+        if (documentsButton != null) documentsButton.getStyleClass().remove(ACTIVE_STYLE);
+        if (knowledgeBaseButton != null) knowledgeBaseButton.getStyleClass().remove(ACTIVE_STYLE);
+        if (budgetAuditButton != null) budgetAuditButton.getStyleClass().remove(ACTIVE_STYLE);
 
         switch (navigationState.getCurrentView()) {
 
@@ -220,6 +247,18 @@ public class MainController extends BaseController {
             case REPORTS -> reportsButton.getStyleClass().add(ACTIVE_STYLE);
 
             case ADMINISTRATION -> administrationButton.getStyleClass().add(ACTIVE_STYLE);
+
+            case DOCUMENTS -> {
+                if (documentsButton != null) documentsButton.getStyleClass().add(ACTIVE_STYLE);
+            }
+
+            case KNOWLEDGE_BASE -> {
+                if (knowledgeBaseButton != null) knowledgeBaseButton.getStyleClass().add(ACTIVE_STYLE);
+            }
+
+            case BUDGET_AUDIT -> {
+                if (budgetAuditButton != null) budgetAuditButton.getStyleClass().add(ACTIVE_STYLE);
+            }
 
             default -> {
             }

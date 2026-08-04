@@ -30,7 +30,13 @@ public enum View {
 
     FINANCE("/fxml/finance/finance.fxml"),
 
-    SEARCH("/fxml/search/search.fxml");
+    SEARCH("/fxml/search/search.fxml"),
+
+    DOCUMENTS("/fxml/document/document.fxml"),
+
+    KNOWLEDGE_BASE("/fxml/knowledge/knowledge.fxml"),
+
+    BUDGET_AUDIT("/fxml/finance/budget-audit.fxml");
 
 
 
