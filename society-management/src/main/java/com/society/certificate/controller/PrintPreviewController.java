@@ -13,6 +13,7 @@ import javafx.scene.transform.Scale;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @Component
 public class PrintPreviewController {
@@ -90,18 +91,18 @@ public class PrintPreviewController {
         }
 
         memberNameLabel.setText(fullName);
-        relationLabel.setText("S/o / D/o / W/o  N/A");
+        relationLabel.setText("N/A");
 
         int sharesCount = certificate.totalShares();
         String sharesWord = convertNumberToWords(sharesCount);
         sharesWordsLabel.setText(sharesWord + " (" + String.format("%02d", sharesCount) + ")");
 
         double faceVal = certificate.faceValuePerShare();
-        faceValueWordsLabel.setText("₹" + String.format("%.0f", faceVal) + "/-");
+        faceValueWordsLabel.setText(""); // Face value is already present on the template
 
         double totalVal = certificate.totalAmount();
         String totalWord = convertNumberToWords((int) totalVal);
-        totalAmountWordsLabel.setText(totalWord + " Only");
+        totalAmountWordsLabel.setText(totalWord); // "Only" is already printed on the template
 
         LocalDate date = certificate.issueDate() != null ? certificate.issueDate() : LocalDate.now();
         issueDayLabel.setText(getOrdinalDay(date.getDayOfMonth()));
@@ -113,8 +114,9 @@ public class PrintPreviewController {
         faceValueLabel.setText("₹ " + String.format("%.0f", faceVal) + "/- each");
         totalFaceValueLabel.setText("₹ " + String.format("%.0f", totalVal) + "/-");
 
-        admissionDateLabel.setText(date.toString());
-        issueDateLabel.setText(date.toString());
+        DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        admissionDateLabel.setText(date.format(dateFmt));
+        issueDateLabel.setText(date.format(dateFmt));
 
     }
 
