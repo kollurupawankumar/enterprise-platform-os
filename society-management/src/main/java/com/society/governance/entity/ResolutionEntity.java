@@ -17,7 +17,6 @@ public class ResolutionEntity {
     @Column(nullable = false, length = 250)
     private String subject;
 
-    @Lob
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)

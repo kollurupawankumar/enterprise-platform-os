@@ -17,7 +17,6 @@ public class ComplianceEntity {
     @Column(nullable = false, length = 50)
     private String category; // FIRE_NOC, LIFT_LICENSE, INSURANCE, WATER_TEST
 
-    @Lob
     private String description;
 
     @Column(name = "due_date", nullable = false, length = 20)

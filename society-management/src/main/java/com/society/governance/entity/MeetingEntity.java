@@ -26,10 +26,8 @@ public class MeetingEntity {
     @Column(nullable = false, length = 250)
     private String venue;
 
-    @Lob
     private String agenda;
 
-    @Lob
     private String minutes;
 
     @Column(nullable = false, length = 20)

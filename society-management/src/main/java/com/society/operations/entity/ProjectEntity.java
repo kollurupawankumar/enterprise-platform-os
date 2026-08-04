@@ -14,7 +14,6 @@ public class ProjectEntity {
     @Column(nullable = false, length = 150)
     private String name;
 
-    @Lob
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)

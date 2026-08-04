@@ -33,7 +33,6 @@ public class ExpenseEntity {
     @JoinColumn(name = "bank_account_id")
     private BankAccountEntity bankAccount;
 
-    @Lob
     private String remarks;
 
     @Column(name = "created_at", nullable = false)
