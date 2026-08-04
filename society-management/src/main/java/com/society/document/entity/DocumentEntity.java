@@ -24,7 +24,7 @@ public class DocumentEntity {
     private String filePath;
 
     @Column(name = "file_size", nullable = false)
-    private Long fileSize;
+    private Integer fileSize;
 
     @Column(name = "mime_type", length = 100)
     private String mimeType;
@@ -97,11 +97,11 @@ public class DocumentEntity {
         this.filePath = filePath;
     }
 
-    public Long getFileSize() {
+    public Integer getFileSize() {
         return fileSize;
     }
 
-    public void setFileSize(Long fileSize) {
+    public void setFileSize(Integer fileSize) {
         this.fileSize = fileSize;
     }
 
