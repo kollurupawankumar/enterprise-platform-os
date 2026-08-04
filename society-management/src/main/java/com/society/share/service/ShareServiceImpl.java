@@ -61,7 +61,7 @@ public class ShareServiceImpl implements ShareService {
         entity.setFaceValuePerShare(faceValue);
         entity.setTotalAmount(totalShares * faceValue);
 
-        entity.setIssueDate(dto.issueDate() != null ? dto.issueDate() : LocalDate.now());
+        entity.setIssueDate((dto.issueDate() != null ? dto.issueDate() : LocalDate.now()).toString());
         entity.setStatus(ShareCertificateStatus.ACTIVE);
 
         ShareCertificateEntity saved = certificateRepository.save(entity);
@@ -99,7 +99,7 @@ public class ShareServiceImpl implements ShareService {
         history.setCertificate(certificate);
         history.setFromMember(fromMember);
         history.setToMember(toMember);
-        history.setTransferDate(LocalDate.now());
+        history.setTransferDate(LocalDate.now().toString());
         history.setTransferFee(transferFee != null ? transferFee : 0.0);
         history.setRemarks(remarks);
 
@@ -212,7 +212,7 @@ public class ShareServiceImpl implements ShareService {
                 entity.getTotalShares(),
                 entity.getFaceValuePerShare(),
                 entity.getTotalAmount(),
-                entity.getIssueDate(),
+                parseDate(entity.getIssueDate()),
                 entity.getStatus()
         );
     }
@@ -233,9 +233,23 @@ public class ShareServiceImpl implements ShareService {
                 fromName,
                 to != null ? to.getId() : null,
                 toName,
-                entity.getTransferDate(),
+                parseDate(entity.getTransferDate()),
                 entity.getTransferFee(),
                 entity.getRemarks()
         );
+    }
+    private LocalDate parseDate(String value) {
+        if (value == null || value.isBlank()) {
+            return LocalDate.now();
+        }
+        try {
+            if (value.matches("^\\d+$")) {
+                long millis = Long.parseLong(value);
+                return java.time.Instant.ofEpochMilli(millis).atZone(java.time.ZoneId.systemDefault()).toLocalDate();
+            }
+            return LocalDate.parse(value);
+        } catch (Exception ex) {
+            return LocalDate.now();
+        }
     }
 }

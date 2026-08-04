@@ -48,8 +48,8 @@ public class ShareCertificateEntity {
     @Column(name = "total_amount", nullable = false)
     private Double totalAmount;
 
-    @Column(name = "issue_date", nullable = false, columnDefinition = "TEXT")
-    private LocalDate issueDate;
+    @Column(name = "issue_date", nullable = false)
+    private String issueDate;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
@@ -147,11 +147,11 @@ public class ShareCertificateEntity {
         this.totalAmount = totalAmount;
     }
 
-    public LocalDate getIssueDate() {
+    public String getIssueDate() {
         return issueDate;
     }
 
-    public void setIssueDate(LocalDate issueDate) {
+    public void setIssueDate(String issueDate) {
         this.issueDate = issueDate;
     }
 

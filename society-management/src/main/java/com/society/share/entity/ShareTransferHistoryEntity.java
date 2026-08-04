@@ -35,8 +35,8 @@ public class ShareTransferHistoryEntity {
     @JoinColumn(name = "to_member_id", nullable = false)
     private MemberEntity toMember;
 
-    @Column(name = "transfer_date", nullable = false, columnDefinition = "TEXT")
-    private LocalDate transferDate;
+    @Column(name = "transfer_date", nullable = false)
+    private String transferDate;
 
     @Column(name = "transfer_fee")
     private Double transferFee;
@@ -89,11 +89,11 @@ public class ShareTransferHistoryEntity {
         this.toMember = toMember;
     }
 
-    public LocalDate getTransferDate() {
+    public String getTransferDate() {
         return transferDate;
     }
 
-    public void setTransferDate(LocalDate transferDate) {
+    public void setTransferDate(String transferDate) {
         this.transferDate = transferDate;
     }
 
