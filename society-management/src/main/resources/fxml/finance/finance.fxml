@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<TabPane tabClosingPolicy="UNAVAILABLE"
+         xmlns="http://javafx.com/javafx/21"
+         xmlns:fx="http://javafx.com/fxml/1"
+         fx:controller="com.society.finance.controller.FinanceController"
+         styleClass="main-content">
+
+    <!-- Tab 1: Expense Register -->
+    <Tab text="Expense Register">
+        <SplitPane dividerPositions="0.6">
+            <!-- Left Panel: Expenses List -->
+            <VBox spacing="15">
+                <padding>
+                    <Insets top="15" right="10" bottom="15" left="15"/>
+                </padding>
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="Society Expenditures" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button text="Record Expense" onAction="#handleRecordExpense" styleClass="button-primary"/>
+                </HBox>
+                <TableView fx:id="expenseTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="voucherCol" text="Voucher No" prefWidth="120"/>
+                        <TableColumn fx:id="expenseDateCol" text="Date" prefWidth="110"/>
+                        <TableColumn fx:id="payeeCol" text="Payee" prefWidth="180"/>
+                        <TableColumn fx:id="amountCol" text="Amount" prefWidth="110"/>
+                    </columns>
+                </TableView>
+            </VBox>
+
+            <!-- Right Panel: Voucher details -->
+            <VBox spacing="15" style="-fx-background-color: #F8FAFC; -fx-padding: 15;">
+                <Label text="Payment Voucher details" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                <GridPane hgap="10" vgap="12">
+                    <columnConstraints>
+                        <ColumnConstraints prefWidth="110"/>
+                        <ColumnConstraints hgrow="ALWAYS"/>
+                    </columnConstraints>
+                    
+                    <Label text="Category:" style="-fx-font-weight: bold;"/>
+                    <Label fx:id="categoryLabel" text="-" GridPane.columnIndex="1"/>
+                    
+                    <Label text="Payment Mode:" style="-fx-font-weight: bold;" GridPane.rowIndex="1"/>
+                    <Label fx:id="modeLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                    
+                    <Label text="Remarks/Notes:" style="-fx-font-weight: bold;" GridPane.rowIndex="2"/>
+                    <Label fx:id="remarksLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="2" wrapText="true"/>
+                </GridPane>
+            </VBox>
+        </SplitPane>
+    </Tab>
+
+    <!-- Tab 2: Bank & FD Accounts -->
+    <Tab text="Accounts &amp; Investments">
+        <SplitPane dividerPositions="0.5">
+            <!-- Left Side: Bank Accounts -->
+            <VBox spacing="15">
+                <padding>
+                    <Insets top="15" right="10" bottom="15" left="15"/>
+                </padding>
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="Bank Accounts" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button text="Add Account" onAction="#handleAddBankAccount" styleClass="button-primary"/>
+                </HBox>
+                <TableView fx:id="bankTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="bankNameCol" text="Bank" prefWidth="120"/>
+                        <TableColumn fx:id="accNumCol" text="Account No" prefWidth="150"/>
+                        <TableColumn fx:id="balanceCol" text="Balance" prefWidth="120"/>
+                    </columns>
+                </TableView>
+            </VBox>
+
+            <!-- Right Side: FD Portfolio -->
+            <VBox spacing="15">
+                <padding>
+                    <Insets top="15" right="15" bottom="15" left="10"/>
+                </padding>
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="Fixed Deposits (FD)" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button text="Record FD" onAction="#handleRecordInvestment" styleClass="button-primary"/>
+                </HBox>
+                <TableView fx:id="investmentTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="fdInstCol" text="Institution" prefWidth="130"/>
+                        <TableColumn fx:id="fdPrincipalCol" text="Principal" prefWidth="110"/>
+                        <TableColumn fx:id="fdMaturityCol" text="Maturity Date" prefWidth="120"/>
+                    </columns>
+                </TableView>
+            </VBox>
+        </SplitPane>
+    </Tab>
+</TabPane>

@@ -1,17 +1,43 @@
+.form-card {
+    -fx-background-color: white;
+    -fx-border-color: #E2E8F0;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.03), 6, 0, 0, 2);
+}
+
 .text-field {
+    -fx-pref-width: 320;
+    -fx-pref-height: 36px;
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-border-color: #CBD5E1;
+    -fx-padding: 5 10;
+}
 
-    -fx-pref-width: 300;
+.text-field:focused {
+    -fx-border-color: #1F4E79;
+    -fx-effect: dropshadow(three-pass-box, rgba(31,78,121,0.2), 3, 0, 0, 0);
+}
 
+.text-field:disabled {
+    -fx-background-color: #F1F5F9;
+    -fx-text-fill: #64748B;
 }
 
 .combo-box {
-
-    -fx-pref-width: 300;
-
+    -fx-pref-width: 320;
+    -fx-pref-height: 36px;
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-border-color: #CBD5E1;
 }
 
-.button {
+.combo-box:focused {
+    -fx-border-color: #1F4E79;
+}
 
-    -fx-pref-width: 120;
-
+.label {
+    -fx-font-weight: bold;
+    -fx-text-fill: #334155;
 }

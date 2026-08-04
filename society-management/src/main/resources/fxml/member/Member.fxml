@@ -6,7 +6,8 @@
 
 <BorderPane xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.society.member.controller.MemberController">
+            fx:controller="com.society.member.controller.MemberController"
+            stylesheets="/css/member.css">
 
     <top>
 
@@ -22,36 +23,37 @@
             <Label text="Member Management"
                    styleClass="dashboard-title"/>
 
-            <HBox spacing="10">
+            <HBox spacing="10" alignment="CENTER_LEFT">
 
                 <TextField fx:id="searchField"
-                           promptText="Search by Member Number, Name or Mobile"
+                           promptText="Search by Member Number, Membership Number, Name or Mobile"
+                           styleClass="search-field"
                            HBox.hgrow="ALWAYS"/>
 
-                <Button fx:id="searchButton"
-                        text="Search"
+                <Button text="Search"
+                        styleClass="button-primary"
                         onAction="#searchMembers"/>
 
             </HBox>
 
-            <HBox spacing="10">
+            <HBox spacing="10" alignment="CENTER_LEFT">
 
-                <Button fx:id="newButton"
-                        text="New"
+                <Button text="New"
+                        styleClass="button-primary"
                         onAction="#addMember"/>
 
-                <Button fx:id="editButton"
-                        text="Edit"
+                <Button text="Edit"
+                        styleClass="button-secondary"
                         onAction="#editMember"/>
 
-                <Button fx:id="deleteButton"
-                        text="Delete"
+                <Button text="Delete"
+                        styleClass="button-danger"
                         onAction="#deleteMember"/>
 
                 <Region HBox.hgrow="ALWAYS"/>
 
-                <Button fx:id="refreshButton"
-                        text="Refresh"
+                <Button text="Refresh"
+                        styleClass="button-secondary"
                         onAction="#refresh"/>
 
             </HBox>
@@ -62,7 +64,8 @@
 
     <center>
 
-        <TableView fx:id="memberTable">
+        <TableView fx:id="memberTable"
+                   VBox.vgrow="ALWAYS" onMouseClicked="#memberDoubleClicked">
 
             <columns>
 
@@ -72,15 +75,15 @@
 
                 <TableColumn fx:id="membershipNumberColumn"
                              text="Membership No"
-                             prefWidth="180"/>
+                             prefWidth="170"/>
 
                 <TableColumn fx:id="memberNameColumn"
                              text="Member Name"
-                             prefWidth="250"/>
+                             prefWidth="260"/>
 
                 <TableColumn fx:id="mobileColumn"
                              text="Mobile"
-                             prefWidth="160"/>
+                             prefWidth="170"/>
 
                 <TableColumn fx:id="statusColumn"
                              text="Status"
@@ -94,8 +97,7 @@
 
     <bottom>
 
-        <HBox alignment="CENTER_LEFT"
-              spacing="10">
+        <HBox alignment="CENTER_LEFT">
 
             <padding>
                 <Insets top="10"

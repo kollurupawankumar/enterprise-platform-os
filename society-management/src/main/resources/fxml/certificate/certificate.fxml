@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.society.certificate.controller.CertificateController"
+            stylesheets="/css/certificate.css">
+
+    <top>
+
+        <VBox spacing="15">
+
+            <padding>
+                <Insets top="20"
+                        right="20"
+                        bottom="20"
+                        left="20"/>
+            </padding>
+
+            <Label text="Generate Certificates"
+                   styleClass="dashboard-title"/>
+
+            <HBox spacing="10" alignment="CENTER_LEFT">
+
+                <TextField fx:id="searchField"
+                           promptText="Search by Certificate No, Member Name or Member No"
+                           styleClass="search-field"
+                           HBox.hgrow="ALWAYS"/>
+
+                <Button text="Search"
+                        styleClass="button-primary"
+                        onAction="#searchShares"/>
+
+            </HBox>
+
+            <HBox spacing="10" alignment="CENTER_LEFT">
+
+                <Button text="Print Share Certificate"
+                        styleClass="button-primary"
+                        onAction="#printCertificate"/>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <Button text="Refresh"
+                        styleClass="button-secondary"
+                        onAction="#refreshShares"/>
+
+            </HBox>
+
+        </VBox>
+
+    </top>
+
+    <center>
+
+        <TableView fx:id="shareTable"
+                   VBox.vgrow="ALWAYS">
+
+            <columns>
+
+                <TableColumn fx:id="certificateNumberColumn"
+                             text="Certificate No"
+                             prefWidth="140"/>
+
+                <TableColumn fx:id="memberNameColumn"
+                             text="Member Name"
+                             prefWidth="260"/>
+
+                <TableColumn fx:id="shareRangeColumn"
+                             text="Share Range"
+                             prefWidth="160"/>
+
+                <TableColumn fx:id="totalSharesColumn"
+                             text="Total Shares"
+                             prefWidth="110"/>
+
+                <TableColumn fx:id="totalAmountColumn"
+                             text="Total Amount"
+                             prefWidth="140"/>
+
+                <TableColumn fx:id="issueDateColumn"
+                             text="Issue Date"
+                             prefWidth="120"/>
+
+                <TableColumn fx:id="statusColumn"
+                             text="Status"
+                             prefWidth="120"/>
+
+            </columns>
+
+        </TableView>
+
+    </center>
+
+    <bottom>
+
+        <HBox alignment="CENTER_LEFT">
+
+            <padding>
+                <Insets top="10"
+                        right="20"
+                        bottom="10"
+                        left="20"/>
+            </padding>
+
+            <Label fx:id="totalCertificatesLabel"
+                   text="Total Certificates : 0"/>
+
+        </HBox>
+
+    </bottom>
+
+</BorderPane>

@@ -9,6 +9,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+import jakarta.persistence.Convert;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
+import com.society.infrastructure.persistance.converter.BooleanToIntegerConverter;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -61,6 +66,7 @@ public class MemberEntity {
     private MemberStatus status;
 
     @Column(nullable = false)
+    @Convert(converter = BooleanToIntegerConverter.class)
     private boolean active;
 
     @Column(name = "created_at",
@@ -70,6 +76,22 @@ public class MemberEntity {
     @Column(name = "updated_at",
             nullable = false)
     private LocalDateTime updatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        LocalDateTime now = LocalDateTime.now();
+        if (createdAt == null) {
+            createdAt = now;
+        }
+        if (updatedAt == null) {
+            updatedAt = now;
+        }
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
 
     public MemberEntity() {
     }

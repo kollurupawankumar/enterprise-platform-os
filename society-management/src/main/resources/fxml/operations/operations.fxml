@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<TabPane tabClosingPolicy="UNAVAILABLE"
+         xmlns="http://javafx.com/javafx/21"
+         xmlns:fx="http://javafx.com/fxml/1"
+         fx:controller="com.society.operations.controller.OperationsController"
+         styleClass="main-content">
+
+    <!-- Tab 1: Assets -->
+    <Tab text="Asset Register">
+        <SplitPane dividerPositions="0.6">
+            <!-- Left Panel: Assets Table -->
+            <VBox spacing="15">
+                <padding>
+                    <Insets top="15" right="10" bottom="15" left="15"/>
+                </padding>
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="Society Assets" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button text="Add Asset" onAction="#handleAddAsset" styleClass="button-primary"/>
+                </HBox>
+                <TableView fx:id="assetTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="assetNameCol" text="Asset Name" prefWidth="180"/>
+                        <TableColumn fx:id="assetCategoryCol" text="Category" prefWidth="120"/>
+                        <TableColumn fx:id="assetStatusCol" text="Status" prefWidth="120"/>
+                    </columns>
+                </TableView>
+            </VBox>
+
+            <!-- Right Panel: Asset Details -->
+            <VBox spacing="15" style="-fx-background-color: #F8FAFC; -fx-padding: 15;">
+                <Label text="Asset Details" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                <GridPane hgap="10" vgap="12">
+                    <columnConstraints>
+                        <ColumnConstraints prefWidth="110"/>
+                        <ColumnConstraints hgrow="ALWAYS"/>
+                    </columnConstraints>
+                    
+                    <Label text="Serial No:" style="-fx-font-weight: bold;"/>
+                    <Label fx:id="serialLabel" text="-" GridPane.columnIndex="1"/>
+                    
+                    <Label text="Purchase Date:" style="-fx-font-weight: bold;" GridPane.rowIndex="1"/>
+                    <Label fx:id="purchaseDateLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                    
+                    <Label text="Purchase Cost:" style="-fx-font-weight: bold;" GridPane.rowIndex="2"/>
+                    <Label fx:id="purchaseCostLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                    
+                    <Label text="Warranty Expiry:" style="-fx-font-weight: bold;" GridPane.rowIndex="3"/>
+                    <Label fx:id="warrantyLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                </GridPane>
+            </VBox>
+        </SplitPane>
+    </Tab>
+
+    <!-- Tab 2: Vendors -->
+    <Tab text="Vendor Directory">
+        <SplitPane dividerPositions="0.6">
+            <!-- Left Panel: Vendors Table -->
+            <VBox spacing="15">
+                <padding>
+                    <Insets top="15" right="10" bottom="15" left="15"/>
+                </padding>
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="Contracted Vendors" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button text="Add Vendor" onAction="#handleAddVendor" styleClass="button-primary"/>
+                </HBox>
+                <TableView fx:id="vendorTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="vendorNameCol" text="Vendor Name" prefWidth="180"/>
+                        <TableColumn fx:id="vendorCategoryCol" text="Category" prefWidth="120"/>
+                        <TableColumn fx:id="vendorPhoneCol" text="Phone" prefWidth="120"/>
+                    </columns>
+                </TableView>
+            </VBox>
+
+            <!-- Right Panel: Vendor Details -->
+            <VBox spacing="15" style="-fx-background-color: #F8FAFC; -fx-padding: 15;">
+                <Label text="Vendor Profile" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                <GridPane hgap="10" vgap="12">
+                    <columnConstraints>
+                        <ColumnConstraints prefWidth="110"/>
+                        <ColumnConstraints hgrow="ALWAYS"/>
+                    </columnConstraints>
+                    
+                    <Label text="Contact Person:" style="-fx-font-weight: bold;"/>
+                    <Label fx:id="contactPersonLabel" text="-" GridPane.columnIndex="1"/>
+                    
+                    <Label text="Email:" style="-fx-font-weight: bold;" GridPane.rowIndex="1"/>
+                    <Label fx:id="emailLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                    
+                    <Label text="Address:" style="-fx-font-weight: bold;" GridPane.rowIndex="2"/>
+                    <Label fx:id="addressLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                </GridPane>
+            </VBox>
+        </SplitPane>
+    </Tab>
+</TabPane>

@@ -1,0 +1,88 @@
+package com.society.governance.service;
+
+import com.society.governance.entity.MeetingEntity;
+import com.society.governance.entity.ResolutionEntity;
+import com.society.governance.repository.MeetingRepository;
+import com.society.governance.repository.ResolutionRepository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+@Transactional
+public class GovernanceServiceImpl implements GovernanceService {
+
+    private final MeetingRepository meetingRepository;
+    private final ResolutionRepository resolutionRepository;
+
+    public GovernanceServiceImpl(
+            MeetingRepository meetingRepository,
+            ResolutionRepository resolutionRepository) {
+        this.meetingRepository = meetingRepository;
+        this.resolutionRepository = resolutionRepository;
+    }
+
+    @Override
+    public MeetingEntity scheduleMeeting(MeetingEntity meeting) {
+        meeting.setStatus("SCHEDULED");
+        return meetingRepository.save(meeting);
+    }
+
+    @Override
+    public MeetingEntity completeMeeting(Integer meetingId, String minutes) {
+        MeetingEntity meeting = meetingRepository.findById(meetingId)
+                .orElseThrow(() -> new IllegalArgumentException("Meeting not found with ID: " + meetingId));
+        meeting.setMinutes(minutes);
+        meeting.setStatus("COMPLETED");
+        return meetingRepository.save(meeting);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<MeetingEntity> getMeetingById(Integer id) {
+        return meetingRepository.findById(id);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<MeetingEntity> getAllMeetings() {
+        return meetingRepository.findAll();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<MeetingEntity> getMeetingsByType(String type) {
+        return meetingRepository.findByMeetingType(type);
+    }
+
+    @Override
+    public ResolutionEntity createResolution(ResolutionEntity resolution) {
+        return resolutionRepository.save(resolution);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<ResolutionEntity> getResolutionById(Integer id) {
+        return resolutionRepository.findById(id);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<ResolutionEntity> getResolutionByNumber(String resolutionNumber) {
+        return resolutionRepository.findByResolutionNumber(resolutionNumber);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ResolutionEntity> getResolutionsForMeeting(Integer meetingId) {
+        return resolutionRepository.findByMeetingId(meetingId);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ResolutionEntity> getAllResolutions() {
+        return resolutionRepository.findAll();
+    }
+}

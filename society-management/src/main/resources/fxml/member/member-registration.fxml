@@ -6,7 +6,8 @@
 
 <BorderPane xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.society.member.controller.MemberRegistrationController">
+            fx:controller="com.society.member.controller.MemberRegistrationController"
+            stylesheets="/css/member-registration.css">
 
     <top>
 
@@ -15,11 +16,12 @@
             <padding>
                 <Insets top="20"
                         right="20"
-                        bottom="20"
+                        bottom="10"
                         left="20"/>
             </padding>
 
-            <Label text="Register Member"
+            <Label fx:id="titleLabel"
+                   text="Register Member"
                    styleClass="dashboard-title"/>
 
         </VBox>
@@ -29,7 +31,8 @@
     <center>
 
         <GridPane hgap="15"
-                  vgap="15">
+                  vgap="15"
+                  styleClass="form-card">
 
             <padding>
                 <Insets top="20"
@@ -116,10 +119,12 @@
 
             <Button fx:id="cancelButton"
                     text="Cancel"
+                    styleClass="button-secondary"
                     onAction="#cancel"/>
 
             <Button fx:id="saveButton"
                     text="Save"
+                    styleClass="button-primary"
                     onAction="#save"/>
 
         </HBox>

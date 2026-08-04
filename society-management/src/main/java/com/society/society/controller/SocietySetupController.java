@@ -7,9 +7,13 @@ import com.society.society.dto.SocietyDto;
 import com.society.society.entity.FinancialYearStartMonth;
 import com.society.society.runtime.SocietyProvider;
 import com.society.society.service.SocietyService;
+import com.society.user.context.UserContext;
+import com.society.user.entity.UserEntity;
+import com.society.user.service.UserService;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +22,8 @@ public class SocietySetupController extends BaseController {
 
     private final SocietyService societyService;
     private final SocietyProvider societyProvider;
+    private final UserService userService;
+    private final UserContext userContext;
 
     @FXML
     private TextField societyNameField;
@@ -55,15 +61,34 @@ public class SocietySetupController extends BaseController {
     @FXML
     private ComboBox<FinancialYearStartMonth> financialYearCombo;
 
+    @FXML
+    private TextField adminUsernameField;
+
+    @FXML
+    private PasswordField adminPasswordField;
+
+    @FXML
+    private TextField adminFirstNameField;
+
+    @FXML
+    private TextField adminLastNameField;
+
+    @FXML
+    private TextField adminEmailField;
+
     public SocietySetupController(
             NavigationManager navigationManager,
             SocietyService societyService,
-            SocietyProvider societyProvider) {
+            SocietyProvider societyProvider,
+            UserService userService,
+            UserContext userContext) {
 
         super(navigationManager);
 
         this.societyService = societyService;
         this.societyProvider = societyProvider;
+        this.userService = userService;
+        this.userContext = userContext;
     }
 
     @FXML
@@ -79,6 +104,14 @@ public class SocietySetupController extends BaseController {
 
     @FXML
     private void save() {
+        String adminUsername = adminUsernameField.getText().trim();
+        String adminPassword = adminPasswordField.getText();
+        String adminFirstName = adminFirstNameField.getText().trim();
+
+        if (adminUsername.isEmpty() || adminPassword.isEmpty() || adminFirstName.isEmpty()) {
+            // Log/Notify validation (In production we should use a proper dialog, for now print or throw)
+            throw new IllegalArgumentException("Admin Username, Password and First Name are required.");
+        }
 
         SocietyDto dto = new SocietyDto(
                 societyNameField.getText().trim(),
@@ -99,6 +132,19 @@ public class SocietySetupController extends BaseController {
         );
 
         societyService.save(dto);
+
+        // Save admin user
+        UserEntity adminUser = userService.createUser(
+                adminUsername,
+                adminPassword,
+                "ADMINISTRATOR",
+                adminFirstName,
+                adminLastNameField.getText().trim(),
+                adminEmailField.getText().trim()
+        );
+
+        // Log user in
+        userContext.setCurrentUser(adminUser);
 
         societyProvider.refresh();
 

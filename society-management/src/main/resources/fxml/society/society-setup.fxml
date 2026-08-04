@@ -89,9 +89,44 @@
                   GridPane.columnIndex="1"
                   GridPane.rowIndex="11"/>
 
+        <!-- Admin User Setup -->
+        <Label text="Admin Username"
+               GridPane.rowIndex="12"
+               style="-fx-font-weight: bold;"/>
+        <TextField fx:id="adminUsernameField"
+                   GridPane.columnIndex="1"
+                   GridPane.rowIndex="12"/>
+
+        <Label text="Admin Password"
+               GridPane.rowIndex="13"
+               style="-fx-font-weight: bold;"/>
+        <PasswordField fx:id="adminPasswordField"
+                       GridPane.columnIndex="1"
+                       GridPane.rowIndex="13"/>
+
+        <Label text="Admin First Name"
+               GridPane.rowIndex="14"
+               style="-fx-font-weight: bold;"/>
+        <TextField fx:id="adminFirstNameField"
+                   GridPane.columnIndex="1"
+                   GridPane.rowIndex="14"/>
+
+        <Label text="Admin Last Name"
+               GridPane.rowIndex="15"/>
+        <TextField fx:id="adminLastNameField"
+                   GridPane.columnIndex="1"
+                   GridPane.rowIndex="15"/>
+
+        <Label text="Admin Email"
+               GridPane.rowIndex="16"/>
+        <TextField fx:id="adminEmailField"
+                   GridPane.columnIndex="1"
+                   GridPane.rowIndex="16"/>
+
     </GridPane>
 
-    <Button text="Save"
-            onAction="#save"/>
+    <Button text="Complete Setup"
+            onAction="#save"
+            styleClass="button-primary"/>
 
 </VBox>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<TabPane tabClosingPolicy="UNAVAILABLE"
+         xmlns="http://javafx.com/javafx/21"
+         xmlns:fx="http://javafx.com/fxml/1"
+         fx:controller="com.society.governance.controller.GovernanceController"
+         styleClass="main-content">
+
+    <!-- Tab 1: Meetings -->
+    <Tab text="Meeting Management">
+        <SplitPane dividerPositions="0.6">
+            <!-- Left Panel: Meetings List -->
+            <VBox spacing="15">
+                <padding>
+                    <Insets top="15" right="10" bottom="15" left="15"/>
+                </padding>
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="Scheduled &amp; Past Meetings" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button text="Schedule Meeting" onAction="#handleScheduleMeeting" styleClass="button-primary"/>
+                </HBox>
+                <TableView fx:id="meetingTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="meetTitleCol" text="Title" prefWidth="180"/>
+                        <TableColumn fx:id="meetTypeCol" text="Type" prefWidth="100"/>
+                        <TableColumn fx:id="meetDateCol" text="Date" prefWidth="110"/>
+                        <TableColumn fx:id="meetStatusCol" text="Status" prefWidth="100"/>
+                    </columns>
+                </TableView>
+            </VBox>
+
+            <!-- Right Panel: Meeting Details -->
+            <VBox spacing="15">
+                <padding>
+                    <Insets top="15" right="15" bottom="15" left="10"/>
+                </padding>
+                <Label text="Meeting details" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                <TextArea fx:id="agendaArea" promptText="Agenda description..." editable="false" prefHeight="150" wrapText="true"/>
+                <TextArea fx:id="minutesArea" promptText="Minutes of the meeting..." editable="false" prefHeight="250" wrapText="true"/>
+                <HBox spacing="10">
+                    <Button fx:id="completeMeetingBtn" text="Enter Minutes" onAction="#handleCompleteMeeting" styleClass="button-primary" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+                </HBox>
+            </VBox>
+        </SplitPane>
+    </Tab>
+
+    <!-- Tab 2: Resolutions -->
+    <Tab text="Resolutions Register">
+        <VBox spacing="15">
+            <padding>
+                <Insets top="15" right="15" bottom="15" left="15"/>
+            </padding>
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Passed Resolutions" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="Add Resolution" onAction="#handleAddResolution" styleClass="button-primary"/>
+            </HBox>
+            <TableView fx:id="resolutionTable" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="resNumCol" text="Resolution No" prefWidth="150"/>
+                    <TableColumn fx:id="resSubjectCol" text="Subject" prefWidth="300"/>
+                    <TableColumn fx:id="resProposerCol" text="Proposed By" prefWidth="180"/>
+                    <TableColumn fx:id="resStatusCol" text="Status" prefWidth="120"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </Tab>
+</TabPane>

@@ -8,6 +8,8 @@ public enum View {
 
     SHARES("/fxml/share/share.fxml"),
 
+    SHARE_ALLOTMENT("/fxml/share/share-allotment.fxml"),
+
     CERTIFICATES("/fxml/certificate/certificate.fxml"),
 
     MEMBER_REGISTRATION("/fxml/member/member-registration.fxml"),
@@ -16,7 +18,19 @@ public enum View {
 
     ADMINISTRATION("/fxml/admin/administration.fxml"),
 
-    SOCIETY_SETUP("/fxml/society/society-setup.fxml");
+    SOCIETY_SETUP("/fxml/society/society-setup.fxml"),
+
+    LOGIN("/fxml/auth/login.fxml"),
+
+    PROPERTIES("/fxml/property/property.fxml"),
+
+    GOVERNANCE("/fxml/governance/governance.fxml"),
+
+    OPERATIONS("/fxml/operations/operations.fxml"),
+
+    FINANCE("/fxml/finance/finance.fxml"),
+
+    SEARCH("/fxml/search/search.fxml");
 
 
 

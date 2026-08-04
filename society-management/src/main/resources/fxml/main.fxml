@@ -9,7 +9,8 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns="http://javafx.com/javafx/21"
+<BorderPane fx:id="rootBorderPane"
+            xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.society.common.controller.MainController">
 
@@ -36,6 +37,31 @@
                     fx:id="membersButton"
                     text="Members"
                     onAction="#openMembers"/>
+
+            <Button
+                    fx:id="propertiesButton"
+                    text="Properties"
+                    onAction="#openProperties"/>
+
+            <Button
+                    fx:id="governanceButton"
+                    text="Governance"
+                    onAction="#openGovernance"/>
+
+            <Button
+                    fx:id="operationsButton"
+                    text="Operations"
+                    onAction="#openOperations"/>
+
+            <Button
+                    fx:id="financeButton"
+                    text="Finance"
+                    onAction="#openFinance"/>
+
+            <Button
+                    fx:id="searchButton"
+                    text="Universal Search"
+                    onAction="#openSearch"/>
 
             <Button
                     fx:id="sharesButton"
