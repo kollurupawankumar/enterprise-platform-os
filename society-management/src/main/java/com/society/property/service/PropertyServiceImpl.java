@@ -49,7 +49,7 @@ public class PropertyServiceImpl implements PropertyService {
     @Override
     @Transactional(readOnly = true)
     public List<PropertyEntity> getAllProperties() {
-        return propertyRepository.findAll();
+        return propertyRepository.findAllWithOwners();
     }
 
     @Override
