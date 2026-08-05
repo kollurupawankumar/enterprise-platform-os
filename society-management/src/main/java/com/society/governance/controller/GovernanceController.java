@@ -17,6 +17,9 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import org.springframework.stereotype.Component;
 
+import javafx.print.PrinterJob;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -268,6 +271,156 @@ public class GovernanceController extends BaseController {
                 .filter(m -> m.getId().equals(selected.getId()))
                 .findFirst().orElse(selected);
         showMeetingDetails(updated);
+    }
+
+    @FXML
+    private void handleMarkAttendance() {
+        if (selectedMeeting == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Selection Required");
+            alert.setHeaderText(null);
+            alert.setContentText("Please select a meeting first.");
+            alert.showAndWait();
+            return;
+        }
+
+        List<ManagingCommitteeEntity> committee = governanceService.getAllCommitteeMembers();
+        if (committee.isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("No Committee Members");
+            alert.setHeaderText(null);
+            alert.setContentText("No committee members registered. Please add committee members first.");
+            alert.showAndWait();
+            return;
+        }
+
+        List<com.society.governance.entity.MeetingAttendanceEntity> currentAttendance =
+                governanceService.getAttendanceForMeeting(selectedMeeting.getId());
+        java.util.Map<Integer, String> statusMap = new java.util.HashMap<>();
+        for (com.society.governance.entity.MeetingAttendanceEntity a : currentAttendance) {
+            statusMap.put(a.getMember().getId(), a.getStatus());
+        }
+
+        Dialog<Void> dialog = new Dialog<>();
+        dialog.setTitle("Mark Committee Attendance");
+        dialog.setHeaderText("Attendance for " + selectedMeeting.getTitle() + " (" + selectedMeeting.getMeetingDate() + ")");
+
+        ButtonType saveBtnType = new ButtonType("Save Attendance", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(saveBtnType, ButtonType.CANCEL);
+
+        VBox content = new VBox(10);
+        content.setPadding(new Insets(15));
+
+        java.util.Map<Integer, ComboBox<String>> comboMap = new java.util.HashMap<>();
+
+        for (ManagingCommitteeEntity mc : committee) {
+            MemberEntity m = mc.getMember();
+            if (m == null) continue;
+
+            HBox row = new HBox(15);
+            row.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+
+            Label nameLabel = new Label(m.getFirstName() + " " + (m.getLastName() != null ? m.getLastName() : "") + " (" + mc.getDesignation() + ")");
+            nameLabel.setPrefWidth(260);
+
+            ComboBox<String> statusCombo = new ComboBox<>(FXCollections.observableArrayList("PRESENT", "ABSENT", "APOLOGY"));
+            String currentStatus = statusMap.getOrDefault(m.getId(), "ABSENT");
+            statusCombo.getSelectionModel().select(currentStatus);
+
+            comboMap.put(m.getId(), statusCombo);
+            row.getChildren().addAll(nameLabel, statusCombo);
+            content.getChildren().add(row);
+        }
+
+        dialog.getDialogPane().setContent(new ScrollPane(content));
+
+        dialog.setResultConverter(btn -> {
+            if (btn == saveBtnType) {
+                for (java.util.Map.Entry<Integer, ComboBox<String>> entry : comboMap.entrySet()) {
+                    governanceService.markAttendance(selectedMeeting.getId(), entry.getKey(), entry.getValue().getValue());
+                }
+            }
+            return null;
+        });
+
+        dialog.showAndWait();
+    }
+
+    @FXML
+    private void handlePrintMeeting() {
+        if (selectedMeeting == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Selection Required");
+            alert.setHeaderText(null);
+            alert.setContentText("Please select a meeting to print.");
+            alert.showAndWait();
+            return;
+        }
+
+        List<com.society.governance.entity.MeetingAttendanceEntity> attendanceList =
+                governanceService.getAttendanceForMeeting(selectedMeeting.getId());
+
+        VBox printNode = new VBox(15);
+        printNode.setPadding(new Insets(20));
+        printNode.setStyle("-fx-background-color: white;");
+
+        Label titleLbl = new Label(selectedMeeting.getTitle() + " - Meeting Report");
+        titleLbl.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #0F172A;");
+
+        Label metaLbl = new Label("Type: " + selectedMeeting.getMeetingType() + " | Date: " + selectedMeeting.getMeetingDate() +
+                (selectedMeeting.getMeetingTime() != null ? " (" + selectedMeeting.getMeetingTime() + ")" : "") +
+                " | Venue: " + selectedMeeting.getVenue() + " | Status: " + selectedMeeting.getStatus());
+        metaLbl.setStyle("-fx-font-size: 12px; -fx-text-fill: #475569;");
+
+        Label agendaHeading = new Label("Meeting Agenda");
+        agendaHeading.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
+        TextArea agendaBox = new TextArea(selectedMeeting.getAgenda() != null ? selectedMeeting.getAgenda() : "No Agenda Specified");
+        agendaBox.setWrapText(true);
+        agendaBox.setEditable(false);
+        agendaBox.setPrefHeight(100);
+
+        Label attHeading = new Label("Committee Attendance");
+        attHeading.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
+
+        VBox attListVBox = new VBox(4);
+        if (attendanceList.isEmpty()) {
+            attListVBox.getChildren().add(new Label("No attendance recorded."));
+        } else {
+            for (com.society.governance.entity.MeetingAttendanceEntity a : attendanceList) {
+                String name = a.getMember() != null ? a.getMember().getFirstName() + " " + (a.getMember().getLastName() != null ? a.getMember().getLastName() : "") : "Member #" + a.getMember().getId();
+                Label row = new Label("• " + name + " : " + a.getStatus());
+                if ("PRESENT".equalsIgnoreCase(a.getStatus())) {
+                    row.setStyle("-fx-text-fill: #16A34A; -fx-font-weight: bold;");
+                } else {
+                    row.setStyle("-fx-text-fill: #DC2626; -fx-font-weight: bold;");
+                }
+                attListVBox.getChildren().add(row);
+            }
+        }
+
+        Label minutesHeading = new Label("Minutes of Meeting (MoM)");
+        minutesHeading.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
+        TextArea minutesBox = new TextArea(selectedMeeting.getMinutes() != null ? selectedMeeting.getMinutes() : "Minutes not entered yet.");
+        minutesBox.setWrapText(true);
+        minutesBox.setEditable(false);
+        minutesBox.setPrefHeight(150);
+
+        HBox sigBox = new HBox(100);
+        sigBox.setPadding(new Insets(30, 0, 0, 0));
+        sigBox.getChildren().addAll(
+                new Label("_______________________\nChairman Signature"),
+                new Label("_______________________\nSecretary Signature")
+        );
+
+        printNode.getChildren().addAll(titleLbl, metaLbl, agendaHeading, agendaBox, attHeading, attListVBox, minutesHeading, minutesBox, sigBox);
+
+        PrinterJob job = PrinterJob.createPrinterJob();
+        if (job != null && job.showPrintDialog(meetingTable.getScene().getWindow())) {
+            boolean success = job.printPage(printNode);
+            if (success) {
+                job.endJob();
+            }
+        }
     }
 
     @FXML

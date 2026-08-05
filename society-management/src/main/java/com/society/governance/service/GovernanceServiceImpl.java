@@ -19,14 +19,20 @@ public class GovernanceServiceImpl implements GovernanceService {
     private final MeetingRepository meetingRepository;
     private final ResolutionRepository resolutionRepository;
     private final ManagingCommitteeRepository managingCommitteeRepository;
+    private final com.society.governance.repository.MeetingAttendanceRepository meetingAttendanceRepository;
+    private final com.society.member.repository.MemberRepository memberRepository;
 
     public GovernanceServiceImpl(
             MeetingRepository meetingRepository,
             ResolutionRepository resolutionRepository,
-            ManagingCommitteeRepository managingCommitteeRepository) {
+            ManagingCommitteeRepository managingCommitteeRepository,
+            com.society.governance.repository.MeetingAttendanceRepository meetingAttendanceRepository,
+            com.society.member.repository.MemberRepository memberRepository) {
         this.meetingRepository = meetingRepository;
         this.resolutionRepository = resolutionRepository;
         this.managingCommitteeRepository = managingCommitteeRepository;
+        this.meetingAttendanceRepository = meetingAttendanceRepository;
+        this.memberRepository = memberRepository;
     }
 
     @Override
@@ -120,5 +126,30 @@ public class GovernanceServiceImpl implements GovernanceService {
     @Transactional(readOnly = true)
     public List<ManagingCommitteeEntity> getAllCommitteeMembers() {
         return managingCommitteeRepository.findAllWithMembers();
+    }
+
+    @Override
+    public void markAttendance(Integer meetingId, Integer memberId, String status) {
+        MeetingEntity meeting = meetingRepository.findById(meetingId)
+                .orElseThrow(() -> new IllegalArgumentException("Meeting not found: " + meetingId));
+        com.society.member.entity.MemberEntity member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("Member not found: " + memberId));
+
+        com.society.governance.entity.MeetingAttendanceEntity attendance =
+                meetingAttendanceRepository.findByMeetingIdAndMemberId(meetingId, memberId)
+                        .orElseGet(() -> {
+                            com.society.governance.entity.MeetingAttendanceEntity a = new com.society.governance.entity.MeetingAttendanceEntity();
+                            a.setMeeting(meeting);
+                            a.setMember(member);
+                            return a;
+                        });
+        attendance.setStatus(status);
+        meetingAttendanceRepository.save(attendance);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<com.society.governance.entity.MeetingAttendanceEntity> getAttendanceForMeeting(Integer meetingId) {
+        return meetingAttendanceRepository.findByMeetingIdWithMembers(meetingId);
     }
 }

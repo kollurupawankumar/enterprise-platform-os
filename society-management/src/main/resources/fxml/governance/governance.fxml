@@ -59,6 +59,8 @@
 
                 <HBox spacing="10">
                     <Button fx:id="completeMeetingBtn" text="Save Minutes" onAction="#handleCompleteMeeting" styleClass="button-primary" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="attendanceBtn" text="Mark Attendance" onAction="#handleMarkAttendance" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+                    <Button text="Print MoM" onAction="#handlePrintMeeting" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
                 </HBox>
             </VBox>
         </SplitPane>

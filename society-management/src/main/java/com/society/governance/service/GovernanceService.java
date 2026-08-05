@@ -21,4 +21,7 @@ public interface GovernanceService {
 
     ManagingCommitteeEntity addCommitteeMember(ManagingCommitteeEntity mc);
     List<ManagingCommitteeEntity> getAllCommitteeMembers();
+
+    void markAttendance(Integer meetingId, Integer memberId, String status);
+    List<com.society.governance.entity.MeetingAttendanceEntity> getAttendanceForMeeting(Integer meetingId);
 }
