@@ -13,5 +13,7 @@ public interface ManagingCommitteeRepository extends JpaRepository<ManagingCommi
     @Query("SELECT mc FROM ManagingCommitteeEntity mc LEFT JOIN FETCH mc.member")
     List<ManagingCommitteeEntity> findAllWithMembers();
 
+    List<ManagingCommitteeEntity> findByDesignationAndStatus(String designation, String status);
+
     List<ManagingCommitteeEntity> findByStatus(String status);
 }

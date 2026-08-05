@@ -96,6 +96,23 @@ public class GovernanceServiceImpl implements GovernanceService {
         if (mc.getStatus() == null) {
             mc.setStatus("ACTIVE");
         }
+
+        // For single-holder designations (CHAIRMAN, SECRETARY, TREASURER, INTERNAL_AUDITOR),
+        // automatically expire any existing ACTIVE officer and set their end_date to today
+        String desig = mc.getDesignation();
+        if ("CHAIRMAN".equalsIgnoreCase(desig) || "SECRETARY".equalsIgnoreCase(desig)
+                || "TREASURER".equalsIgnoreCase(desig) || "INTERNAL_AUDITOR".equalsIgnoreCase(desig)) {
+
+            List<ManagingCommitteeEntity> existingActive = managingCommitteeRepository.findByDesignationAndStatus(desig, "ACTIVE");
+            String todayStr = java.time.LocalDate.now().toString();
+
+            for (ManagingCommitteeEntity existing : existingActive) {
+                existing.setStatus("EXPIRED");
+                existing.setEndDate(todayStr);
+                managingCommitteeRepository.save(existing);
+            }
+        }
+
         return managingCommitteeRepository.save(mc);
     }
 
