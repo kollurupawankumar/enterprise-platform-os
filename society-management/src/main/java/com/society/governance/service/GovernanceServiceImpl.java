@@ -88,7 +88,7 @@ public class GovernanceServiceImpl implements GovernanceService {
     @Override
     @Transactional(readOnly = true)
     public List<ResolutionEntity> getAllResolutions() {
-        return resolutionRepository.findAll();
+        return resolutionRepository.findAllWithMeetings();
     }
 
     @Override

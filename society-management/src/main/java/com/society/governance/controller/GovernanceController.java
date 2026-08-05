@@ -40,6 +40,7 @@ public class GovernanceController extends BaseController {
     @FXML private TableView<ResolutionEntity> resolutionTable;
     @FXML private TableColumn<ResolutionEntity, String> resNumCol;
     @FXML private TableColumn<ResolutionEntity, String> resSubjectCol;
+    @FXML private TableColumn<ResolutionEntity, String> resMeetingCol;
     @FXML private TableColumn<ResolutionEntity, String> resProposerCol;
     @FXML private TableColumn<ResolutionEntity, String> resStatusCol;
 
@@ -78,6 +79,10 @@ public class GovernanceController extends BaseController {
         // Resolutions mapping
         resNumCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getResolutionNumber()));
         resSubjectCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getSubject()));
+        resMeetingCol.setCellValueFactory(c -> {
+            MeetingEntity m = c.getValue().getMeeting();
+            return new SimpleStringProperty(m != null ? m.toString() : "N/A");
+        });
         resProposerCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getProposedBy()));
         resStatusCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getStatus()));
 

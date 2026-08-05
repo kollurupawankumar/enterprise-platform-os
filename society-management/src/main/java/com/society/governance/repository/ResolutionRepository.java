@@ -7,8 +7,18 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Optional;
+
 @Repository
 public interface ResolutionRepository extends JpaRepository<ResolutionEntity, Integer> {
+
+    @Query("SELECT r FROM ResolutionEntity r LEFT JOIN FETCH r.meeting")
+    List<ResolutionEntity> findAllWithMeetings();
+
     Optional<ResolutionEntity> findByResolutionNumber(String resolutionNumber);
     List<ResolutionEntity> findByMeetingId(Integer meetingId);
 }

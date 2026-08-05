@@ -77,10 +77,11 @@
             </HBox>
             <TableView fx:id="resolutionTable" VBox.vgrow="ALWAYS">
                 <columns>
-                    <TableColumn fx:id="resNumCol" text="Resolution No" prefWidth="150"/>
-                    <TableColumn fx:id="resSubjectCol" text="Subject" prefWidth="300"/>
-                    <TableColumn fx:id="resProposerCol" text="Proposed By" prefWidth="180"/>
-                    <TableColumn fx:id="resStatusCol" text="Status" prefWidth="120"/>
+                    <TableColumn fx:id="resNumCol" text="Resolution No" prefWidth="130"/>
+                    <TableColumn fx:id="resSubjectCol" text="Subject" prefWidth="250"/>
+                    <TableColumn fx:id="resMeetingCol" text="Meeting (Name - Date)" prefWidth="250"/>
+                    <TableColumn fx:id="resProposerCol" text="Proposed By" prefWidth="160"/>
+                    <TableColumn fx:id="resStatusCol" text="Status" prefWidth="100"/>
                 </columns>
             </TableView>
         </VBox>

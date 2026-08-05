@@ -153,4 +153,21 @@ public class MeetingEntity {
 
     public String getOnlineLink() { return onlineLink; }
     public void setOnlineLink(String onlineLink) { this.onlineLink = onlineLink; }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        if (title != null && !title.isBlank()) {
+            sb.append(title);
+        } else {
+            sb.append("Meeting #").append(id);
+        }
+        if (meetingDate != null && !meetingDate.isBlank()) {
+            sb.append(" - ").append(meetingDate);
+        }
+        if (meetingTime != null && !meetingTime.isBlank()) {
+            sb.append(" (").append(meetingTime).append(")");
+        }
+        return sb.toString();
+    }
 }
