@@ -2,24 +2,26 @@ package com.society.property.controller;
 
 import com.society.common.controller.BaseController;
 import com.society.common.navigation.NavigationManager;
-import com.society.member.entity.MemberEntity;
-import com.society.member.repository.MemberRepository;
-import com.society.member.repository.JointOwnerRepository;
-import com.society.member.repository.NomineeRepository;
 import com.society.member.entity.JointOwnerEntity;
+import com.society.member.entity.MemberEntity;
 import com.society.member.entity.NomineeEntity;
-import com.society.property.entity.PropertyEntity;
+import com.society.member.repository.JointOwnerRepository;
+import com.society.member.repository.MemberRepository;
+import com.society.member.repository.NomineeRepository;
+import com.society.property.dto.OwnershipHistoryDto;
 import com.society.property.entity.OwnershipHistoryEntity;
+import com.society.property.entity.PropertyEntity;
 import com.society.property.service.PropertyService;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
-import javafx.geometry.Insets;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,40 +33,29 @@ public class PropertyController extends BaseController {
     private final JointOwnerRepository jointOwnerRepository;
     private final NomineeRepository nomineeRepository;
 
-    @FXML
-    private TextField searchField;
+    @FXML private TextField searchField;
+    @FXML private TableView<PropertyEntity> propertyTable;
+    @FXML private TableColumn<PropertyEntity, String> propertyNumCol;
+    @FXML private TableColumn<PropertyEntity, String> blockCol;
+    @FXML private TableColumn<PropertyEntity, String> typeCol;
+    @FXML private TableColumn<PropertyEntity, String> ownerCol;
 
-    @FXML
-    private TableView<PropertyEntity> propertyTable;
+    @FXML private Label detailUnitLabel;
+    @FXML private Label detailBlockLabel;
+    @FXML private Label detailTypeLabel;
+    @FXML private Label detailOwnerLabel;
 
-    @FXML
-    private TableColumn<PropertyEntity, String> propertyNumCol;
+    @FXML private ListView<String> associationList;
 
-    @FXML
-    private TableColumn<PropertyEntity, String> blockCol;
-
-    @FXML
-    private TableColumn<PropertyEntity, String> typeCol;
-
-    @FXML
-    private TableColumn<PropertyEntity, String> ownerCol;
-
-    @FXML
-    private Label detailUnitLabel;
-
-    @FXML
-    private Label detailBlockLabel;
-
-    @FXML
-    private Label detailTypeLabel;
-
-    @FXML
-    private Label detailOwnerLabel;
-
-    @FXML
-    private ListView<String> associationList;
+    // Ownership History Table
+    @FXML private TableView<OwnershipHistoryDto> historyTable;
+    @FXML private TableColumn<OwnershipHistoryDto, String> histOwnerCol;
+    @FXML private TableColumn<OwnershipHistoryDto, String> histFromCol;
+    @FXML private TableColumn<OwnershipHistoryDto, String> histToCol;
+    @FXML private TableColumn<OwnershipHistoryDto, String> histStatusCol;
 
     private final ObservableList<PropertyEntity> properties = FXCollections.observableArrayList();
+    private final ObservableList<OwnershipHistoryDto> historyList = FXCollections.observableArrayList();
 
     public PropertyController(
             NavigationManager navigationManager,
@@ -86,8 +77,15 @@ public class PropertyController extends BaseController {
         typeCol.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getType()));
         ownerCol.setCellValueFactory(cell -> {
             MemberEntity owner = cell.getValue().getCurrentOwner();
-            return new SimpleStringProperty(owner != null ? owner.getFirstName() + " " + owner.getLastName() : "No Active Owner");
+            return new SimpleStringProperty(owner != null ? owner.getFirstName() + " " + (owner.getLastName() != null ? owner.getLastName() : "") : "No Active Owner");
         });
+
+        // History Table binding
+        histOwnerCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().ownerName()));
+        histFromCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().fromDate()));
+        histToCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().toDate()));
+        histStatusCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().status()));
+        historyTable.setItems(historyList);
 
         loadProperties();
 
@@ -109,7 +107,7 @@ public class PropertyController extends BaseController {
             return;
         }
         String lower = query.toLowerCase();
-        ObservableList<PropertyEntity> filtered = properties.filtered(p -> 
+        ObservableList<PropertyEntity> filtered = properties.filtered(p ->
             p.getPropertyNumber().toLowerCase().contains(lower) || p.getBlock().toLowerCase().contains(lower)
         );
         propertyTable.setItems(filtered);
@@ -122,6 +120,7 @@ public class PropertyController extends BaseController {
             detailTypeLabel.setText("-");
             detailOwnerLabel.setText("-");
             associationList.getItems().clear();
+            historyList.clear();
             return;
         }
 
@@ -131,25 +130,42 @@ public class PropertyController extends BaseController {
 
         MemberEntity owner = property.getCurrentOwner();
         if (owner != null) {
-            detailOwnerLabel.setText(owner.getFirstName() + " " + owner.getLastName() + " (" + owner.getMemberNumber() + ")");
+            detailOwnerLabel.setText(owner.getFirstName() + " " + (owner.getLastName() != null ? owner.getLastName() : "") + " (" + owner.getMemberNumber() + ")");
             loadAssociations(owner.getId());
         } else {
             detailOwnerLabel.setText("No Active Owner");
             associationList.getItems().clear();
         }
+
+        loadOwnershipHistory(property.getId());
     }
 
     private void loadAssociations(Integer memberId) {
         associationList.getItems().clear();
         List<JointOwnerEntity> jointOwners = jointOwnerRepository.findByMemberId(memberId);
         for (JointOwnerEntity jo : jointOwners) {
-            associationList.getItems().add("Joint Owner: " + jo.getFirstName() + " " + jo.getLastName() + " (" + jo.getRelationship() + ")");
+            associationList.getItems().add("Joint Owner: " + jo.getFirstName() + " " + (jo.getLastName() != null ? jo.getLastName() : "") + " (" + jo.getRelationship() + ")");
         }
 
         List<NomineeEntity> nominees = nomineeRepository.findByMemberId(memberId);
         for (NomineeEntity nominee : nominees) {
-            associationList.getItems().add("Nominee: " + nominee.getFirstName() + " " + nominee.getLastName() + " (" + nominee.getSharePercentage() + "%)");
+            associationList.getItems().add("Nominee: " + nominee.getFirstName() + " " + (nominee.getLastName() != null ? nominee.getLastName() : "") + " (" + nominee.getSharePercentage() + "%)");
         }
+    }
+
+    private void loadOwnershipHistory(Integer propertyId) {
+        historyList.clear();
+        List<OwnershipHistoryEntity> histories = propertyService.getOwnershipHistory(propertyId);
+        List<OwnershipHistoryDto> dtos = new ArrayList<>();
+        for (OwnershipHistoryEntity h : histories) {
+            MemberEntity m = h.getMember();
+            String name = m != null ? m.getFirstName() + " " + (m.getLastName() != null ? m.getLastName() : "") + " (" + m.getMemberNumber() + ")" : "Unknown Member";
+            String from = h.getFromDate() != null ? h.getFromDate() : "-";
+            String to = h.getToDate() != null ? h.getToDate() : "Present";
+            String status = h.getToDate() == null ? "CURRENT OWNER" : "PREVIOUS OWNER";
+            dtos.add(new OwnershipHistoryDto(h.getId(), name, from, to, status));
+        }
+        historyList.setAll(dtos);
     }
 
     @FXML
