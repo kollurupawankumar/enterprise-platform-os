@@ -365,66 +365,84 @@ public class GovernanceController extends BaseController {
         List<com.society.governance.entity.MeetingAttendanceEntity> attendanceList =
                 governanceService.getAttendanceForMeeting(selectedMeeting.getId());
 
-        VBox printNode = new VBox(15);
-        printNode.setPadding(new Insets(20));
-        printNode.setStyle("-fx-background-color: white;");
+        StringBuilder html = new StringBuilder();
+        html.append("<!DOCTYPE html><html><head><title>Meeting Report - ").append(selectedMeeting.getTitle()).append("</title>")
+            .append("<style>")
+            .append("@media print { @page { margin: 1.5cm; } }")
+            .append("body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 30px; color: #1E293B; }")
+            .append(".header { border-bottom: 2px solid #2563EB; padding-bottom: 12px; margin-bottom: 20px; }")
+            .append(".title { font-size: 24px; font-weight: bold; color: #0F172A; margin: 0; }")
+            .append(".meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; background: #F8FAFC; padding: 12px; border-radius: 6px; border: 1px solid #E2E8F0; margin-bottom: 20px; }")
+            .append(".meta-item { font-size: 14px; }")
+            .append(".meta-label { font-weight: bold; color: #64748B; }")
+            .append(".section-title { font-size: 16px; font-weight: bold; color: #0F172A; margin-top: 20px; margin-bottom: 8px; border-left: 4px solid #2563EB; padding-left: 8px; }")
+            .append(".box { background: #FFFFFF; border: 1px solid #CBD5E1; padding: 15px; border-radius: 6px; font-size: 14px; white-space: pre-wrap; line-height: 1.5; }")
+            .append("table { width: 100%; border-collapse: collapse; margin-top: 8px; }")
+            .append("th, td { border: 1px solid #CBD5E1; padding: 8px 12px; text-align: left; font-size: 14px; }")
+            .append("th { background-color: #F1F5F9; font-weight: bold; }")
+            .append(".present { color: #16A34A; font-weight: bold; }")
+            .append(".absent { color: #DC2626; font-weight: bold; }")
+            .append(".sig-box { margin-top: 50px; display: flex; justify-content: space-between; }")
+            .append(".sig-line { width: 220px; border-top: 1px solid #0F172A; text-align: center; padding-top: 5px; font-weight: bold; }")
+            .append("</style>")
+            .append("</head><body onload='window.print()'>");
 
-        Label titleLbl = new Label(selectedMeeting.getTitle() + " - Meeting Report");
-        titleLbl.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #0F172A;");
+        html.append("<div class='header'>")
+            .append("<div class='title'>").append(selectedMeeting.getTitle()).append(" - Official Meeting Report</div>")
+            .append("</div>");
 
-        Label metaLbl = new Label("Type: " + selectedMeeting.getMeetingType() + " | Date: " + selectedMeeting.getMeetingDate() +
-                (selectedMeeting.getMeetingTime() != null ? " (" + selectedMeeting.getMeetingTime() + ")" : "") +
-                " | Venue: " + selectedMeeting.getVenue() + " | Status: " + selectedMeeting.getStatus());
-        metaLbl.setStyle("-fx-font-size: 12px; -fx-text-fill: #475569;");
+        html.append("<div class='meta-grid'>")
+            .append("<div class='meta-item'><span class='meta-label'>Meeting Type:</span> ").append(selectedMeeting.getMeetingType()).append("</div>")
+            .append("<div class='meta-item'><span class='meta-label'>Status:</span> ").append(selectedMeeting.getStatus()).append("</div>")
+            .append("<div class='meta-item'><span class='meta-label'>Date & Time:</span> ").append(selectedMeeting.getMeetingDate())
+            .append(selectedMeeting.getMeetingTime() != null ? " (" + selectedMeeting.getMeetingTime() + ")" : "").append("</div>")
+            .append("<div class='meta-item'><span class='meta-label'>Venue:</span> ").append(selectedMeeting.getVenue()).append("</div>");
 
-        Label agendaHeading = new Label("Meeting Agenda");
-        agendaHeading.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
-        TextArea agendaBox = new TextArea(selectedMeeting.getAgenda() != null ? selectedMeeting.getAgenda() : "No Agenda Specified");
-        agendaBox.setWrapText(true);
-        agendaBox.setEditable(false);
-        agendaBox.setPrefHeight(100);
+        if (Boolean.TRUE.equals(selectedMeeting.getIsOnline()) && selectedMeeting.getOnlineLink() != null) {
+            html.append("<div class='meta-item' style='grid-column: span 2;'><span class='meta-label'>Online Link:</span> ").append(selectedMeeting.getOnlineLink()).append("</div>");
+        }
+        html.append("</div>");
 
-        Label attHeading = new Label("Committee Attendance");
-        attHeading.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
+        html.append("<div class='section-title'>Meeting Agenda</div>");
+        html.append("<div class='box'>").append(selectedMeeting.getAgenda() != null && !selectedMeeting.getAgenda().isBlank() ? selectedMeeting.getAgenda() : "No Agenda Specified.").append("</div>");
 
-        VBox attListVBox = new VBox(4);
+        html.append("<div class='section-title'>Committee Attendance Register</div>");
         if (attendanceList.isEmpty()) {
-            attListVBox.getChildren().add(new Label("No attendance recorded."));
+            html.append("<div class='box'>No committee attendance recorded for this meeting.</div>");
         } else {
+            html.append("<table><tr><th>Committee Officer Name</th><th>Attendance Status</th></tr>");
             for (com.society.governance.entity.MeetingAttendanceEntity a : attendanceList) {
                 String name = a.getMember() != null ? a.getMember().getFirstName() + " " + (a.getMember().getLastName() != null ? a.getMember().getLastName() : "") : "Member #" + a.getMember().getId();
-                Label row = new Label("• " + name + " : " + a.getStatus());
-                if ("PRESENT".equalsIgnoreCase(a.getStatus())) {
-                    row.setStyle("-fx-text-fill: #16A34A; -fx-font-weight: bold;");
-                } else {
-                    row.setStyle("-fx-text-fill: #DC2626; -fx-font-weight: bold;");
-                }
-                attListVBox.getChildren().add(row);
+                String cssClass = "PRESENT".equalsIgnoreCase(a.getStatus()) ? "present" : "absent";
+                html.append("<tr><td>").append(name).append("</td><td class='").append(cssClass).append("'>").append(a.getStatus()).append("</td></tr>");
             }
+            html.append("</table>");
         }
 
-        Label minutesHeading = new Label("Minutes of Meeting (MoM)");
-        minutesHeading.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
-        TextArea minutesBox = new TextArea(selectedMeeting.getMinutes() != null ? selectedMeeting.getMinutes() : "Minutes not entered yet.");
-        minutesBox.setWrapText(true);
-        minutesBox.setEditable(false);
-        minutesBox.setPrefHeight(150);
+        html.append("<div class='section-title'>Minutes of Meeting (MoM)</div>");
+        html.append("<div class='box'>").append(selectedMeeting.getMinutes() != null && !selectedMeeting.getMinutes().isBlank() ? selectedMeeting.getMinutes() : "Minutes of meeting not recorded.").append("</div>");
 
-        HBox sigBox = new HBox(100);
-        sigBox.setPadding(new Insets(30, 0, 0, 0));
-        sigBox.getChildren().addAll(
-                new Label("_______________________\nChairman Signature"),
-                new Label("_______________________\nSecretary Signature")
-        );
+        html.append("<div class='sig-box'>")
+            .append("<div class='sig-line'>Chairman Signature</div>")
+            .append("<div class='sig-line'>Secretary Signature</div>")
+            .append("</div>");
 
-        printNode.getChildren().addAll(titleLbl, metaLbl, agendaHeading, agendaBox, attHeading, attListVBox, minutesHeading, minutesBox, sigBox);
+        html.append("</body></html>");
 
-        PrinterJob job = PrinterJob.createPrinterJob();
-        if (job != null && job.showPrintDialog(meetingTable.getScene().getWindow())) {
-            boolean success = job.printPage(printNode);
-            if (success) {
-                job.endJob();
+        try {
+            java.io.File tempFile = java.io.File.createTempFile("Meeting_Report_" + selectedMeeting.getId(), ".html");
+            tempFile.deleteOnExit();
+            java.nio.file.Files.writeString(tempFile.toPath(), html.toString());
+
+            if (java.awt.Desktop.isDesktopSupported()) {
+                java.awt.Desktop.getDesktop().open(tempFile);
             }
+        } catch (Exception ex) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Print Error");
+            alert.setHeaderText("Failed to generate meeting report");
+            alert.setContentText(ex.getMessage());
+            alert.showAndWait();
         }
     }
 
