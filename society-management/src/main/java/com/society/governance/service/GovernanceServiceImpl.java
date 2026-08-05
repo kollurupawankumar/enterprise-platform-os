@@ -102,6 +102,6 @@ public class GovernanceServiceImpl implements GovernanceService {
     @Override
     @Transactional(readOnly = true)
     public List<ManagingCommitteeEntity> getAllCommitteeMembers() {
-        return managingCommitteeRepository.findAll();
+        return managingCommitteeRepository.findAllWithMembers();
     }
 }
