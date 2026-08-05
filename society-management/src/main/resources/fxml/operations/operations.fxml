@@ -78,6 +78,22 @@
                     <Label text="AMC Details:" style="-fx-font-weight: bold; -fx-text-fill: #64748B;" GridPane.rowIndex="3"/>
                     <Label fx:id="amcDetailsLabel" text="-" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
                 </GridPane>
+
+                <HBox alignment="CENTER_LEFT" style="-fx-padding: 10 0 0 0;">
+                    <Label text="Service Visits &amp; Photo Logs" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button text="Log Service Visit" onAction="#handleLogServiceVisit" styleClass="button-primary"/>
+                </HBox>
+
+                <TableView fx:id="serviceLogTable" VBox.vgrow="ALWAYS" prefHeight="150" style="-fx-background-radius: 6;">
+                    <columns>
+                        <TableColumn fx:id="serviceDateCol" text="Date" prefWidth="90"/>
+                        <TableColumn fx:id="serviceTypeCol" text="Type" prefWidth="100"/>
+                        <TableColumn fx:id="serviceEngCol" text="Engineer" prefWidth="110"/>
+                        <TableColumn fx:id="serviceSummaryCol" text="Work Done / Remarks" prefWidth="180"/>
+                        <TableColumn fx:id="serviceDocCol" text="Receipt / Photo" prefWidth="110"/>
+                    </columns>
+                </TableView>
             </VBox>
         </SplitPane>
     </Tab>

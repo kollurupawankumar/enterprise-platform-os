@@ -21,16 +21,19 @@ public class OperationsServiceImpl implements OperationsService {
     private final VendorRepository vendorRepository;
     private final FacilityRepository facilityRepository;
     private final SocietyStaffRepository staffRepository;
+    private final com.society.operations.repository.AssetServiceLogRepository serviceLogRepository;
 
     public OperationsServiceImpl(
             AssetRepository assetRepository,
             VendorRepository vendorRepository,
             FacilityRepository facilityRepository,
-            SocietyStaffRepository staffRepository) {
+            SocietyStaffRepository staffRepository,
+            com.society.operations.repository.AssetServiceLogRepository serviceLogRepository) {
         this.assetRepository = assetRepository;
         this.vendorRepository = vendorRepository;
         this.facilityRepository = facilityRepository;
         this.staffRepository = staffRepository;
+        this.serviceLogRepository = serviceLogRepository;
     }
 
     @Override
@@ -75,5 +78,16 @@ public class OperationsServiceImpl implements OperationsService {
     @Override
     public SocietyStaffEntity saveStaff(SocietyStaffEntity staff) {
         return staffRepository.save(staff);
+    }
+
+    @Override
+    public com.society.operations.entity.AssetServiceLogEntity logServiceVisit(com.society.operations.entity.AssetServiceLogEntity log) {
+        return serviceLogRepository.save(log);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<com.society.operations.entity.AssetServiceLogEntity> getServiceLogsForAsset(Integer assetId) {
+        return serviceLogRepository.findByAssetId(assetId);
     }
 }

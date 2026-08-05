@@ -18,4 +18,7 @@ public interface OperationsService {
 
     List<SocietyStaffEntity> getAllStaff();
     SocietyStaffEntity saveStaff(SocietyStaffEntity staff);
+
+    com.society.operations.entity.AssetServiceLogEntity logServiceVisit(com.society.operations.entity.AssetServiceLogEntity log);
+    List<com.society.operations.entity.AssetServiceLogEntity> getServiceLogsForAsset(Integer assetId);
 }

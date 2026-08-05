@@ -40,6 +40,15 @@ public class OperationsController extends BaseController {
     @FXML private Label purchaseCostLabel;
     @FXML private Label warrantyLabel;
 
+    // Service Log Controls
+    @FXML private TableView<com.society.operations.entity.AssetServiceLogEntity> serviceLogTable;
+    @FXML private TableColumn<com.society.operations.entity.AssetServiceLogEntity, String> serviceDateCol;
+    @FXML private TableColumn<com.society.operations.entity.AssetServiceLogEntity, String> serviceTypeCol;
+    @FXML private TableColumn<com.society.operations.entity.AssetServiceLogEntity, String> serviceEngCol;
+    @FXML private TableColumn<com.society.operations.entity.AssetServiceLogEntity, String> serviceSummaryCol;
+    @FXML private TableColumn<com.society.operations.entity.AssetServiceLogEntity, String> serviceDocCol;
+    private final ObservableList<com.society.operations.entity.AssetServiceLogEntity> serviceLogs = FXCollections.observableArrayList();
+
     // Vendors
     @FXML private TableView<VendorEntity> vendorTable;
     @FXML private TableColumn<VendorEntity, String> vendorNameCol;
@@ -91,6 +100,13 @@ public class OperationsController extends BaseController {
         assetTable.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             showAssetDetails(newVal);
         });
+
+        // Service log column mapping
+        serviceDateCol.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getServiceDate()));
+        serviceTypeCol.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getServiceType()));
+        serviceEngCol.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getEngineerName() != null ? cell.getValue().getEngineerName() : "-"));
+        serviceSummaryCol.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getWorkSummary() != null ? cell.getValue().getWorkSummary() : "-"));
+        serviceDocCol.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getDocumentPath() != null ? cell.getValue().getDocumentPath() : "No Document"));
 
         // Vendor column mapping
         vendorNameCol.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getName()));
@@ -181,6 +197,108 @@ public class OperationsController extends BaseController {
 
         amcCostLabel.setText(asset.getAmcCost() != null ? "₹ " + String.format("%.2f", asset.getAmcCost()) : "-");
         amcDetailsLabel.setText(asset.getAmcDetails() != null && !asset.getAmcDetails().isBlank() ? asset.getAmcDetails() : "No details.");
+
+        loadServiceLogs(asset.getId());
+    }
+
+    private void loadServiceLogs(Integer assetId) {
+        if (assetId == null) {
+            serviceLogs.clear();
+        } else {
+            serviceLogs.setAll(operationsService.getServiceLogsForAsset(assetId));
+        }
+        serviceLogTable.setItems(serviceLogs);
+    }
+
+    @FXML
+    private void handleLogServiceVisit() {
+        if (selectedAsset == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Selection Required");
+            alert.setHeaderText(null);
+            alert.setContentText("Please select an asset first before logging a service visit.");
+            alert.showAndWait();
+            return;
+        }
+
+        Dialog<com.society.operations.entity.AssetServiceLogEntity> dialog = new Dialog<>();
+        dialog.setTitle("Log AMC / Repair Service Visit");
+        dialog.setHeaderText("Record service visit details for: " + selectedAsset.getName());
+
+        ButtonType saveBtnType = new ButtonType("Save Log", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(saveBtnType, ButtonType.CANCEL);
+
+        GridPane grid = new GridPane();
+        grid.setHgap(10); grid.setVgap(10);
+        grid.setPadding(new Insets(15));
+
+        DatePicker serviceDatePicker = new DatePicker(LocalDate.now());
+        ComboBox<String> typeCombo = new ComboBox<>(FXCollections.observableArrayList("ROUTINE_AMC", "REPAIR", "INSPECTION", "EMERGENCY"));
+        typeCombo.getSelectionModel().selectFirst();
+
+        TextField engField = new TextField();
+        engField.setPromptText("Service Engineer / Vendor Contact Name");
+
+        TextField costField = new TextField();
+        costField.setPromptText("Cost incurred ₹ (0 if covered under AMC)");
+
+        TextArea summaryArea = new TextArea();
+        summaryArea.setPromptText("Work performed, parts replaced, remarks...");
+        summaryArea.setPrefRowCount(3);
+
+        Label docPathLabel = new Label("No document selected");
+        Button uploadBtn = new Button("Upload Service Receipt / Photo");
+        final String[] uploadedPath = new String[1];
+
+        uploadBtn.setOnAction(e -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Select Service Receipt / Photo");
+            fileChooser.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("Images & Documents", "*.jpg", "*.jpeg", "*.png", "*.pdf")
+            );
+            File file = fileChooser.showOpenDialog(serviceLogTable.getScene().getWindow());
+            if (file != null) {
+                try {
+                    String relativePath = fileStorageService.storeFile(file, "assets/service_receipts");
+                    uploadedPath[0] = relativePath;
+                    docPathLabel.setText(file.getName());
+                } catch (Exception ex) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setContentText("Failed to upload file: " + ex.getMessage());
+                    alert.showAndWait();
+                }
+            }
+        });
+
+        grid.add(new Label("Service Date:"), 0, 0); grid.add(serviceDatePicker, 1, 0);
+        grid.add(new Label("Service Type:"), 0, 1); grid.add(typeCombo, 1, 1);
+        grid.add(new Label("Engineer / Contact:"), 0, 2); grid.add(engField, 1, 2);
+        grid.add(new Label("Cost (₹):"), 0, 3); grid.add(costField, 1, 3);
+        grid.add(new Label("Work Summary:"), 0, 4); grid.add(summaryArea, 1, 4);
+        grid.add(new Label("Inspection Photo / Bill:"), 0, 5); grid.add(new HBox(10, uploadBtn, docPathLabel), 1, 5);
+
+        dialog.getDialogPane().setContent(grid);
+
+        dialog.setResultConverter(btn -> {
+            if (btn == saveBtnType) {
+                com.society.operations.entity.AssetServiceLogEntity log = new com.society.operations.entity.AssetServiceLogEntity();
+                log.setAsset(selectedAsset);
+                log.setServiceDate(serviceDatePicker.getValue() != null ? serviceDatePicker.getValue().toString() : LocalDate.now().toString());
+                log.setServiceType(typeCombo.getValue());
+                log.setEngineerName(engField.getText().trim());
+                try { log.setCost(Double.parseDouble(costField.getText().trim())); } catch (Exception ignored) {}
+                log.setWorkSummary(summaryArea.getText().trim());
+                log.setDocumentPath(uploadedPath[0]);
+                return log;
+            }
+            return null;
+        });
+
+        Optional<com.society.operations.entity.AssetServiceLogEntity> result = dialog.showAndWait();
+        result.ifPresent(log -> {
+            operationsService.logServiceVisit(log);
+            loadServiceLogs(selectedAsset.getId());
+        });
     }
 
     private void showVendorDetails(VendorEntity vendor) {
