@@ -212,8 +212,16 @@ public class PropertyController extends BaseController {
         Optional<PropertyEntity> result = dialog.showAndWait();
         result.ifPresent(p -> {
             if (!p.getPropertyNumber().isEmpty() && !p.getBlock().isEmpty()) {
-                propertyService.saveProperty(p);
-                loadProperties();
+                try {
+                    propertyService.saveProperty(p);
+                    loadProperties();
+                } catch (IllegalArgumentException ex) {
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Duplicate Property");
+                    alert.setHeaderText("Unit Already Exists");
+                    alert.setContentText(ex.getMessage());
+                    alert.showAndWait();
+                }
             }
         });
     }

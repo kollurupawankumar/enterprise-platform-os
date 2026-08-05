@@ -15,5 +15,6 @@ public interface PropertyRepository extends JpaRepository<PropertyEntity, Intege
     List<PropertyEntity> findAllWithOwners();
 
     Optional<PropertyEntity> findByPropertyNumber(String propertyNumber);
+    boolean existsByPropertyNumberIgnoreCaseAndBlockIgnoreCaseAndTypeIgnoreCase(String propertyNumber, String block, String type);
     List<PropertyEntity> findByCurrentOwnerId(Integer memberId);
 }

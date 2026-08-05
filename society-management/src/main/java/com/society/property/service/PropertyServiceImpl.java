@@ -31,6 +31,16 @@ public class PropertyServiceImpl implements PropertyService {
 
     @Override
     public PropertyEntity saveProperty(PropertyEntity property) {
+        if (property != null && property.getPropertyNumber() != null && property.getBlock() != null && property.getType() != null) {
+            boolean exists = propertyRepository.existsByPropertyNumberIgnoreCaseAndBlockIgnoreCaseAndTypeIgnoreCase(
+                    property.getPropertyNumber().trim(),
+                    property.getBlock().trim(),
+                    property.getType().trim()
+            );
+            if (exists) {
+                throw new IllegalArgumentException("Property unit '" + property.getPropertyNumber() + "' (Block: " + property.getBlock() + ", Type: " + property.getType() + ") already exists in the system.");
+            }
+        }
         return propertyRepository.save(property);
     }
 
