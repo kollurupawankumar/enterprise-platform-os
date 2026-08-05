@@ -53,4 +53,24 @@ public class FileStorageService {
 
         return targetPath.toString().replace("\\", "/");
     }
+
+    /**
+     * Copies a source file to local storage directory with a custom specified filename.
+     */
+    public String storeFileWithName(File sourceFile, String prefix, String targetFileName) throws IOException {
+        if (sourceFile == null || !sourceFile.exists() || targetFileName == null || targetFileName.isBlank()) {
+            return null;
+        }
+
+        String subDirName = UPLOAD_ROOT_DIR + "/" + prefix;
+        File subDir = new File(subDirName);
+        if (!subDir.exists()) {
+            subDir.mkdirs();
+        }
+
+        Path targetPath = Paths.get(subDirName, targetFileName);
+        Files.copy(sourceFile.toPath(), targetPath, StandardCopyOption.REPLACE_EXISTING);
+
+        return targetPath.toString().replace("\\", "/");
+    }
 }

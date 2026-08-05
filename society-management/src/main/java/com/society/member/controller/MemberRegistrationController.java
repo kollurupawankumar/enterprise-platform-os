@@ -302,7 +302,25 @@ public class MemberRegistrationController extends BaseController {
         File file = chooseFile("Select Member Photo", new FileChooser.ExtensionFilter("Image Files", "*.jpg", "*.jpeg", "*.png"));
         if (file != null) {
             try {
-                String relPath = fileStorageService.storeFile(file, "photos");
+                String first = firstNameField.getText() != null && !firstNameField.getText().isBlank() ? firstNameField.getText().trim() : "member";
+                String last = lastNameField.getText() != null && !lastNameField.getText().isBlank() ? lastNameField.getText().trim() : "";
+                String unit = memberNumberField.getText() != null && !memberNumberField.getText().isBlank() ? memberNumberField.getText().trim() : "unit";
+
+                String ext = ".jpg";
+                int idx = file.getName().lastIndexOf('.');
+                if (idx > 0) {
+                    ext = file.getName().substring(idx);
+                }
+
+                String cleanFirst = first.replaceAll("[^a-zA-Z0-9]", "_").toLowerCase();
+                String cleanLast = last.replaceAll("[^a-zA-Z0-9]", "_").toLowerCase();
+                String cleanUnit = unit.replaceAll("[^a-zA-Z0-9]", "_").toLowerCase();
+
+                String customFileName = cleanLast.isEmpty()
+                        ? cleanFirst + "_" + cleanUnit + ext
+                        : cleanFirst + "_" + cleanLast + "_" + cleanUnit + ext;
+
+                String relPath = fileStorageService.storeFileWithName(file, "photos", customFileName);
                 photoPathField.setText(relPath);
             } catch (Exception ex) {
                 showError("Failed to copy photo file: " + ex.getMessage());
