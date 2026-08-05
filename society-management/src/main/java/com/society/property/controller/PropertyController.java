@@ -233,7 +233,8 @@ public class PropertyController extends BaseController {
         result.ifPresent(newOwner -> {
             propertyService.transferOwnership(selected.getId(), newOwner.getId(), java.time.LocalDate.now().toString());
             loadProperties();
-            showPropertyDetails(selected);
+            PropertyEntity updated = propertyService.getPropertyById(selected.getId()).orElse(null);
+            showPropertyDetails(updated);
         });
     }
 }

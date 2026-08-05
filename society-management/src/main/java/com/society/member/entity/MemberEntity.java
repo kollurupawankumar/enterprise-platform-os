@@ -289,4 +289,14 @@ public class MemberEntity {
 
     public String getPanDocPath() { return panDocPath; }
     public void setPanDocPath(String panDocPath) { this.panDocPath = panDocPath; }
+
+    @Override
+    public String toString() {
+        String full = (firstName != null ? firstName : "") + " " + (lastName != null ? lastName : "");
+        full = full.trim();
+        if (memberNumber != null && !memberNumber.isBlank()) {
+            return (full.isEmpty() ? "Member" : full) + " (" + memberNumber + ")";
+        }
+        return full.isEmpty() ? "Member #" + id : full;
+    }
 }
