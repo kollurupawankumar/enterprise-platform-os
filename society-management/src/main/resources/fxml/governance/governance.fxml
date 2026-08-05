@@ -34,13 +34,29 @@
             </VBox>
 
             <!-- Right Panel: Meeting Details -->
-            <VBox spacing="15">
+            <VBox spacing="12">
                 <padding>
                     <Insets top="15" right="15" bottom="15" left="10"/>
                 </padding>
-                <Label text="Meeting details" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
-                <TextArea fx:id="agendaArea" promptText="Agenda description..." editable="false" prefHeight="150" wrapText="true"/>
-                <TextArea fx:id="minutesArea" promptText="Minutes of the meeting..." editable="false" prefHeight="250" wrapText="true"/>
+                <Label text="Meeting Details" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                
+                <GridPane hgap="10" vgap="8" style="-fx-background-color: #F8FAFC; -fx-padding: 10; -fx-background-radius: 6;">
+                    <Label text="Time:" style="-fx-font-weight: bold; -fx-text-fill: #64748B;" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                    <Label fx:id="meetTimeVal" text="-" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                    <Label text="Venue:" style="-fx-font-weight: bold; -fx-text-fill: #64748B;" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                    <Label fx:id="meetVenueVal" text="-" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                    <Label text="Online Link:" style="-fx-font-weight: bold; -fx-text-fill: #64748B;" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                    <Hyperlink fx:id="meetOnlineLinkVal" text="-" onAction="#openOnlineLink" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                </GridPane>
+
+                <Label text="Agenda" style="-fx-font-weight: bold;"/>
+                <TextArea fx:id="agendaArea" promptText="Agenda description..." editable="false" prefHeight="120" wrapText="true"/>
+
+                <Label text="Minutes of Meeting" style="-fx-font-weight: bold;"/>
+                <TextArea fx:id="minutesArea" promptText="Minutes of the meeting..." editable="false" prefHeight="180" wrapText="true"/>
+
                 <HBox spacing="10">
                     <Button fx:id="completeMeetingBtn" text="Enter Minutes" onAction="#handleCompleteMeeting" styleClass="button-primary" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
                 </HBox>

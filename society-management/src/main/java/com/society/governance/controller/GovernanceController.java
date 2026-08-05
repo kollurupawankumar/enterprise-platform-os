@@ -111,16 +111,49 @@ public class GovernanceController extends BaseController {
         mcTable.setItems(committeeMembers);
     }
 
+    @FXML private Label meetTimeVal;
+    @FXML private Label meetVenueVal;
+    @FXML private Hyperlink meetOnlineLinkVal;
+
+    private MeetingEntity selectedMeeting;
+
     private void showMeetingDetails(MeetingEntity meeting) {
+        this.selectedMeeting = meeting;
         if (meeting == null) {
+            meetTimeVal.setText("-");
+            meetVenueVal.setText("-");
+            meetOnlineLinkVal.setText("-");
             agendaArea.clear();
             minutesArea.clear();
             completeMeetingBtn.setDisable(true);
             return;
         }
+        meetTimeVal.setText(meeting.getMeetingTime() != null ? meeting.getMeetingTime() : "-");
+        meetVenueVal.setText(meeting.getVenue() != null ? meeting.getVenue() : "-");
+        if (Boolean.TRUE.equals(meeting.getIsOnline()) && meeting.getOnlineLink() != null && !meeting.getOnlineLink().isBlank()) {
+            meetOnlineLinkVal.setText(meeting.getOnlineLink());
+            meetOnlineLinkVal.setDisable(false);
+        } else {
+            meetOnlineLinkVal.setText(Boolean.TRUE.equals(meeting.getIsOnline()) ? "Online Meeting (Link in Agenda)" : "-");
+            meetOnlineLinkVal.setDisable(true);
+        }
+
         agendaArea.setText(meeting.getAgenda() != null ? meeting.getAgenda() : "No Agenda Stated.");
         minutesArea.setText(meeting.getMinutes() != null ? meeting.getMinutes() : "No Minutes entered yet.");
         completeMeetingBtn.setDisable("COMPLETED".equals(meeting.getStatus()));
+    }
+
+    @FXML
+    private void openOnlineLink() {
+        if (selectedMeeting != null && selectedMeeting.getOnlineLink() != null && !selectedMeeting.getOnlineLink().isBlank()) {
+            try {
+                if (java.awt.Desktop.isDesktopSupported()) {
+                    java.awt.Desktop.getDesktop().browse(new java.net.URI(selectedMeeting.getOnlineLink()));
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 
     @FXML
@@ -141,24 +174,41 @@ public class GovernanceController extends BaseController {
         titleField.setPromptText("e.g. AGM 2026");
         ComboBox<String> typeCombo = new ComboBox<>(FXCollections.observableArrayList("AGM", "SGM", "COMMITTEE"));
         typeCombo.getSelectionModel().selectFirst();
-        TextField dateField = new TextField();
-        dateField.setPromptText("YYYY-MM-DD");
+        
+        DatePicker datePicker = new DatePicker(java.time.LocalDate.now());
+        TextField timeField = new TextField();
+        timeField.setPromptText("e.g. 10:30 AM");
+        
         TextField venueField = new TextField();
         venueField.setPromptText("e.g. Clubhouse");
+
+        CheckBox onlineCheckBox = new CheckBox("Hybrid / Online Meeting");
+        TextField onlineLinkField = new TextField();
+        onlineLinkField.setPromptText("Meeting link e.g. https://meet.google.com/abc-defg-hij");
+        onlineLinkField.setVisible(false);
+
+        onlineCheckBox.selectedProperty().addListener((obs, oldVal, newVal) -> {
+            onlineLinkField.setVisible(newVal);
+        });
+
         TextArea agendaInput = new TextArea();
         agendaInput.setPromptText("Enter agendas here...");
-        agendaInput.setPrefRowCount(4);
+        agendaInput.setPrefRowCount(3);
 
         grid.add(new Label("Title:"), 0, 0);
         grid.add(titleField, 1, 0);
         grid.add(new Label("Type:"), 0, 1);
         grid.add(typeCombo, 1, 1);
         grid.add(new Label("Date:"), 0, 2);
-        grid.add(dateField, 1, 2);
-        grid.add(new Label("Venue:"), 0, 3);
-        grid.add(venueField, 1, 3);
-        grid.add(new Label("Agenda:"), 0, 4);
-        grid.add(agendaInput, 1, 4);
+        grid.add(datePicker, 1, 2);
+        grid.add(new Label("Time:"), 0, 3);
+        grid.add(timeField, 1, 3);
+        grid.add(new Label("Venue:"), 0, 4);
+        grid.add(venueField, 1, 4);
+        grid.add(onlineCheckBox, 0, 5);
+        grid.add(onlineLinkField, 1, 5);
+        grid.add(new Label("Agenda:"), 0, 6);
+        grid.add(agendaInput, 1, 6);
 
         dialog.getDialogPane().setContent(grid);
 
@@ -167,8 +217,11 @@ public class GovernanceController extends BaseController {
                 MeetingEntity m = new MeetingEntity();
                 m.setTitle(titleField.getText().trim());
                 m.setMeetingType(typeCombo.getValue());
-                m.setMeetingDate(dateField.getText().trim());
+                m.setMeetingDate(datePicker.getValue() != null ? datePicker.getValue().toString() : java.time.LocalDate.now().toString());
+                m.setMeetingTime(timeField.getText().trim());
                 m.setVenue(venueField.getText().trim());
+                m.setIsOnline(onlineCheckBox.isSelected());
+                m.setOnlineLink(onlineCheckBox.isSelected() ? onlineLinkField.getText().trim() : null);
                 m.setAgenda(agendaInput.getText().trim());
                 return m;
             }

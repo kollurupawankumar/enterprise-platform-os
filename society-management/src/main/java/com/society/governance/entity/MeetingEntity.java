@@ -33,6 +33,12 @@ public class MeetingEntity {
     @Column(nullable = false, length = 20)
     private String status; // SCHEDULED, COMPLETED, CANCELLED
 
+    @Column(name = "is_online")
+    private Boolean isOnline = false;
+
+    @Column(name = "online_link", length = 500)
+    private String onlineLink;
+
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
@@ -142,7 +148,9 @@ public class MeetingEntity {
         return updatedAt;
     }
 
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
+    public Boolean getIsOnline() { return isOnline; }
+    public void setIsOnline(Boolean isOnline) { this.isOnline = isOnline; }
+
+    public String getOnlineLink() { return onlineLink; }
+    public void setOnlineLink(String onlineLink) { this.onlineLink = onlineLink; }
 }
