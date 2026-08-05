@@ -170,7 +170,7 @@ public class PropertyController extends BaseController {
         unitField.setPromptText("e.g. 301");
         TextField blockField = new TextField();
         blockField.setPromptText("e.g. A Wing");
-        ComboBox<String> typeCombo = new ComboBox<>(FXCollections.observableArrayList("FLAT", "SHOP", "GARAGE"));
+        ComboBox<String> typeCombo = new ComboBox<>(FXCollections.observableArrayList("FLAT", "VILLA", "SHOP", "GARAGE"));
         typeCombo.getSelectionModel().selectFirst();
 
         grid.add(new Label("Unit Number:"), 0, 0);
