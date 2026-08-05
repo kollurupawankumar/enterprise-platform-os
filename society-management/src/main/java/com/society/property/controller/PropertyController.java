@@ -261,4 +261,91 @@ public class PropertyController extends BaseController {
             showPropertyDetails(updated);
         });
     }
+
+    @FXML
+    private void downloadTemplate() {
+        javafx.stage.FileChooser fileChooser = new javafx.stage.FileChooser();
+        fileChooser.setTitle("Save Property CSV Template");
+        fileChooser.setInitialFileName("property_import_template.csv");
+        fileChooser.getExtensionFilters().add(new javafx.stage.FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+        java.io.File file = fileChooser.showSaveDialog(propertyTable.getScene().getWindow());
+
+        if (file != null) {
+            String template = "Property Number,Block,Type\n" +
+                    "101,A Wing,FLAT\n" +
+                    "102,A Wing,FLAT\n" +
+                    "V-01,Phase 1,VILLA\n" +
+                    "S-01,Commercial Block,SHOP\n";
+            try {
+                java.nio.file.Files.writeString(file.toPath(), template);
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Information");
+                alert.setHeaderText(null);
+                alert.setContentText("Property CSV Template downloaded successfully!");
+                alert.showAndWait();
+            } catch (Exception ex) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setContentText("Failed to save template: " + ex.getMessage());
+                alert.showAndWait();
+            }
+        }
+    }
+
+    @FXML
+    private void bulkImportCsv() {
+        javafx.stage.FileChooser fileChooser = new javafx.stage.FileChooser();
+        fileChooser.setTitle("Select Property CSV File to Import");
+        fileChooser.getExtensionFilters().add(new javafx.stage.FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+        java.io.File file = fileChooser.showOpenDialog(propertyTable.getScene().getWindow());
+
+        if (file != null) {
+            try {
+                List<String> lines = java.nio.file.Files.readAllLines(file.toPath());
+                if (lines.size() <= 1) {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setContentText("The selected CSV file is empty or has no data rows.");
+                    alert.showAndWait();
+                    return;
+                }
+
+                int successCount = 0;
+                int failCount = 0;
+
+                for (int i = 1; i < lines.size(); i++) {
+                    String line = lines.get(i).trim();
+                    if (line.isBlank()) continue;
+
+                    String[] cols = line.split(",", -1);
+                    if (cols.length >= 3) {
+                        try {
+                            String pNo = cols[0].trim();
+                            String block = cols[1].trim();
+                            String type = cols[2].trim().toUpperCase();
+
+                            PropertyEntity p = new PropertyEntity();
+                            p.setPropertyNumber(pNo);
+                            p.setBlock(block);
+                            p.setType(type);
+
+                            propertyService.saveProperty(p);
+                            successCount++;
+                        } catch (Exception ex) {
+                            failCount++;
+                        }
+                    }
+                }
+
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Bulk Import Result");
+                alert.setHeaderText(null);
+                alert.setContentText("Property Bulk Import Complete!\nSuccessfully Imported: " + successCount + " units.\nFailed/Skipped (Duplicates): " + failCount);
+                alert.showAndWait();
+                loadProperties();
+            } catch (Exception ex) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setContentText("Failed to process CSV file: " + ex.getMessage());
+                alert.showAndWait();
+            }
+        }
+    }
 }

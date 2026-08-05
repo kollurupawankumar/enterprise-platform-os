@@ -54,11 +54,17 @@
                         styleClass="button-danger"
                         onAction="#deleteMember"/>
 
-                <Region HBox.hgrow="ALWAYS"/>
-
                 <Button text="Refresh"
                         styleClass="button-secondary"
                         onAction="#refresh"/>
+
+                <Button text="Download Template"
+                        styleClass="button-secondary"
+                        onAction="#downloadTemplate"/>
+
+                <Button text="Bulk Import CSV"
+                        styleClass="button-primary"
+                        onAction="#bulkImportCsv"/>
 
             </HBox>
 

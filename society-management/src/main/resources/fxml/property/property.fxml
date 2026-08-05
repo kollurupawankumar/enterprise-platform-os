@@ -22,6 +22,8 @@
             <TextField fx:id="searchField" promptText="Search unit number/block..." prefWidth="220"
                        style="-fx-background-radius: 6; -fx-padding: 8;"/>
             <Button text="Add Unit" onAction="#handleAddProperty" styleClass="button-primary"/>
+            <Button text="Download Template" onAction="#downloadTemplate" styleClass="button-secondary"/>
+            <Button text="Bulk Import CSV" onAction="#bulkImportCsv" styleClass="button-primary"/>
         </HBox>
 
         <TableView fx:id="propertyTable" VBox.vgrow="ALWAYS" style="-fx-background-radius: 8;">

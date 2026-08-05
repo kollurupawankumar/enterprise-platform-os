@@ -148,7 +148,7 @@ public class GovernanceController extends BaseController {
 
         agendaArea.setText(meeting.getAgenda() != null ? meeting.getAgenda() : "No Agenda Stated.");
         minutesArea.setText(meeting.getMinutes() != null ? meeting.getMinutes() : "No Minutes entered yet.");
-        completeMeetingBtn.setDisable("COMPLETED".equals(meeting.getStatus()));
+        completeMeetingBtn.setDisable(false);
     }
 
     @FXML
@@ -407,14 +407,28 @@ public class GovernanceController extends BaseController {
         html.append("<div class='box'>").append(selectedMeeting.getAgenda() != null && !selectedMeeting.getAgenda().isBlank() ? selectedMeeting.getAgenda() : "No Agenda Specified.").append("</div>");
 
         html.append("<div class='section-title'>Committee Attendance Register</div>");
-        if (attendanceList.isEmpty()) {
-            html.append("<div class='box'>No committee attendance recorded for this meeting.</div>");
+        List<ManagingCommitteeEntity> allActiveCommittee = governanceService.getAllCommitteeMembers().stream()
+                .filter(mc -> "ACTIVE".equalsIgnoreCase(mc.getStatus()))
+                .toList();
+
+        if (allActiveCommittee.isEmpty()) {
+            html.append("<div class='box'>No active committee members registered.</div>");
         } else {
-            html.append("<table><tr><th>Committee Officer Name</th><th>Attendance Status</th></tr>");
+            java.util.Map<Integer, String> attMap = new java.util.HashMap<>();
             for (com.society.governance.entity.MeetingAttendanceEntity a : attendanceList) {
-                String name = a.getMember() != null ? a.getMember().getFirstName() + " " + (a.getMember().getLastName() != null ? a.getMember().getLastName() : "") : "Member #" + a.getMember().getId();
-                String cssClass = "PRESENT".equalsIgnoreCase(a.getStatus()) ? "present" : "absent";
-                html.append("<tr><td>").append(name).append("</td><td class='").append(cssClass).append("'>").append(a.getStatus()).append("</td></tr>");
+                if (a.getMember() != null) {
+                    attMap.put(a.getMember().getId(), a.getStatus());
+                }
+            }
+
+            html.append("<table><tr><th>Committee Officer Name</th><th>Designation</th><th>Attendance Status</th></tr>");
+            for (ManagingCommitteeEntity mc : allActiveCommittee) {
+                MemberEntity m = mc.getMember();
+                if (m == null) continue;
+                String name = m.getFirstName() + " " + (m.getLastName() != null ? m.getLastName() : "");
+                String status = attMap.getOrDefault(m.getId(), "ABSENT");
+                String cssClass = "PRESENT".equalsIgnoreCase(status) ? "present" : "absent";
+                html.append("<tr><td>").append(name).append("</td><td>").append(mc.getDesignation()).append("</td><td class='").append(cssClass).append("'>").append(status).append("</td></tr>");
             }
             html.append("</table>");
         }
