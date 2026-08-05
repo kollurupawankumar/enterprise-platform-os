@@ -21,13 +21,15 @@ class GovernanceServiceTest {
     private MeetingRepository meetingRepository;
     @Mock
     private ResolutionRepository resolutionRepository;
+    @Mock
+    private com.society.governance.repository.ManagingCommitteeRepository managingCommitteeRepository;
 
     private GovernanceService governanceService;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        governanceService = new GovernanceServiceImpl(meetingRepository, resolutionRepository);
+        governanceService = new GovernanceServiceImpl(meetingRepository, resolutionRepository, managingCommitteeRepository);
     }
 
     @Test

@@ -1,7 +1,9 @@
 package com.society.governance.service;
 
+import com.society.governance.entity.ManagingCommitteeEntity;
 import com.society.governance.entity.MeetingEntity;
 import com.society.governance.entity.ResolutionEntity;
+import com.society.governance.repository.ManagingCommitteeRepository;
 import com.society.governance.repository.MeetingRepository;
 import com.society.governance.repository.ResolutionRepository;
 import org.springframework.stereotype.Service;
@@ -16,12 +18,15 @@ public class GovernanceServiceImpl implements GovernanceService {
 
     private final MeetingRepository meetingRepository;
     private final ResolutionRepository resolutionRepository;
+    private final ManagingCommitteeRepository managingCommitteeRepository;
 
     public GovernanceServiceImpl(
             MeetingRepository meetingRepository,
-            ResolutionRepository resolutionRepository) {
+            ResolutionRepository resolutionRepository,
+            ManagingCommitteeRepository managingCommitteeRepository) {
         this.meetingRepository = meetingRepository;
         this.resolutionRepository = resolutionRepository;
+        this.managingCommitteeRepository = managingCommitteeRepository;
     }
 
     @Override
@@ -84,5 +89,19 @@ public class GovernanceServiceImpl implements GovernanceService {
     @Transactional(readOnly = true)
     public List<ResolutionEntity> getAllResolutions() {
         return resolutionRepository.findAll();
+    }
+
+    @Override
+    public ManagingCommitteeEntity addCommitteeMember(ManagingCommitteeEntity mc) {
+        if (mc.getStatus() == null) {
+            mc.setStatus("ACTIVE");
+        }
+        return managingCommitteeRepository.save(mc);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ManagingCommitteeEntity> getAllCommitteeMembers() {
+        return managingCommitteeRepository.findAll();
     }
 }

@@ -2,9 +2,12 @@ package com.society.governance.controller;
 
 import com.society.common.controller.BaseController;
 import com.society.common.navigation.NavigationManager;
+import com.society.governance.entity.ManagingCommitteeEntity;
 import com.society.governance.entity.MeetingEntity;
 import com.society.governance.entity.ResolutionEntity;
 import com.society.governance.service.GovernanceService;
+import com.society.member.entity.MemberEntity;
+import com.society.member.repository.MemberRepository;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,58 +17,50 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Component
 public class GovernanceController extends BaseController {
 
     private final GovernanceService governanceService;
+    private final MemberRepository memberRepository;
 
-    @FXML
-    private TableView<MeetingEntity> meetingTable;
+    @FXML private TableView<MeetingEntity> meetingTable;
+    @FXML private TableColumn<MeetingEntity, String> meetTitleCol;
+    @FXML private TableColumn<MeetingEntity, String> meetTypeCol;
+    @FXML private TableColumn<MeetingEntity, String> meetDateCol;
+    @FXML private TableColumn<MeetingEntity, String> meetStatusCol;
 
-    @FXML
-    private TableColumn<MeetingEntity, String> meetTitleCol;
+    @FXML private TextArea agendaArea;
+    @FXML private TextArea minutesArea;
+    @FXML private Button completeMeetingBtn;
 
-    @FXML
-    private TableColumn<MeetingEntity, String> meetTypeCol;
+    @FXML private TableView<ResolutionEntity> resolutionTable;
+    @FXML private TableColumn<ResolutionEntity, String> resNumCol;
+    @FXML private TableColumn<ResolutionEntity, String> resSubjectCol;
+    @FXML private TableColumn<ResolutionEntity, String> resProposerCol;
+    @FXML private TableColumn<ResolutionEntity, String> resStatusCol;
 
-    @FXML
-    private TableColumn<MeetingEntity, String> meetDateCol;
-
-    @FXML
-    private TableColumn<MeetingEntity, String> meetStatusCol;
-
-    @FXML
-    private TextArea agendaArea;
-
-    @FXML
-    private TextArea minutesArea;
-
-    @FXML
-    private Button completeMeetingBtn;
-
-    @FXML
-    private TableView<ResolutionEntity> resolutionTable;
-
-    @FXML
-    private TableColumn<ResolutionEntity, String> resNumCol;
-
-    @FXML
-    private TableColumn<ResolutionEntity, String> resSubjectCol;
-
-    @FXML
-    private TableColumn<ResolutionEntity, String> resProposerCol;
-
-    @FXML
-    private TableColumn<ResolutionEntity, String> resStatusCol;
+    @FXML private TableView<ManagingCommitteeEntity> mcTable;
+    @FXML private TableColumn<ManagingCommitteeEntity, String> mcMemberCol;
+    @FXML private TableColumn<ManagingCommitteeEntity, String> mcDesignationCol;
+    @FXML private TableColumn<ManagingCommitteeEntity, String> mcStartDateCol;
+    @FXML private TableColumn<ManagingCommitteeEntity, String> mcEndDateCol;
+    @FXML private TableColumn<ManagingCommitteeEntity, String> mcStatusCol;
 
     private final ObservableList<MeetingEntity> meetings = FXCollections.observableArrayList();
     private final ObservableList<ResolutionEntity> resolutions = FXCollections.observableArrayList();
+    private final ObservableList<ManagingCommitteeEntity> committeeMembers = FXCollections.observableArrayList();
 
-    public GovernanceController(NavigationManager navigationManager, GovernanceService governanceService) {
+    public GovernanceController(
+            NavigationManager navigationManager,
+            GovernanceService governanceService,
+            MemberRepository memberRepository) {
         super(navigationManager);
         this.governanceService = governanceService;
+        this.memberRepository = memberRepository;
     }
 
     @FXML
@@ -86,8 +81,19 @@ public class GovernanceController extends BaseController {
         resProposerCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getProposedBy()));
         resStatusCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getStatus()));
 
+        // Managing Committee mapping
+        mcMemberCol.setCellValueFactory(c -> {
+            MemberEntity m = c.getValue().getMember();
+            return new SimpleStringProperty(m != null ? m.getFirstName() + " " + (m.getLastName() != null ? m.getLastName() : "") + " (" + m.getMemberNumber() + ")" : "N/A");
+        });
+        mcDesignationCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getDesignation()));
+        mcStartDateCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getStartDate()));
+        mcEndDateCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getEndDate() != null ? c.getValue().getEndDate() : "-"));
+        mcStatusCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getStatus()));
+
         loadMeetings();
         loadResolutions();
+        loadCommitteeMembers();
     }
 
     private void loadMeetings() {
@@ -98,6 +104,11 @@ public class GovernanceController extends BaseController {
     private void loadResolutions() {
         resolutions.setAll(governanceService.getAllResolutions());
         resolutionTable.setItems(resolutions);
+    }
+
+    private void loadCommitteeMembers() {
+        committeeMembers.setAll(governanceService.getAllCommitteeMembers());
+        mcTable.setItems(committeeMembers);
     }
 
     private void showMeetingDetails(MeetingEntity meeting) {
@@ -244,6 +255,70 @@ public class GovernanceController extends BaseController {
             if (!r.getResolutionNumber().isEmpty() && r.getMeeting() != null) {
                 governanceService.createResolution(r);
                 loadResolutions();
+            }
+        });
+    }
+
+    @FXML
+    private void handleAddCommitteeMember() {
+        List<MemberEntity> members = memberRepository.findAll();
+        if (members.isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("No Members Found");
+            alert.setHeaderText(null);
+            alert.setContentText("Please register members before appointing Managing Committee board members.");
+            alert.showAndWait();
+            return;
+        }
+
+        Dialog<ManagingCommitteeEntity> dialog = new Dialog<>();
+        dialog.setTitle("Appoint Managing Committee Member");
+        dialog.setHeaderText("Select Member & Board Designation:");
+
+        ButtonType appointBtnType = new ButtonType("Appoint", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(appointBtnType, ButtonType.CANCEL);
+
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20, 150, 10, 10));
+
+        ComboBox<MemberEntity> memberCombo = new ComboBox<>(FXCollections.observableArrayList(members));
+        memberCombo.getSelectionModel().selectFirst();
+
+        ComboBox<String> designationCombo = new ComboBox<>(FXCollections.observableArrayList(
+                "CHAIRMAN", "SECRETARY", "TREASURER", "COMMITTEE_MEMBER", "INTERNAL_AUDITOR"
+        ));
+        designationCombo.getSelectionModel().selectFirst();
+
+        DatePicker startDatePicker = new DatePicker(LocalDate.now());
+        DatePicker endDatePicker = new DatePicker(LocalDate.now().plusYears(3)); // Standard 3-year term
+
+        grid.add(new Label("Select Member:"), 0, 0); grid.add(memberCombo, 1, 0);
+        grid.add(new Label("Designation:"), 0, 1); grid.add(designationCombo, 1, 1);
+        grid.add(new Label("Start Date:"), 0, 2); grid.add(startDatePicker, 1, 2);
+        grid.add(new Label("End Date:"), 0, 3); grid.add(endDatePicker, 1, 3);
+
+        dialog.getDialogPane().setContent(grid);
+
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == appointBtnType) {
+                ManagingCommitteeEntity mc = new ManagingCommitteeEntity();
+                mc.setMember(memberCombo.getValue());
+                mc.setDesignation(designationCombo.getValue());
+                mc.setStartDate(startDatePicker.getValue() != null ? startDatePicker.getValue().toString() : LocalDate.now().toString());
+                mc.setEndDate(endDatePicker.getValue() != null ? endDatePicker.getValue().toString() : null);
+                mc.setStatus("ACTIVE");
+                return mc;
+            }
+            return null;
+        });
+
+        Optional<ManagingCommitteeEntity> result = dialog.showAndWait();
+        result.ifPresent(mc -> {
+            if (mc.getMember() != null) {
+                governanceService.addCommitteeMember(mc);
+                loadCommitteeMembers();
             }
         });
     }
