@@ -22,6 +22,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -75,6 +76,7 @@ public class OperationsController extends BaseController {
     @FXML private TableColumn<SocietyStaffEntity, String> staffShiftCol;
     @FXML private TableColumn<SocietyStaffEntity, String> staffPoliceStatusCol;
     @FXML private TableColumn<SocietyStaffEntity, String> staffDocPathCol;
+    @FXML private TableColumn<SocietyStaffEntity, String> staffStatusCol;
 
     private final ObservableList<AssetEntity> assets = FXCollections.observableArrayList();
     private final ObservableList<VendorEntity> vendors = FXCollections.observableArrayList();
@@ -132,6 +134,7 @@ public class OperationsController extends BaseController {
         staffShiftCol.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getShiftTiming()));
         staffPoliceStatusCol.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getPoliceVerificationStatus()));
         staffDocPathCol.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getPoliceDocPath() != null ? cell.getValue().getPoliceDocPath() : "-"));
+        staffStatusCol.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().isActive() ? "ACTIVE" : "INACTIVE"));
 
         loadAssets();
         loadVendors();
@@ -247,21 +250,24 @@ public class OperationsController extends BaseController {
         summaryArea.setPrefRowCount(3);
 
         Label docPathLabel = new Label("No document selected");
-        Button uploadBtn = new Button("Upload Service Receipt / Photo");
+        Button uploadBtn = new Button("Upload Service Receipt / Photo(s)");
         final String[] uploadedPath = new String[1];
 
         uploadBtn.setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Select Service Receipt / Photo");
+            fileChooser.setTitle("Select Service Receipt / Photo(s)");
             fileChooser.getExtensionFilters().addAll(
                     new FileChooser.ExtensionFilter("Images & Documents", "*.jpg", "*.jpeg", "*.png", "*.pdf")
             );
-            File file = fileChooser.showOpenDialog(serviceLogTable.getScene().getWindow());
-            if (file != null) {
+            List<File> files = fileChooser.showOpenMultipleDialog(serviceLogTable.getScene().getWindow());
+            if (files != null && !files.isEmpty()) {
                 try {
-                    String relativePath = fileStorageService.storeFile(file, "assets/service_receipts");
-                    uploadedPath[0] = relativePath;
-                    docPathLabel.setText(file.getName());
+                    List<String> paths = new java.util.ArrayList<>();
+                    for (File f : files) {
+                        paths.add(fileStorageService.storeFile(f, "assets/service_receipts"));
+                    }
+                    uploadedPath[0] = String.join(";", paths);
+                    docPathLabel.setText(files.size() + " document(s) attached");
                 } catch (Exception ex) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setContentText("Failed to upload file: " + ex.getMessage());
@@ -275,7 +281,7 @@ public class OperationsController extends BaseController {
         grid.add(new Label("Engineer / Contact:"), 0, 2); grid.add(engField, 1, 2);
         grid.add(new Label("Cost (₹):"), 0, 3); grid.add(costField, 1, 3);
         grid.add(new Label("Work Summary:"), 0, 4); grid.add(summaryArea, 1, 4);
-        grid.add(new Label("Inspection Photo / Bill:"), 0, 5); grid.add(new HBox(10, uploadBtn, docPathLabel), 1, 5);
+        grid.add(new Label("Inspection Photos / Bills:"), 0, 5); grid.add(new HBox(10, uploadBtn, docPathLabel), 1, 5);
 
         dialog.getDialogPane().setContent(grid);
 
@@ -371,6 +377,16 @@ public class OperationsController extends BaseController {
 
         // AMC Section
         ComboBox<VendorEntity> amcVendorCombo = new ComboBox<>(FXCollections.observableArrayList(vendors));
+        amcVendorCombo.setConverter(new javafx.util.StringConverter<>() {
+            @Override
+            public String toString(VendorEntity v) {
+                return v != null ? v.getName() + " (" + v.getCategory() + ")" : "";
+            }
+            @Override
+            public VendorEntity fromString(String string) {
+                return null;
+            }
+        });
         if (asset.getAmcVendor() != null) {
             amcVendorCombo.getSelectionModel().select(asset.getAmcVendor());
         }
@@ -601,5 +617,31 @@ public class OperationsController extends BaseController {
                 loadStaff();
             }
         });
+    }
+
+    @FXML
+    private void handleDeactivateStaff() {
+        SocietyStaffEntity selected = staffTable.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Selection Required");
+            alert.setHeaderText(null);
+            alert.setContentText("Please select a staff member from the table to deactivate.");
+            alert.showAndWait();
+            return;
+        }
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Deactivate / Terminate Staff");
+        alert.setHeaderText("End Term / Deactivate " + selected.getName());
+        alert.setContentText("Are you sure you want to set this staff member's status to INACTIVE / Terminated?");
+
+        alert.showAndWait()
+                .filter(btn -> btn == ButtonType.OK)
+                .ifPresent(btn -> {
+                    selected.setActive(false);
+                    operationsService.saveStaff(selected);
+                    loadStaff();
+                });
     }
 }

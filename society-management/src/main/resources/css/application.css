@@ -126,3 +126,12 @@
 .button-danger:hover {
     -fx-background-color: #DC2626;
 }
+
+/* Table Alignment: Header Center, Data Cells Left */
+.table-view .column-header .label {
+    -fx-alignment: CENTER;
+    -fx-font-weight: bold;
+}
+.table-view .table-cell {
+    -fx-alignment: CENTER-LEFT;
+}
