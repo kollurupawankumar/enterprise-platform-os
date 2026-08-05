@@ -285,11 +285,16 @@ public class GovernanceController extends BaseController {
         }
 
         List<ManagingCommitteeEntity> committee = governanceService.getAllCommitteeMembers();
-        if (committee.isEmpty()) {
+        // Filter only ACTIVE committee members
+        List<ManagingCommitteeEntity> activeCommittee = committee.stream()
+                .filter(mc -> "ACTIVE".equalsIgnoreCase(mc.getStatus()))
+                .toList();
+
+        if (activeCommittee.isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("No Committee Members");
+            alert.setTitle("No Active Committee Members");
             alert.setHeaderText(null);
-            alert.setContentText("No committee members registered. Please add committee members first.");
+            alert.setContentText("No active committee members found. Please add active committee members first.");
             alert.showAndWait();
             return;
         }
@@ -313,7 +318,7 @@ public class GovernanceController extends BaseController {
 
         java.util.Map<Integer, ComboBox<String>> comboMap = new java.util.HashMap<>();
 
-        for (ManagingCommitteeEntity mc : committee) {
+        for (ManagingCommitteeEntity mc : activeCommittee) {
             MemberEntity m = mc.getMember();
             if (m == null) continue;
 
