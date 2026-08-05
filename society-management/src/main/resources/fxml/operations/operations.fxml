@@ -32,26 +32,51 @@
                 </TableView>
             </VBox>
 
-            <!-- Right Panel: Asset Details -->
+            <!-- Right Panel: Asset Details & AMC -->
             <VBox spacing="15" style="-fx-background-color: #F8FAFC; -fx-padding: 15;">
-                <Label text="Asset Details" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
-                <GridPane hgap="10" vgap="12">
+                <HBox alignment="CENTER_LEFT">
+                    <Label text="Asset &amp; AMC Details" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button text="Edit Asset" onAction="#handleEditAsset" styleClass="button-secondary"/>
+                </HBox>
+
+                <GridPane hgap="10" vgap="10" style="-fx-background-color: white; -fx-padding: 12; -fx-background-radius: 6;">
                     <columnConstraints>
-                        <ColumnConstraints prefWidth="110"/>
+                        <ColumnConstraints prefWidth="120"/>
                         <ColumnConstraints hgrow="ALWAYS"/>
                     </columnConstraints>
                     
-                    <Label text="Serial No:" style="-fx-font-weight: bold;"/>
+                    <Label text="Serial No:" style="-fx-font-weight: bold; -fx-text-fill: #64748B;"/>
                     <Label fx:id="serialLabel" text="-" GridPane.columnIndex="1"/>
                     
-                    <Label text="Purchase Date:" style="-fx-font-weight: bold;" GridPane.rowIndex="1"/>
+                    <Label text="Purchase Date:" style="-fx-font-weight: bold; -fx-text-fill: #64748B;" GridPane.rowIndex="1"/>
                     <Label fx:id="purchaseDateLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
                     
-                    <Label text="Purchase Cost:" style="-fx-font-weight: bold;" GridPane.rowIndex="2"/>
+                    <Label text="Purchase Cost:" style="-fx-font-weight: bold; -fx-text-fill: #64748B;" GridPane.rowIndex="2"/>
                     <Label fx:id="purchaseCostLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
                     
-                    <Label text="Warranty Expiry:" style="-fx-font-weight: bold;" GridPane.rowIndex="3"/>
+                    <Label text="Warranty Expiry:" style="-fx-font-weight: bold; -fx-text-fill: #64748B;" GridPane.rowIndex="3"/>
                     <Label fx:id="warrantyLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                </GridPane>
+
+                <Label text="Annual Maintenance Contract (AMC)" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                <GridPane hgap="10" vgap="10" style="-fx-background-color: white; -fx-padding: 12; -fx-background-radius: 6;">
+                    <columnConstraints>
+                        <ColumnConstraints prefWidth="120"/>
+                        <ColumnConstraints hgrow="ALWAYS"/>
+                    </columnConstraints>
+
+                    <Label text="AMC Vendor:" style="-fx-font-weight: bold; -fx-text-fill: #64748B;"/>
+                    <Label fx:id="amcVendorLabel" text="-" GridPane.columnIndex="1"/>
+
+                    <Label text="AMC Duration:" style="-fx-font-weight: bold; -fx-text-fill: #64748B;" GridPane.rowIndex="1"/>
+                    <Label fx:id="amcPeriodLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                    <Label text="AMC Cost:" style="-fx-font-weight: bold; -fx-text-fill: #64748B;" GridPane.rowIndex="2"/>
+                    <Label fx:id="amcCostLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                    <Label text="AMC Details:" style="-fx-font-weight: bold; -fx-text-fill: #64748B;" GridPane.rowIndex="3"/>
+                    <Label fx:id="amcDetailsLabel" text="-" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
                 </GridPane>
             </VBox>
         </SplitPane>

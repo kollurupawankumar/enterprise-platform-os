@@ -36,7 +36,7 @@ public class OperationsServiceImpl implements OperationsService {
     @Override
     @Transactional(readOnly = true)
     public List<AssetEntity> getAllAssets() {
-        return assetRepository.findAll();
+        return assetRepository.findAllWithAmcVendor();
     }
 
     @Override

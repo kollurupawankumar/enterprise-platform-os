@@ -32,6 +32,22 @@ public class AssetEntity {
     @Column(nullable = false, length = 30)
     private String status; // OPERATIONAL, UNDER_MAINTENANCE, SCRAPPED
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "amc_vendor_id")
+    private VendorEntity amcVendor;
+
+    @Column(name = "amc_start_date", length = 20)
+    private String amcStartDate;
+
+    @Column(name = "amc_expiry_date", length = 20)
+    private String amcExpiryDate;
+
+    @Column(name = "amc_cost")
+    private Double amcCost;
+
+    @Column(name = "amc_details", length = 500)
+    private String amcDetails;
+
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
@@ -136,4 +152,19 @@ public class AssetEntity {
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+    public VendorEntity getAmcVendor() { return amcVendor; }
+    public void setAmcVendor(VendorEntity amcVendor) { this.amcVendor = amcVendor; }
+
+    public String getAmcStartDate() { return amcStartDate; }
+    public void setAmcStartDate(String amcStartDate) { this.amcStartDate = amcStartDate; }
+
+    public String getAmcExpiryDate() { return amcExpiryDate; }
+    public void setAmcExpiryDate(String amcExpiryDate) { this.amcExpiryDate = amcExpiryDate; }
+
+    public Double getAmcCost() { return amcCost; }
+    public void setAmcCost(Double amcCost) { this.amcCost = amcCost; }
+
+    public String getAmcDetails() { return amcDetails; }
+    public void setAmcDetails(String amcDetails) { this.amcDetails = amcDetails; }
 }

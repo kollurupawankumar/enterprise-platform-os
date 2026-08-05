@@ -21,6 +21,7 @@ import javafx.stage.FileChooser;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
+import java.time.LocalDate;
 import java.util.Optional;
 
 @Component
@@ -142,18 +143,44 @@ public class OperationsController extends BaseController {
         staffTable.setItems(staffMembers);
     }
 
+    @FXML private Label amcVendorLabel;
+    @FXML private Label amcPeriodLabel;
+    @FXML private Label amcCostLabel;
+    @FXML private Label amcDetailsLabel;
+
+    private AssetEntity selectedAsset;
+
     private void showAssetDetails(AssetEntity asset) {
+        this.selectedAsset = asset;
         if (asset == null) {
             serialLabel.setText("-");
             purchaseDateLabel.setText("-");
             purchaseCostLabel.setText("-");
             warrantyLabel.setText("-");
+            amcVendorLabel.setText("-");
+            amcPeriodLabel.setText("-");
+            amcCostLabel.setText("-");
+            amcDetailsLabel.setText("-");
             return;
         }
-        serialLabel.setText(asset.getSerialNumber() != null ? asset.getSerialNumber() : "-");
-        purchaseDateLabel.setText(asset.getPurchaseDate() != null ? asset.getPurchaseDate() : "-");
-        purchaseCostLabel.setText(asset.getPurchaseCost() != null ? "₹ " + asset.getPurchaseCost() : "-");
-        warrantyLabel.setText(asset.getWarrantyExpiryDate() != null ? asset.getWarrantyExpiryDate() : "-");
+        serialLabel.setText(asset.getSerialNumber() != null && !asset.getSerialNumber().isBlank() ? asset.getSerialNumber() : "-");
+        purchaseDateLabel.setText(asset.getPurchaseDate() != null && !asset.getPurchaseDate().isBlank() ? asset.getPurchaseDate() : "-");
+        purchaseCostLabel.setText(asset.getPurchaseCost() != null ? "₹ " + String.format("%.2f", asset.getPurchaseCost()) : "-");
+        warrantyLabel.setText(asset.getWarrantyExpiryDate() != null && !asset.getWarrantyExpiryDate().isBlank() ? asset.getWarrantyExpiryDate() : "-");
+
+        VendorEntity v = asset.getAmcVendor();
+        amcVendorLabel.setText(v != null ? v.getName() + " (" + (v.getPhone() != null ? v.getPhone() : "") + ")" : "No AMC Vendor Assigned");
+        
+        String start = asset.getAmcStartDate() != null ? asset.getAmcStartDate() : "";
+        String expiry = asset.getAmcExpiryDate() != null ? asset.getAmcExpiryDate() : "";
+        if (!start.isEmpty() || !expiry.isEmpty()) {
+            amcPeriodLabel.setText(start + " to " + (expiry.isEmpty() ? "N/A" : expiry));
+        } else {
+            amcPeriodLabel.setText("-");
+        }
+
+        amcCostLabel.setText(asset.getAmcCost() != null ? "₹ " + String.format("%.2f", asset.getAmcCost()) : "-");
+        amcDetailsLabel.setText(asset.getAmcDetails() != null && !asset.getAmcDetails().isBlank() ? asset.getAmcDetails() : "No details.");
     }
 
     private void showVendorDetails(VendorEntity vendor) {
@@ -170,35 +197,109 @@ public class OperationsController extends BaseController {
 
     @FXML
     private void handleAddAsset() {
-        Dialog<AssetEntity> dialog = new Dialog<>();
-        dialog.setTitle("Add Asset");
-        dialog.setHeaderText("Enter Asset Details:");
+        showAssetDialog(new AssetEntity());
+    }
 
-        ButtonType saveBtnType = new ButtonType("Add", ButtonBar.ButtonData.OK_DONE);
+    @FXML
+    private void handleEditAsset() {
+        if (selectedAsset == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Selection Required");
+            alert.setHeaderText(null);
+            alert.setContentText("Please select an asset from the table to edit.");
+            alert.showAndWait();
+            return;
+        }
+        showAssetDialog(selectedAsset);
+    }
+
+    private void showAssetDialog(AssetEntity asset) {
+        boolean isEdit = asset.getId() != null;
+        Dialog<AssetEntity> dialog = new Dialog<>();
+        dialog.setTitle(isEdit ? "Edit Asset & AMC Details" : "Add Asset & AMC Details");
+        dialog.setHeaderText(isEdit ? "Update Asset details:" : "Enter Asset & AMC Registration Details:");
+
+        ButtonType saveBtnType = new ButtonType(isEdit ? "Update" : "Save", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(saveBtnType, ButtonType.CANCEL);
 
         GridPane grid = new GridPane();
         grid.setHgap(10); grid.setVgap(10);
-        grid.setPadding(new Insets(20, 150, 10, 10));
+        grid.setPadding(new Insets(15));
 
-        TextField nameField = new TextField(); nameField.setPromptText("Asset Name");
-        TextField catField = new TextField(); catField.setPromptText("Category (e.g. LIFT, DG)");
-        TextField serialField = new TextField(); serialField.setPromptText("Serial Number");
+        TextField nameField = new TextField(asset.getName() != null ? asset.getName() : "");
+        nameField.setPromptText("Asset Name (e.g. Passenger Lift A)");
 
-        grid.add(new Label("Name:"), 0, 0); grid.add(nameField, 1, 0);
-        grid.add(new Label("Category:"), 0, 1); grid.add(catField, 1, 1);
-        grid.add(new Label("Serial No:"), 0, 2); grid.add(serialField, 1, 2);
+        ComboBox<String> categoryCombo = new ComboBox<>(FXCollections.observableArrayList(
+                "ELEVATOR", "GENERATOR", "WATER_PUMP", "SECURITY_CAMERAS", "FIRE_EXTINGUISHER", "SOLAR_PANEL", "CLUBHOUSE_EQUIPMENT", "OTHER"
+        ));
+        categoryCombo.setEditable(true);
+        if (asset.getCategory() != null) {
+            categoryCombo.getSelectionModel().select(asset.getCategory());
+        } else {
+            categoryCombo.getSelectionModel().selectFirst();
+        }
 
-        dialog.getDialogPane().setContent(grid);
+        TextField serialField = new TextField(asset.getSerialNumber() != null ? asset.getSerialNumber() : "");
+        serialField.setPromptText("Serial Number / Tag No");
+
+        DatePicker purchaseDatePicker = new DatePicker(asset.getPurchaseDate() != null && !asset.getPurchaseDate().isBlank() ? LocalDate.parse(asset.getPurchaseDate()) : LocalDate.now());
+        TextField costField = new TextField(asset.getPurchaseCost() != null ? String.valueOf(asset.getPurchaseCost()) : "");
+        costField.setPromptText("Purchase Cost in ₹");
+
+        DatePicker warrantyDatePicker = new DatePicker(asset.getWarrantyExpiryDate() != null && !asset.getWarrantyExpiryDate().isBlank() ? LocalDate.parse(asset.getWarrantyExpiryDate()) : LocalDate.now().plusYears(1));
+
+        ComboBox<String> statusCombo = new ComboBox<>(FXCollections.observableArrayList("OPERATIONAL", "UNDER_MAINTENANCE", "SCRAPPED"));
+        statusCombo.getSelectionModel().select(asset.getStatus() != null ? asset.getStatus() : "OPERATIONAL");
+
+        // AMC Section
+        ComboBox<VendorEntity> amcVendorCombo = new ComboBox<>(FXCollections.observableArrayList(vendors));
+        if (asset.getAmcVendor() != null) {
+            amcVendorCombo.getSelectionModel().select(asset.getAmcVendor());
+        }
+
+        DatePicker amcStartDatePicker = new DatePicker(asset.getAmcStartDate() != null && !asset.getAmcStartDate().isBlank() ? LocalDate.parse(asset.getAmcStartDate()) : LocalDate.now());
+        DatePicker amcExpiryDatePicker = new DatePicker(asset.getAmcExpiryDate() != null && !asset.getAmcExpiryDate().isBlank() ? LocalDate.parse(asset.getAmcExpiryDate()) : LocalDate.now().plusYears(1));
+        TextField amcCostField = new TextField(asset.getAmcCost() != null ? String.valueOf(asset.getAmcCost()) : "");
+        amcCostField.setPromptText("Annual Contract Cost ₹");
+
+        TextArea amcDetailsArea = new TextArea(asset.getAmcDetails() != null ? asset.getAmcDetails() : "");
+        amcDetailsArea.setPromptText("AMC terms / Service frequency / Contact notes...");
+        amcDetailsArea.setPrefRowCount(2);
+
+        grid.add(new Label("Asset Name:"), 0, 0); grid.add(nameField, 1, 0);
+        grid.add(new Label("Category:"), 0, 1); grid.add(categoryCombo, 1, 1);
+        grid.add(new Label("Serial / Tag No:"), 0, 2); grid.add(serialField, 1, 2);
+        grid.add(new Label("Purchase Date:"), 0, 3); grid.add(purchaseDatePicker, 1, 3);
+        grid.add(new Label("Purchase Cost (₹):"), 0, 4); grid.add(costField, 1, 4);
+        grid.add(new Label("Warranty Expiry:"), 0, 5); grid.add(warrantyDatePicker, 1, 5);
+        grid.add(new Label("Status:"), 0, 6); grid.add(statusCombo, 1, 6);
+
+        grid.add(new Label("--- AMC Details ---"), 0, 7, 2, 1);
+        grid.add(new Label("AMC Vendor:"), 0, 8); grid.add(amcVendorCombo, 1, 8);
+        grid.add(new Label("AMC Start Date:"), 0, 9); grid.add(amcStartDatePicker, 1, 9);
+        grid.add(new Label("AMC Expiry Date:"), 0, 10); grid.add(amcExpiryDatePicker, 1, 10);
+        grid.add(new Label("AMC Cost (₹):"), 0, 11); grid.add(amcCostField, 1, 11);
+        grid.add(new Label("AMC Notes:"), 0, 12); grid.add(amcDetailsArea, 1, 12);
+
+        dialog.getDialogPane().setContent(new ScrollPane(grid));
 
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == saveBtnType) {
-                AssetEntity a = new AssetEntity();
-                a.setName(nameField.getText().trim());
-                a.setCategory(catField.getText().trim());
-                a.setSerialNumber(serialField.getText().trim());
-                a.setStatus("OPERATIONAL");
-                return a;
+                asset.setName(nameField.getText().trim());
+                asset.setCategory(categoryCombo.getValue());
+                asset.setSerialNumber(serialField.getText().trim());
+                asset.setPurchaseDate(purchaseDatePicker.getValue() != null ? purchaseDatePicker.getValue().toString() : null);
+                try { asset.setPurchaseCost(Double.parseDouble(costField.getText().trim())); } catch (Exception ignored) {}
+                asset.setWarrantyExpiryDate(warrantyDatePicker.getValue() != null ? warrantyDatePicker.getValue().toString() : null);
+                asset.setStatus(statusCombo.getValue());
+
+                asset.setAmcVendor(amcVendorCombo.getValue());
+                asset.setAmcStartDate(amcStartDatePicker.getValue() != null ? amcStartDatePicker.getValue().toString() : null);
+                asset.setAmcExpiryDate(amcExpiryDatePicker.getValue() != null ? amcExpiryDatePicker.getValue().toString() : null);
+                try { asset.setAmcCost(Double.parseDouble(amcCostField.getText().trim())); } catch (Exception ignored) {}
+                asset.setAmcDetails(amcDetailsArea.getText().trim());
+
+                return asset;
             }
             return null;
         });
@@ -208,6 +309,7 @@ public class OperationsController extends BaseController {
             if (!a.getName().isEmpty()) {
                 operationsService.saveAsset(a);
                 loadAssets();
+                showAssetDetails(a);
             }
         });
     }
