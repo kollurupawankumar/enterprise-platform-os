@@ -14,6 +14,8 @@ public enum View {
 
     MEMBER_REGISTRATION("/fxml/member/member-registration.fxml"),
 
+    MEMBER_DETAILS("/fxml/member/member-details.fxml"),
+
     REPORTS("/fxml/report/report.fxml"),
 
     ADMINISTRATION("/fxml/admin/administration.fxml"),

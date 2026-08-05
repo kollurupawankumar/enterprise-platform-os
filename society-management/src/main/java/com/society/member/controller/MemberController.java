@@ -165,6 +165,24 @@ public class MemberController extends BaseController {
 
     }
 
+    @FXML
+    private void viewMemberDetails() {
+        MemberDto selected = memberTable.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            showInformation("Please select a member to view details.");
+            return;
+        }
+        memberContext.setSelectedMember(selected);
+        navigationManager.navigate(View.MEMBER_DETAILS);
+    }
+
+    @FXML
+    private void memberDoubleClicked(javafx.scene.input.MouseEvent event) {
+        if (event.getClickCount() == 2) {
+            viewMemberDetails();
+        }
+    }
+
     /**
      * Edit selected member.
      */

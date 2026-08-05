@@ -42,6 +42,10 @@
                         styleClass="button-primary"
                         onAction="#addMember"/>
 
+                <Button text="View Details"
+                        styleClass="button-secondary"
+                        onAction="#viewMemberDetails"/>
+
                 <Button text="Edit"
                         styleClass="button-secondary"
                         onAction="#editMember"/>
