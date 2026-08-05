@@ -52,6 +52,51 @@ public class MemberEntity {
     @Column(length = 150)
     private String email;
 
+    @Column(name = "middle_name", length = 100)
+    private String middleName;
+
+    @Column(name = "gender", length = 20)
+    private String gender;
+
+    @Column(name = "dob", length = 20)
+    private String dob;
+
+    @Column(name = "occupation", length = 100)
+    private String occupation;
+
+    @Column(name = "emergency_contact_name", length = 100)
+    private String emergencyContactName;
+
+    @Column(name = "emergency_contact_phone", length = 20)
+    private String emergencyContactPhone;
+
+    @Column(name = "member_type", length = 50)
+    private String memberType;
+
+    @Column(name = "admission_date", length = 20)
+    private String admissionDate;
+
+    @Column(name = "resolution_number", length = 50)
+    private String resolutionNumber;
+
+    @Column(name = "resolution_date", length = 20)
+    private String resolutionDate;
+
+    @Column(name = "permanent_address", length = 500)
+    private String permanentAddress;
+
+    @Column(name = "correspondence_address", length = 500)
+    private String correspondenceAddress;
+
+    @Column(name = "photo_path", length = 255)
+    private String photoPath;
+
+    @Column(name = "aadhaar_doc_path", length = 255)
+    private String aadhaarDocPath;
+
+    @Column(name = "pan_doc_path", length = 255)
+    private String panDocPath;
+
     @Column(name = "aadhaar_number",
             length = 20)
     private String aadhaarNumber;
@@ -199,4 +244,49 @@ public class MemberEntity {
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+    public String getMiddleName() { return middleName; }
+    public void setMiddleName(String middleName) { this.middleName = middleName; }
+
+    public String getGender() { return gender; }
+    public void setGender(String gender) { this.gender = gender; }
+
+    public String getDob() { return dob; }
+    public void setDob(String dob) { this.dob = dob; }
+
+    public String getOccupation() { return occupation; }
+    public void setOccupation(String occupation) { this.occupation = occupation; }
+
+    public String getEmergencyContactName() { return emergencyContactName; }
+    public void setEmergencyContactName(String emergencyContactName) { this.emergencyContactName = emergencyContactName; }
+
+    public String getEmergencyContactPhone() { return emergencyContactPhone; }
+    public void setEmergencyContactPhone(String emergencyContactPhone) { this.emergencyContactPhone = emergencyContactPhone; }
+
+    public String getMemberType() { return memberType; }
+    public void setMemberType(String memberType) { this.memberType = memberType; }
+
+    public String getAdmissionDate() { return admissionDate; }
+    public void setAdmissionDate(String admissionDate) { this.admissionDate = admissionDate; }
+
+    public String getResolutionNumber() { return resolutionNumber; }
+    public void setResolutionNumber(String resolutionNumber) { this.resolutionNumber = resolutionNumber; }
+
+    public String getResolutionDate() { return resolutionDate; }
+    public void setResolutionDate(String resolutionDate) { this.resolutionDate = resolutionDate; }
+
+    public String getPermanentAddress() { return permanentAddress; }
+    public void setPermanentAddress(String permanentAddress) { this.permanentAddress = permanentAddress; }
+
+    public String getCorrespondenceAddress() { return correspondenceAddress; }
+    public void setCorrespondenceAddress(String correspondenceAddress) { this.correspondenceAddress = correspondenceAddress; }
+
+    public String getPhotoPath() { return photoPath; }
+    public void setPhotoPath(String photoPath) { this.photoPath = photoPath; }
+
+    public String getAadhaarDocPath() { return aadhaarDocPath; }
+    public void setAadhaarDocPath(String aadhaarDocPath) { this.aadhaarDocPath = aadhaarDocPath; }
+
+    public String getPanDocPath() { return panDocPath; }
+    public void setPanDocPath(String panDocPath) { this.panDocPath = panDocPath; }
 }

@@ -5,7 +5,7 @@ app:
 
 spring:
   application:
-    name: Society Management System
+    name: Society Office OS
 
   datasource:
     url: jdbc:sqlite:${app.database.path}

@@ -56,7 +56,7 @@ public class DashboardController extends BaseController {
         } else {
 
             welcomeLabel.setText(
-                    "Welcome to Society Management System");
+                    "Welcome to Society Office OS");
 
         }
 

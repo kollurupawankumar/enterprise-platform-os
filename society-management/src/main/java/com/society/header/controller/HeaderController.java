@@ -37,7 +37,7 @@ public class HeaderController {
 
         if (!societyProvider.hasSociety()) {
 
-            societyNameLabel.setText("Society Management System");
+            societyNameLabel.setText("Society Office OS");
             registrationNumberLabel.setText("");
             financialYearLabel.setText("");
 

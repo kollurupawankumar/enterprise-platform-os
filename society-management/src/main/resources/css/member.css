@@ -12,11 +12,12 @@
     -fx-border-width: 0 0 1 0;
 }
 
-.table-view .column-header {
-    -fx-background-color: transparent;
-    -fx-font-weight: bold;
-    -fx-text-fill: #334155;
-    -fx-padding: 10 5;
+.table-view .column-header .label {
+    -fx-alignment: CENTER-LEFT;
+}
+
+.table-cell {
+    -fx-alignment: CENTER-LEFT;
 }
 
 .table-row-cell {

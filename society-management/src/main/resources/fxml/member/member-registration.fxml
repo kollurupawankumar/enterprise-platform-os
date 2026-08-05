@@ -10,125 +10,193 @@
             stylesheets="/css/member-registration.css">
 
     <top>
-
         <VBox spacing="10">
-
             <padding>
-                <Insets top="20"
-                        right="20"
-                        bottom="10"
-                        left="20"/>
+                <Insets top="20" right="20" bottom="10" left="20"/>
             </padding>
-
-            <Label fx:id="titleLabel"
-                   text="Register Member"
-                   styleClass="dashboard-title"/>
-
+            <Label fx:id="titleLabel" text="Register Member" styleClass="dashboard-title"/>
         </VBox>
-
     </top>
 
     <center>
-
-        <GridPane hgap="15"
-                  vgap="15"
-                  styleClass="form-card">
-
+        <TabPane tabClosingPolicy="UNAVAILABLE" styleClass="form-card">
             <padding>
-                <Insets top="20"
-                        right="20"
-                        bottom="20"
-                        left="20"/>
+                <Insets top="10" right="15" bottom="15" left="15"/>
             </padding>
+            
+            <!-- Tab 1: Personal & Demographic -->
+            <Tab text="Personal &amp; Demographic">
+                <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;">
+                    <GridPane hgap="15" vgap="15">
+                        <padding>
+                            <Insets top="15" right="15" bottom="15" left="15"/>
+                        </padding>
 
-            <Label text="Member Number"/>
-            <TextField fx:id="memberNumberField"
-                       GridPane.columnIndex="1"/>
+                        <Label text="Member Number" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                        <TextField fx:id="memberNumberField" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
 
-            <Label text="Membership Number"
-                   GridPane.rowIndex="1"/>
+                        <Label text="Membership Number" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+                        <TextField fx:id="membershipNumberField" GridPane.columnIndex="3" GridPane.rowIndex="0"/>
 
-            <TextField fx:id="membershipNumberField"
-                       GridPane.columnIndex="1"
-                       GridPane.rowIndex="1"/>
+                        <Label text="First Name *" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                        <TextField fx:id="firstNameField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
 
-            <Label text="First Name *"
-                   GridPane.rowIndex="2"/>
+                        <Label text="Middle Name" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+                        <TextField fx:id="middleNameField" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
 
-            <TextField fx:id="firstNameField"
-                       GridPane.columnIndex="1"
-                       GridPane.rowIndex="2"/>
+                        <Label text="Last Name" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                        <TextField fx:id="lastNameField" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
 
-            <Label text="Last Name"
-                   GridPane.rowIndex="3"/>
+                        <Label text="Gender" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
+                        <ComboBox fx:id="genderComboBox" GridPane.columnIndex="3" GridPane.rowIndex="2"/>
 
-            <TextField fx:id="lastNameField"
-                       GridPane.columnIndex="1"
-                       GridPane.rowIndex="3"/>
+                        <Label text="Date of Birth" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                        <DatePicker fx:id="dobDatePicker" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
 
-            <Label text="Mobile *"
-                   GridPane.rowIndex="4"/>
+                        <Label text="Occupation" GridPane.columnIndex="2" GridPane.rowIndex="3"/>
+                        <TextField fx:id="occupationField" GridPane.columnIndex="3" GridPane.rowIndex="3"/>
 
-            <TextField fx:id="mobileNumberField"
-                       GridPane.columnIndex="1"
-                       GridPane.rowIndex="4"/>
+                        <Label text="Mobile *" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+                        <TextField fx:id="mobileNumberField" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
 
-            <Label text="Email"
-                   GridPane.rowIndex="5"/>
+                        <Label text="Email" GridPane.columnIndex="2" GridPane.rowIndex="4"/>
+                        <TextField fx:id="emailField" GridPane.columnIndex="3" GridPane.rowIndex="4"/>
 
-            <TextField fx:id="emailField"
-                       GridPane.columnIndex="1"
-                       GridPane.rowIndex="5"/>
+                        <Label text="Emergency Contact Name" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+                        <TextField fx:id="emergencyContactNameField" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
 
-            <Label text="Aadhaar"
-                   GridPane.rowIndex="6"/>
+                        <Label text="Emergency Phone" GridPane.columnIndex="2" GridPane.rowIndex="5"/>
+                        <TextField fx:id="emergencyContactPhoneField" GridPane.columnIndex="3" GridPane.rowIndex="5"/>
 
-            <TextField fx:id="aadhaarNumberField"
-                       GridPane.columnIndex="1"
-                       GridPane.rowIndex="6"/>
+                        <Label text="Status" GridPane.columnIndex="0" GridPane.rowIndex="6"/>
+                        <ComboBox fx:id="statusComboBox" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+                    </GridPane>
+                </ScrollPane>
+            </Tab>
 
-            <Label text="PAN"
-                   GridPane.rowIndex="7"/>
+            <!-- Tab 2: Classification -->
+            <Tab text="Member Classification">
+                <GridPane hgap="15" vgap="15">
+                    <padding>
+                        <Insets top="15" right="15" bottom="15" left="15"/>
+                    </padding>
 
-            <TextField fx:id="panNumberField"
-                       GridPane.columnIndex="1"
-                       GridPane.rowIndex="7"/>
+                    <Label text="Member Type" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                    <ComboBox fx:id="memberTypeComboBox" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
 
-            <Label text="Status"
-                   GridPane.rowIndex="8"/>
+                    <Label text="Admission Date" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                    <DatePicker fx:id="admissionDatePicker" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
 
-            <ComboBox fx:id="statusComboBox"
-                      GridPane.columnIndex="1"
-                      GridPane.rowIndex="8"/>
+                    <Label text="MC Resolution Number" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                    <TextField fx:id="resolutionNumberField" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
 
-        </GridPane>
+                    <Label text="Resolution Date" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                    <DatePicker fx:id="resolutionDatePicker" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                </GridPane>
+            </Tab>
 
+            <!-- Tab 3: Address Information -->
+            <Tab text="Address Information">
+                <VBox spacing="15">
+                    <padding>
+                        <Insets top="15" right="15" bottom="15" left="15"/>
+                    </padding>
+                    <Label text="Permanent Address" style="-fx-font-weight: bold;"/>
+                    <TextArea fx:id="permanentAddressArea" prefRowCount="3" wrapText="true"/>
+
+                    <Label text="Correspondence Address" style="-fx-font-weight: bold;"/>
+                    <TextArea fx:id="correspondenceAddressArea" prefRowCount="3" wrapText="true"/>
+                </VBox>
+            </Tab>
+
+            <!-- Tab 4: Joint Owners & Nominees -->
+            <Tab text="Joint Owners &amp; Nominees">
+                <VBox spacing="20">
+                    <padding>
+                        <Insets top="15" right="15" bottom="15" left="15"/>
+                    </padding>
+                    
+                    <!-- Joint Owners Section -->
+                    <VBox spacing="8">
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <Label text="Joint Owners" style="-fx-font-weight: bold; -fx-font-size: 14px;"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Button text="+ Add Joint Owner" onAction="#addJointOwner" styleClass="button-secondary"/>
+                            <Button text="Remove" onAction="#removeJointOwner" styleClass="button-danger"/>
+                        </HBox>
+                        <TableView fx:id="jointOwnerTable" prefHeight="130">
+                            <columns>
+                                <TableColumn fx:id="joFirstNameCol" text="First Name" prefWidth="120"/>
+                                <TableColumn fx:id="joLastNameCol" text="Last Name" prefWidth="120"/>
+                                <TableColumn fx:id="joRelationCol" text="Relationship" prefWidth="100"/>
+                                <TableColumn fx:id="joAadhaarCol" text="Aadhaar" prefWidth="120"/>
+                                <TableColumn fx:id="joPanCol" text="PAN" prefWidth="100"/>
+                            </columns>
+                        </TableView>
+                    </VBox>
+
+                    <!-- Nominees Section -->
+                    <VBox spacing="8">
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <Label text="Nominees" style="-fx-font-weight: bold; -fx-font-size: 14px;"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Button text="+ Add Nominee" onAction="#addNominee" styleClass="button-secondary"/>
+                            <Button text="Remove" onAction="#removeNominee" styleClass="button-danger"/>
+                        </HBox>
+                        <TableView fx:id="nomineeTable" prefHeight="130">
+                            <columns>
+                                <TableColumn fx:id="nomFirstNameCol" text="First Name" prefWidth="140"/>
+                                <TableColumn fx:id="nomLastNameCol" text="Last Name" prefWidth="140"/>
+                                <TableColumn fx:id="nomRelationCol" text="Relationship" prefWidth="120"/>
+                                <TableColumn fx:id="nomShareCol" text="Share %" prefWidth="100"/>
+                            </columns>
+                        </TableView>
+                    </VBox>
+                </VBox>
+            </Tab>
+
+            <!-- Tab 5: KYC & Documents -->
+            <Tab text="KYC &amp; Document Uploads">
+                <GridPane hgap="15" vgap="15">
+                    <padding>
+                        <Insets top="15" right="15" bottom="15" left="15"/>
+                    </padding>
+
+                    <Label text="Aadhaar Number" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                    <TextField fx:id="aadhaarNumberField" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                    <Label text="PAN Number" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+                    <TextField fx:id="panNumberField" GridPane.columnIndex="3" GridPane.rowIndex="0"/>
+
+                    <Label text="Member Photo" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                    <HBox spacing="10" alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="1">
+                        <TextField fx:id="photoPathField" prefWidth="300" editable="false"/>
+                        <Button text="Choose Photo" onAction="#browsePhoto"/>
+                    </HBox>
+
+                    <Label text="Aadhaar Document (PDF/Img)" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                    <HBox spacing="10" alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="2">
+                        <TextField fx:id="aadhaarDocPathField" prefWidth="300" editable="false"/>
+                        <Button text="Choose File" onAction="#browseAadhaarDoc"/>
+                    </HBox>
+
+                    <Label text="PAN Document (PDF/Img)" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                    <HBox spacing="10" alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="3">
+                        <TextField fx:id="panDocPathField" prefWidth="300" editable="false"/>
+                        <Button text="Choose File" onAction="#browsePanDoc"/>
+                    </HBox>
+                </GridPane>
+            </Tab>
+        </TabPane>
     </center>
 
     <bottom>
-
-        <HBox spacing="10"
-              alignment="CENTER_RIGHT">
-
+        <HBox spacing="10" alignment="CENTER_RIGHT">
             <padding>
-                <Insets top="15"
-                        right="20"
-                        bottom="20"
-                        left="20"/>
+                <Insets top="15" right="20" bottom="20" left="20"/>
             </padding>
-
-            <Button fx:id="cancelButton"
-                    text="Cancel"
-                    styleClass="button-secondary"
-                    onAction="#cancel"/>
-
-            <Button fx:id="saveButton"
-                    text="Save"
-                    styleClass="button-primary"
-                    onAction="#save"/>
-
+            <Button fx:id="cancelButton" text="Cancel" styleClass="button-secondary" onAction="#cancel"/>
+            <Button fx:id="saveButton" text="Save" styleClass="button-primary" onAction="#save"/>
         </HBox>
-
     </bottom>
-
 </BorderPane>

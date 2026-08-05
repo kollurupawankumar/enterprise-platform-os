@@ -13,6 +13,6 @@ public class HomeController {
 
     @FXML
     public void initialize() {
-        titleLabel.setText("Society Management System");
+        titleLabel.setText("Society Office OS");
     }
 }

@@ -23,7 +23,7 @@ public class ApplicationStartupRunner implements ApplicationRunner {
     public void run(ApplicationArguments args) {
 
         LOGGER.info("======================================");
-        LOGGER.info("Society Management System");
+        LOGGER.info("Society Office OS");
         LOGGER.info("Starting application...");
 
         if (databaseHealthService.isDatabaseAvailable()) {

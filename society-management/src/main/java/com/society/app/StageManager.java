@@ -33,7 +33,7 @@ public class StageManager {
                             .getResource("/css/application.css")
                             .toExternalForm());
 
-            stage.setTitle("Society Management System");
+            stage.setTitle("Society Office OS");
 
             stage.setMinWidth(1300);
 
