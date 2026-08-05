@@ -55,10 +55,10 @@
                 <TextArea fx:id="agendaArea" promptText="Agenda description..." editable="false" prefHeight="120" wrapText="true"/>
 
                 <Label text="Minutes of Meeting" style="-fx-font-weight: bold;"/>
-                <TextArea fx:id="minutesArea" promptText="Minutes of the meeting..." editable="false" prefHeight="180" wrapText="true"/>
+                <TextArea fx:id="minutesArea" promptText="Type or edit minutes of the meeting here..." editable="true" prefHeight="180" wrapText="true"/>
 
                 <HBox spacing="10">
-                    <Button fx:id="completeMeetingBtn" text="Enter Minutes" onAction="#handleCompleteMeeting" styleClass="button-primary" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="completeMeetingBtn" text="Save Minutes" onAction="#handleCompleteMeeting" styleClass="button-primary" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
                 </HBox>
             </VBox>
         </SplitPane>

@@ -241,20 +241,28 @@ public class GovernanceController extends BaseController {
     private void handleCompleteMeeting() {
         MeetingEntity selected = meetingTable.getSelectionModel().getSelectedItem();
         if (selected == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Selection Required");
+            alert.setHeaderText(null);
+            alert.setContentText("Please select a meeting to save minutes.");
+            alert.showAndWait();
             return;
         }
 
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Complete Meeting & Enter Minutes");
-        dialog.setHeaderText("Record Minutes for " + selected.getTitle());
-        dialog.setContentText("Enter Minutes text:");
+        String minutesText = minutesArea.getText() != null ? minutesArea.getText().trim() : "";
+        governanceService.completeMeeting(selected.getId(), minutesText);
 
-        Optional<String> result = dialog.showAndWait();
-        result.ifPresent(minutes -> {
-            governanceService.completeMeeting(selected.getId(), minutes);
-            loadMeetings();
-            showMeetingDetails(selected);
-        });
+        Alert info = new Alert(Alert.AlertType.INFORMATION);
+        info.setTitle("Success");
+        info.setHeaderText(null);
+        info.setContentText("Minutes of the meeting saved successfully!");
+        info.showAndWait();
+
+        loadMeetings();
+        MeetingEntity updated = governanceService.getAllMeetings().stream()
+                .filter(m -> m.getId().equals(selected.getId()))
+                .findFirst().orElse(selected);
+        showMeetingDetails(updated);
     }
 
     @FXML
