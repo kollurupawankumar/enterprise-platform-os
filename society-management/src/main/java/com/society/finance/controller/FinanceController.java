@@ -75,6 +75,16 @@ public class FinanceController extends BaseController {
     @FXML private Button addBankAccountBtn;
     @FXML private Button recordInvestmentBtn;
 
+    // Expense Details Side Pane
+    @FXML private Label categoryVal;
+    @FXML private Label modeVal;
+    @FXML private Label refNoVal;
+    @FXML private Label approvedByVal;
+    @FXML private TextArea narrationArea;
+    @FXML private Label receiptPathVal;
+
+    private ExpenseEntity selectedExpense;
+
     private final com.society.user.context.UserContext userContext;
 
     public FinanceController(
@@ -153,15 +163,50 @@ public class FinanceController extends BaseController {
     }
 
     private void showExpenseDetails(ExpenseEntity expense) {
+        this.selectedExpense = expense;
         if (expense == null) {
-            categoryLabel.setText("-");
-            modeLabel.setText("-");
-            remarksLabel.setText("-");
+            if (categoryLabel != null) categoryLabel.setText("-");
+            if (categoryVal != null) categoryVal.setText("-");
+            if (modeLabel != null) modeLabel.setText("-");
+            if (modeVal != null) modeVal.setText("-");
+            if (refNoVal != null) refNoVal.setText("-");
+            if (approvedByVal != null) approvedByVal.setText("-");
+            if (remarksLabel != null) remarksLabel.setText("-");
+            if (narrationArea != null) narrationArea.setText("");
+            if (receiptPathVal != null) receiptPathVal.setText("No receipt attached");
             return;
         }
-        categoryLabel.setText(expense.getCategory());
-        modeLabel.setText(expense.getPaymentMode());
-        remarksLabel.setText(expense.getRemarks() != null ? expense.getRemarks() : "-");
+        if (categoryLabel != null) categoryLabel.setText(expense.getCategory());
+        if (categoryVal != null) categoryVal.setText(expense.getCategory());
+        if (modeLabel != null) modeLabel.setText(expense.getPaymentMode());
+        if (modeVal != null) modeVal.setText(expense.getPaymentMode());
+        if (refNoVal != null) refNoVal.setText(expense.getVoucherNumber());
+        if (approvedByVal != null) approvedByVal.setText("Treasurer / Secretary");
+        if (remarksLabel != null) remarksLabel.setText(expense.getRemarks() != null ? expense.getRemarks() : "-");
+        if (narrationArea != null) narrationArea.setText(expense.getRemarks() != null ? expense.getRemarks() : "No narration provided.");
+        if (receiptPathVal != null) receiptPathVal.setText("Receipt attached / On record");
+    }
+
+    @FXML
+    private void handleViewReceipt() {
+        if (selectedExpense == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Selection Required");
+            alert.setHeaderText(null);
+            alert.setContentText("Please select an expense voucher from the table first.");
+            alert.showAndWait();
+            return;
+        }
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Expense Receipt & Voucher Proof");
+        alert.setHeaderText("Voucher Number: " + selectedExpense.getVoucherNumber());
+        alert.setContentText("Payee: " + selectedExpense.getPayee() + "\n"
+                + "Amount: " + com.society.common.util.CurrencyUtils.formatInr(selectedExpense.getAmount()) + "\n"
+                + "Category: " + selectedExpense.getCategory() + "\n"
+                + "Payment Mode: " + selectedExpense.getPaymentMode() + "\n"
+                + "Narration: " + (selectedExpense.getRemarks() != null ? selectedExpense.getRemarks() : "N/A"));
+        alert.showAndWait();
     }
 
     @FXML
