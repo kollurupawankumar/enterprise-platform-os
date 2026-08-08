@@ -92,6 +92,7 @@ public class OperationsController extends BaseController {
     @FXML private Button editAssetBtn;
     @FXML private Button logServiceVisitBtn;
     @FXML private Button addVendorBtn;
+    @FXML private Button editVendorBtn;
     @FXML private Button addFacilityBtn;
     @FXML private Button addStaffBtn;
     @FXML private Button deactivateStaffBtn;
@@ -166,6 +167,7 @@ public class OperationsController extends BaseController {
         if (editAssetBtn != null) { editAssetBtn.setVisible(canEdit); editAssetBtn.setManaged(canEdit); }
         if (logServiceVisitBtn != null) { logServiceVisitBtn.setVisible(canEdit); logServiceVisitBtn.setManaged(canEdit); }
         if (addVendorBtn != null) { addVendorBtn.setVisible(canEdit); addVendorBtn.setManaged(canEdit); }
+        if (editVendorBtn != null) { editVendorBtn.setVisible(canEdit); editVendorBtn.setManaged(canEdit); }
         if (addFacilityBtn != null) { addFacilityBtn.setVisible(canEdit); addFacilityBtn.setManaged(canEdit); }
         if (addStaffBtn != null) { addStaffBtn.setVisible(canEdit); addStaffBtn.setManaged(canEdit); }
         if (deactivateStaffBtn != null) { deactivateStaffBtn.setVisible(canEdit); deactivateStaffBtn.setManaged(canEdit); }
@@ -567,34 +569,73 @@ public class OperationsController extends BaseController {
 
     @FXML
     private void handleAddVendor() {
-        Dialog<VendorEntity> dialog = new Dialog<>();
-        dialog.setTitle("Add Vendor");
-        dialog.setHeaderText("Enter Vendor Directory Details:");
+        showVendorDialog(new VendorEntity());
+    }
 
-        ButtonType saveBtnType = new ButtonType("Add", ButtonBar.ButtonData.OK_DONE);
+    @FXML
+    private void handleEditVendor() {
+        VendorEntity selected = vendorTable.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Selection Required");
+            alert.setHeaderText(null);
+            alert.setContentText("Please select a vendor from the table to edit.");
+            alert.showAndWait();
+            return;
+        }
+        showVendorDialog(selected);
+    }
+
+    private void showVendorDialog(VendorEntity vendor) {
+        boolean isEdit = vendor.getId() != null;
+        Dialog<VendorEntity> dialog = new Dialog<>();
+        dialog.setTitle(isEdit ? "Edit Vendor Profile" : "Add Vendor");
+        dialog.setHeaderText(isEdit ? "Update Vendor Profile & Contact Details:" : "Enter Vendor Directory Details:");
+
+        ButtonType saveBtnType = new ButtonType(isEdit ? "Update" : "Save", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(saveBtnType, ButtonType.CANCEL);
 
         GridPane grid = new GridPane();
         grid.setHgap(10); grid.setVgap(10);
-        grid.setPadding(new Insets(20, 150, 10, 10));
+        grid.setPadding(new Insets(15));
 
-        TextField nameField = new TextField(); nameField.setPromptText("Vendor Company Name");
-        TextField catField = new TextField(); catField.setPromptText("Category (e.g. SECURITY, LIFT)");
-        TextField phoneField = new TextField(); phoneField.setPromptText("Phone Number");
+        TextField nameField = new TextField(vendor.getName() != null ? vendor.getName() : "");
+        nameField.setPromptText("Vendor Company Name");
 
-        grid.add(new Label("Name:"), 0, 0); grid.add(nameField, 1, 0);
+        TextField catField = new TextField(vendor.getCategory() != null ? vendor.getCategory() : "");
+        catField.setPromptText("Category (e.g. SECURITY, ELEVATOR, MAINTENANCE)");
+
+        TextField phoneField = new TextField(vendor.getPhone() != null ? vendor.getPhone() : "");
+        phoneField.setPromptText("Primary Contact Phone Number");
+
+        TextField contactPersonField = new TextField(vendor.getContactPerson() != null ? vendor.getContactPerson() : "");
+        contactPersonField.setPromptText("Contact Person Name");
+
+        TextField emailField = new TextField(vendor.getEmail() != null ? vendor.getEmail() : "");
+        emailField.setPromptText("Email Address");
+
+        TextArea addressArea = new TextArea(vendor.getAddress() != null ? vendor.getAddress() : "");
+        addressArea.setPromptText("Office / Business Address...");
+        addressArea.setPrefRowCount(3);
+
+        grid.add(new Label("Company Name:"), 0, 0); grid.add(nameField, 1, 0);
         grid.add(new Label("Category:"), 0, 1); grid.add(catField, 1, 1);
         grid.add(new Label("Phone:"), 0, 2); grid.add(phoneField, 1, 2);
+        grid.add(new Label("Contact Person:"), 0, 3); grid.add(contactPersonField, 1, 3);
+        grid.add(new Label("Email:"), 0, 4); grid.add(emailField, 1, 4);
+        grid.add(new Label("Office Address:"), 0, 5); grid.add(addressArea, 1, 5);
 
         dialog.getDialogPane().setContent(grid);
 
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == saveBtnType) {
-                VendorEntity v = new VendorEntity();
-                v.setName(nameField.getText().trim());
-                v.setCategory(catField.getText().trim());
-                v.setPhone(phoneField.getText().trim());
-                return v;
+                vendor.setName(nameField.getText().trim());
+                vendor.setCategory(catField.getText().trim());
+                vendor.setPhone(phoneField.getText().trim());
+                vendor.setContactPerson(contactPersonField.getText().trim());
+                vendor.setEmail(emailField.getText().trim());
+                vendor.setAddress(addressArea.getText().trim());
+                return vendor;
             }
             return null;
         });
@@ -604,6 +645,7 @@ public class OperationsController extends BaseController {
             if (!v.getName().isEmpty()) {
                 operationsService.saveVendor(v);
                 loadVendors();
+                showVendorDetails(v);
             }
         });
     }

@@ -122,7 +122,11 @@
 
             <!-- Right Panel: Vendor Details -->
             <VBox spacing="15" style="-fx-background-color: #F8FAFC; -fx-padding: 15;">
-                <Label text="Vendor Profile &amp; Contact Details" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+                <HBox alignment="CENTER_LEFT">
+                    <Label text="Vendor Profile &amp; Contact Details" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="editVendorBtn" text="Edit Vendor" onAction="#handleEditVendor" styleClass="button-secondary"/>
+                </HBox>
                 <GridPane hgap="10" vgap="12" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;">
                     <columnConstraints>
                         <ColumnConstraints prefWidth="120"/>
