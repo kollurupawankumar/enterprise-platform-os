@@ -13,7 +13,6 @@ DELETE FROM managing_committee;
 DELETE FROM document;
 DELETE FROM share_certificate;
 DELETE FROM share_transfer_history;
-DELETE FROM share_allotment;
 DELETE FROM property;
 DELETE FROM member;
 DELETE FROM society;
