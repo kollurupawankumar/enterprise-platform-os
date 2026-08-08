@@ -73,4 +73,11 @@ public class FileStorageService {
 
         return targetPath.toString().replace("\\", "/");
     }
+
+    public File getFileByPath(String relativeOrAbsolutePath) {
+        if (relativeOrAbsolutePath == null || relativeOrAbsolutePath.isBlank()) {
+            return null;
+        }
+        return new File(relativeOrAbsolutePath);
+    }
 }

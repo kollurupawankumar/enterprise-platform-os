@@ -15,7 +15,7 @@
             fx:controller="com.society.common.controller.MainController">
 
     <top>
-        <fx:include source="/fxml/header/header.fxml"/>
+        <fx:include fx:id="headerInclude" source="/fxml/header/header.fxml"/>
     </top>
 
     <left>

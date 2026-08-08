@@ -76,6 +76,8 @@ public class MainController extends BaseController {
 
     private static final String ACTIVE_STYLE = "navigation-button-active";
 
+    @FXML private com.society.header.controller.HeaderController headerIncludeController;
+
     public MainController(
             NavigationManager navigationManager,
             StartupCoordinator startupCoordinator,
@@ -109,6 +111,9 @@ public class MainController extends BaseController {
                 rootBorderPane.setTop(initialTop);
                 rootBorderPane.setLeft(initialLeft);
                 rootBorderPane.setBottom(initialBottom);
+                if (headerIncludeController != null) {
+                    headerIncludeController.refresh();
+                }
                 updateNavigation();
             }
         });

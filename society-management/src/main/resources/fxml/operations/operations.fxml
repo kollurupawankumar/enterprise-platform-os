@@ -85,7 +85,7 @@
                     <Button fx:id="logServiceVisitBtn" text="Log Service Visit" onAction="#handleLogServiceVisit" styleClass="button-primary"/>
                 </HBox>
 
-                <TableView fx:id="serviceLogTable" VBox.vgrow="ALWAYS" prefHeight="150" style="-fx-background-radius: 6;">
+                <TableView fx:id="serviceLogTable" VBox.vgrow="ALWAYS" prefHeight="150" style="-fx-background-radius: 6;" onMouseClicked="#handleServiceLogClicked">
                     <columns>
                         <TableColumn fx:id="serviceDateCol" text="Date" prefWidth="90"/>
                         <TableColumn fx:id="serviceTypeCol" text="Type" prefWidth="100"/>

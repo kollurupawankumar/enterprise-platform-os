@@ -15,8 +15,10 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import org.springframework.stereotype.Component;
 
@@ -319,6 +321,10 @@ public class OperationsController extends BaseController {
                 try { log.setCost(Double.parseDouble(costField.getText().trim())); } catch (Exception ignored) {}
                 log.setWorkSummary(summaryArea.getText().trim());
                 log.setDocumentPath(uploadedPath[0]);
+
+                String currentUser = userContext.isLoggedIn() ? userContext.getCurrentUser().getUsername() : "SYSTEM";
+                log.setCreatedBy(currentUser);
+                log.setUpdatedBy(currentUser);
                 return log;
             }
             return null;
@@ -329,6 +335,84 @@ public class OperationsController extends BaseController {
             operationsService.logServiceVisit(log);
             loadServiceLogs(selectedAsset.getId());
         });
+    }
+
+    @FXML
+    private void handleServiceLogClicked() {
+        com.society.operations.entity.AssetServiceLogEntity selectedLog = serviceLogTable.getSelectionModel().getSelectedItem();
+        if (selectedLog == null) {
+            return;
+        }
+
+        Dialog<Void> dialog = new Dialog<>();
+        dialog.setTitle("Service Visit & Photo Inspection Details");
+        dialog.setHeaderText("Asset: " + (selectedAsset != null ? selectedAsset.getName() : "N/A"));
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+
+        VBox contentBox = new VBox(15);
+        contentBox.setPadding(new Insets(15));
+        contentBox.setPrefWidth(550);
+
+        GridPane grid = new GridPane();
+        grid.setHgap(12); grid.setVgap(8);
+
+        grid.add(new Label("Service Date:"), 0, 0); grid.add(new Label(selectedLog.getServiceDate()), 1, 0);
+        grid.add(new Label("Service Type:"), 0, 1); grid.add(new Label(selectedLog.getServiceType()), 1, 1);
+        grid.add(new Label("Engineer / Contact:"), 0, 2); grid.add(new Label(selectedLog.getEngineerName() != null ? selectedLog.getEngineerName() : "-"), 1, 2);
+        grid.add(new Label("Cost Incurred:"), 0, 3); grid.add(new Label(com.society.common.util.CurrencyUtils.formatInr(selectedLog.getCost() != null ? selectedLog.getCost() : 0.0)), 1, 3);
+        grid.add(new Label("Work Performed:"), 0, 4); grid.add(new Label(selectedLog.getWorkSummary() != null ? selectedLog.getWorkSummary() : "-"), 1, 4);
+
+        contentBox.getChildren().add(grid);
+
+        // Uploaded Photos & Documents Section
+        Label docHeader = new Label("Attached Inspection Photos & Bills:");
+        docHeader.setStyle("-fx-font-weight: bold; -fx-font-size: 13px;");
+        contentBox.getChildren().add(docHeader);
+
+        String docPath = selectedLog.getDocumentPath();
+        if (docPath != null && !docPath.isBlank()) {
+            String[] paths = docPath.split(";");
+            FlowPane mediaPane = new FlowPane();
+            mediaPane.setHgap(10); mediaPane.setVgap(10);
+
+            for (String p : paths) {
+                String cleanPath = p.trim();
+                File file = fileStorageService.getFileByPath(cleanPath);
+                if (file != null && file.exists()) {
+                    String lowerName = file.getName().toLowerCase();
+                    if (lowerName.endsWith(".jpg") || lowerName.endsWith(".jpeg") || lowerName.endsWith(".png")) {
+                        try {
+                            javafx.scene.image.ImageView imgView = new javafx.scene.image.ImageView(new javafx.scene.image.Image(file.toURI().toString()));
+                            imgView.setFitWidth(150);
+                            imgView.setPreserveRatio(true);
+                            imgView.setStyle("-fx-border-color: #CBD5E1; -fx-border-width: 1; -fx-cursor: hand;");
+                            
+                            // Double-click or click to open full file
+                            imgView.setOnMouseClicked(e -> {
+                                try { java.awt.Desktop.getDesktop().open(file); } catch (Exception ignored) {}
+                            });
+                            mediaPane.getChildren().add(imgView);
+                        } catch (Exception ex) {
+                            Hyperlink link = new Hyperlink(file.getName());
+                            link.setOnAction(e -> { try { java.awt.Desktop.getDesktop().open(file); } catch (Exception ignored) {} });
+                            mediaPane.getChildren().add(link);
+                        }
+                    } else {
+                        Hyperlink link = new Hyperlink(file.getName() + " (Open File)");
+                        link.setOnAction(e -> { try { java.awt.Desktop.getDesktop().open(file); } catch (Exception ignored) {} });
+                        mediaPane.getChildren().add(link);
+                    }
+                } else {
+                    mediaPane.getChildren().add(new Label("File path: " + cleanPath + " (File not found)"));
+                }
+            }
+            contentBox.getChildren().add(mediaPane);
+        } else {
+            contentBox.getChildren().add(new Label("No inspection photos or receipts attached for this service visit."));
+        }
+
+        dialog.getDialogPane().setContent(contentBox);
+        dialog.showAndWait();
     }
 
     private void showVendorDetails(VendorEntity vendor) {

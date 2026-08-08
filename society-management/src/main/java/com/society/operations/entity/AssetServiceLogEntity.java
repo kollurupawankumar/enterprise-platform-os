@@ -32,6 +32,12 @@ public class AssetServiceLogEntity {
     @Column(name = "document_path", length = 255)
     private String documentPath;
 
+    @Column(name = "created_by", length = 100)
+    private String createdBy;
+
+    @Column(name = "updated_by", length = 100)
+    private String updatedBy;
+
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
@@ -75,6 +81,12 @@ public class AssetServiceLogEntity {
 
     public String getDocumentPath() { return documentPath; }
     public void setDocumentPath(String documentPath) { this.documentPath = documentPath; }
+
+    public String getCreatedBy() { return createdBy; }
+    public void setCreatedBy(String createdBy) { this.createdBy = createdBy; }
+
+    public String getUpdatedBy() { return updatedBy; }
+    public void setUpdatedBy(String updatedBy) { this.updatedBy = updatedBy; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
