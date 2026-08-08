@@ -26,6 +26,9 @@ public class FacilityEntity {
     @Column(length = 100)
     private String timings;
 
+    @Column(name = "booking_price")
+    private Double bookingPrice;
+
     @Column(nullable = false, length = 30)
     private String status; // OPERATIONAL, MAINTENANCE, CLOSED
 
@@ -66,6 +69,9 @@ public class FacilityEntity {
 
     public String getTimings() { return timings; }
     public void setTimings(String timings) { this.timings = timings; }
+
+    public Double getBookingPrice() { return bookingPrice; }
+    public void setBookingPrice(Double bookingPrice) { this.bookingPrice = bookingPrice; }
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }

@@ -75,6 +75,7 @@ public class OperationsController extends BaseController {
     @FXML private TableColumn<FacilityEntity, String> facilityLocationCol;
     @FXML private TableColumn<FacilityEntity, Number> facilityCapacityCol;
     @FXML private TableColumn<FacilityEntity, String> facilityTimingsCol;
+    @FXML private TableColumn<FacilityEntity, String> facilityPriceCol;
     @FXML private TableColumn<FacilityEntity, String> facilityStatusCol;
 
     // Staff & Police Verification
@@ -148,6 +149,11 @@ public class OperationsController extends BaseController {
         facilityLocationCol.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getLocation()));
         facilityCapacityCol.setCellValueFactory(cell -> new SimpleIntegerProperty(cell.getValue().getCapacity() != null ? cell.getValue().getCapacity() : 0));
         facilityTimingsCol.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getTimings()));
+        facilityPriceCol.setCellValueFactory(cell -> new SimpleStringProperty(
+                cell.getValue().getBookingPrice() != null && cell.getValue().getBookingPrice() > 0 
+                ? com.society.common.util.CurrencyUtils.formatInr(cell.getValue().getBookingPrice()) 
+                : "Free / N/A"
+        ));
         facilityStatusCol.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getStatus()));
 
         // Staff column mapping
@@ -753,12 +759,14 @@ public class OperationsController extends BaseController {
         TextField locField = new TextField(); locField.setPromptText("e.g. Wing A Ground Floor");
         TextField capField = new TextField(); capField.setPromptText("e.g. 100");
         TextField timingsField = new TextField(); timingsField.setPromptText("e.g. 06:00 AM - 10:00 PM");
+        TextField priceField = new TextField(); priceField.setPromptText("Booking Fee / Price ₹ (0 if Free)");
 
         grid.add(new Label("Facility Name:"), 0, 0); grid.add(nameField, 1, 0);
         grid.add(new Label("Type:"), 0, 1); grid.add(typeCombo, 1, 1);
         grid.add(new Label("Location:"), 0, 2); grid.add(locField, 1, 2);
         grid.add(new Label("Capacity:"), 0, 3); grid.add(capField, 1, 3);
         grid.add(new Label("Timings:"), 0, 4); grid.add(timingsField, 1, 4);
+        grid.add(new Label("Price / Booking (₹):"), 0, 5); grid.add(priceField, 1, 5);
 
         dialog.getDialogPane().setContent(grid);
 
@@ -770,6 +778,7 @@ public class OperationsController extends BaseController {
                 f.setLocation(locField.getText().trim());
                 try { f.setCapacity(Integer.parseInt(capField.getText().trim())); } catch (Exception ignored) {}
                 f.setTimings(timingsField.getText().trim());
+                try { f.setBookingPrice(Double.parseDouble(priceField.getText().trim())); } catch (Exception ignored) {}
                 f.setStatus("OPERATIONAL");
                 return f;
             }

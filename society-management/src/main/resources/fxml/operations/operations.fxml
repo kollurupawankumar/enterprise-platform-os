@@ -182,12 +182,13 @@
             </HBox>
             <TableView fx:id="facilityTable" VBox.vgrow="ALWAYS">
                 <columns>
-                    <TableColumn fx:id="facilityNameCol" text="Facility Name" prefWidth="180"/>
-                    <TableColumn fx:id="facilityTypeCol" text="Type" prefWidth="130"/>
-                    <TableColumn fx:id="facilityLocationCol" text="Location" prefWidth="160"/>
-                    <TableColumn fx:id="facilityCapacityCol" text="Capacity" prefWidth="100"/>
-                    <TableColumn fx:id="facilityTimingsCol" text="Timings" prefWidth="150"/>
-                    <TableColumn fx:id="facilityStatusCol" text="Status" prefWidth="120"/>
+                    <TableColumn fx:id="facilityNameCol" text="Facility Name" prefWidth="170"/>
+                    <TableColumn fx:id="facilityTypeCol" text="Type" prefWidth="120"/>
+                    <TableColumn fx:id="facilityLocationCol" text="Location" prefWidth="150"/>
+                    <TableColumn fx:id="facilityCapacityCol" text="Capacity" prefWidth="90"/>
+                    <TableColumn fx:id="facilityTimingsCol" text="Timings" prefWidth="130"/>
+                    <TableColumn fx:id="facilityPriceCol" text="Price / Booking (₹)" prefWidth="130"/>
+                    <TableColumn fx:id="facilityStatusCol" text="Status" prefWidth="100"/>
                 </columns>
             </TableView>
         </VBox>
