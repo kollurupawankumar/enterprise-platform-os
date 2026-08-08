@@ -13,4 +13,7 @@ public interface AssetServiceLogRepository extends JpaRepository<AssetServiceLog
 
     @Query("SELECT s FROM AssetServiceLogEntity s WHERE s.asset.id = :assetId ORDER BY s.id DESC")
     List<AssetServiceLogEntity> findByAssetId(@Param("assetId") Integer assetId);
+
+    @Query("SELECT s FROM AssetServiceLogEntity s LEFT JOIN FETCH s.asset ORDER BY s.id DESC")
+    List<AssetServiceLogEntity> findAllWithAsset();
 }

@@ -122,7 +122,7 @@ public class AdministrationController extends BaseController {
 
     private void loadAuditLogs() {
         if (auditTable != null && assetServiceLogRepository != null) {
-            auditLogs.setAll(assetServiceLogRepository.findAll());
+            auditLogs.setAll(assetServiceLogRepository.findAllWithAsset());
             auditTable.setItems(auditLogs);
         }
     }
