@@ -57,6 +57,9 @@ public class OperationsController extends BaseController {
     @FXML private TableColumn<VendorEntity, String> vendorNameCol;
     @FXML private TableColumn<VendorEntity, String> vendorCategoryCol;
     @FXML private TableColumn<VendorEntity, String> vendorPhoneCol;
+    @FXML private Label vendorNameVal;
+    @FXML private Label vendorCategoryVal;
+    @FXML private Label vendorPhoneVal;
     @FXML private Label contactPersonLabel;
     @FXML private Label emailLabel;
     @FXML private Label addressLabel;
@@ -417,11 +420,17 @@ public class OperationsController extends BaseController {
 
     private void showVendorDetails(VendorEntity vendor) {
         if (vendor == null) {
+            if (vendorNameVal != null) vendorNameVal.setText("-");
+            if (vendorCategoryVal != null) vendorCategoryVal.setText("-");
+            if (vendorPhoneVal != null) vendorPhoneVal.setText("-");
             contactPersonLabel.setText("-");
             emailLabel.setText("-");
             addressLabel.setText("-");
             return;
         }
+        if (vendorNameVal != null) vendorNameVal.setText(vendor.getName() != null ? vendor.getName() : "-");
+        if (vendorCategoryVal != null) vendorCategoryVal.setText(vendor.getCategory() != null ? vendor.getCategory() : "-");
+        if (vendorPhoneVal != null) vendorPhoneVal.setText(vendor.getPhone() != null ? vendor.getPhone() : "-");
         contactPersonLabel.setText(vendor.getContactPerson() != null ? vendor.getContactPerson() : "-");
         emailLabel.setText(vendor.getEmail() != null ? vendor.getEmail() : "-");
         addressLabel.setText(vendor.getAddress() != null ? vendor.getAddress() : "-");
