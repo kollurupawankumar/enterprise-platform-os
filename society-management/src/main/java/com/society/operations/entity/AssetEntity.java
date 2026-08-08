@@ -48,6 +48,9 @@ public class AssetEntity {
     @Column(name = "amc_details", length = 500)
     private String amcDetails;
 
+    @Column(name = "amc_document_path", length = 500)
+    private String amcDocumentPath;
+
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
@@ -167,4 +170,7 @@ public class AssetEntity {
 
     public String getAmcDetails() { return amcDetails; }
     public void setAmcDetails(String amcDetails) { this.amcDetails = amcDetails; }
+
+    public String getAmcDocumentPath() { return amcDocumentPath; }
+    public void setAmcDocumentPath(String amcDocumentPath) { this.amcDocumentPath = amcDocumentPath; }
 }

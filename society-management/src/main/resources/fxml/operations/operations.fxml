@@ -77,6 +77,11 @@
 
                     <Label text="AMC Details:" style="-fx-font-weight: bold; -fx-text-fill: #64748B;" GridPane.rowIndex="3"/>
                     <Label fx:id="amcDetailsLabel" text="-" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+                    <Label text="AMC Contract Document:" style="-fx-font-weight: bold; -fx-text-fill: #64748B;" GridPane.rowIndex="4"/>
+                    <HBox fx:id="amcDocBox" alignment="CENTER_LEFT" spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                        <Label text="No document uploaded"/>
+                    </HBox>
                 </GridPane>
 
                 <HBox alignment="CENTER_LEFT" style="-fx-padding: 10 0 0 0;">

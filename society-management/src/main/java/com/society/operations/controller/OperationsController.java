@@ -42,6 +42,7 @@ public class OperationsController extends BaseController {
     @FXML private Label purchaseDateLabel;
     @FXML private Label purchaseCostLabel;
     @FXML private Label warrantyLabel;
+    @FXML private HBox amcDocBox;
 
     // Service Log Controls
     @FXML private TableView<com.society.operations.entity.AssetServiceLogEntity> serviceLogTable;
@@ -235,6 +236,26 @@ public class OperationsController extends BaseController {
 
         amcCostLabel.setText(asset.getAmcCost() != null ? "₹ " + String.format("%.2f", asset.getAmcCost()) : "-");
         amcDetailsLabel.setText(asset.getAmcDetails() != null && !asset.getAmcDetails().isBlank() ? asset.getAmcDetails() : "No details.");
+
+        if (amcDocBox != null) {
+            amcDocBox.getChildren().clear();
+            String docPath = asset.getAmcDocumentPath();
+            if (docPath != null && !docPath.isBlank()) {
+                File docFile = fileStorageService.getFileByPath(docPath);
+                if (docFile != null && docFile.exists()) {
+                    Hyperlink link = new Hyperlink("📄 View AMC Contract Document (" + docFile.getName() + ")");
+                    link.setStyle("-fx-font-weight: bold; -fx-text-fill: #1D4ED8;");
+                    link.setOnAction(e -> {
+                        try { java.awt.Desktop.getDesktop().open(docFile); } catch (Exception ignored) {}
+                    });
+                    amcDocBox.getChildren().add(link);
+                } else {
+                    amcDocBox.getChildren().add(new Label("Document path saved: " + docPath));
+                }
+            } else {
+                amcDocBox.getChildren().add(new Label("No AMC contract uploaded."));
+            }
+        }
 
         loadServiceLogs(asset.getId());
     }
@@ -550,6 +571,32 @@ public class OperationsController extends BaseController {
         amcDetailsArea.setPromptText("AMC terms / Service frequency / Contact notes...");
         amcDetailsArea.setPrefRowCount(2);
 
+        final String[] uploadedAmcDoc = new String[]{asset.getAmcDocumentPath()};
+        Label amcDocPathLabel = new Label(asset.getAmcDocumentPath() != null && !asset.getAmcDocumentPath().isBlank() 
+                ? fileStorageService.getFileByPath(asset.getAmcDocumentPath()).getName() 
+                : "No AMC document uploaded");
+        Button uploadAmcBtn = new Button("Upload AMC Agreement / PDF");
+
+        uploadAmcBtn.setOnAction(e -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Select AMC Contract / Agreement Document");
+            fileChooser.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("Documents & Images", "*.pdf", "*.jpg", "*.jpeg", "*.png", "*.docx")
+            );
+            File file = fileChooser.showOpenDialog(assetTable.getScene().getWindow());
+            if (file != null) {
+                try {
+                    String stored = fileStorageService.storeFile(file, "assets/amc_contracts");
+                    uploadedAmcDoc[0] = stored;
+                    amcDocPathLabel.setText(file.getName());
+                } catch (Exception ex) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setContentText("Failed to upload AMC document: " + ex.getMessage());
+                    alert.showAndWait();
+                }
+            }
+        });
+
         grid.add(new Label("Asset Name:"), 0, 0); grid.add(nameField, 1, 0);
         grid.add(new Label("Category:"), 0, 1); grid.add(categoryCombo, 1, 1);
         grid.add(new Label("Serial / Tag No:"), 0, 2); grid.add(serialField, 1, 2);
@@ -564,6 +611,7 @@ public class OperationsController extends BaseController {
         grid.add(new Label("AMC Expiry Date:"), 0, 10); grid.add(amcExpiryDatePicker, 1, 10);
         grid.add(new Label("AMC Cost (₹):"), 0, 11); grid.add(amcCostField, 1, 11);
         grid.add(new Label("AMC Notes:"), 0, 12); grid.add(amcDetailsArea, 1, 12);
+        grid.add(new Label("AMC Agreement:"), 0, 13); grid.add(new HBox(10, uploadAmcBtn, amcDocPathLabel), 1, 13);
 
         dialog.getDialogPane().setContent(new ScrollPane(grid));
 
@@ -582,6 +630,7 @@ public class OperationsController extends BaseController {
                 asset.setAmcExpiryDate(amcExpiryDatePicker.getValue() != null ? amcExpiryDatePicker.getValue().toString() : null);
                 try { asset.setAmcCost(Double.parseDouble(amcCostField.getText().trim())); } catch (Exception ignored) {}
                 asset.setAmcDetails(amcDetailsArea.getText().trim());
+                asset.setAmcDocumentPath(uploadedAmcDoc[0]);
 
                 return asset;
             }
