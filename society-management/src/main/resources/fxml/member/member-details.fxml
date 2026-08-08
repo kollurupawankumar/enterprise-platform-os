@@ -19,6 +19,7 @@
                 <Button text="← Back to Members" onAction="#backToMembers" styleClass="button-secondary"/>
                 <Label text="Member Dossier Profile" styleClass="dashboard-title"/>
                 <Region HBox.hgrow="ALWAYS"/>
+                <Button text="📄 Export PDF Statement" onAction="#handleExportPdf" styleClass="button-secondary"/>
                 <Button text="Edit Member Profile" onAction="#editMember" styleClass="button-primary"/>
             </HBox>
 

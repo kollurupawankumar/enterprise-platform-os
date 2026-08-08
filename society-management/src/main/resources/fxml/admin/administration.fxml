@@ -97,4 +97,28 @@
         </VBox>
     </Tab>
 
+    <!-- Tab 4: System Audit Trail Explorer -->
+    <Tab text="Audit Trail Explorer">
+        <VBox spacing="15">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+            <HBox alignment="CENTER_LEFT" spacing="15">
+                <Label text="System Audit Trail &amp; Data Modifications Log" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1F4E79;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="🔄 Refresh Audit Logs" onAction="#handleRefreshAuditLogs" styleClass="button-secondary"/>
+            </HBox>
+            <TableView fx:id="auditTable" VBox.vgrow="ALWAYS" style="-fx-background-radius: 8;">
+                <columns>
+                    <TableColumn fx:id="auditEntityCol" text="Entity / Module" prefWidth="150"/>
+                    <TableColumn fx:id="auditRecordCol" text="Record Info / Details" prefWidth="250"/>
+                    <TableColumn fx:id="auditCreatedByCol" text="Created By" prefWidth="120"/>
+                    <TableColumn fx:id="auditCreatedAtCol" text="Created At" prefWidth="160"/>
+                    <TableColumn fx:id="auditUpdatedByCol" text="Updated By" prefWidth="120"/>
+                    <TableColumn fx:id="auditUpdatedAtCol" text="Updated At" prefWidth="160"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </Tab>
+
 </TabPane>

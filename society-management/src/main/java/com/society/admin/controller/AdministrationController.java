@@ -66,19 +66,30 @@ public class AdministrationController extends BaseController {
     @FXML
     private TableColumn<UserEntity, String> emailCol;
 
-    @FXML
-    private ListView<String> backupListView;
+    @FXML private ListView<String> backupListView;
+    @FXML private TableView<com.society.operations.entity.AssetServiceLogEntity> auditTable;
+    @FXML private TableColumn<com.society.operations.entity.AssetServiceLogEntity, String> auditEntityCol;
+    @FXML private TableColumn<com.society.operations.entity.AssetServiceLogEntity, String> auditRecordCol;
+    @FXML private TableColumn<com.society.operations.entity.AssetServiceLogEntity, String> auditCreatedByCol;
+    @FXML private TableColumn<com.society.operations.entity.AssetServiceLogEntity, String> auditCreatedAtCol;
+    @FXML private TableColumn<com.society.operations.entity.AssetServiceLogEntity, String> auditUpdatedByCol;
+    @FXML private TableColumn<com.society.operations.entity.AssetServiceLogEntity, String> auditUpdatedAtCol;
 
     private final ObservableList<UserEntity> users = FXCollections.observableArrayList();
+    private final ObservableList<com.society.operations.entity.AssetServiceLogEntity> auditLogs = FXCollections.observableArrayList();
     private SocietyEntity activeSociety;
+
+    private final com.society.operations.repository.AssetServiceLogRepository assetServiceLogRepository;
 
     public AdministrationController(
             NavigationManager navigationManager,
             SocietyRepository societyRepository,
-            UserRepository userRepository) {
+            UserRepository userRepository,
+            com.society.operations.repository.AssetServiceLogRepository assetServiceLogRepository) {
         super(navigationManager);
         this.societyRepository = societyRepository;
         this.userRepository = userRepository;
+        this.assetServiceLogRepository = assetServiceLogRepository;
     }
 
     @FXML
@@ -89,9 +100,31 @@ public class AdministrationController extends BaseController {
         roleCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getRole()));
         emailCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getEmail() != null ? c.getValue().getEmail() : "-"));
 
+        if (auditTable != null) {
+            auditEntityCol.setCellValueFactory(c -> new SimpleStringProperty("Asset Service Log"));
+            auditRecordCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getAsset() != null ? c.getValue().getAsset().getName() + " (" + c.getValue().getServiceType() + ")" : "-"));
+            auditCreatedByCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getCreatedBy() != null ? c.getValue().getCreatedBy() : "SYSTEM"));
+            auditCreatedAtCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getCreatedAt() != null ? c.getValue().getCreatedAt().toString().replace("T", " ") : "-"));
+            auditUpdatedByCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getUpdatedBy() != null ? c.getValue().getUpdatedBy() : "SYSTEM"));
+            auditUpdatedAtCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getUpdatedAt() != null ? c.getValue().getUpdatedAt().toString().replace("T", " ") : "-"));
+        }
+
         loadSocietyDetails();
         loadUsers();
         loadBackups();
+        loadAuditLogs();
+    }
+
+    @FXML
+    private void handleRefreshAuditLogs() {
+        loadAuditLogs();
+    }
+
+    private void loadAuditLogs() {
+        if (auditTable != null && assetServiceLogRepository != null) {
+            auditLogs.setAll(assetServiceLogRepository.findAll());
+            auditTable.setItems(auditLogs);
+        }
     }
 
     private void loadSocietyDetails() {

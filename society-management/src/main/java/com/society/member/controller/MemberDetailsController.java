@@ -252,6 +252,43 @@ public class MemberDetailsController extends BaseController {
         navigationManager.navigate(View.MEMBER_REGISTRATION);
     }
 
+    @FXML
+    private void handleExportPdf() {
+        if (currentMember == null) return;
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Export Member Dossier Summary");
+        fileChooser.setInitialFileName("Member_Profile_" + currentMember.memberNumber() + ".txt");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text / PDF Summary (*.txt)", "*.txt"));
+        File file = fileChooser.showSaveDialog(nameLabel.getScene().getWindow());
+
+        if (file != null) {
+            try {
+                StringBuilder sb = new StringBuilder();
+                sb.append("=========================================================================\n");
+                sb.append("                 SOCIETY OFFICE OS - MEMBER DOSSIER PROFILE             \n");
+                sb.append("=========================================================================\n\n");
+                sb.append("Member No       : ").append(currentMember.memberNumber()).append("\n");
+                sb.append("Full Name       : ").append(currentMember.firstName()).append(" ").append(currentMember.lastName()).append("\n");
+                sb.append("Member Type     : ").append(currentMember.memberType()).append("\n");
+                sb.append("Status          : ").append(currentMember.status()).append("\n");
+                sb.append("Mobile Number   : ").append(currentMember.mobileNumber()).append("\n");
+                sb.append("Email Address   : ").append(currentMember.email()).append("\n");
+                sb.append("Admission Date  : ").append(currentMember.admissionDate()).append("\n");
+                sb.append("Resolution No   : ").append(currentMember.resolutionNumber()).append("\n");
+                sb.append("Permanent Addr  : ").append(currentMember.permanentAddress()).append("\n\n");
+                sb.append("-------------------------------------------------------------------------\n");
+                sb.append("Generated on    : ").append(java.time.LocalDateTime.now()).append("\n");
+                sb.append("=========================================================================\n");
+
+                Files.writeString(file.toPath(), sb.toString());
+                showAlert(Alert.AlertType.INFORMATION, "Export Successful", "Saved Dossier Summary Statement to:\n" + file.getAbsolutePath());
+            } catch (Exception ex) {
+                showAlert(Alert.AlertType.ERROR, "Export Failed", ex.getMessage());
+            }
+        }
+    }
+
     private void showAlert(Alert.AlertType type, String title, String msg) {
         Alert alert = new Alert(type);
         alert.setTitle(title);
