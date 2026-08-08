@@ -66,10 +66,9 @@ public class MainController extends BaseController {
 
 
     private final StartupCoordinator startupCoordinator;
-
     private final SocietyContext societyContext;
-
     private final NavigationState navigationState;
+    private final com.society.user.context.UserContext userContext;
 
     private javafx.scene.Node initialTop;
     private javafx.scene.Node initialLeft;
@@ -81,13 +80,15 @@ public class MainController extends BaseController {
             NavigationManager navigationManager,
             StartupCoordinator startupCoordinator,
             SocietyContext societyContext,
-            NavigationState navigationState) {
+            NavigationState navigationState,
+            com.society.user.context.UserContext userContext) {
 
         super(navigationManager);
 
         this.startupCoordinator = startupCoordinator;
         this.societyContext = societyContext;
         this.navigationState = navigationState;
+        this.userContext = userContext;
     }
 
     @FXML
@@ -115,88 +116,87 @@ public class MainController extends BaseController {
         startupCoordinator.start();
     }
 
+    private void navigateAuthorized(View view, String module) {
+        if (userContext.canAccess(module)) {
+            navigationManager.navigate(view);
+            updateNavigation();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Access Denied");
+            alert.setHeaderText("Permission Required");
+            alert.setContentText("Your role (" + (userContext.getCurrentUser() != null ? userContext.getCurrentUser().getRole() : "Guest") + ") is not authorized to access the " + module + " module.");
+            alert.showAndWait();
+        }
+    }
+
     @FXML
     private void openDashboard() {
-        navigationManager.navigate(View.DASHBOARD);
-        updateNavigation();
+        navigateAuthorized(View.DASHBOARD, "DASHBOARD");
     }
 
     @FXML
     private void openMembers() {
-        navigationManager.navigate(View.MEMBERS);
-        updateNavigation();
+        navigateAuthorized(View.MEMBERS, "MEMBERS");
     }
 
     @FXML
     private void openProperties() {
-        navigationManager.navigate(View.PROPERTIES);
-        updateNavigation();
+        navigateAuthorized(View.PROPERTIES, "PROPERTIES");
     }
 
     @FXML
     private void openGovernance() {
-        navigationManager.navigate(View.GOVERNANCE);
-        updateNavigation();
+        navigateAuthorized(View.GOVERNANCE, "GOVERNANCE");
     }
 
     @FXML
     private void openOperations() {
-        navigationManager.navigate(View.OPERATIONS);
-        updateNavigation();
+        navigateAuthorized(View.OPERATIONS, "OPERATIONS");
     }
 
     @FXML
     private void openFinance() {
-        navigationManager.navigate(View.FINANCE);
-        updateNavigation();
+        navigateAuthorized(View.FINANCE, "FINANCE");
     }
 
     @FXML
     private void openSearch() {
-        navigationManager.navigate(View.SEARCH);
-        updateNavigation();
+        navigateAuthorized(View.SEARCH, "SEARCH");
     }
 
     @FXML
     private void openShares() {
-        navigationManager.navigate(View.SHARES);
-        updateNavigation();
+        navigateAuthorized(View.SHARES, "SHARES");
     }
 
     @FXML
     private void openCertificates() {
-        navigationManager.navigate(View.CERTIFICATES);
-        updateNavigation();
+        navigateAuthorized(View.CERTIFICATES, "CERTIFICATES");
     }
 
     @FXML
     private void openReports() {
-        navigationManager.navigate(View.REPORTS);
-        updateNavigation();
+        navigateAuthorized(View.REPORTS, "REPORTS");
     }
 
     @FXML
     private void openAdministration() {
-        navigationManager.navigate(View.ADMINISTRATION);
-        updateNavigation();
+        navigateAuthorized(View.ADMINISTRATION, "ADMINISTRATION");
     }
 
     @FXML
     private void openDocuments() {
-        navigationManager.navigate(View.DOCUMENTS);
-        updateNavigation();
+        navigateAuthorized(View.DOCUMENTS, "DOCUMENTS");
     }
 
     @FXML
     private void openKnowledgeBase() {
-        navigationManager.navigate(View.KNOWLEDGE_BASE);
-        updateNavigation();
+        navigateAuthorized(View.KNOWLEDGE_BASE, "KNOWLEDGE_BASE");
     }
 
     @FXML
     private void openBudgetAudit() {
-        navigationManager.navigate(View.BUDGET_AUDIT);
-        updateNavigation();
+        navigateAuthorized(View.BUDGET_AUDIT, "BUDGET_AUDIT");
     }
 
     private void showNotImplemented(String module) {
@@ -208,6 +208,21 @@ public class MainController extends BaseController {
     }
 
     private void updateNavigation() {
+        // Role-based Sidebar Button Visibility & Managed Status
+        setButtonVisibility(dashboardButton, "DASHBOARD");
+        setButtonVisibility(membersButton, "MEMBERS");
+        setButtonVisibility(propertiesButton, "PROPERTIES");
+        setButtonVisibility(governanceButton, "GOVERNANCE");
+        setButtonVisibility(operationsButton, "OPERATIONS");
+        setButtonVisibility(financeButton, "FINANCE");
+        setButtonVisibility(searchButton, "SEARCH");
+        setButtonVisibility(sharesButton, "SHARES");
+        setButtonVisibility(certificatesButton, "CERTIFICATES");
+        setButtonVisibility(reportsButton, "REPORTS");
+        setButtonVisibility(documentsButton, "DOCUMENTS");
+        setButtonVisibility(knowledgeBaseButton, "KNOWLEDGE_BASE");
+        setButtonVisibility(budgetAuditButton, "BUDGET_AUDIT");
+        setButtonVisibility(administrationButton, "ADMINISTRATION");
 
         dashboardButton.getStyleClass().remove(ACTIVE_STYLE);
         membersButton.getStyleClass().remove(ACTIVE_STYLE);
@@ -225,44 +240,36 @@ public class MainController extends BaseController {
         if (budgetAuditButton != null) budgetAuditButton.getStyleClass().remove(ACTIVE_STYLE);
 
         switch (navigationState.getCurrentView()) {
-
             case DASHBOARD -> dashboardButton.getStyleClass().add(ACTIVE_STYLE);
-
             case MEMBERS -> membersButton.getStyleClass().add(ACTIVE_STYLE);
-
             case PROPERTIES -> propertiesButton.getStyleClass().add(ACTIVE_STYLE);
-
             case GOVERNANCE -> governanceButton.getStyleClass().add(ACTIVE_STYLE);
-
             case OPERATIONS -> operationsButton.getStyleClass().add(ACTIVE_STYLE);
-
             case FINANCE -> financeButton.getStyleClass().add(ACTIVE_STYLE);
-
             case SEARCH -> searchButton.getStyleClass().add(ACTIVE_STYLE);
-
             case SHARES -> sharesButton.getStyleClass().add(ACTIVE_STYLE);
-
             case CERTIFICATES -> certificatesButton.getStyleClass().add(ACTIVE_STYLE);
-
             case REPORTS -> reportsButton.getStyleClass().add(ACTIVE_STYLE);
-
             case ADMINISTRATION -> administrationButton.getStyleClass().add(ACTIVE_STYLE);
-
             case DOCUMENTS -> {
                 if (documentsButton != null) documentsButton.getStyleClass().add(ACTIVE_STYLE);
             }
-
             case KNOWLEDGE_BASE -> {
                 if (knowledgeBaseButton != null) knowledgeBaseButton.getStyleClass().add(ACTIVE_STYLE);
             }
-
             case BUDGET_AUDIT -> {
                 if (budgetAuditButton != null) budgetAuditButton.getStyleClass().add(ACTIVE_STYLE);
             }
-
             default -> {
             }
         }
+    }
+
+    private void setButtonVisibility(Button btn, String module) {
+        if (btn == null) return;
+        boolean allowed = userContext.canAccess(module);
+        btn.setVisible(allowed);
+        btn.setManaged(allowed);
     }
 
 
