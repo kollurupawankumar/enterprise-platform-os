@@ -21,7 +21,7 @@
                 <HBox spacing="10" alignment="CENTER_LEFT">
                     <Label text="Society Assets" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
                     <Region HBox.hgrow="ALWAYS"/>
-                    <Button text="Add Asset" onAction="#handleAddAsset" styleClass="button-primary"/>
+                    <Button fx:id="addAssetBtn" text="Add Asset" onAction="#handleAddAsset" styleClass="button-primary"/>
                 </HBox>
                 <TableView fx:id="assetTable" VBox.vgrow="ALWAYS">
                     <columns>
@@ -37,7 +37,7 @@
                 <HBox alignment="CENTER_LEFT">
                     <Label text="Asset &amp; AMC Details" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
                     <Region HBox.hgrow="ALWAYS"/>
-                    <Button text="Edit Asset" onAction="#handleEditAsset" styleClass="button-secondary"/>
+                    <Button fx:id="editAssetBtn" text="Edit Asset" onAction="#handleEditAsset" styleClass="button-secondary"/>
                 </HBox>
 
                 <GridPane hgap="10" vgap="10" style="-fx-background-color: white; -fx-padding: 12; -fx-background-radius: 6;">
@@ -82,7 +82,7 @@
                 <HBox alignment="CENTER_LEFT" style="-fx-padding: 10 0 0 0;">
                     <Label text="Service Visits &amp; Photo Logs" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
                     <Region HBox.hgrow="ALWAYS"/>
-                    <Button text="Log Service Visit" onAction="#handleLogServiceVisit" styleClass="button-primary"/>
+                    <Button fx:id="logServiceVisitBtn" text="Log Service Visit" onAction="#handleLogServiceVisit" styleClass="button-primary"/>
                 </HBox>
 
                 <TableView fx:id="serviceLogTable" VBox.vgrow="ALWAYS" prefHeight="150" style="-fx-background-radius: 6;">
@@ -109,7 +109,7 @@
                 <HBox spacing="10" alignment="CENTER_LEFT">
                     <Label text="Contracted Vendors" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
                     <Region HBox.hgrow="ALWAYS"/>
-                    <Button text="Add Vendor" onAction="#handleAddVendor" styleClass="button-primary"/>
+                    <Button fx:id="addVendorBtn" text="Add Vendor" onAction="#handleAddVendor" styleClass="button-primary"/>
                 </HBox>
                 <TableView fx:id="vendorTable" VBox.vgrow="ALWAYS">
                     <columns>
@@ -151,7 +151,7 @@
             <HBox spacing="10" alignment="CENTER_LEFT">
                 <Label text="Society Facilities &amp; Amenities" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
                 <Region HBox.hgrow="ALWAYS"/>
-                <Button text="+ Add Facility" onAction="#handleAddFacility" styleClass="button-primary"/>
+                <Button fx:id="addFacilityBtn" text="+ Add Facility" onAction="#handleAddFacility" styleClass="button-primary"/>
             </HBox>
             <TableView fx:id="facilityTable" VBox.vgrow="ALWAYS">
                 <columns>
@@ -175,8 +175,8 @@
             <HBox spacing="10" alignment="CENTER_LEFT">
                 <Label text="On-Premise Staff &amp; Police Verification Directory" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
                 <Region HBox.hgrow="ALWAYS"/>
-                <Button text="+ Add Staff Member" onAction="#handleAddStaff" styleClass="button-primary"/>
-                <Button text="Deactivate / End Term" onAction="#handleDeactivateStaff" styleClass="button-danger"/>
+                <Button fx:id="addStaffBtn" text="+ Add Staff Member" onAction="#handleAddStaff" styleClass="button-primary"/>
+                <Button fx:id="deactivateStaffBtn" text="Deactivate / End Term" onAction="#handleDeactivateStaff" styleClass="button-danger"/>
             </HBox>
             <TableView fx:id="staffTable" VBox.vgrow="ALWAYS">
                 <columns>

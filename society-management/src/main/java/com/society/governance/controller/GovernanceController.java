@@ -58,13 +58,22 @@ public class GovernanceController extends BaseController {
     private final ObservableList<ResolutionEntity> resolutions = FXCollections.observableArrayList();
     private final ObservableList<ManagingCommitteeEntity> committeeMembers = FXCollections.observableArrayList();
 
+    @FXML private Button scheduleMeetingBtn;
+    @FXML private Button attendanceBtn;
+    @FXML private Button addResolutionBtn;
+    @FXML private Button appointCommitteeBtn;
+
+    private final com.society.user.context.UserContext userContext;
+
     public GovernanceController(
             NavigationManager navigationManager,
             GovernanceService governanceService,
-            MemberRepository memberRepository) {
+            MemberRepository memberRepository,
+            com.society.user.context.UserContext userContext) {
         super(navigationManager);
         this.governanceService = governanceService;
         this.memberRepository = memberRepository;
+        this.userContext = userContext;
     }
 
     @FXML
@@ -102,6 +111,17 @@ public class GovernanceController extends BaseController {
         loadMeetings();
         loadResolutions();
         loadCommitteeMembers();
+        applyRolePermissions();
+    }
+
+    private void applyRolePermissions() {
+        boolean canEdit = userContext.canEdit("GOVERNANCE");
+        if (scheduleMeetingBtn != null) { scheduleMeetingBtn.setVisible(canEdit); scheduleMeetingBtn.setManaged(canEdit); }
+        if (completeMeetingBtn != null) { completeMeetingBtn.setVisible(canEdit); completeMeetingBtn.setManaged(canEdit); }
+        if (attendanceBtn != null) { attendanceBtn.setVisible(canEdit); attendanceBtn.setManaged(canEdit); }
+        if (addResolutionBtn != null) { addResolutionBtn.setVisible(canEdit); addResolutionBtn.setManaged(canEdit); }
+        if (appointCommitteeBtn != null) { appointCommitteeBtn.setVisible(canEdit); appointCommitteeBtn.setManaged(canEdit); }
+        if (minutesArea != null) { minutesArea.setEditable(canEdit); }
     }
 
     private void loadMeetings() {

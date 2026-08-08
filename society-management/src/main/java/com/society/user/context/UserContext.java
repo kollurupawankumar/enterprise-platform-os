@@ -58,4 +58,17 @@ public class UserContext {
             default -> true;
         };
     }
+
+    public synchronized boolean isReadOnlyRole() {
+        if (currentUser == null) {
+            return true;
+        }
+        String role = currentUser.getRole() != null ? currentUser.getRole().toUpperCase() : "";
+        // AUDITOR and MEMBER roles are Read-Only (view permissions only)
+        return "AUDITOR".equals(role) || "MEMBER".equals(role);
+    }
+
+    public synchronized boolean canEdit(String module) {
+        return canAccess(module) && !isReadOnlyRole();
+    }
 }

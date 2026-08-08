@@ -21,7 +21,7 @@
                 <HBox spacing="10" alignment="CENTER_LEFT">
                     <Label text="Society Expenditures" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
                     <Region HBox.hgrow="ALWAYS"/>
-                    <Button text="Record Expense" onAction="#handleRecordExpense" styleClass="button-primary"/>
+                    <Button fx:id="recordExpenseBtn" text="Record Expense" onAction="#handleRecordExpense" styleClass="button-primary"/>
                 </HBox>
                 <TableView fx:id="expenseTable" VBox.vgrow="ALWAYS">
                     <columns>
@@ -43,20 +43,33 @@
                     </columnConstraints>
                     
                     <Label text="Category:" style="-fx-font-weight: bold;"/>
-                    <Label fx:id="categoryLabel" text="-" GridPane.columnIndex="1"/>
+                    <Label fx:id="categoryVal" text="-" GridPane.columnIndex="1"/>
                     
-                    <Label text="Payment Mode:" style="-fx-font-weight: bold;" GridPane.rowIndex="1"/>
-                    <Label fx:id="modeLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                    <Label text="Mode:" style="-fx-font-weight: bold;" GridPane.rowIndex="1"/>
+                    <Label fx:id="modeVal" text="-" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
                     
-                    <Label text="Remarks/Notes:" style="-fx-font-weight: bold;" GridPane.rowIndex="2"/>
-                    <Label fx:id="remarksLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="2" wrapText="true"/>
+                    <Label text="Ref No:" style="-fx-font-weight: bold;" GridPane.rowIndex="2"/>
+                    <Label fx:id="refNoVal" text="-" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                    <Label text="Approved By:" style="-fx-font-weight: bold;" GridPane.rowIndex="3"/>
+                    <Label fx:id="approvedByVal" text="-" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
                 </GridPane>
+
+                <Label text="Narration / Description" style="-fx-font-weight: bold;"/>
+                <TextArea fx:id="narrationArea" promptText="Voucher narration..." editable="false" prefHeight="100" wrapText="true"/>
+
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="Supporting Receipt / Bill:" style="-fx-font-weight: bold;"/>
+                    <Label fx:id="receiptPathVal" text="No receipt attached" style="-fx-text-fill: #64748B;"/>
+                </HBox>
+
+                <Button text="Attach / View Receipt" onAction="#handleViewReceipt" styleClass="button-secondary"/>
             </VBox>
         </SplitPane>
     </Tab>
 
-    <!-- Tab 2: Bank & FD Accounts -->
-    <Tab text="Accounts &amp; Investments">
+    <!-- Tab 2: Bank & Investments -->
+    <Tab text="Bank Accounts &amp; Fixed Deposits">
         <SplitPane dividerPositions="0.5">
             <!-- Left Side: Bank Accounts -->
             <VBox spacing="15">
@@ -66,7 +79,7 @@
                 <HBox spacing="10" alignment="CENTER_LEFT">
                     <Label text="Bank Accounts" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
                     <Region HBox.hgrow="ALWAYS"/>
-                    <Button text="Add Account" onAction="#handleAddBankAccount" styleClass="button-primary"/>
+                    <Button fx:id="addBankAccountBtn" text="Add Account" onAction="#handleAddBankAccount" styleClass="button-primary"/>
                 </HBox>
                 <TableView fx:id="bankTable" VBox.vgrow="ALWAYS" onMouseClicked="#handleBankClicked">
                     <columns>
@@ -92,7 +105,7 @@
                 <HBox spacing="10" alignment="CENTER_LEFT">
                     <Label text="Fixed Deposits (FD)" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
                     <Region HBox.hgrow="ALWAYS"/>
-                    <Button text="Record FD" onAction="#handleRecordInvestment" styleClass="button-primary"/>
+                    <Button fx:id="recordInvestmentBtn" text="Record FD" onAction="#handleRecordInvestment" styleClass="button-primary"/>
                 </HBox>
                 <TableView fx:id="investmentTable" VBox.vgrow="ALWAYS" onMouseClicked="#handleInvestmentClicked">
                     <columns>

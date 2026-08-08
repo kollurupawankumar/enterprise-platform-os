@@ -83,13 +83,25 @@ public class OperationsController extends BaseController {
     private final ObservableList<FacilityEntity> facilities = FXCollections.observableArrayList();
     private final ObservableList<SocietyStaffEntity> staffMembers = FXCollections.observableArrayList();
 
+    @FXML private Button addAssetBtn;
+    @FXML private Button editAssetBtn;
+    @FXML private Button logServiceVisitBtn;
+    @FXML private Button addVendorBtn;
+    @FXML private Button addFacilityBtn;
+    @FXML private Button addStaffBtn;
+    @FXML private Button deactivateStaffBtn;
+
+    private final com.society.user.context.UserContext userContext;
+
     public OperationsController(
             NavigationManager navigationManager,
             OperationsService operationsService,
-            FileStorageService fileStorageService) {
+            FileStorageService fileStorageService,
+            com.society.user.context.UserContext userContext) {
         super(navigationManager);
         this.operationsService = operationsService;
         this.fileStorageService = fileStorageService;
+        this.userContext = userContext;
     }
 
     @FXML
@@ -140,6 +152,18 @@ public class OperationsController extends BaseController {
         loadVendors();
         loadFacilities();
         loadStaff();
+        applyRolePermissions();
+    }
+
+    private void applyRolePermissions() {
+        boolean canEdit = userContext.canEdit("OPERATIONS");
+        if (addAssetBtn != null) { addAssetBtn.setVisible(canEdit); addAssetBtn.setManaged(canEdit); }
+        if (editAssetBtn != null) { editAssetBtn.setVisible(canEdit); editAssetBtn.setManaged(canEdit); }
+        if (logServiceVisitBtn != null) { logServiceVisitBtn.setVisible(canEdit); logServiceVisitBtn.setManaged(canEdit); }
+        if (addVendorBtn != null) { addVendorBtn.setVisible(canEdit); addVendorBtn.setManaged(canEdit); }
+        if (addFacilityBtn != null) { addFacilityBtn.setVisible(canEdit); addFacilityBtn.setManaged(canEdit); }
+        if (addStaffBtn != null) { addStaffBtn.setVisible(canEdit); addStaffBtn.setManaged(canEdit); }
+        if (deactivateStaffBtn != null) { deactivateStaffBtn.setVisible(canEdit); deactivateStaffBtn.setManaged(canEdit); }
     }
 
     private void loadAssets() {

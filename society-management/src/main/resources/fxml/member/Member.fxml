@@ -38,7 +38,8 @@
 
             <HBox spacing="10" alignment="CENTER_LEFT">
 
-                <Button text="New"
+                <Button fx:id="addMemberBtn"
+                        text="New"
                         styleClass="button-primary"
                         onAction="#addMember"/>
 
@@ -46,11 +47,13 @@
                         styleClass="button-secondary"
                         onAction="#viewMemberDetails"/>
 
-                <Button text="Edit"
+                <Button fx:id="editMemberBtn"
+                        text="Edit"
                         styleClass="button-secondary"
                         onAction="#editMember"/>
 
-                <Button text="Delete"
+                <Button fx:id="deleteMemberBtn"
+                        text="Delete"
                         styleClass="button-danger"
                         onAction="#deleteMember"/>
 
@@ -62,7 +65,8 @@
                         styleClass="button-secondary"
                         onAction="#downloadTemplate"/>
 
-                <Button text="Bulk Import CSV"
+                <Button fx:id="bulkImportBtn"
+                        text="Bulk Import CSV"
                         styleClass="button-primary"
                         onAction="#bulkImportCsv"/>
 

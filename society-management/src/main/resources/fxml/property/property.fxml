@@ -21,9 +21,9 @@
             <Region HBox.hgrow="ALWAYS"/>
             <TextField fx:id="searchField" promptText="Search unit number/block..." prefWidth="220"
                        style="-fx-background-radius: 6; -fx-padding: 8;"/>
-            <Button text="Add Unit" onAction="#handleAddProperty" styleClass="button-primary"/>
+            <Button fx:id="addUnitBtn" text="Add Unit" onAction="#handleAddProperty" styleClass="button-primary"/>
             <Button text="Download Template" onAction="#downloadTemplate" styleClass="button-secondary"/>
-            <Button text="Bulk Import CSV" onAction="#bulkImportCsv" styleClass="button-primary"/>
+            <Button fx:id="bulkImportBtn" text="Bulk Import CSV" onAction="#bulkImportCsv" styleClass="button-primary"/>
         </HBox>
 
         <TableView fx:id="propertyTable" VBox.vgrow="ALWAYS" style="-fx-background-radius: 8;">
@@ -93,6 +93,6 @@
             </Tab>
         </TabPane>
 
-        <Button text="Transfer Ownership" onAction="#handleTransfer" maxWidth="Infinity" styleClass="button-primary"/>
+        <Button fx:id="transferBtn" text="Transfer Ownership" onAction="#handleTransfer" maxWidth="Infinity" styleClass="button-primary"/>
     </VBox>
 </SplitPane>

@@ -41,29 +41,40 @@ public class MemberController extends BaseController {
     @FXML
     private TableColumn<MemberDto, String> statusColumn;
 
-    @FXML
-    private Label totalMembersLabel;
+    @FXML private Button addMemberBtn;
+    @FXML private Button editMemberBtn;
+    @FXML private Button deleteMemberBtn;
+    @FXML private Button bulkImportBtn;
+    @FXML private Label totalMembersLabel;
+
+    private final com.society.user.context.UserContext userContext;
 
     public MemberController(
             NavigationManager navigationManager,
             MemberService memberService,
-            MemberContext memberContext) {
+            MemberContext memberContext,
+            com.society.user.context.UserContext userContext) {
 
         super(navigationManager);
         this.memberService = memberService;
         this.memberContext = memberContext;
+        this.userContext = userContext;
     }
 
     @FXML
     public void initialize() {
-
         configureTable();
-
         loadMembers();
+        memberTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        applyRolePermissions();
+    }
 
-        memberTable.setColumnResizePolicy(
-                TableView.CONSTRAINED_RESIZE_POLICY);
-
+    private void applyRolePermissions() {
+        boolean canEdit = userContext.canEdit("MEMBERS");
+        if (addMemberBtn != null) { addMemberBtn.setVisible(canEdit); addMemberBtn.setManaged(canEdit); }
+        if (editMemberBtn != null) { editMemberBtn.setVisible(canEdit); editMemberBtn.setManaged(canEdit); }
+        if (deleteMemberBtn != null) { deleteMemberBtn.setVisible(canEdit); deleteMemberBtn.setManaged(canEdit); }
+        if (bulkImportBtn != null) { bulkImportBtn.setVisible(canEdit); bulkImportBtn.setManaged(canEdit); }
     }
 
     /**

@@ -57,17 +57,25 @@ public class PropertyController extends BaseController {
     private final ObservableList<PropertyEntity> properties = FXCollections.observableArrayList();
     private final ObservableList<OwnershipHistoryDto> historyList = FXCollections.observableArrayList();
 
+    @FXML private Button addUnitBtn;
+    @FXML private Button bulkImportBtn;
+    @FXML private Button transferBtn;
+
+    private final com.society.user.context.UserContext userContext;
+
     public PropertyController(
             NavigationManager navigationManager,
             PropertyService propertyService,
             MemberRepository memberRepository,
             JointOwnerRepository jointOwnerRepository,
-            NomineeRepository nomineeRepository) {
+            NomineeRepository nomineeRepository,
+            com.society.user.context.UserContext userContext) {
         super(navigationManager);
         this.propertyService = propertyService;
         this.memberRepository = memberRepository;
         this.jointOwnerRepository = jointOwnerRepository;
         this.nomineeRepository = nomineeRepository;
+        this.userContext = userContext;
     }
 
     @FXML
@@ -76,24 +84,31 @@ public class PropertyController extends BaseController {
         blockCol.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getBlock()));
         typeCol.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getType()));
         ownerCol.setCellValueFactory(cell -> {
-            MemberEntity owner = cell.getValue().getCurrentOwner();
-            return new SimpleStringProperty(owner != null ? owner.getFirstName() + " " + (owner.getLastName() != null ? owner.getLastName() : "") : "No Active Owner");
+            MemberEntity m = cell.getValue().getCurrentOwner();
+            return new SimpleStringProperty(m != null ? m.getFirstName() + " " + (m.getLastName() != null ? m.getLastName() : "") : "Unassigned");
         });
 
-        // History Table binding
+        // History Table Columns
         histOwnerCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().ownerName()));
         histFromCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().fromDate()));
-        histToCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().toDate()));
+        histToCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().toDate() != null ? c.getValue().toDate() : "Present"));
         histStatusCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().status()));
         historyTable.setItems(historyList);
-
-        loadProperties();
 
         propertyTable.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             showPropertyDetails(newVal);
         });
 
+        loadProperties();
+        applyRolePermissions();
         searchField.textProperty().addListener((obs, oldVal, newVal) -> filterProperties(newVal));
+    }
+
+    private void applyRolePermissions() {
+        boolean canEdit = userContext.canEdit("PROPERTIES");
+        if (addUnitBtn != null) { addUnitBtn.setVisible(canEdit); addUnitBtn.setManaged(canEdit); }
+        if (bulkImportBtn != null) { bulkImportBtn.setVisible(canEdit); bulkImportBtn.setManaged(canEdit); }
+        if (transferBtn != null) { transferBtn.setVisible(canEdit); transferBtn.setManaged(canEdit); }
     }
 
     private void loadProperties() {

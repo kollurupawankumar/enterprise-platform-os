@@ -71,15 +71,23 @@ public class FinanceController extends BaseController {
     private final ObservableList<BankAccountEntity> bankAccounts = FXCollections.observableArrayList();
     private final ObservableList<InvestmentEntity> investments = FXCollections.observableArrayList();
 
+    @FXML private Button recordExpenseBtn;
+    @FXML private Button addBankAccountBtn;
+    @FXML private Button recordInvestmentBtn;
+
+    private final com.society.user.context.UserContext userContext;
+
     public FinanceController(
             NavigationManager navigationManager,
             BankAccountRepository bankAccountRepository,
             ExpenseRepository expenseRepository,
-            InvestmentRepository investmentRepository) {
+            InvestmentRepository investmentRepository,
+            com.society.user.context.UserContext userContext) {
         super(navigationManager);
         this.bankAccountRepository = bankAccountRepository;
         this.expenseRepository = expenseRepository;
         this.investmentRepository = investmentRepository;
+        this.userContext = userContext;
     }
 
     @FXML
@@ -111,6 +119,14 @@ public class FinanceController extends BaseController {
         loadExpenses();
         loadBankAccounts();
         loadInvestments();
+        applyRolePermissions();
+    }
+
+    private void applyRolePermissions() {
+        boolean canEdit = userContext.canEdit("FINANCE");
+        if (recordExpenseBtn != null) { recordExpenseBtn.setVisible(canEdit); recordExpenseBtn.setManaged(canEdit); }
+        if (addBankAccountBtn != null) { addBankAccountBtn.setVisible(canEdit); addBankAccountBtn.setManaged(canEdit); }
+        if (recordInvestmentBtn != null) { recordInvestmentBtn.setVisible(canEdit); recordInvestmentBtn.setManaged(canEdit); }
     }
 
     private void loadExpenses() {
