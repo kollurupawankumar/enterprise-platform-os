@@ -18,8 +18,8 @@ DELETE FROM member;
 DELETE FROM society;
 
 -- 1. SOCIETY PROFILE
-INSERT INTO society (id, name, registration_number, short_name, email, phone, website, address_line1, address_line2, active, created_at, updated_at)
-VALUES (1, 'Sree Sai Trust Co-operative Housing Society Ltd.', 'REG/TG/HYD/2024/09812', 'Sree Sai Trust Society', 'contact@sreesaitrustsociety.in', '+91 40 2988 7766', 'www.sreesaitrustsociety.in', 'Sy No 142/A & 143, Financial District, Gachibowli', 'Hyderabad, Telangana - 500032', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO society (id, name, registration_number, short_name, email, phone, website, address_line1, address_line2, financial_year_start_month, active)
+VALUES (1, 'Sree Sai Trust Co-operative Housing Society Ltd.', 'REG/TG/HYD/2024/09812', 'Sree Sai Trust Society', 'contact@sreesaitrustsociety.in', '+91 40 2988 7766', 'www.sreesaitrustsociety.in', 'Sy No 142/A & 143, Financial District, Gachibowli', 'Hyderabad, Telangana - 500032', 'APRIL', 1);
 
 -- 2. VENDORS
 INSERT INTO vendor (id, name, category, phone, contact_person, email, address, active, created_at, updated_at) VALUES
