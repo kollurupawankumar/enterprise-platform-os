@@ -56,8 +56,6 @@ public class FinanceController extends BaseController {
     @FXML private TableColumn<BankAccountEntity, String> accNumCol;
     @FXML private TableColumn<BankAccountEntity, String> ifscCol;
     @FXML private TableColumn<BankAccountEntity, String> branchCol;
-    @FXML private TableColumn<BankAccountEntity, String> balanceCol;
-    @FXML private Label totalBankLabel;
 
     @FXML private TableView<InvestmentEntity> investmentTable;
     @FXML private TableColumn<InvestmentEntity, String> fdRefCol;
@@ -117,7 +115,6 @@ public class FinanceController extends BaseController {
         accNumCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getAccountNumber()));
         ifscCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getIfsc()));
         branchCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getBranch() != null ? c.getValue().getBranch() : "-"));
-        balanceCol.setCellValueFactory(c -> new SimpleStringProperty(com.society.common.util.CurrencyUtils.formatInr(c.getValue().getBalance())));
 
         // Fixed Deposits Columns
         fdRefCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getReferenceNumber()));
@@ -148,9 +145,6 @@ public class FinanceController extends BaseController {
         List<BankAccountEntity> list = bankAccountRepository.findAll();
         bankAccounts.setAll(list);
         bankTable.setItems(bankAccounts);
-
-        double total = list.stream().mapToDouble(b -> b.getBalance() != null ? b.getBalance() : 0.0).sum();
-        totalBankLabel.setText(com.society.common.util.CurrencyUtils.formatInr(total));
     }
 
     private void loadInvestments() {
@@ -288,11 +282,6 @@ public class FinanceController extends BaseController {
         Optional<ExpenseEntity> result = dialog.showAndWait();
         result.ifPresent(e -> {
             if (!e.getVoucherNumber().isEmpty() && e.getAmount() != null) {
-                // Deduct balance
-                BankAccountEntity acc = e.getBankAccount();
-                acc.setBalance(acc.getBalance() - e.getAmount());
-                bankAccountRepository.save(acc);
-
                 expenseRepository.save(e);
                 loadExpenses();
                 loadBankAccounts();
@@ -304,7 +293,7 @@ public class FinanceController extends BaseController {
     private void handleAddBankAccount() {
         Dialog<BankAccountEntity> dialog = new Dialog<>();
         dialog.setTitle("Add Bank Account");
-        dialog.setHeaderText("Specify bank account registers details:");
+        dialog.setHeaderText("Specify bank account register details:");
 
         ButtonType addBtnType = new ButtonType("Add", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(addBtnType, ButtonType.CANCEL);
@@ -314,11 +303,10 @@ public class FinanceController extends BaseController {
         grid.setVgap(10);
         grid.setPadding(new Insets(20, 150, 10, 10));
 
-        TextField bankField = new TextField();
-        TextField accNumField = new TextField();
-        TextField ifscField = new TextField();
-        TextField balField = new TextField();
-        balField.setPromptText("e.g. 5000.00");
+        TextField bankField = new TextField(); bankField.setPromptText("e.g. State Bank of India");
+        TextField accNumField = new TextField(); accNumField.setPromptText("Account Number");
+        TextField ifscField = new TextField(); ifscField.setPromptText("IFSC Code");
+        TextField branchField = new TextField(); branchField.setPromptText("Branch Name");
 
         grid.add(new Label("Bank Name:"), 0, 0);
         grid.add(bankField, 1, 0);
@@ -326,8 +314,8 @@ public class FinanceController extends BaseController {
         grid.add(accNumField, 1, 1);
         grid.add(new Label("IFSC Code:"), 0, 2);
         grid.add(ifscField, 1, 2);
-        grid.add(new Label("Opening Balance:"), 0, 3);
-        grid.add(balField, 1, 3);
+        grid.add(new Label("Branch:"), 0, 3);
+        grid.add(branchField, 1, 3);
 
         dialog.getDialogPane().setContent(grid);
 
@@ -337,11 +325,8 @@ public class FinanceController extends BaseController {
                 a.setBankName(bankField.getText().trim());
                 a.setAccountNumber(accNumField.getText().trim());
                 a.setIfsc(ifscField.getText().trim());
-                try {
-                    a.setBalance(Double.parseDouble(balField.getText().trim()));
-                } catch (NumberFormatException ignored) {
-                    a.setBalance(0.0);
-                }
+                a.setBranch(branchField.getText().trim());
+                a.setBalance(0.0);
                 return a;
             }
             return null;
