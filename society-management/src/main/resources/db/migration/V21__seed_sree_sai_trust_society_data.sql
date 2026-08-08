@@ -112,13 +112,13 @@ INSERT INTO managing_committee (id, member_id, designation, start_date, end_date
 (3, 3, 'TREASURER', '2024-02-15', '2027-02-14', 'ACTIVE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- 10. GOVERNANCE MEETINGS & RESOLUTIONS
-INSERT INTO meeting (id, title, meeting_type, meeting_date, meeting_time, venue, status, minutes_of_meeting, created_at, updated_at) VALUES
+INSERT INTO meeting (id, title, meeting_type, meeting_date, meeting_time, venue, status, minutes, created_at, updated_at) VALUES
 (1, 'First General Body Meeting & Bylaws Adoption', 'AGM', '2024-02-15', '10:00 AM', 'Grand Central Clubhouse Banquet Hall', 'COMPLETED', 'Adopted society model bylaws, elected Office Bearers, and approved 500 parking allocations for 240 flats and 15 villas.', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 (2, 'Managing Committee Meeting - Q3 Maintenance & STP Audit', 'COMMITTEE', '2026-08-25', '06:00 PM', 'Society Board Room', 'SCHEDULED', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
-INSERT INTO resolution (id, resolution_number, meeting_id, title, description, passed_date, category, status, created_at, updated_at) VALUES
-(1, 'RES-2024-001', 1, 'Approval of Society Model Bylaws & Rules', 'Unanimously approved model bylaws under Telangana Co-operative Societies Act for Sree Sai Trust Society.', '2024-02-15', 'BYLAWS', 'APPROVED', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(2, 'RES-2024-002', 1, 'Allocation of 2 Covered Parking Bays per Flat', 'Resolved to allocate 2 dedicated covered parking slots to each apartment and villa.', '2024-02-15', 'PARKING', 'APPROVED', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO resolution (id, resolution_number, subject, description, meeting_id, status, created_at, updated_at) VALUES
+(1, 'RES-2024-001', 'Approval of Society Model Bylaws & Rules', 'Unanimously approved model bylaws under Telangana Co-operative Societies Act for Sree Sai Trust Society.', 1, 'PASSED', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(2, 'RES-2024-002', 'Allocation of 2 Covered Parking Bays per Flat', 'Resolved to allocate 2 dedicated covered parking slots to each apartment and villa.', 1, 'PASSED', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- 11. FINANCIAL EXPENSES & BANK ACCOUNTS
 INSERT INTO bank_account (id, bank_name, account_number, ifsc, branch, balance, created_at, updated_at) VALUES
@@ -131,7 +131,7 @@ INSERT INTO expense (id, voucher_number, expense_date, payee, category, amount, 
 (3, 'VOU-2026-003', '2026-08-01', 'Thermax Environmental STP Technologies', 'UTILITIES', 15000.0, 'CHEQUE', 2, 'STP 250KLD Plant bacterial dosing & membrane maintenance', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- 12. STATUTORY DOCUMENTS
-INSERT INTO document (id, document_name, category, file_path, uploaded_date, description, created_at, updated_at) VALUES
-(1, 'Model Bye-Laws & Rules of Sree Sai Trust Society', 'BYELAWS', 'uploads/members/byelaws/Sree_Sai_Trust_Society_ByeLaws.pdf', '2024-02-15', 'Registered Bylaws under Telangana Co-operative Societies Act', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(2, 'Schindler Elevator AMC Agreement 2026', 'AGREEMENT', 'uploads/members/assets/amc_contracts/Schindler_Elevator_AMC_2026.pdf', '2026-01-15', 'Comprehensive AMC agreement for 7 Elevators in Block A, Block B & Clubhouse', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(3, 'Thermax 250KLD STP Maintenance Agreement', 'AGREEMENT', 'uploads/members/assets/amc_contracts/Thermax_STP_AMC_2026.pdf', '2026-02-01', 'STP Plant operation & water quality testing agreement', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO document (id, title, category, file_path, file_size, created_at, updated_at) VALUES
+(1, 'Model Bye-Laws & Rules of Sree Sai Trust Society', 'BYELAWS', 'uploads/members/byelaws/Sree_Sai_Trust_Society_ByeLaws.pdf', 1024, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(2, 'Schindler Elevator AMC Agreement 2026', 'AGREEMENT', 'uploads/members/assets/amc_contracts/Schindler_Elevator_AMC_2026.pdf', 2048, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(3, 'Thermax 250KLD STP Maintenance Agreement', 'AGREEMENT', 'uploads/members/assets/amc_contracts/Thermax_STP_AMC_2026.pdf', 2048, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
