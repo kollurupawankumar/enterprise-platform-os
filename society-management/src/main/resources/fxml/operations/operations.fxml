@@ -202,18 +202,18 @@
             <HBox spacing="10" alignment="CENTER_LEFT">
                 <Label text="On-Premise Staff &amp; Police Verification Directory" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
                 <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="viewPoliceDocBtn" text="📄 View Police Verification Doc" onAction="#handleViewPoliceDoc" styleClass="button-secondary"/>
                 <Button fx:id="addStaffBtn" text="+ Add Staff Member" onAction="#handleAddStaff" styleClass="button-primary"/>
                 <Button fx:id="deactivateStaffBtn" text="Deactivate / End Term" onAction="#handleDeactivateStaff" styleClass="button-danger"/>
             </HBox>
             <TableView fx:id="staffTable" VBox.vgrow="ALWAYS">
                 <columns>
                     <TableColumn fx:id="staffNameCol" text="Staff Name" prefWidth="170"/>
-                    <TableColumn fx:id="staffRoleCol" text="Role" prefWidth="120"/>
-                    <TableColumn fx:id="staffMobileCol" text="Mobile" prefWidth="120"/>
-                    <TableColumn fx:id="staffShiftCol" text="Shift Timing" prefWidth="120"/>
-                    <TableColumn fx:id="staffPoliceStatusCol" text="Police Verification" prefWidth="140"/>
-                    <TableColumn fx:id="staffDocPathCol" text="Document Path" prefWidth="160"/>
-                    <TableColumn fx:id="staffStatusCol" text="Status" prefWidth="100"/>
+                    <TableColumn fx:id="staffRoleCol" text="Role" prefWidth="130"/>
+                    <TableColumn fx:id="staffMobileCol" text="Mobile" prefWidth="130"/>
+                    <TableColumn fx:id="staffShiftCol" text="Shift Timing" prefWidth="130"/>
+                    <TableColumn fx:id="staffPoliceStatusCol" text="Police Verification" prefWidth="150"/>
+                    <TableColumn fx:id="staffStatusCol" text="Status" prefWidth="110"/>
                 </columns>
             </TableView>
         </VBox>

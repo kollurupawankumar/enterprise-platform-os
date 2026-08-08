@@ -84,7 +84,6 @@ public class OperationsController extends BaseController {
     @FXML private TableColumn<SocietyStaffEntity, String> staffMobileCol;
     @FXML private TableColumn<SocietyStaffEntity, String> staffShiftCol;
     @FXML private TableColumn<SocietyStaffEntity, String> staffPoliceStatusCol;
-    @FXML private TableColumn<SocietyStaffEntity, String> staffDocPathCol;
     @FXML private TableColumn<SocietyStaffEntity, String> staffStatusCol;
 
     private final ObservableList<AssetEntity> assets = FXCollections.observableArrayList();
@@ -100,6 +99,7 @@ public class OperationsController extends BaseController {
     @FXML private Button addFacilityBtn;
     @FXML private Button addStaffBtn;
     @FXML private Button deactivateStaffBtn;
+    @FXML private Button viewPoliceDocBtn;
 
     private final com.society.user.context.UserContext userContext;
 
@@ -156,7 +156,6 @@ public class OperationsController extends BaseController {
         staffMobileCol.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getMobileNumber()));
         staffShiftCol.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getShiftTiming()));
         staffPoliceStatusCol.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getPoliceVerificationStatus()));
-        staffDocPathCol.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getPoliceDocPath() != null ? cell.getValue().getPoliceDocPath() : "-"));
         staffStatusCol.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().isActive() ? "ACTIVE" : "INACTIVE"));
 
         loadAssets();
@@ -887,5 +886,45 @@ public class OperationsController extends BaseController {
                     operationsService.saveStaff(selected);
                     loadStaff();
                 });
+    }
+
+    @FXML
+    private void handleViewPoliceDoc() {
+        SocietyStaffEntity selected = staffTable.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Selection Required");
+            alert.setHeaderText(null);
+            alert.setContentText("Please select a staff member from the table first.");
+            alert.showAndWait();
+            return;
+        }
+
+        String docPath = selected.getPoliceDocPath();
+        if (docPath == null || docPath.isBlank()) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("No Document Attached");
+            alert.setHeaderText("Police Verification Document");
+            alert.setContentText("No police verification document has been uploaded for " + selected.getName() + ".");
+            alert.showAndWait();
+            return;
+        }
+
+        File docFile = fileStorageService.getFileByPath(docPath);
+        if (docFile != null && docFile.exists()) {
+            try {
+                java.awt.Desktop.getDesktop().open(docFile);
+            } catch (Exception ex) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setContentText("Unable to open document: " + ex.getMessage());
+                alert.showAndWait();
+            }
+        } else {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("File Not Found");
+            alert.setHeaderText(null);
+            alert.setContentText("Document file not found at path: " + docPath);
+            alert.showAndWait();
+        }
     }
 }
