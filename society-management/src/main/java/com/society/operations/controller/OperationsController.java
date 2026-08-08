@@ -57,12 +57,15 @@ public class OperationsController extends BaseController {
     @FXML private TableColumn<VendorEntity, String> vendorNameCol;
     @FXML private TableColumn<VendorEntity, String> vendorCategoryCol;
     @FXML private TableColumn<VendorEntity, String> vendorPhoneCol;
+    @FXML private TableColumn<VendorEntity, String> vendorStatusCol;
     @FXML private Label vendorNameVal;
     @FXML private Label vendorCategoryVal;
     @FXML private Label vendorPhoneVal;
     @FXML private Label contactPersonLabel;
     @FXML private Label emailLabel;
     @FXML private Label addressLabel;
+    @FXML private Label vendorStatusVal;
+    @FXML private ListView<String> vendorAssetList;
 
     // Facilities
     @FXML private TableView<FacilityEntity> facilityTable;
@@ -132,6 +135,7 @@ public class OperationsController extends BaseController {
         vendorNameCol.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getName()));
         vendorCategoryCol.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getCategory()));
         vendorPhoneCol.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getPhone()));
+        vendorStatusCol.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().isActive() ? "ACTIVE" : "INACTIVE"));
 
         vendorTable.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             showVendorDetails(newVal);
@@ -425,17 +429,41 @@ public class OperationsController extends BaseController {
             if (vendorNameVal != null) vendorNameVal.setText("-");
             if (vendorCategoryVal != null) vendorCategoryVal.setText("-");
             if (vendorPhoneVal != null) vendorPhoneVal.setText("-");
-            contactPersonLabel.setText("-");
-            emailLabel.setText("-");
-            addressLabel.setText("-");
+            if (contactPersonLabel != null) contactPersonLabel.setText("-");
+            if (emailLabel != null) emailLabel.setText("-");
+            if (addressLabel != null) addressLabel.setText("-");
+            if (vendorStatusVal != null) vendorStatusVal.setText("-");
+            if (vendorAssetList != null) vendorAssetList.getItems().clear();
             return;
         }
         if (vendorNameVal != null) vendorNameVal.setText(vendor.getName() != null ? vendor.getName() : "-");
         if (vendorCategoryVal != null) vendorCategoryVal.setText(vendor.getCategory() != null ? vendor.getCategory() : "-");
         if (vendorPhoneVal != null) vendorPhoneVal.setText(vendor.getPhone() != null ? vendor.getPhone() : "-");
-        contactPersonLabel.setText(vendor.getContactPerson() != null ? vendor.getContactPerson() : "-");
-        emailLabel.setText(vendor.getEmail() != null ? vendor.getEmail() : "-");
-        addressLabel.setText(vendor.getAddress() != null ? vendor.getAddress() : "-");
+        if (contactPersonLabel != null) contactPersonLabel.setText(vendor.getContactPerson() != null ? vendor.getContactPerson() : "-");
+        if (emailLabel != null) emailLabel.setText(vendor.getEmail() != null ? vendor.getEmail() : "-");
+        if (addressLabel != null) addressLabel.setText(vendor.getAddress() != null ? vendor.getAddress() : "-");
+        if (vendorStatusVal != null) {
+            boolean active = vendor.isActive();
+            vendorStatusVal.setText(active ? "ACTIVE" : "INACTIVE");
+            vendorStatusVal.setStyle("-fx-text-fill: " + (active ? "#16A34A;" : "#DC2626;"));
+        }
+
+        // Query assets assigned to this vendor
+        if (vendorAssetList != null) {
+            vendorAssetList.getItems().clear();
+            List<AssetEntity> allAssets = operationsService.getAllAssets();
+            List<String> assignedAssets = allAssets.stream()
+                    .filter(a -> a.getAmcVendor() != null && a.getAmcVendor().getId() != null && a.getAmcVendor().getId().equals(vendor.getId()))
+                    .map(a -> a.getName() + " (" + (a.getCategory() != null ? a.getCategory() : "ASSET") + ") - AMC: " 
+                            + (a.getAmcExpiryDate() != null ? "Exp " + a.getAmcExpiryDate() : "Active"))
+                    .collect(java.util.stream.Collectors.toList());
+
+            if (assignedAssets.isEmpty()) {
+                vendorAssetList.getItems().add("No AMC contracts currently assigned to this vendor.");
+            } else {
+                vendorAssetList.getItems().addAll(assignedAssets);
+            }
+        }
     }
 
     @FXML
@@ -494,12 +522,15 @@ public class OperationsController extends BaseController {
         ComboBox<String> statusCombo = new ComboBox<>(FXCollections.observableArrayList("OPERATIONAL", "UNDER_MAINTENANCE", "SCRAPPED"));
         statusCombo.getSelectionModel().select(asset.getStatus() != null ? asset.getStatus() : "OPERATIONAL");
 
-        // AMC Section
-        ComboBox<VendorEntity> amcVendorCombo = new ComboBox<>(FXCollections.observableArrayList(vendors));
+        // AMC Section - filter active vendors (or preserve existing vendor if edit)
+        List<VendorEntity> activeVendors = vendors.stream()
+                .filter(v -> v.isActive() || (asset.getAmcVendor() != null && asset.getAmcVendor().getId().equals(v.getId())))
+                .collect(java.util.stream.Collectors.toList());
+        ComboBox<VendorEntity> amcVendorCombo = new ComboBox<>(FXCollections.observableArrayList(activeVendors));
         amcVendorCombo.setConverter(new javafx.util.StringConverter<>() {
             @Override
             public String toString(VendorEntity v) {
-                return v != null ? v.getName() + " (" + v.getCategory() + ")" : "";
+                return v != null ? v.getName() + " (" + v.getCategory() + ")" + (!v.isActive() ? " [INACTIVE]" : "") : "";
             }
             @Override
             public VendorEntity fromString(String string) {
@@ -618,12 +649,16 @@ public class OperationsController extends BaseController {
         addressArea.setPromptText("Office / Business Address...");
         addressArea.setPrefRowCount(3);
 
+        ComboBox<String> statusCombo = new ComboBox<>(FXCollections.observableArrayList("ACTIVE", "INACTIVE"));
+        statusCombo.getSelectionModel().select(vendor.getId() == null || vendor.isActive() ? "ACTIVE" : "INACTIVE");
+
         grid.add(new Label("Company Name:"), 0, 0); grid.add(nameField, 1, 0);
         grid.add(new Label("Category:"), 0, 1); grid.add(catField, 1, 1);
         grid.add(new Label("Phone:"), 0, 2); grid.add(phoneField, 1, 2);
         grid.add(new Label("Contact Person:"), 0, 3); grid.add(contactPersonField, 1, 3);
         grid.add(new Label("Email:"), 0, 4); grid.add(emailField, 1, 4);
         grid.add(new Label("Office Address:"), 0, 5); grid.add(addressArea, 1, 5);
+        grid.add(new Label("Status:"), 0, 6); grid.add(statusCombo, 1, 6);
 
         dialog.getDialogPane().setContent(grid);
 
@@ -635,6 +670,7 @@ public class OperationsController extends BaseController {
                 vendor.setContactPerson(contactPersonField.getText().trim());
                 vendor.setEmail(emailField.getText().trim());
                 vendor.setAddress(addressArea.getText().trim());
+                vendor.setActive("ACTIVE".equals(statusCombo.getValue()));
                 return vendor;
             }
             return null;
