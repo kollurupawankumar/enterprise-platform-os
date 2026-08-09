@@ -153,6 +153,10 @@
                 <version>0.0.8</version>
                 <configuration>
                     <mainClass>com.society.Launcher</mainClass>
+                    <launcher>society-os</launcher>
+                    <jlinkZipName>society-os-desktop</jlinkZipName>
+                    <noHeaderFiles>true</noHeaderFiles>
+                    <noManPages>true</noManPages>
                 </configuration>
             </plugin>
             <plugin>
