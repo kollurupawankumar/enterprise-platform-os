@@ -12,6 +12,8 @@ import com.society.share.repository.ShareCertificateRepository;
 import com.society.share.repository.ShareTransferHistoryRepository;
 import com.society.society.entity.SocietyEntity;
 import com.society.society.repository.SocietyRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +24,8 @@ import java.util.Optional;
 @Service
 @Transactional
 public class ShareServiceImpl implements ShareService {
+
+    private static final Logger log = LoggerFactory.getLogger(ShareServiceImpl.class);
 
     private final ShareCertificateRepository certificateRepository;
     private final ShareTransferHistoryRepository transferRepository;
@@ -45,7 +49,7 @@ public class ShareServiceImpl implements ShareService {
 
     @Override
     public ShareCertificateDto allotShares(ShareCertificateDto dto) {
-
+        log.info("Allotting share certificate to member ID: {}", dto.memberId());
         validateAllotment(dto);
 
         MemberEntity member = memberRepository.findById(dto.memberId())

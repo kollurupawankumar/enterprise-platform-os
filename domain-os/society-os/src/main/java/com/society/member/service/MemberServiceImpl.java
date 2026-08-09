@@ -12,6 +12,8 @@ import com.society.member.mapper.MemberMapper;
 import com.society.member.repository.JointOwnerRepository;
 import com.society.member.repository.MemberRepository;
 import com.society.member.repository.NomineeRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +22,8 @@ import java.util.List;
 
 @Service
 public class MemberServiceImpl implements MemberService {
+
+    private static final Logger log = LoggerFactory.getLogger(MemberServiceImpl.class);
 
     private final MemberRepository repository;
     private final JointOwnerRepository jointOwnerRepository;
@@ -44,6 +48,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     @Transactional
     public MemberDto register(MemberDto dto) {
+        log.info("Registering new member: {} {}", dto.firstName(), dto.lastName());
         validate(dto);
 
         MemberEntity entity = mapper.toEntity(dto);
