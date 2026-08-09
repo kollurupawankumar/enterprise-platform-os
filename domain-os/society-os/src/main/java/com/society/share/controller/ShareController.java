@@ -216,6 +216,44 @@ public class ShareController extends BaseController {
 
     }
 
+    @FXML
+    private void printCertificate() {
+        ShareCertificateDto selected = shareTable.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            showInformation("Please select a share certificate to print.");
+            return;
+        }
+
+        javafx.print.PrinterJob job = javafx.print.PrinterJob.createPrinterJob();
+        if (job != null) {
+            boolean success = job.showPrintDialog(shareTable.getScene().getWindow());
+            if (success) {
+                Label printLabel = new Label(
+                        "===========================================================\n" +
+                        "                   SHARE CERTIFICATE (FORM I)              \n" +
+                        "===========================================================\n" +
+                        "Certificate No : " + selected.certificateNumber() + "\n" +
+                        "Member Name    : " + selected.memberName() + "\n" +
+                        "Share Range    : " + selected.fromShareNumber() + " to " + selected.toShareNumber() + "\n" +
+                        "Total Shares   : " + selected.totalShares() + "\n" +
+                        "Total Value    : ₹ " + selected.totalAmount() + "\n" +
+                        "Issue Date     : " + selected.issueDate() + "\n" +
+                        "===========================================================\n"
+                );
+                printLabel.setStyle("-fx-font-family: monospace; -fx-font-size: 14px; -fx-padding: 30px;");
+                boolean printed = job.printPage(printLabel);
+                if (printed) {
+                    job.endJob();
+                    showInformation("Share Certificate (Form I) printed successfully!");
+                } else {
+                    showInformation("Printing failed or was cancelled.");
+                }
+            }
+        } else {
+            showInformation("No printer found on this system.");
+        }
+    }
+
     private void showInformation(String message) {
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);

@@ -46,6 +46,10 @@
                         styleClass="button-secondary"
                         onAction="#transferShares"/>
 
+                <Button text="Print Certificate (Form I)"
+                        styleClass="button-secondary"
+                        onAction="#printCertificate"/>
+
                 <Region HBox.hgrow="ALWAYS"/>
 
                 <Button text="Refresh"

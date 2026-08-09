@@ -2,6 +2,7 @@ package com.core.os.config.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -18,6 +19,16 @@ import java.util.zip.ZipOutputStream;
 public class BackupService {
 
     private static final Logger log = LoggerFactory.getLogger(BackupService.class);
+
+    @Scheduled(cron = "0 0 23 * * ?") // Daily at 11:00 PM
+    public void performScheduledDailyBackup() {
+        log.info("Executing scheduled automated daily database backup...");
+        try {
+            createSystemBackup("database/society.db", "backups");
+        } catch (Exception ex) {
+            log.error("Scheduled automated backup failed: {}", ex.getMessage(), ex);
+        }
+    }
 
     public String createSystemBackup(String dbPath, String targetBackupDir) throws IOException {
         log.info("Initiating system database backup for path: {}", dbPath);

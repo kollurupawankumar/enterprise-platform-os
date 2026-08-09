@@ -2,6 +2,8 @@ package com.society.app;
 
 import com.society.SocietyApplication;
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +18,13 @@ public class JavaFxApplication extends Application {
     @Override
     public void init() {
         log.info("Initializing Spring Boot application context for Society Office OS...");
+        
+        // Setup Global JavaFX Thread Exception Handler
+        Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> {
+            log.error("Unhandled Exception on Thread [{}]: {}", thread.getName(), throwable.getMessage(), throwable);
+            Platform.runLater(() -> showErrorDialog("System Exception", throwable.getMessage() != null ? throwable.getMessage() : throwable.toString()));
+        });
+
         applicationContext =
                 new SpringApplicationBuilder(SocietyApplication.class)
                         .headless(false)
@@ -38,8 +47,16 @@ public class JavaFxApplication extends Application {
         if (applicationContext != null) {
             applicationContext.close();
         }
-        javafx.application.Platform.exit();
+        Platform.exit();
         log.info("Application shutdown complete.");
+    }
+
+    private static void showErrorDialog(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText("An unexpected system error occurred");
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
 }

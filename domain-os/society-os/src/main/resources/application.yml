@@ -8,7 +8,7 @@ spring:
     name: Society Office OS
 
   datasource:
-    url: jdbc:sqlite:${app.database.path}
+    url: jdbc:sqlite:${app.database.path}?journal_mode=WAL&busy_timeout=10000
     driver-class-name: org.sqlite.JDBC
 
   jpa:
