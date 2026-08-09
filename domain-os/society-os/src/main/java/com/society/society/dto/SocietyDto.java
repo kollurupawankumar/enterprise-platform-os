@@ -30,6 +30,8 @@ public record SocietyDto(
 
         String memberNumberFormat,
 
+        String membershipNumberFormat,
+
         String shareCertificateFormat,
 
         String logoPath,

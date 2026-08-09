@@ -50,6 +50,9 @@ public class SocietyEntity {
     @Column(name = "member_number_format", length = 100)
     private String memberNumberFormat;
 
+    @Column(name = "membership_number_format", length = 100)
+    private String membershipNumberFormat;
+
     @Column(name = "share_certificate_format", length = 100)
     private String shareCertificateFormat;
 
@@ -175,6 +178,14 @@ public class SocietyEntity {
 
     public void setMemberNumberFormat(String memberNumberFormat) {
         this.memberNumberFormat = memberNumberFormat;
+    }
+
+    public String getMembershipNumberFormat() {
+        return membershipNumberFormat;
+    }
+
+    public void setMembershipNumberFormat(String membershipNumberFormat) {
+        this.membershipNumberFormat = membershipNumberFormat;
     }
 
     public String getShareCertificateFormat() {

@@ -45,7 +45,8 @@ public class SocietyServiceImpl implements SocietyService {
         entity.setWebsite(dto.website());
         entity.setFinancialYearStartMonth(dto.financialYearStartMonth());
         entity.setMemberNumberFormat(dto.memberNumberFormat() != null && !dto.memberNumberFormat().isBlank() ? dto.memberNumberFormat().trim() : "MEM-{SEQ}");
-        entity.setShareCertificateFormat(dto.shareCertificateFormat() != null && !dto.shareCertificateFormat().isBlank() ? dto.shareCertificateFormat().trim() : "SC-{SEQ}");
+        entity.setMembershipNumberFormat(dto.membershipNumberFormat() != null && !dto.membershipNumberFormat().isBlank() ? dto.membershipNumberFormat().trim() : "SSTS/{YEAR}/{SEQ}");
+        entity.setShareCertificateFormat(dto.shareCertificateFormat() != null && !dto.shareCertificateFormat().isBlank() ? dto.shareCertificateFormat().trim() : "SC/{YEAR}/{SEQ}");
         entity.setLogoPath(dto.logoPath());
         entity.setSealPath(dto.sealPath());
         entity.setActive(dto.active() != null ? dto.active() : true);
@@ -80,7 +81,8 @@ public class SocietyServiceImpl implements SocietyService {
                 entity.getWebsite(),
                 entity.getFinancialYearStartMonth(),
                 entity.getMemberNumberFormat() != null ? entity.getMemberNumberFormat() : "MEM-{SEQ}",
-                entity.getShareCertificateFormat() != null ? entity.getShareCertificateFormat() : "SC-{SEQ}",
+                entity.getMembershipNumberFormat() != null ? entity.getMembershipNumberFormat() : "SSTS/{YEAR}/{SEQ}",
+                entity.getShareCertificateFormat() != null ? entity.getShareCertificateFormat() : "SC/{YEAR}/{SEQ}",
                 entity.getLogoPath(),
                 entity.getSealPath(),
                 entity.getActive()

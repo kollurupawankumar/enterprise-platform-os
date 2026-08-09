@@ -43,6 +43,9 @@ public class AdministrationController extends BaseController {
     private TextField memberFormatField;
 
     @FXML
+    private TextField membershipFormatField;
+
+    @FXML
     private TextField shareFormatField;
 
     @FXML
@@ -141,7 +144,10 @@ public class AdministrationController extends BaseController {
             regNoField.setText(activeSociety.getRegistrationNumber());
             shortNameField.setText(activeSociety.getShortName());
             if (memberFormatField != null) {
-                memberFormatField.setText(activeSociety.getMemberNumberFormat() != null ? activeSociety.getMemberNumberFormat() : "ICSC/{YEAR}/{SEQ}");
+                memberFormatField.setText(activeSociety.getMemberNumberFormat() != null ? activeSociety.getMemberNumberFormat() : "MEM-{SEQ}");
+            }
+            if (membershipFormatField != null) {
+                membershipFormatField.setText(activeSociety.getMembershipNumberFormat() != null ? activeSociety.getMembershipNumberFormat() : "SSTS/{YEAR}/{SEQ}");
             }
             if (shareFormatField != null) {
                 shareFormatField.setText(activeSociety.getShareCertificateFormat() != null ? activeSociety.getShareCertificateFormat() : "SC/{YEAR}/{SEQ}");
@@ -167,6 +173,9 @@ public class AdministrationController extends BaseController {
         activeSociety.setShortName(shortNameField.getText().trim());
         if (memberFormatField != null) {
             activeSociety.setMemberNumberFormat(memberFormatField.getText().trim());
+        }
+        if (membershipFormatField != null) {
+            activeSociety.setMembershipNumberFormat(membershipFormatField.getText().trim());
         }
         if (shareFormatField != null) {
             activeSociety.setShareCertificateFormat(shareFormatField.getText().trim());

@@ -52,6 +52,10 @@ public class MemberServiceImpl implements MemberService {
             entity.setMemberNumber(generateMemberNumber());
         }
 
+        if (entity.getMembershipNumber() == null || entity.getMembershipNumber().isBlank()) {
+            entity.setMembershipNumber(numberGeneratorService.nextMembershipNumber());
+        }
+
         if (entity.getStatus() == null) {
             entity.setStatus(MemberStatus.ACTIVE);
         }
