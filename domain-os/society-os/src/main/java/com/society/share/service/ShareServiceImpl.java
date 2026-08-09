@@ -103,12 +103,12 @@ public class ShareServiceImpl implements ShareService {
         history.setTransferFee(transferFee != null ? transferFee : 0.0);
         history.setRemarks(remarks);
 
-        ShareTransferHistoryEntity savedHistory = transferRepository.save(history);
+        transferRepository.save(history);
 
         certificate.setMember(toMember);
-        certificateRepository.save(certificate);
+        ShareCertificateEntity updated = certificateRepository.save(certificate);
 
-        return toTransferDto(savedHistory);
+        return toTransferDto(history);
     }
 
     @Override
@@ -126,7 +126,7 @@ public class ShareServiceImpl implements ShareService {
         if (keyword == null || keyword.isBlank()) {
             return findAll();
         }
-        return certificateRepository.search(keyword)
+        return certificateRepository.search(keyword.trim())
                 .stream()
                 .map(this::toDto)
                 .toList();
@@ -155,6 +155,13 @@ public class ShareServiceImpl implements ShareService {
         return certificateRepository.findFirstByOrderByIdDesc()
                 .map(sc -> String.format("SC-%05d", sc.getId() + 1))
                 .orElse("SC-00001");
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public int getNextAvailableShareNumber() {
+        Integer maxTo = certificateRepository.findMaxToShareNumber();
+        return (maxTo != null && maxTo > 0) ? maxTo + 1 : 1;
     }
 
     @Override
@@ -238,6 +245,7 @@ public class ShareServiceImpl implements ShareService {
                 entity.getRemarks()
         );
     }
+
     private LocalDate parseDate(String value) {
         if (value == null || value.isBlank()) {
             return LocalDate.now();

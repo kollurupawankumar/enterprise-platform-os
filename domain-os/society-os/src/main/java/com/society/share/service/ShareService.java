@@ -21,5 +21,7 @@ public interface ShareService {
 
     String generateCertificateNumber();
 
+    int getNextAvailableShareNumber();
+
     long count();
 }

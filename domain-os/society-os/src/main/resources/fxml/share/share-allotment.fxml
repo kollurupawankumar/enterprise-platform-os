@@ -50,23 +50,24 @@
                       GridPane.columnIndex="1"
                       GridPane.rowIndex="1"/>
 
-            <Label text="From Share No *"
+            <Label text="Number of Shares *"
                    GridPane.rowIndex="2"/>
-            <TextField fx:id="fromShareNumberField"
-                       promptText="e.g. 1"
+            <TextField fx:id="totalSharesField"
+                       promptText="e.g. 10 (Standard allocation)"
                        GridPane.columnIndex="1"
                        GridPane.rowIndex="2"/>
 
-            <Label text="To Share No *"
+            <Label text="From Share No (Auto)"
                    GridPane.rowIndex="3"/>
-            <TextField fx:id="toShareNumberField"
-                       promptText="e.g. 10"
+            <TextField fx:id="fromShareNumberField"
+                       promptText="Auto-computed"
                        GridPane.columnIndex="1"
                        GridPane.rowIndex="3"/>
 
-            <Label text="Total Shares"
+            <Label text="To Share No (Auto)"
                    GridPane.rowIndex="4"/>
-            <TextField fx:id="totalSharesField"
+            <TextField fx:id="toShareNumberField"
+                       promptText="Auto-computed"
                        GridPane.columnIndex="1"
                        GridPane.rowIndex="4"/>
 

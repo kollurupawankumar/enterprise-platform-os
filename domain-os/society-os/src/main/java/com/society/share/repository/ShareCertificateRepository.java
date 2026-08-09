@@ -37,6 +37,9 @@ public interface ShareCertificateRepository extends JpaRepository<ShareCertifica
             """)
     boolean isShareRangeOverlapping(@Param("fromShare") Integer fromShare, @Param("toShare") Integer toShare);
 
+    @Query("SELECT MAX(sc.toShareNumber) FROM ShareCertificateEntity sc")
+    Integer findMaxToShareNumber();
+
     @Query("SELECT COALESCE(SUM(sc.totalShares), 0) FROM ShareCertificateEntity sc WHERE sc.status = 'ACTIVE'")
     long sumTotalActiveShares();
 

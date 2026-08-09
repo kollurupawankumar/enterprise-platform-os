@@ -48,6 +48,8 @@ public class ShareAllotmentController extends BaseController {
     @FXML
     private DatePicker issueDatePicker;
 
+    private boolean calculating = false;
+
     public ShareAllotmentController(
             NavigationManager navigationManager,
             ShareService shareService,
@@ -57,7 +59,6 @@ public class ShareAllotmentController extends BaseController {
         this.shareService = shareService;
         this.memberService = memberService;
     }
-    private boolean calculating = false;
 
     @FXML
     public void initialize() {
@@ -65,19 +66,26 @@ public class ShareAllotmentController extends BaseController {
         certificateNumberField.setText(shareService.generateCertificateNumber());
         certificateNumberField.setEditable(false);
 
+        // Auto-detect next available starting share number
+        int nextStartShare = shareService.getNextAvailableShareNumber();
+        fromShareNumberField.setText(String.valueOf(nextStartShare));
+
         // Keep totalAmountField read-only as it's a computed sum
         totalAmountField.setEditable(false);
 
         faceValueField.setText("50.00");
         issueDatePicker.setValue(LocalDate.now());
 
+        // Default standard share allocation (e.g. 10 shares)
+        totalSharesField.setText("10");
+
         loadMembers();
+        recalculateRangesAndTotals();
 
-        fromShareNumberField.textProperty().addListener((obs, oldVal, newVal) -> onFromOrTotalChanged(true));
-        totalSharesField.textProperty().addListener((obs, oldVal, newVal) -> onFromOrTotalChanged(false));
-        toShareNumberField.textProperty().addListener((obs, oldVal, newVal) -> onToChanged());
+        totalSharesField.textProperty().addListener((obs, oldVal, newVal) -> recalculateRangesAndTotals());
+        fromShareNumberField.textProperty().addListener((obs, oldVal, newVal) -> recalculateRangesAndTotals());
+        toShareNumberField.textProperty().addListener((obs, oldVal, newVal) -> onToShareManualChanged());
         faceValueField.textProperty().addListener((obs, oldVal, newVal) -> recalculateTotalAmount());
-
     }
 
     private void loadMembers() {
@@ -115,10 +123,9 @@ public class ShareAllotmentController extends BaseController {
         if (!members.isEmpty()) {
             memberComboBox.getSelectionModel().select(0);
         }
-
     }
 
-    private void onFromOrTotalChanged(boolean fromChanged) {
+    private void recalculateRangesAndTotals() {
         if (calculating) return;
         calculating = true;
 
@@ -135,18 +142,6 @@ public class ShareAllotmentController extends BaseController {
                     toShareNumberField.setText(String.valueOf(to));
                     recalculateTotalAmount();
                 }
-            } else if (fromChanged && !fromText.isEmpty()) {
-                // If From was changed, try to use existing To to update Total Shares
-                String toText = toShareNumberField.getText().trim();
-                if (!toText.isEmpty()) {
-                    int from = Integer.parseInt(fromText);
-                    int to = Integer.parseInt(toText);
-                    if (to >= from && from > 0) {
-                        int total = to - from + 1;
-                        totalSharesField.setText(String.valueOf(total));
-                        recalculateTotalAmount();
-                    }
-                }
             }
         } catch (NumberFormatException ignored) {
         } finally {
@@ -154,7 +149,7 @@ public class ShareAllotmentController extends BaseController {
         }
     }
 
-    private void onToChanged() {
+    private void onToShareManualChanged() {
         if (calculating) return;
         calculating = true;
 
