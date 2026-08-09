@@ -1,6 +1,6 @@
-/Users/pawan/developer/society-management/core-os/core-notification/src/main/java/com/core/os/notification/channel/EmailNotificationChannel.java
-/Users/pawan/developer/society-management/core-os/core-notification/src/main/java/com/core/os/notification/channel/NotificationChannel.java
-/Users/pawan/developer/society-management/core-os/core-notification/src/main/java/com/core/os/notification/channel/NotificationChannelType.java
-/Users/pawan/developer/society-management/core-os/core-notification/src/main/java/com/core/os/notification/channel/SlackNotificationChannel.java
-/Users/pawan/developer/society-management/core-os/core-notification/src/main/java/com/core/os/notification/channel/TeamsNotificationChannel.java
-/Users/pawan/developer/society-management/core-os/core-notification/src/main/java/com/core/os/notification/service/MultiChannelNotificationDispatcher.java
+/Users/pawan/developer/enterprise-platform-os/core-os/core-notification/src/main/java/com/core/os/notification/channel/EmailNotificationChannel.java
+/Users/pawan/developer/enterprise-platform-os/core-os/core-notification/src/main/java/com/core/os/notification/channel/NotificationChannel.java
+/Users/pawan/developer/enterprise-platform-os/core-os/core-notification/src/main/java/com/core/os/notification/channel/NotificationChannelType.java
+/Users/pawan/developer/enterprise-platform-os/core-os/core-notification/src/main/java/com/core/os/notification/channel/SlackNotificationChannel.java
+/Users/pawan/developer/enterprise-platform-os/core-os/core-notification/src/main/java/com/core/os/notification/channel/TeamsNotificationChannel.java
+/Users/pawan/developer/enterprise-platform-os/core-os/core-notification/src/main/java/com/core/os/notification/service/MultiChannelNotificationDispatcher.java

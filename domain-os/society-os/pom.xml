@@ -47,6 +47,18 @@
             <groupId>com.core.os</groupId>
             <artifactId>core-ui-shell</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.core.os</groupId>
+            <artifactId>core-config</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.core.os</groupId>
+            <artifactId>core-reporting</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.core.os</groupId>
+            <artifactId>core-search</artifactId>
+        </dependency>
 
         <!-- Spring Boot -->
         <dependency>
