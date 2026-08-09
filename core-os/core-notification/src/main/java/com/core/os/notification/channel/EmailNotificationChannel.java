@@ -1,5 +1,6 @@
 package com.core.os.notification.channel;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
@@ -9,7 +10,7 @@ public class EmailNotificationChannel implements NotificationChannel {
 
     private final JavaMailSender mailSender;
 
-    public EmailNotificationChannel(JavaMailSender mailSender) {
+    public EmailNotificationChannel(@Autowired(required = false) JavaMailSender mailSender) {
         this.mailSender = mailSender;
     }
 
