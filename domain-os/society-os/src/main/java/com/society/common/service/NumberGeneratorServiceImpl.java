@@ -2,39 +2,52 @@ package com.society.common.service;
 
 import com.society.member.entity.MemberEntity;
 import com.society.member.repository.MemberRepository;
+import com.society.society.entity.SocietyEntity;
+import com.society.society.repository.SocietyRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 @Service
 public class NumberGeneratorServiceImpl implements NumberGeneratorService {
 
     private final MemberRepository memberRepository;
+    private final SocietyRepository societyRepository;
 
-    public NumberGeneratorServiceImpl(MemberRepository memberRepository) {
+    public NumberGeneratorServiceImpl(MemberRepository memberRepository, SocietyRepository societyRepository) {
         this.memberRepository = memberRepository;
+        this.societyRepository = societyRepository;
     }
 
     @Override
     public String nextMemberNumber() {
+        Optional<MemberEntity> lastMember = memberRepository.findFirstByOrderByIdDesc();
+        long nextSeq = lastMember.map(m -> m.getId() + 1L).orElse(1L);
 
-        Optional<MemberEntity> lastMember =
-                memberRepository.findFirstByOrderByIdDesc();
+        Optional<SocietyEntity> societyOpt = societyRepository.findFirstByActiveTrue();
+        String pattern = societyOpt.map(SocietyEntity::getMemberNumberFormat).orElse("ICSC/{YEAR}/{SEQ}");
+        String prefix = societyOpt.map(SocietyEntity::getShortName).orElse("MEM");
 
-        if (lastMember.isEmpty()) {
-            return "M000001";
-        }
-
-        String lastNumber = lastMember.get().getMemberNumber();
-
-        if (lastNumber == null || lastNumber.isBlank()) {
-            return "M000001";
-        }
-
-        int value = Integer.parseInt(lastNumber.substring(1));
-
-        return String.format("M%06d", value + 1);
-
+        return formatNumber(pattern, nextSeq, prefix);
     }
 
+    @Override
+    public String formatNumber(String pattern, long sequence, String prefix) {
+        if (pattern == null || pattern.isBlank()) {
+            pattern = "ICSC/{YEAR}/{SEQ}";
+        }
+
+        LocalDate now = LocalDate.now();
+        String year4 = String.valueOf(now.getYear());
+        String year2 = year4.substring(2);
+        String seqPadded = String.format("%05d", sequence);
+        String prefixClean = (prefix != null && !prefix.isBlank()) ? prefix.trim() : "SYS";
+
+        return pattern
+                .replace("{YEAR}", year4)
+                .replace("{YY}", year2)
+                .replace("{SEQ}", seqPadded)
+                .replace("{PREFIX}", prefixClean);
+    }
 }

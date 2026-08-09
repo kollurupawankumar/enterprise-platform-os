@@ -47,6 +47,12 @@ public class SocietyEntity {
     @Column(name = "financial_year_start_month", nullable = false, length = 20)
     private FinancialYearStartMonth financialYearStartMonth;
 
+    @Column(name = "member_number_format", length = 100)
+    private String memberNumberFormat;
+
+    @Column(name = "share_certificate_format", length = 100)
+    private String shareCertificateFormat;
+
     @Column(name = "logo_path", length = 500)
     private String logoPath;
 
@@ -161,6 +167,22 @@ public class SocietyEntity {
 
     public void setFinancialYearStartMonth(FinancialYearStartMonth financialYearStartMonth) {
         this.financialYearStartMonth = financialYearStartMonth;
+    }
+
+    public String getMemberNumberFormat() {
+        return memberNumberFormat;
+    }
+
+    public void setMemberNumberFormat(String memberNumberFormat) {
+        this.memberNumberFormat = memberNumberFormat;
+    }
+
+    public String getShareCertificateFormat() {
+        return shareCertificateFormat;
+    }
+
+    public void setShareCertificateFormat(String shareCertificateFormat) {
+        this.shareCertificateFormat = shareCertificateFormat;
     }
 
     public String getLogoPath() {

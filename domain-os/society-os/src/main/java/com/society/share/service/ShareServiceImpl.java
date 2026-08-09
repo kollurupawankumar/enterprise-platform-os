@@ -1,5 +1,6 @@
 package com.society.share.service;
 
+import com.society.common.service.NumberGeneratorService;
 import com.society.member.entity.MemberEntity;
 import com.society.member.repository.MemberRepository;
 import com.society.share.dto.ShareCertificateDto;
@@ -9,11 +10,14 @@ import com.society.share.entity.ShareCertificateStatus;
 import com.society.share.entity.ShareTransferHistoryEntity;
 import com.society.share.repository.ShareCertificateRepository;
 import com.society.share.repository.ShareTransferHistoryRepository;
+import com.society.society.entity.SocietyEntity;
+import com.society.society.repository.SocietyRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -22,15 +26,21 @@ public class ShareServiceImpl implements ShareService {
     private final ShareCertificateRepository certificateRepository;
     private final ShareTransferHistoryRepository transferRepository;
     private final MemberRepository memberRepository;
+    private final SocietyRepository societyRepository;
+    private final NumberGeneratorService numberGeneratorService;
 
     public ShareServiceImpl(
             ShareCertificateRepository certificateRepository,
             ShareTransferHistoryRepository transferRepository,
-            MemberRepository memberRepository) {
+            MemberRepository memberRepository,
+            SocietyRepository societyRepository,
+            NumberGeneratorService numberGeneratorService) {
 
         this.certificateRepository = certificateRepository;
         this.transferRepository = transferRepository;
         this.memberRepository = memberRepository;
+        this.societyRepository = societyRepository;
+        this.numberGeneratorService = numberGeneratorService;
     }
 
     @Override
@@ -152,9 +162,14 @@ public class ShareServiceImpl implements ShareService {
     @Override
     @Transactional(readOnly = true)
     public String generateCertificateNumber() {
-        return certificateRepository.findFirstByOrderByIdDesc()
-                .map(sc -> String.format("SC-%05d", sc.getId() + 1))
-                .orElse("SC-00001");
+        Optional<ShareCertificateEntity> lastCert = certificateRepository.findFirstByOrderByIdDesc();
+        long nextSeq = lastCert.map(c -> c.getId() + 1L).orElse(1L);
+
+        Optional<SocietyEntity> societyOpt = societyRepository.findFirstByActiveTrue();
+        String pattern = societyOpt.map(SocietyEntity::getShareCertificateFormat).orElse("SC/{YEAR}/{SEQ}");
+        String prefix = societyOpt.map(SocietyEntity::getShortName).orElse("SC");
+
+        return numberGeneratorService.formatNumber(pattern, nextSeq, prefix);
     }
 
     @Override

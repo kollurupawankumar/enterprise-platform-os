@@ -30,7 +30,25 @@ public class SocietyServiceImpl implements SocietyService {
     @Override
     public SocietyDto save(SocietyDto dto) {
 
-        SocietyEntity entity = toEntity(dto);
+        SocietyEntity entity = repository.findFirstByActiveTrue().orElse(new SocietyEntity());
+
+        entity.setName(dto.name());
+        entity.setShortName(dto.shortName());
+        entity.setRegistrationNumber(dto.registrationNumber());
+        entity.setAddressLine1(dto.addressLine1());
+        entity.setAddressLine2(dto.addressLine2());
+        entity.setCity(dto.city());
+        entity.setState(dto.state());
+        entity.setPinCode(dto.pinCode());
+        entity.setPhone(dto.phone());
+        entity.setEmail(dto.email());
+        entity.setWebsite(dto.website());
+        entity.setFinancialYearStartMonth(dto.financialYearStartMonth());
+        entity.setMemberNumberFormat(dto.memberNumberFormat() != null && !dto.memberNumberFormat().isBlank() ? dto.memberNumberFormat().trim() : "MEM-{SEQ}");
+        entity.setShareCertificateFormat(dto.shareCertificateFormat() != null && !dto.shareCertificateFormat().isBlank() ? dto.shareCertificateFormat().trim() : "SC-{SEQ}");
+        entity.setLogoPath(dto.logoPath());
+        entity.setSealPath(dto.sealPath());
+        entity.setActive(dto.active() != null ? dto.active() : true);
 
         SocietyEntity saved = repository.save(entity);
 
@@ -61,34 +79,12 @@ public class SocietyServiceImpl implements SocietyService {
                 entity.getEmail(),
                 entity.getWebsite(),
                 entity.getFinancialYearStartMonth(),
+                entity.getMemberNumberFormat() != null ? entity.getMemberNumberFormat() : "MEM-{SEQ}",
+                entity.getShareCertificateFormat() != null ? entity.getShareCertificateFormat() : "SC-{SEQ}",
                 entity.getLogoPath(),
                 entity.getSealPath(),
                 entity.getActive()
         );
 
     }
-
-    private SocietyEntity toEntity(SocietyDto dto) {
-
-        SocietyEntity entity = new SocietyEntity();
-        entity.setName(dto.name());
-        entity.setShortName(dto.shortName());
-        entity.setRegistrationNumber(dto.registrationNumber());
-        entity.setAddressLine1(dto.addressLine1());
-        entity.setAddressLine2(dto.addressLine2());
-        entity.setCity(dto.city());
-        entity.setState(dto.state());
-        entity.setPinCode(dto.pinCode());
-        entity.setPhone(dto.phone());
-        entity.setEmail(dto.email());
-        entity.setWebsite(dto.website());
-        entity.setFinancialYearStartMonth(dto.financialYearStartMonth());
-        entity.setLogoPath(dto.logoPath());
-        entity.setSealPath(dto.sealPath());
-        entity.setActive(dto.active());
-
-        return entity;
-
-    }
-
 }

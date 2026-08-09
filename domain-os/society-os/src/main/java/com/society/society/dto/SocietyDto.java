@@ -28,6 +28,10 @@ public record SocietyDto(
 
         FinancialYearStartMonth financialYearStartMonth,
 
+        String memberNumberFormat,
+
+        String shareCertificateFormat,
+
         String logoPath,
 
         String sealPath,
