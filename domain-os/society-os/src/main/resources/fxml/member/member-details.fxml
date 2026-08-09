@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.society.member.controller.MemberDetailsController"
+            stylesheets="/css/member.css">
+
+    <top>
+        <VBox spacing="15">
+            <padding>
+                <Insets top="20" right="20" bottom="10" left="20"/>
+            </padding>
+            <HBox spacing="15" alignment="CENTER_LEFT">
+                <Button text="← Back to Members" onAction="#backToMembers" styleClass="button-secondary"/>
+                <Label text="Member Dossier Profile" styleClass="dashboard-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="📄 Export PDF Statement" onAction="#handleExportPdf" styleClass="button-secondary"/>
+                <Button text="Edit Member Profile" onAction="#editMember" styleClass="button-primary"/>
+            </HBox>
+
+            <!-- Profile Summary Card -->
+            <HBox spacing="20" alignment="CENTER_LEFT" style="-fx-background-color: white; -fx-padding: 15; -fx-border-color: #E2E8F0; -fx-border-radius: 8; -fx-background-radius: 8;">
+                <ImageView fx:id="photoImageView" fitWidth="90" fitHeight="90" preserveRatio="true"/>
+                <VBox spacing="6">
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label fx:id="nameLabel" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+                        <Label fx:id="statusBadge" styleClass="status-badge"/>
+                    </HBox>
+                    <Label fx:id="memberNumLabel" style="-fx-font-size: 14px; -fx-text-fill: #475569;"/>
+                    <Label fx:id="membershipNumLabel" style="-fx-font-size: 13px; -fx-text-fill: #64748B;"/>
+                </VBox>
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <TabPane tabClosingPolicy="UNAVAILABLE" styleClass="form-card">
+            <padding>
+                <Insets top="10" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <!-- Tab 1: Personal & Demographics -->
+            <Tab text="Personal &amp; Demographics">
+                <GridPane hgap="20" vgap="15">
+                    <padding>
+                        <Insets top="15" right="15" bottom="15" left="15"/>
+                    </padding>
+
+                    <Label text="First Name:" style="-fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                    <Label fx:id="firstNameVal" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                    <Label text="Middle Name:" style="-fx-font-weight: bold;" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+                    <Label fx:id="middleNameVal" GridPane.columnIndex="3" GridPane.rowIndex="0"/>
+
+                    <Label text="Last Name:" style="-fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                    <Label fx:id="lastNameVal" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                    <Label text="Gender:" style="-fx-font-weight: bold;" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+                    <Label fx:id="genderVal" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
+
+                    <Label text="Date of Birth:" style="-fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                    <Label fx:id="dobVal" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                    <Label text="Occupation:" style="-fx-font-weight: bold;" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
+                    <Label fx:id="occupationVal" GridPane.columnIndex="3" GridPane.rowIndex="2"/>
+
+                    <Label text="Mobile Number:" style="-fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                    <Label fx:id="mobileVal" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+                    <Label text="Email:" style="-fx-font-weight: bold;" GridPane.columnIndex="2" GridPane.rowIndex="3"/>
+                    <Label fx:id="emailVal" GridPane.columnIndex="3" GridPane.rowIndex="3"/>
+
+                    <Label text="Emergency Contact Name:" style="-fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+                    <Label fx:id="emergencyNameVal" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+
+                    <Label text="Emergency Phone:" style="-fx-font-weight: bold;" GridPane.columnIndex="2" GridPane.rowIndex="4"/>
+                    <Label fx:id="emergencyPhoneVal" GridPane.columnIndex="3" GridPane.rowIndex="4"/>
+                </GridPane>
+            </Tab>
+
+            <!-- Tab 2: Member Classification -->
+            <Tab text="Member Classification">
+                <GridPane hgap="20" vgap="15">
+                    <padding>
+                        <Insets top="15" right="15" bottom="15" left="15"/>
+                    </padding>
+
+                    <Label text="Member Type:" style="-fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                    <Label fx:id="memberTypeVal" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                    <Label text="Admission Date:" style="-fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                    <Label fx:id="admissionDateVal" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                    <Label text="MC Resolution Number:" style="-fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                    <Label fx:id="resolutionNumVal" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                    <Label text="MC Resolution Date:" style="-fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                    <Label fx:id="resolutionDateVal" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                </GridPane>
+            </Tab>
+
+            <!-- Tab 3: Address Information -->
+            <Tab text="Address Information">
+                <VBox spacing="15">
+                    <padding>
+                        <Insets top="15" right="15" bottom="15" left="15"/>
+                    </padding>
+                    <Label text="Permanent Address:" style="-fx-font-weight: bold;"/>
+                    <Label fx:id="permanentAddressVal" wrapText="true" style="-fx-background-color: white; -fx-padding: 10; -fx-border-color: #CBD5E1; -fx-border-radius: 4;"/>
+
+                    <Label text="Correspondence Address:" style="-fx-font-weight: bold;"/>
+                    <Label fx:id="correspondenceAddressVal" wrapText="true" style="-fx-background-color: white; -fx-padding: 10; -fx-border-color: #CBD5E1; -fx-border-radius: 4;"/>
+                </VBox>
+            </Tab>
+
+            <!-- Tab 4: Joint Owners & Nominees -->
+            <Tab text="Joint Owners &amp; Nominees">
+                <VBox spacing="20">
+                    <padding>
+                        <Insets top="15" right="15" bottom="15" left="15"/>
+                    </padding>
+                    
+                    <VBox spacing="8">
+                        <Label text="Joint Owners" style="-fx-font-weight: bold; -fx-font-size: 14px;"/>
+                        <TableView fx:id="jointOwnerTable" prefHeight="130">
+                            <columns>
+                                <TableColumn fx:id="joFirstNameCol" text="First Name" prefWidth="130"/>
+                                <TableColumn fx:id="joLastNameCol" text="Last Name" prefWidth="130"/>
+                                <TableColumn fx:id="joRelationCol" text="Relationship" prefWidth="110"/>
+                                <TableColumn fx:id="joAadhaarCol" text="Aadhaar" prefWidth="130"/>
+                                <TableColumn fx:id="joPanCol" text="PAN" prefWidth="110"/>
+                            </columns>
+                        </TableView>
+                    </VBox>
+
+                    <VBox spacing="8">
+                        <Label text="Nominees" style="-fx-font-weight: bold; -fx-font-size: 14px;"/>
+                        <TableView fx:id="nomineeTable" prefHeight="130">
+                            <columns>
+                                <TableColumn fx:id="nomFirstNameCol" text="First Name" prefWidth="150"/>
+                                <TableColumn fx:id="nomLastNameCol" text="Last Name" prefWidth="150"/>
+                                <TableColumn fx:id="nomRelationCol" text="Relationship" prefWidth="130"/>
+                                <TableColumn fx:id="nomShareCol" text="Share %" prefWidth="110"/>
+                            </columns>
+                        </TableView>
+                    </VBox>
+                </VBox>
+            </Tab>
+
+            <!-- Tab 5: Documents & Files -->
+            <Tab text="KYC &amp; Download Documents">
+                <GridPane hgap="20" vgap="15">
+                    <padding>
+                        <Insets top="15" right="15" bottom="15" left="15"/>
+                    </padding>
+
+                    <Label text="Aadhaar Number:" style="-fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                    <Label fx:id="aadhaarNumVal" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                    <Label text="PAN Number:" style="-fx-font-weight: bold;" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+                    <Label fx:id="panNumVal" GridPane.columnIndex="3" GridPane.rowIndex="0"/>
+
+                    <!-- Aadhaar Document Actions -->
+                    <Label text="Aadhaar Document:" style="-fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                    <HBox spacing="10" alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="1">
+                        <Label fx:id="aadhaarPathLabel" text="No document uploaded"/>
+                        <Button fx:id="viewAadhaarBtn" text="Open Document" onAction="#openAadhaarDoc"/>
+                        <Button fx:id="downloadAadhaarBtn" text="Download" onAction="#downloadAadhaarDoc" styleClass="button-secondary"/>
+                    </HBox>
+
+                    <!-- PAN Document Actions -->
+                    <Label text="PAN Document:" style="-fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                    <HBox spacing="10" alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="2">
+                        <Label fx:id="panPathLabel" text="No document uploaded"/>
+                        <Button fx:id="viewPanBtn" text="Open Document" onAction="#openPanDoc"/>
+                        <Button fx:id="downloadPanBtn" text="Download" onAction="#downloadPanDoc" styleClass="button-secondary"/>
+                    </HBox>
+                </GridPane>
+            </Tab>
+        </TabPane>
+    </center>
+</BorderPane>

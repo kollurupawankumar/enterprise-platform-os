@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.society.certificate.controller.PrintPreviewController"
+            prefWidth="1000"
+            prefHeight="667"
+            style="-fx-background-color: white;">
+
+    <!-- Background JPEG Certificate Template -->
+    <ImageView fitWidth="1000" fitHeight="667" preserveRatio="true">
+        <image>
+            <Image url="/images/membership_cum_share_certificate.jpeg"/>
+        </image>
+    </ImageView>
+
+    <!-- Certificate Metadata Fields (Overlaid at precise coordinates) -->
+    
+    <!-- Left: Certificate No -->
+    <Label fx:id="certNoLabel"
+           layoutX="220"
+           layoutY="325"
+           style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #990000;"/>
+
+    <!-- Right: Share Certificate No -->
+    <Label fx:id="shareCertNoLabel"
+           layoutX="880"
+           layoutY="325"
+           style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #990000;"/>
+
+    <!-- Paragraph Line 1: Member Name -->
+    <Label fx:id="memberNameLabel"
+           layoutX="340"
+           layoutY="365"
+           style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+
+    <!-- Paragraph Line 2: S/o, D/o, W/o and Flat/Villa No -->
+    <Label fx:id="relationLabel"
+           layoutX="230"
+           layoutY="402"
+           text="N/A"
+           style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+
+    <Label fx:id="flatNoLabel"
+           layoutX="540"
+           layoutY="402"
+           text="101"
+           style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+
+    <!-- Paragraph Line 3: Number of Shares & Face Value -->
+    <Label fx:id="sharesWordsLabel"
+           layoutX="320"
+           layoutY="482"
+           style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+
+    <Label fx:id="faceValueWordsLabel"
+           layoutX="700"
+           layoutY="482"
+           style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+
+    <!-- Paragraph Line 4: Total Amount Words -->
+    <Label fx:id="totalAmountWordsLabel"
+           layoutX="380"
+           layoutY="528"
+           style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+
+    <!-- Paragraph Line 5: Issue Day, Month, Year -->
+    <Label fx:id="issueDayLabel"
+           layoutX="345"
+           layoutY="582"
+           style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+
+    <Label fx:id="issueMonthLabel"
+           layoutX="430"
+           layoutY="582"
+           style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+
+    <Label fx:id="issueYearLabel"
+           layoutX="540"
+           layoutY="582"
+           style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+
+    <!-- Right Side Sidebar Info Box Details -->
+    
+    <!-- Membership No -->
+    <Label fx:id="membershipNoLabel"
+           layoutX="835"
+           layoutY="375"
+           style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+
+    <!-- Share No (Range) -->
+    <Label fx:id="shareRangeLabel"
+           layoutX="835"
+           layoutY="410"
+           style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+
+    <!-- No. of Shares -->
+    <Label fx:id="totalSharesLabel"
+           layoutX="835"
+           layoutY="447"
+           style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #990000;"/>
+
+    <!-- Face Value -->
+    <Label fx:id="faceValueLabel"
+           layoutX="835"
+           layoutY="485"
+           style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #990000;"/>
+
+    <!-- Total Face Value -->
+    <Label fx:id="totalFaceValueLabel"
+           layoutX="835"
+           layoutY="522"
+           style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #990000;"/>
+
+    <!-- Date of Admission -->
+    <Label fx:id="admissionDateLabel"
+           layoutX="835"
+           layoutY="558"
+           style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+
+    <!-- Date of Issue -->
+    <Label fx:id="issueDateLabel"
+           layoutX="835"
+           layoutY="595"
+           style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+
+</AnchorPane>

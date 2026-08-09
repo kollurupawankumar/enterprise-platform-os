@@ -1,0 +1,8 @@
+.form-container {
+    -fx-background-color: white;
+}
+
+.form-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+}

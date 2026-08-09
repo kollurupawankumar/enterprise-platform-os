@@ -1,0 +1,18 @@
+.app-header {
+    -fx-background-color: white;
+    -fx-border-color: #E2E8F0;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 14 24;
+}
+
+.header-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0F172A;
+}
+
+.header-subtitle {
+    -fx-font-size: 13px;
+    -fx-text-fill: #475569;
+    -fx-font-weight: normal;
+}

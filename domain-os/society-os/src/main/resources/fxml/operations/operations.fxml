@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<TabPane tabClosingPolicy="UNAVAILABLE"
+         xmlns="http://javafx.com/javafx/21"
+         xmlns:fx="http://javafx.com/fxml/1"
+         fx:controller="com.society.operations.controller.OperationsController"
+         styleClass="main-content">
+
+    <!-- Tab 1: Assets -->
+    <Tab text="Asset Register">
+        <SplitPane dividerPositions="0.6">
+            <!-- Left Panel: Assets Table -->
+            <VBox spacing="15">
+                <padding>
+                    <Insets top="15" right="10" bottom="15" left="15"/>
+                </padding>
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="Society Assets" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="addAssetBtn" text="Add Asset" onAction="#handleAddAsset" styleClass="button-primary"/>
+                </HBox>
+                <TableView fx:id="assetTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="assetNameCol" text="Asset Name" prefWidth="180"/>
+                        <TableColumn fx:id="assetCategoryCol" text="Category" prefWidth="120"/>
+                        <TableColumn fx:id="assetStatusCol" text="Status" prefWidth="120"/>
+                    </columns>
+                </TableView>
+            </VBox>
+
+            <!-- Right Panel: Asset Details & AMC -->
+            <VBox spacing="15" style="-fx-background-color: #F8FAFC; -fx-padding: 15;">
+                <HBox alignment="CENTER_LEFT">
+                    <Label text="Asset &amp; AMC Details" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="editAssetBtn" text="Edit Asset" onAction="#handleEditAsset" styleClass="button-secondary"/>
+                </HBox>
+
+                <GridPane hgap="10" vgap="10" style="-fx-background-color: white; -fx-padding: 12; -fx-background-radius: 6;">
+                    <columnConstraints>
+                        <ColumnConstraints prefWidth="120"/>
+                        <ColumnConstraints hgrow="ALWAYS"/>
+                    </columnConstraints>
+                    
+                    <Label text="Serial No:" style="-fx-font-weight: bold; -fx-text-fill: #64748B;"/>
+                    <Label fx:id="serialLabel" text="-" GridPane.columnIndex="1"/>
+                    
+                    <Label text="Purchase Date:" style="-fx-font-weight: bold; -fx-text-fill: #64748B;" GridPane.rowIndex="1"/>
+                    <Label fx:id="purchaseDateLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                    
+                    <Label text="Purchase Cost:" style="-fx-font-weight: bold; -fx-text-fill: #64748B;" GridPane.rowIndex="2"/>
+                    <Label fx:id="purchaseCostLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                    
+                    <Label text="Warranty Expiry:" style="-fx-font-weight: bold; -fx-text-fill: #64748B;" GridPane.rowIndex="3"/>
+                    <Label fx:id="warrantyLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                </GridPane>
+
+                <Label text="Annual Maintenance Contract (AMC)" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                <GridPane hgap="10" vgap="10" style="-fx-background-color: white; -fx-padding: 12; -fx-background-radius: 6;">
+                    <columnConstraints>
+                        <ColumnConstraints prefWidth="120"/>
+                        <ColumnConstraints hgrow="ALWAYS"/>
+                    </columnConstraints>
+
+                    <Label text="AMC Vendor:" style="-fx-font-weight: bold; -fx-text-fill: #64748B;"/>
+                    <Label fx:id="amcVendorLabel" text="-" GridPane.columnIndex="1"/>
+
+                    <Label text="AMC Duration:" style="-fx-font-weight: bold; -fx-text-fill: #64748B;" GridPane.rowIndex="1"/>
+                    <Label fx:id="amcPeriodLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                    <Label text="AMC Cost:" style="-fx-font-weight: bold; -fx-text-fill: #64748B;" GridPane.rowIndex="2"/>
+                    <Label fx:id="amcCostLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                    <Label text="AMC Details:" style="-fx-font-weight: bold; -fx-text-fill: #64748B;" GridPane.rowIndex="3"/>
+                    <Label fx:id="amcDetailsLabel" text="-" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+                    <Label text="AMC Contract Document:" style="-fx-font-weight: bold; -fx-text-fill: #64748B;" GridPane.rowIndex="4"/>
+                    <HBox fx:id="amcDocBox" alignment="CENTER_LEFT" spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                        <Label text="No document uploaded"/>
+                    </HBox>
+                </GridPane>
+
+                <HBox alignment="CENTER_LEFT" style="-fx-padding: 10 0 0 0;">
+                    <Label text="Service Visits &amp; Photo Logs" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="logServiceVisitBtn" text="Log Service Visit" onAction="#handleLogServiceVisit" styleClass="button-primary"/>
+                </HBox>
+
+                <TableView fx:id="serviceLogTable" VBox.vgrow="ALWAYS" prefHeight="150" style="-fx-background-radius: 6;" onMouseClicked="#handleServiceLogClicked">
+                    <columns>
+                        <TableColumn fx:id="serviceDateCol" text="Date" prefWidth="90"/>
+                        <TableColumn fx:id="serviceTypeCol" text="Type" prefWidth="100"/>
+                        <TableColumn fx:id="serviceEngCol" text="Engineer" prefWidth="110"/>
+                        <TableColumn fx:id="serviceSummaryCol" text="Work Done / Remarks" prefWidth="180"/>
+                        <TableColumn fx:id="serviceDocCol" text="Receipt / Photo" prefWidth="110"/>
+                    </columns>
+                </TableView>
+            </VBox>
+        </SplitPane>
+    </Tab>
+
+    <!-- Tab 2: Vendors -->
+    <Tab text="Vendor Directory">
+        <SplitPane dividerPositions="0.6">
+            <!-- Left Panel: Vendors Table -->
+            <VBox spacing="15">
+                <padding>
+                    <Insets top="15" right="10" bottom="15" left="15"/>
+                </padding>
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="Contracted Vendors" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="addVendorBtn" text="Add Vendor" onAction="#handleAddVendor" styleClass="button-primary"/>
+                </HBox>
+                <TableView fx:id="vendorTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="vendorNameCol" text="Vendor Name" prefWidth="180"/>
+                        <TableColumn fx:id="vendorCategoryCol" text="Category" prefWidth="120"/>
+                        <TableColumn fx:id="vendorPhoneCol" text="Phone" prefWidth="120"/>
+                        <TableColumn fx:id="vendorStatusCol" text="Status" prefWidth="90"/>
+                    </columns>
+                </TableView>
+            </VBox>
+
+            <!-- Right Panel: Vendor Details & Assigned AMC Assets -->
+            <VBox spacing="15" style="-fx-background-color: #F8FAFC; -fx-padding: 15;">
+                <HBox alignment="CENTER_LEFT">
+                    <Label text="Vendor Profile &amp; Contact Details" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="editVendorBtn" text="Edit Vendor" onAction="#handleEditVendor" styleClass="button-secondary"/>
+                </HBox>
+                <GridPane hgap="10" vgap="10" style="-fx-background-color: white; -fx-padding: 12; -fx-background-radius: 8;">
+                    <columnConstraints>
+                        <ColumnConstraints prefWidth="120"/>
+                        <ColumnConstraints hgrow="ALWAYS"/>
+                    </columnConstraints>
+
+                    <Label text="Vendor Name:" style="-fx-font-weight: bold; -fx-text-fill: #64748B;"/>
+                    <Label fx:id="vendorNameVal" text="-" GridPane.columnIndex="1" style="-fx-font-weight: bold; -fx-text-fill: #0F172A; -fx-font-size: 14px;"/>
+
+                    <Label text="Category:" style="-fx-font-weight: bold; -fx-text-fill: #64748B;" GridPane.rowIndex="1"/>
+                    <Label fx:id="vendorCategoryVal" text="-" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                    <Label text="Phone / Mobile:" style="-fx-font-weight: bold; -fx-text-fill: #64748B;" GridPane.rowIndex="2"/>
+                    <Label fx:id="vendorPhoneVal" text="-" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                    
+                    <Label text="Contact Person:" style="-fx-font-weight: bold; -fx-text-fill: #64748B;" GridPane.rowIndex="3"/>
+                    <Label fx:id="contactPersonLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                    
+                    <Label text="Email:" style="-fx-font-weight: bold; -fx-text-fill: #64748B;" GridPane.rowIndex="4"/>
+                    <Label fx:id="emailLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+                    
+                    <Label text="Office Address:" style="-fx-font-weight: bold; -fx-text-fill: #64748B;" GridPane.rowIndex="5"/>
+                    <Label fx:id="addressLabel" text="-" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+
+                    <Label text="Vendor Status:" style="-fx-font-weight: bold; -fx-text-fill: #64748B;" GridPane.rowIndex="6"/>
+                    <Label fx:id="vendorStatusVal" text="-" GridPane.columnIndex="1" GridPane.rowIndex="6" style="-fx-font-weight: bold;"/>
+                </GridPane>
+
+                <VBox spacing="8" VBox.vgrow="ALWAYS">
+                    <Label text="Contracted AMC Assets / Serviced Equipment" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                    <ListView fx:id="vendorAssetList" VBox.vgrow="ALWAYS" prefHeight="130" style="-fx-background-radius: 6;"/>
+                </VBox>
+            </VBox>
+        </SplitPane>
+    </Tab>
+
+    <!-- Tab 3: Facilities -->
+    <Tab text="Society Facilities">
+        <VBox spacing="15">
+            <padding>
+                <Insets top="15" right="15" bottom="15" left="15"/>
+            </padding>
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Society Facilities &amp; Amenities" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="addFacilityBtn" text="+ Add Facility" onAction="#handleAddFacility" styleClass="button-primary"/>
+            </HBox>
+            <TableView fx:id="facilityTable" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="facilityNameCol" text="Facility Name" prefWidth="170"/>
+                    <TableColumn fx:id="facilityTypeCol" text="Type" prefWidth="120"/>
+                    <TableColumn fx:id="facilityLocationCol" text="Location" prefWidth="150"/>
+                    <TableColumn fx:id="facilityCapacityCol" text="Capacity" prefWidth="90"/>
+                    <TableColumn fx:id="facilityTimingsCol" text="Timings" prefWidth="130"/>
+                    <TableColumn fx:id="facilityPriceCol" text="Price / Booking (₹)" prefWidth="130"/>
+                    <TableColumn fx:id="facilityStatusCol" text="Status" prefWidth="100"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </Tab>
+
+    <!-- Tab 4: Staff Directory & Police Verification -->
+    <Tab text="Staff &amp; Police Verification">
+        <VBox spacing="15">
+            <padding>
+                <Insets top="15" right="15" bottom="15" left="15"/>
+            </padding>
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="On-Premise Staff &amp; Police Verification Directory" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="viewPoliceDocBtn" text="📄 View Police Verification Doc" onAction="#handleViewPoliceDoc" styleClass="button-secondary"/>
+                <Button fx:id="addStaffBtn" text="+ Add Staff Member" onAction="#handleAddStaff" styleClass="button-primary"/>
+                <Button fx:id="deactivateStaffBtn" text="Deactivate / End Term" onAction="#handleDeactivateStaff" styleClass="button-danger"/>
+            </HBox>
+            <TableView fx:id="staffTable" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="staffNameCol" text="Staff Name" prefWidth="170"/>
+                    <TableColumn fx:id="staffRoleCol" text="Role" prefWidth="130"/>
+                    <TableColumn fx:id="staffMobileCol" text="Mobile" prefWidth="130"/>
+                    <TableColumn fx:id="staffShiftCol" text="Shift Timing" prefWidth="130"/>
+                    <TableColumn fx:id="staffPoliceStatusCol" text="Police Verification" prefWidth="150"/>
+                    <TableColumn fx:id="staffStatusCol" text="Status" prefWidth="110"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </Tab>
+</TabPane>

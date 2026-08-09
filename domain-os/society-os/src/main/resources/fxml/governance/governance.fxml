@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<TabPane tabClosingPolicy="UNAVAILABLE"
+         xmlns="http://javafx.com/javafx/21"
+         xmlns:fx="http://javafx.com/fxml/1"
+         fx:controller="com.society.governance.controller.GovernanceController"
+         styleClass="main-content">
+
+    <!-- Tab 1: Meetings -->
+    <Tab text="Meeting Management">
+        <SplitPane dividerPositions="0.6">
+            <!-- Left Panel: Meetings List -->
+            <VBox spacing="15">
+                <padding>
+                    <Insets top="15" right="10" bottom="15" left="15"/>
+                </padding>
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="Scheduled &amp; Past Meetings" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="scheduleMeetingBtn" text="Schedule Meeting" onAction="#handleScheduleMeeting" styleClass="button-primary"/>
+                </HBox>
+                <TableView fx:id="meetingTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="meetTitleCol" text="Title" prefWidth="180"/>
+                        <TableColumn fx:id="meetTypeCol" text="Type" prefWidth="100"/>
+                        <TableColumn fx:id="meetDateCol" text="Date" prefWidth="110"/>
+                        <TableColumn fx:id="meetStatusCol" text="Status" prefWidth="100"/>
+                    </columns>
+                </TableView>
+            </VBox>
+
+            <!-- Right Panel: Meeting Details -->
+            <VBox spacing="12">
+                <padding>
+                    <Insets top="15" right="15" bottom="15" left="10"/>
+                </padding>
+                <Label text="Meeting Details" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                
+                <GridPane hgap="10" vgap="8" style="-fx-background-color: #F8FAFC; -fx-padding: 10; -fx-background-radius: 6;">
+                    <Label text="Time:" style="-fx-font-weight: bold; -fx-text-fill: #64748B;" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                    <Label fx:id="meetTimeVal" text="-" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                    <Label text="Venue:" style="-fx-font-weight: bold; -fx-text-fill: #64748B;" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                    <Label fx:id="meetVenueVal" text="-" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                    <Label text="Online Link:" style="-fx-font-weight: bold; -fx-text-fill: #64748B;" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                    <Hyperlink fx:id="meetOnlineLinkVal" text="-" onAction="#openOnlineLink" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                </GridPane>
+
+                <Label text="Agenda" style="-fx-font-weight: bold;"/>
+                <TextArea fx:id="agendaArea" promptText="Agenda description..." editable="false" prefHeight="120" wrapText="true"/>
+
+                <Label text="Minutes of Meeting" style="-fx-font-weight: bold;"/>
+                <TextArea fx:id="minutesArea" promptText="Type or edit minutes of the meeting here..." editable="true" prefHeight="180" wrapText="true"/>
+
+                <HBox spacing="10">
+                    <Button fx:id="completeMeetingBtn" text="Save Minutes" onAction="#handleCompleteMeeting" styleClass="button-primary" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="attendanceBtn" text="Mark Attendance" onAction="#handleMarkAttendance" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+                    <Button text="Print MoM" onAction="#handlePrintMeeting" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+                </HBox>
+            </VBox>
+        </SplitPane>
+    </Tab>
+
+    <!-- Tab 2: Resolutions -->
+    <Tab text="Resolutions Register">
+        <VBox spacing="15">
+            <padding>
+                <Insets top="15" right="15" bottom="15" left="15"/>
+            </padding>
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Passed Resolutions" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="addResolutionBtn" text="Add Resolution" onAction="#handleAddResolution" styleClass="button-primary"/>
+            </HBox>
+            <TableView fx:id="resolutionTable" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="resNumCol" text="Resolution No" prefWidth="130"/>
+                    <TableColumn fx:id="resSubjectCol" text="Subject" prefWidth="250"/>
+                    <TableColumn fx:id="resMeetingCol" text="Meeting (Name - Date)" prefWidth="250"/>
+                    <TableColumn fx:id="resProposerCol" text="Proposed By" prefWidth="160"/>
+                    <TableColumn fx:id="resStatusCol" text="Status" prefWidth="100"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </Tab>
+
+    <!-- Tab 3: Managing Committee Register -->
+    <Tab text="Managing Committee (MC) Board">
+        <VBox spacing="15">
+            <padding>
+                <Insets top="15" right="15" bottom="15" left="15"/>
+            </padding>
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Managing Committee Board Register" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="appointCommitteeBtn" text="+ Appoint Committee Member" onAction="#handleAddCommitteeMember" styleClass="button-primary"/>
+            </HBox>
+            <TableView fx:id="mcTable" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="mcMemberCol" text="Member Name" prefWidth="220"/>
+                    <TableColumn fx:id="mcDesignationCol" text="Designation" prefWidth="160"/>
+                    <TableColumn fx:id="mcStartDateCol" text="Start Date" prefWidth="130"/>
+                    <TableColumn fx:id="mcEndDateCol" text="End Date" prefWidth="130"/>
+                    <TableColumn fx:id="mcStatusCol" text="Status" prefWidth="120"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </Tab>
+</TabPane>

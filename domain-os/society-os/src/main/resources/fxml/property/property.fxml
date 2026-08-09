@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<SplitPane dividerPositions="0.55"
+           xmlns="http://javafx.com/javafx/21"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.society.property.controller.PropertyController"
+           styleClass="main-content">
+
+    <!-- Left Side: Table of Properties -->
+    <VBox spacing="15">
+        <padding>
+            <Insets top="20" right="15" bottom="20" left="20"/>
+        </padding>
+
+        <HBox spacing="15" alignment="CENTER_LEFT">
+            <Label text="Property Register" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <TextField fx:id="searchField" promptText="Search unit number/block..." prefWidth="220"
+                       style="-fx-background-radius: 6; -fx-padding: 8;"/>
+            <Button fx:id="addUnitBtn" text="Add Unit" onAction="#handleAddProperty" styleClass="button-primary"/>
+            <Button text="Download Template" onAction="#downloadTemplate" styleClass="button-secondary"/>
+            <Button fx:id="bulkImportBtn" text="Bulk Import CSV" onAction="#bulkImportCsv" styleClass="button-primary"/>
+        </HBox>
+
+        <TableView fx:id="propertyTable" VBox.vgrow="ALWAYS" style="-fx-background-radius: 8;">
+            <columns>
+                <TableColumn fx:id="propertyNumCol" text="Property No" prefWidth="110"/>
+                <TableColumn fx:id="blockCol" text="Block" prefWidth="90"/>
+                <TableColumn fx:id="typeCol" text="Type" prefWidth="100"/>
+                <TableColumn fx:id="ownerCol" text="Current Owner" prefWidth="200"/>
+            </columns>
+        </TableView>
+    </VBox>
+
+    <!-- Right Side: Details & Action Pane -->
+    <VBox spacing="15" style="-fx-background-color: white;">
+        <padding>
+            <Insets top="20" right="20" bottom="20" left="15"/>
+        </padding>
+
+        <Label text="Unit Details" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+
+        <GridPane hgap="10" vgap="10" style="-fx-background-color: #F8FAFC; -fx-padding: 12; -fx-background-radius: 8;">
+            <columnConstraints>
+                <ColumnConstraints prefWidth="90"/>
+                <ColumnConstraints hgrow="ALWAYS"/>
+            </columnConstraints>
+            
+            <Label text="Unit No:" style="-fx-font-weight: bold; -fx-text-fill: #64748B;"/>
+            <Label fx:id="detailUnitLabel" text="-" GridPane.columnIndex="1" style="-fx-text-fill: #0F172A;"/>
+
+            <Label text="Block:" style="-fx-font-weight: bold; -fx-text-fill: #64748B;" GridPane.rowIndex="1"/>
+            <Label fx:id="detailBlockLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="1" style="-fx-text-fill: #0F172A;"/>
+
+            <Label text="Type:" style="-fx-font-weight: bold; -fx-text-fill: #64748B;" GridPane.rowIndex="2"/>
+            <Label fx:id="detailTypeLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="2" style="-fx-text-fill: #0F172A;"/>
+
+            <Label text="Owner:" style="-fx-font-weight: bold; -fx-text-fill: #64748B;" GridPane.rowIndex="3"/>
+            <Label fx:id="detailOwnerLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="3" style="-fx-text-fill: #0F172A; -fx-font-weight: bold;"/>
+        </GridPane>
+
+        <!-- Tabs for Joint Owners & Ownership History -->
+        <TabPane tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+            <!-- Tab 1: Current Associations -->
+            <Tab text="Joint Owners &amp; Nominees">
+                <VBox spacing="10">
+                    <padding>
+                        <Insets top="10" right="10" bottom="10" left="10"/>
+                    </padding>
+                    <ListView fx:id="associationList" VBox.vgrow="ALWAYS" style="-fx-background-radius: 6;"/>
+                </VBox>
+            </Tab>
+
+            <!-- Tab 2: Ownership Transfer History -->
+            <Tab text="Ownership History Log">
+                <VBox spacing="10">
+                    <padding>
+                        <Insets top="10" right="10" bottom="10" left="10"/>
+                    </padding>
+                    <TableView fx:id="historyTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="histOwnerCol" text="Owner Name" prefWidth="180"/>
+                            <TableColumn fx:id="histFromCol" text="From Date" prefWidth="100"/>
+                            <TableColumn fx:id="histToCol" text="To Date" prefWidth="100"/>
+                            <TableColumn fx:id="histStatusCol" text="Status" prefWidth="110"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+            </Tab>
+        </TabPane>
+
+        <Button fx:id="transferBtn" text="Transfer Ownership" onAction="#handleTransfer" maxWidth="Infinity" styleClass="button-primary"/>
+    </VBox>
+</SplitPane>

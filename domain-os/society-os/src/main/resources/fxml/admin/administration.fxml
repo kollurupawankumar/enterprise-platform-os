@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<TabPane tabClosingPolicy="UNAVAILABLE"
+         xmlns="http://javafx.com/javafx/21"
+         xmlns:fx="http://javafx.com/fxml/1"
+         fx:controller="com.society.admin.controller.AdministrationController"
+         styleClass="main-content">
+
+    <!-- Tab 1: Society Settings Details -->
+    <Tab text="Society Profile">
+        <VBox spacing="15">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+            <Label text="Society Profile Settings" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1F4E79;"/>
+            
+            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" style="-fx-background-color: transparent; -fx-background: white;">
+                <GridPane hgap="10" vgap="12" prefWidth="600">
+                    <columnConstraints>
+                        <ColumnConstraints prefWidth="150"/>
+                        <ColumnConstraints hgrow="ALWAYS"/>
+                    </columnConstraints>
+
+                    <Label text="Society Name:" style="-fx-font-weight: bold;"/>
+                    <TextField fx:id="nameField" GridPane.columnIndex="1"/>
+
+                    <Label text="Registration No:" style="-fx-font-weight: bold;" GridPane.rowIndex="1"/>
+                    <TextField fx:id="regNoField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                    <Label text="Short Name:" style="-fx-font-weight: bold;" GridPane.rowIndex="2"/>
+                    <TextField fx:id="shortNameField" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                    <Label text="Email:" style="-fx-font-weight: bold;" GridPane.rowIndex="3"/>
+                    <TextField fx:id="emailField" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+                    <Label text="Phone:" style="-fx-font-weight: bold;" GridPane.rowIndex="4"/>
+                    <TextField fx:id="phoneField" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+
+                    <Label text="Website:" style="-fx-font-weight: bold;" GridPane.rowIndex="5"/>
+                    <TextField fx:id="websiteField" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+
+                    <Label text="Address:" style="-fx-font-weight: bold;" GridPane.rowIndex="6"/>
+                    <TextArea fx:id="addressArea" prefRowCount="3" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+
+                    <Button text="Save Details" onAction="#handleSaveSocietyDetails" styleClass="button-primary" GridPane.columnIndex="1" GridPane.rowIndex="7" prefWidth="150"/>
+                </GridPane>
+            </ScrollPane>
+        </VBox>
+    </Tab>
+
+    <!-- Tab 2: User Profiles Management -->
+    <Tab text="System Users &amp; Committee">
+        <VBox spacing="15">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="System Users &amp; Committee Roles" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1F4E79;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="Add User" onAction="#handleAddUser" styleClass="button-primary"/>
+            </HBox>
+            <TableView fx:id="usersTable" VBox.vgrow="ALWAYS" style="-fx-background-radius: 8;">
+                <columns>
+                    <TableColumn fx:id="usernameCol" text="Username" prefWidth="120"/>
+                    <TableColumn fx:id="firstNameCol" text="First Name" prefWidth="150"/>
+                    <TableColumn fx:id="roleCol" text="Role" prefWidth="120"/>
+                    <TableColumn fx:id="emailCol" text="Email Address" prefWidth="250"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </Tab>
+
+    <!-- Tab 3: System Database Backups -->
+    <Tab text="Backup &amp; Restore Settings">
+        <VBox spacing="20">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+            <Label text="Local Database Backups" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1F4E79;"/>
+            
+            <HBox spacing="15" alignment="CENTER_LEFT" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8; -fx-border-color: #E2E8F0;">
+                <Button text="Trigger Manual Backup" onAction="#handleTriggerBackup" styleClass="button-primary"/>
+                <Label text="Saves a snapshot copy of the current SQLite database under backups/ directory." style="-fx-text-fill: #64748B;"/>
+            </HBox>
+
+            <VBox spacing="10" VBox.vgrow="ALWAYS">
+                <Label text="Available Restore Points" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+                <ListView fx:id="backupListView" VBox.vgrow="ALWAYS" style="-fx-background-radius: 8;"/>
+                <HBox spacing="15">
+                    <Button text="Restore Selected Point" onAction="#handleRestoreBackup" styleClass="button-primary"/>
+                </HBox>
+            </VBox>
+        </VBox>
+    </Tab>
+
+    <!-- Tab 4: System Audit Trail Explorer -->
+    <Tab text="Audit Trail Explorer">
+        <VBox spacing="15">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+            <HBox alignment="CENTER_LEFT" spacing="15">
+                <Label text="System Audit Trail &amp; Data Modifications Log" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1F4E79;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="🔄 Refresh Audit Logs" onAction="#handleRefreshAuditLogs" styleClass="button-secondary"/>
+            </HBox>
+            <TableView fx:id="auditTable" VBox.vgrow="ALWAYS" style="-fx-background-radius: 8;">
+                <columns>
+                    <TableColumn fx:id="auditEntityCol" text="Entity / Module" prefWidth="150"/>
+                    <TableColumn fx:id="auditRecordCol" text="Record Info / Details" prefWidth="250"/>
+                    <TableColumn fx:id="auditCreatedByCol" text="Created By" prefWidth="120"/>
+                    <TableColumn fx:id="auditCreatedAtCol" text="Created At" prefWidth="160"/>
+                    <TableColumn fx:id="auditUpdatedByCol" text="Updated By" prefWidth="120"/>
+                    <TableColumn fx:id="auditUpdatedAtCol" text="Updated At" prefWidth="160"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </Tab>
+
+</TabPane>

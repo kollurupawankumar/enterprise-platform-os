@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane xmlns="http://javafx.com/javafx/21"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.society.dashboard.controller.DashboardController">
+
+    <VBox spacing="20"
+          alignment="TOP_LEFT">
+
+        <padding>
+            <Insets top="20"
+                    right="20"
+                    bottom="20"
+                    left="20"/>
+        </padding>
+
+        <Label fx:id="welcomeLabel"
+               styleClass="dashboard-title"/>
+
+        <GridPane hgap="20"
+                  vgap="20">
+
+            <!-- Members -->
+
+            <VBox GridPane.columnIndex="0"
+                  GridPane.rowIndex="0"
+                  styleClass="dashboard-card">
+
+                <Label text="Members"/>
+
+                <Label fx:id="membersCountLabel"
+                       text="0"
+                       styleClass="dashboard-value"/>
+
+            </VBox>
+
+            <!-- Shares -->
+
+            <VBox GridPane.columnIndex="1"
+                  GridPane.rowIndex="0"
+                  styleClass="dashboard-card">
+
+                <Label text="Shares"/>
+
+                <Label fx:id="sharesCountLabel"
+                       text="0"
+                       styleClass="dashboard-value"/>
+
+            </VBox>
+
+            <!-- Certificates -->
+
+            <VBox GridPane.columnIndex="0"
+                  GridPane.rowIndex="1"
+                  styleClass="dashboard-card">
+
+                <Label text="Certificates"/>
+
+                <Label fx:id="certificatesCountLabel"
+                       text="0"
+                       styleClass="dashboard-value"/>
+
+            </VBox>
+
+            <!-- Database -->
+
+            <VBox GridPane.columnIndex="1"
+                  GridPane.rowIndex="1"
+                  styleClass="dashboard-card">
+
+                <Label text="Database"/>
+
+                <Label fx:id="databaseStatusLabel"
+                       text="Connected"
+                       styleClass="dashboard-value"/>
+
+            </VBox>
+
+        </GridPane>
+
+        <VBox spacing="10" VBox.vgrow="ALWAYS" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8; -fx-border-color: #E2E8F0;">
+            <HBox alignment="CENTER_LEFT">
+                <Label text="🔔 Important System Alerts &amp; Upcoming Events" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #1F4E79;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label text="Live Sync" style="-fx-text-fill: #16A34A; -fx-font-size: 12px; -fx-font-weight: bold;"/>
+            </HBox>
+            <ListView fx:id="notificationsListView" VBox.vgrow="ALWAYS" prefHeight="180" style="-fx-background-radius: 6;"/>
+        </VBox>
+
+    </VBox>
+
+</StackPane>
