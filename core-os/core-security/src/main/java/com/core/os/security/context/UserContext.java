@@ -2,7 +2,7 @@ package com.core.os.security.context;
 
 import org.springframework.stereotype.Component;
 
-@Component
+@Component("coreUserContext")
 public class UserContext {
     private String currentUsername = "admin";
     private String currentRole = "ADMINISTRATOR";
