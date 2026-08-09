@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.core.os</groupId>
+    <artifactId>core-os-parent</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <name>Core OS Platform Parent</name>
+    <description>Enterprise Modular Core OS Platform and Domain OS Applications</description>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>core-os/core-commons</module>
+        <module>core-os/core-security</module>
+        <module>core-os/core-storage</module>
+        <module>core-os/core-audit</module>
+        <module>core-os/core-notification</module>
+        <module>core-os/core-ai</module>
+        <module>core-os/core-ui-shell</module>
+        <module>core-os/core-config</module>
+        <module>core-os/core-reporting</module>
+        <module>core-os/core-search</module>
+        <module>domain-os/society-os</module>
+    </modules>
+
+    <properties>
+        <java.version>17</java.version>
+        <spring.boot.version>3.5.4</spring.boot.version>
+        <javafx.version>21.0.7</javafx.version>
+        <maven.compiler.release>17</maven.compiler.release>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring.boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- Core OS Module Dependency Management -->
+            <dependency>
+                <groupId>com.core.os</groupId>
+                <artifactId>core-commons</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.core.os</groupId>
+                <artifactId>core-security</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.core.os</groupId>
+                <artifactId>core-storage</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.core.os</groupId>
+                <artifactId>core-audit</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.core.os</groupId>
+                <artifactId>core-notification</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.core.os</groupId>
+                <artifactId>core-ai</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.core.os</groupId>
+                <artifactId>core-ui-shell</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.core.os</groupId>
+                <artifactId>core-config</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.core.os</groupId>
+                <artifactId>core-reporting</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.core.os</groupId>
+                <artifactId>core-search</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.14.0</version>
+                <configuration>
+                    <release>${maven.compiler.release}</release>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
