@@ -3,12 +3,16 @@ package com.society.app;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
 @Component
 public class StageManager {
+
+    private static final Logger log = LoggerFactory.getLogger(StageManager.class);
 
     private static final String MAIN_VIEW =
             "/fxml/main.fxml";
@@ -20,6 +24,7 @@ public class StageManager {
     }
 
     public void showPrimaryStage(Stage stage) {
+        log.info("Initializing primary JavaFX Stage window with main view: {}", MAIN_VIEW);
 
         try {
 
