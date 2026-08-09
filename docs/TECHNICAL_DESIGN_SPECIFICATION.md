@@ -282,3 +282,28 @@ mvn javafx:run -pl domain-os/society-os
 | **Bulk CSV Importer** | Unit test with multi-date formats & missing columns | `MemberControllerTest.java` |
 | **Share Allotment** | Test overlap detection & sequence generator | `ShareServiceImplTest.java` |
 | **UI Integration** | Manual & JavaFX TestFX Headless Execution | `mvn javafx:run -pl domain-os/society-os` |
+
+---
+
+## 9. Enterprise Logging Architecture (Log4j2)
+
+The platform utilizes **Apache Log4j2** (`spring-boot-starter-log4j2`) with SLF4J abstraction. Default Spring Boot Logback logging is explicitly excluded in `pom.xml`.
+
+### 9.1 Log Appender Topology
+- **Console Appender**: Formatted standard output stream for local developer debugging.
+- **Application Rolling File Appender (`logs/society-os.log`)**: Daily rolling file appender with 10 MB size limit, compression (`.log.gz`), and 30-day retention.
+- **Dedicated Audit Log Appender (`logs/audit.log`)**: Isolated compliance log capturing system mutation events (Member creations, Share allotments, Financial vouchers, Document deletions) with 90-day retention.
+
+```
+                      ┌─────────────────────────────────┐
+                      │    Log4j2 Logger Engine         │
+                      └────────────────┬────────────────┘
+                                       │
+        ┌──────────────────────────────┼──────────────────────────────┐
+        │                              │                              │
+┌───────▼────────┐             ┌───────▼────────┐             ┌───────▼────────┐
+│    Console     │             │ Application Log│             │   Audit Log    │
+│   (STDOUT)     │             │`society-os.log`│             │  `audit.log`   │
+└────────────────┘             └────────────────┘             └────────────────┘
+```
+

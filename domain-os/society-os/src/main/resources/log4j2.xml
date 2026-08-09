@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO" monitorInterval="30">
+
+    <Properties>
+        <Property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Property>
+        <Property name="LOG_DIR">logs</Property>
+    </Properties>
+
+    <Appenders>
+        <!-- Console Appender -->
+        <Console name="ConsoleAppender" target="SYSTEM_OUT">
+            <PatternLayout pattern="${LOG_PATTERN}" />
+        </Console>
+
+        <!-- Main Application Rolling File Appender -->
+        <RollingFile name="AppFileAppender"
+                     fileName="${LOG_DIR}/society-os.log"
+                     filePattern="${LOG_DIR}/archived/society-os-%d{yyyy-MM-dd}-%i.log.gz">
+            <PatternLayout pattern="${LOG_PATTERN}" />
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
+                <SizeBasedTriggeringPolicy size="10 MB" />
+            </Policies>
+            <DefaultRolloverStrategy max="30" />
+        </RollingFile>
+
+        <!-- Audit Specific Rolling File Appender -->
+        <RollingFile name="AuditFileAppender"
+                     fileName="${LOG_DIR}/audit.log"
+                     filePattern="${LOG_DIR}/archived/audit-%d{yyyy-MM-dd}-%i.log.gz">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [AUDIT] %msg%n" />
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
+                <SizeBasedTriggeringPolicy size="10 MB" />
+            </Policies>
+            <DefaultRolloverStrategy max="90" />
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <!-- Application level loggers -->
+        <Logger name="com.society" level="DEBUG" additivity="false">
+            <AppenderRef ref="ConsoleAppender" />
+            <AppenderRef ref="AppFileAppender" />
+        </Logger>
+
+        <Logger name="com.core.os" level="DEBUG" additivity="false">
+            <AppenderRef ref="ConsoleAppender" />
+            <AppenderRef ref="AppFileAppender" />
+        </Logger>
+
+        <!-- Dedicated Audit Logger -->
+        <Logger name="com.core.os.audit" level="INFO" additivity="false">
+            <AppenderRef ref="AuditFileAppender" />
+            <AppenderRef ref="ConsoleAppender" />
+        </Logger>
+
+        <!-- Root Logger -->
+        <Root level="INFO">
+            <AppenderRef ref="ConsoleAppender" />
+            <AppenderRef ref="AppFileAppender" />
+        </Root>
+    </Loggers>
+
+</Configuration>
