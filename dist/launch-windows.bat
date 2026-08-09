@@ -5,8 +5,8 @@ echo ====================================================
 
 cd /d "%~dp0"
 
-IF EXIST "app\society-os.exe" (
-    start "" "app\society-os.exe"
+IF EXIST "installers\SocietyOS-Installer.exe" (
+    start "" "installers\SocietyOS-Installer.exe"
 ) ELSE (
     java -jar app\society-os.jar
 )
