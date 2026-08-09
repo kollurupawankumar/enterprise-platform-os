@@ -1,0 +1,3 @@
+com/core/os/audit/repository/AuditTrailRepository.class
+com/core/os/audit/entity/AuditTrailEntity.class
+com/core/os/audit/service/AuditTrailService.class

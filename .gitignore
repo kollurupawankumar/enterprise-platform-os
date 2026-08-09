@@ -1,7 +1,63 @@
-node_modules/
-dist/
+# Maven
+target/
+
+# IntelliJ & IDEs
+.idea/
+*.iml
+out/
+
+# Eclipse
+.project
+.classpath
+.settings/
+
+# VS Code
+.vscode/
+
+# macOS & OS files
 .DS_Store
+Thumbs.db
+
+# Node & Frontend (Legacy)
+node_modules/
 env.local
-*.log
 .env
 coverage/
+
+# Application Logs
+logs/
+*.log
+
+# SQLite Database Files
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+
+# Dynamic Storage & Uploads
+backups/
+imports/
+exports/
+certificates/
+uploads/
+
+# Large AI Model Files (>100MB GitHub limit) & Native Executables
+*.gguf
+society-ai.gguf
+ai/models/
+ai/models/society-ai.gguf
+ai/mac/
+ai/windows/
+ai/linux/
+
+# Java Crash Logs
+hs_err_pid*
+replay_pid*
+
+# Temporary files
+*.tmp
+*.bak
+
+# Build Releases & Packaging Outputs
+*.zip
+dist/

@@ -1,2 +1,0 @@
-ALTER TABLE meeting ADD COLUMN is_online INTEGER DEFAULT 0;
-ALTER TABLE meeting ADD COLUMN online_link TEXT;
