@@ -28,22 +28,19 @@ public class MemberController extends BaseController {
     private TableView<MemberDto> memberTable;
 
     @FXML
-    private TableColumn<MemberDto, String> memberNumberCol;
+    private TableColumn<MemberDto, String> memberNumberColumn;
 
     @FXML
-    private TableColumn<MemberDto, String> nameCol;
+    private TableColumn<MemberDto, String> membershipNumberColumn;
 
     @FXML
-    private TableColumn<MemberDto, String> mobileCol;
+    private TableColumn<MemberDto, String> memberNameColumn;
 
     @FXML
-    private TableColumn<MemberDto, String> emailCol;
+    private TableColumn<MemberDto, String> mobileColumn;
 
     @FXML
-    private TableColumn<MemberDto, String> memberTypeCol;
-
-    @FXML
-    private TableColumn<MemberDto, String> statusCol;
+    private TableColumn<MemberDto, String> statusColumn;
 
     @FXML
     private TextField searchField;
@@ -64,42 +61,32 @@ public class MemberController extends BaseController {
     @FXML
     public void initialize() {
 
-        memberNumberCol.setCellValueFactory(data ->
-                new SimpleStringProperty(
-                        data.getValue().memberNumber()));
+        if (memberNumberColumn != null) {
+            memberNumberColumn.setCellValueFactory(data ->
+                    new SimpleStringProperty(data.getValue().memberNumber()));
+        }
 
-        nameCol.setCellValueFactory(data -> {
+        if (membershipNumberColumn != null) {
+            membershipNumberColumn.setCellValueFactory(data ->
+                    new SimpleStringProperty(data.getValue().membershipNumber() != null ? data.getValue().membershipNumber() : ""));
+        }
 
-            String fullName =
-                    data.getValue().firstName()
-                            + " "
-                            + (data.getValue().lastName() != null
-                            ? data.getValue().lastName()
-                            : "");
+        if (memberNameColumn != null) {
+            memberNameColumn.setCellValueFactory(data -> {
+                String fullName = data.getValue().firstName() + " " + (data.getValue().lastName() != null ? data.getValue().lastName() : "");
+                return new SimpleStringProperty(fullName.trim());
+            });
+        }
 
-            return new SimpleStringProperty(fullName.trim());
+        if (mobileColumn != null) {
+            mobileColumn.setCellValueFactory(data ->
+                    new SimpleStringProperty(data.getValue().mobileNumber()));
+        }
 
-        });
-
-        mobileCol.setCellValueFactory(data ->
-                new SimpleStringProperty(
-                        data.getValue().mobileNumber()));
-
-        emailCol.setCellValueFactory(data ->
-                new SimpleStringProperty(
-                        data.getValue().email()));
-
-        memberTypeCol.setCellValueFactory(data ->
-                new SimpleStringProperty(
-                        data.getValue().memberType() != null
-                                ? data.getValue().memberType()
-                                : ""));
-
-        statusCol.setCellValueFactory(data ->
-                new SimpleStringProperty(
-                        data.getValue().status() != null
-                                ? data.getValue().status().name()
-                                : "ACTIVE"));
+        if (statusColumn != null) {
+            statusColumn.setCellValueFactory(data ->
+                    new SimpleStringProperty(data.getValue().status() != null ? data.getValue().status().name() : "ACTIVE"));
+        }
 
         loadMembers();
 
