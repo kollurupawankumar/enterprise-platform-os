@@ -1,5 +1,7 @@
 package com.core.os.config.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -15,15 +17,21 @@ import java.util.zip.ZipOutputStream;
 @Service
 public class BackupService {
 
+    private static final Logger log = LoggerFactory.getLogger(BackupService.class);
+
     public String createSystemBackup(String dbPath, String targetBackupDir) throws IOException {
+        log.info("Initiating system database backup for path: {}", dbPath);
+
         File dbFile = new File(dbPath);
         if (!dbFile.exists()) {
+            log.error("Database backup failed: File not found at {}", dbPath);
             throw new IllegalArgumentException("Database file not found at path: " + dbPath);
         }
 
         File backupDir = new File(targetBackupDir);
         if (!backupDir.exists()) {
             backupDir.mkdirs();
+            log.info("Created backup directory: {}", targetBackupDir);
         }
 
         String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
@@ -45,6 +53,7 @@ public class BackupService {
             zos.closeEntry();
         }
 
+        log.info("System database backup completed successfully: {}", zipFile.getAbsolutePath());
         return zipFile.getAbsolutePath();
     }
 }

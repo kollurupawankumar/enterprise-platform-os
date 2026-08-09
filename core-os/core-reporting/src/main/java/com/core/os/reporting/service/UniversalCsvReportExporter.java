@@ -1,5 +1,7 @@
 package com.core.os.reporting.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -11,7 +13,11 @@ import java.util.List;
 @Service
 public class UniversalCsvReportExporter {
 
+    private static final Logger log = LoggerFactory.getLogger(UniversalCsvReportExporter.class);
+
     public String exportToCsv(String reportName, List<String> headers, List<List<String>> rows, String targetDir) throws IOException {
+        log.info("Generating universal CSV report: '{}' with {} rows", reportName, rows.size());
+
         File dir = new File(targetDir);
         if (!dir.exists()) {
             dir.mkdirs();
@@ -27,6 +33,7 @@ public class UniversalCsvReportExporter {
             }
         }
 
+        log.info("Universal CSV report generated successfully: {}", csvFile.getAbsolutePath());
         return csvFile.getAbsolutePath();
     }
 

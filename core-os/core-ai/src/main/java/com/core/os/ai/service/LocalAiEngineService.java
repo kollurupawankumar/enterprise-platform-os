@@ -1,5 +1,7 @@
 package com.core.os.ai.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -9,6 +11,7 @@ import java.nio.file.Paths;
 @Service
 public class LocalAiEngineService {
 
+    private static final Logger log = LoggerFactory.getLogger(LocalAiEngineService.class);
     private Process aiProcess;
 
     public void startLocalAiServer() {
@@ -39,18 +42,19 @@ public class LocalAiEngineService {
                         "-c", "4096"
                 );
                 this.aiProcess = pb.start();
-                System.out.println("🤖 Local AI Engine started successfully (" + osFolder + ")");
+                log.info("Local AI Engine started successfully on port 8080 ({})", osFolder);
             } catch (IOException e) {
-                System.err.println("Failed to start local AI server: " + e.getMessage());
+                log.error("Failed to start local AI server: {}", e.getMessage(), e);
             }
         } else {
-            System.out.println("ℹ️ Local AI binary or model not found under ./ai directory. Running without offline AI.");
+            log.info("Local AI binary or model not found under ./ai directory. Running without offline AI.");
         }
     }
 
     public void stopLocalAiServer() {
         if (aiProcess != null && aiProcess.isAlive()) {
             aiProcess.destroyForcibly();
+            log.info("Local AI Engine process stopped.");
         }
     }
 }

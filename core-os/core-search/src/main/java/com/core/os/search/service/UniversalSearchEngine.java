@@ -1,6 +1,8 @@
 package com.core.os.search.service;
 
 import com.core.os.search.model.SearchResultItem;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -8,6 +10,8 @@ import java.util.List;
 
 @Service
 public class UniversalSearchEngine {
+
+    private static final Logger log = LoggerFactory.getLogger(UniversalSearchEngine.class);
 
     public interface SearchProvider {
         List<SearchResultItem> search(String query);
@@ -17,6 +21,7 @@ public class UniversalSearchEngine {
 
     public void registerProvider(SearchProvider provider) {
         this.providers.add(provider);
+        log.info("Registered search provider: {}", provider.getClass().getSimpleName());
     }
 
     public List<SearchResultItem> searchAll(String query) {
@@ -25,13 +30,16 @@ public class UniversalSearchEngine {
             return results;
         }
 
+        log.debug("Executing universal search for query: '{}'", query);
         for (SearchProvider provider : providers) {
             try {
-                results.addAll(provider.search(query.trim().toLowerCase()));
+                List<SearchResultItem> items = provider.search(query.trim().toLowerCase());
+                results.addAll(items);
             } catch (Exception ex) {
-                System.err.println("Search provider error: " + ex.getMessage());
+                log.error("Search provider {} error: {}", provider.getClass().getSimpleName(), ex.getMessage(), ex);
             }
         }
+        log.debug("Universal search for '{}' completed with {} total results", query, results.size());
         return results;
     }
 }
