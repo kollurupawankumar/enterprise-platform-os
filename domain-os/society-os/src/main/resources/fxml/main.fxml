@@ -98,6 +98,12 @@
                     text="Administration"
                     onAction="#openAdministration"/>
 
+            <Button
+                    fx:id="aiCopilotButton"
+                    text="🤖 AI Copilot"
+                    onAction="#toggleAiCopilot"
+                    style="-fx-background-color: #1F4E79; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;"/>
+
         </VBox>
 
     </left>
@@ -107,6 +113,10 @@
         <StackPane fx:id="contentHost"/>
 
     </center>
+
+    <right>
+        <fx:include fx:id="aiCopilotInclude" source="/fxml/ai/ai_copilot.fxml"/>
+    </right>
 
     <bottom>
 

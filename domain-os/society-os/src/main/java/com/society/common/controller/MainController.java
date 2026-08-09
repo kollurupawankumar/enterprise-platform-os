@@ -1,5 +1,6 @@
 package com.society.common.controller;
 
+import com.society.ai.controller.AiCopilotController;
 import com.society.app.StartupCoordinator;
 import com.society.common.navigation.NavigationManager;
 import com.society.common.navigation.NavigationState;
@@ -8,9 +9,9 @@ import com.society.society.context.SocietyContext;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -64,6 +65,14 @@ public class MainController extends BaseController {
     @FXML
     private Button budgetAuditButton;
 
+    @FXML
+    private Button aiCopilotButton;
+
+    @FXML
+    private VBox aiCopilotInclude;
+
+    @FXML
+    private AiCopilotController aiCopilotIncludeController;
 
     private final StartupCoordinator startupCoordinator;
     private final SocietyContext societyContext;
@@ -73,6 +82,7 @@ public class MainController extends BaseController {
     private javafx.scene.Node initialTop;
     private javafx.scene.Node initialLeft;
     private javafx.scene.Node initialBottom;
+    private javafx.scene.Node initialRight;
 
     private static final String ACTIVE_STYLE = "navigation-button-active";
 
@@ -99,6 +109,14 @@ public class MainController extends BaseController {
         initialTop = rootBorderPane.getTop();
         initialLeft = rootBorderPane.getLeft();
         initialBottom = rootBorderPane.getBottom();
+        initialRight = rootBorderPane.getRight();
+
+        // Default: Copilot drawer is hidden until user clicks "🤖 AI Copilot" button
+        rootBorderPane.setRight(null);
+
+        if (aiCopilotIncludeController != null) {
+            aiCopilotIncludeController.setOnCloseHandler(() -> rootBorderPane.setRight(null));
+        }
 
         navigationManager.setContentHost(contentHost);
 
@@ -107,6 +125,7 @@ public class MainController extends BaseController {
                 rootBorderPane.setTop(null);
                 rootBorderPane.setLeft(null);
                 rootBorderPane.setBottom(null);
+                rootBorderPane.setRight(null);
             } else {
                 rootBorderPane.setTop(initialTop);
                 rootBorderPane.setLeft(initialLeft);
@@ -119,6 +138,15 @@ public class MainController extends BaseController {
         });
 
         startupCoordinator.start();
+    }
+
+    @FXML
+    private void toggleAiCopilot() {
+        if (rootBorderPane.getRight() == null) {
+            rootBorderPane.setRight(initialRight);
+        } else {
+            rootBorderPane.setRight(null);
+        }
     }
 
     private void navigateAuthorized(View view, String module) {
@@ -204,14 +232,6 @@ public class MainController extends BaseController {
         navigateAuthorized(View.BUDGET_AUDIT, "BUDGET_AUDIT");
     }
 
-    private void showNotImplemented(String module) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Module");
-        alert.setHeaderText(null);
-        alert.setContentText(module + " module will be available in a future commit.");
-        alert.showAndWait();
-    }
-
     private void updateNavigation() {
         // Role-based Sidebar Button Visibility & Managed Status
         setButtonVisibility(dashboardButton, "DASHBOARD");
@@ -276,6 +296,4 @@ public class MainController extends BaseController {
         btn.setVisible(allowed);
         btn.setManaged(allowed);
     }
-
-
 }
