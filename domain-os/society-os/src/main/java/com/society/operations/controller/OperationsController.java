@@ -20,6 +20,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -29,6 +31,8 @@ import java.util.Optional;
 
 @Component
 public class OperationsController extends BaseController {
+
+    private static final Logger log = LoggerFactory.getLogger(OperationsController.class);
 
     private final OperationsService operationsService;
     private final FileStorageService fileStorageService;

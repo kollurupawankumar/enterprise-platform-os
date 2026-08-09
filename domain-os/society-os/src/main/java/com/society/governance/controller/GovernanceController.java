@@ -15,6 +15,8 @@ import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javafx.print.PrinterJob;
@@ -26,6 +28,8 @@ import java.util.Optional;
 
 @Component
 public class GovernanceController extends BaseController {
+
+    private static final Logger log = LoggerFactory.getLogger(GovernanceController.class);
 
     private final GovernanceService governanceService;
     private final MemberRepository memberRepository;

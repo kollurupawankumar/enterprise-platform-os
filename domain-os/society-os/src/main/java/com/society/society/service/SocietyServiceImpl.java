@@ -3,6 +3,8 @@ package com.society.society.service;
 import com.society.society.dto.SocietyDto;
 import com.society.society.entity.SocietyEntity;
 import com.society.society.repository.SocietyRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,6 +13,8 @@ import java.util.Optional;
 @Service
 @Transactional
 public class SocietyServiceImpl implements SocietyService {
+
+    private static final Logger log = LoggerFactory.getLogger(SocietyServiceImpl.class);
 
     private final SocietyRepository repository;
 
@@ -29,6 +33,7 @@ public class SocietyServiceImpl implements SocietyService {
 
     @Override
     public SocietyDto save(SocietyDto dto) {
+        log.info("Updating society profile details for: {}", dto.name());
 
         SocietyEntity entity = repository.findFirstByActiveTrue().orElse(new SocietyEntity());
 

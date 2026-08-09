@@ -15,6 +15,8 @@ import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -22,6 +24,8 @@ import java.util.Optional;
 
 @Component
 public class FinanceController extends BaseController {
+
+    private static final Logger log = LoggerFactory.getLogger(FinanceController.class);
 
     private final BankAccountRepository bankAccountRepository;
     private final ExpenseRepository expenseRepository;

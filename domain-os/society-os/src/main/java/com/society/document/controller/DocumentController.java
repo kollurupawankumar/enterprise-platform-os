@@ -11,6 +11,8 @@ import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -22,6 +24,8 @@ import java.util.stream.Collectors;
 
 @Component
 public class DocumentController extends BaseController {
+
+    private static final Logger log = LoggerFactory.getLogger(DocumentController.class);
 
     private final DocumentRepository documentRepository;
 
