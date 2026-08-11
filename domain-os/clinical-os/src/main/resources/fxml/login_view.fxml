@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" spacing="15" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.clinical.ui.controller.LoginViewController"
+      style="-fx-background-color: #0F172A; -fx-padding: 40;">
+
+    <VBox alignment="CENTER" spacing="15" maxWidth="380"
+          style="-fx-background-color: #1E293B; -fx-padding: 30; -fx-background-radius: 12; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 10, 0, 0, 0);">
+
+        <Label text="🏥 ClinicalOS" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+        <Label text="Role-Based Secure Portal Access" style="-fx-font-size: 13px; -fx-text-fill: #94A3B8;"/>
+
+        <Separator prefWidth="300" style="-fx-padding: 5 0 10 0;"/>
+
+        <VBox spacing="6" alignment="CENTER_LEFT">
+            <Label text="Select Demo User Role:" style="-fx-text-fill: #CBD5E1; -fx-font-weight: bold;"/>
+            <ComboBox fx:id="roleCombo" prefWidth="320"/>
+        </VBox>
+
+        <VBox spacing="6" alignment="CENTER_LEFT">
+            <Label text="Username:" style="-fx-text-fill: #CBD5E1; -fx-font-weight: bold;"/>
+            <TextField fx:id="usernameField" promptText="Enter username" prefWidth="320"/>
+        </VBox>
+
+        <VBox spacing="6" alignment="CENTER_LEFT">
+            <Label text="Password:" style="-fx-text-fill: #CBD5E1; -fx-font-weight: bold;"/>
+            <PasswordField fx:id="passwordField" promptText="Enter password" prefWidth="320"/>
+        </VBox>
+
+        <Label fx:id="errorLabel" style="-fx-text-fill: #EF4444; -fx-font-weight: bold;" visible="false"/>
+
+        <Button text="Sign In to ClinicalOS" onAction="#handleLogin" prefWidth="320"
+                style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10; -fx-cursor: hand;"/>
+
+    </VBox>
+</VBox>

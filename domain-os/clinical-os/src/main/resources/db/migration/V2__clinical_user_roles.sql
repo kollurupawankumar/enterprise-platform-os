@@ -1,0 +1,20 @@
+-- Add Users and Roles table for authentication and access control
+
+CREATE TABLE IF NOT EXISTS clinical_user (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    full_name VARCHAR(100) NOT NULL,
+    role VARCHAR(32) NOT NULL, -- ADMIN, RECEPTIONIST, DOCTOR, LAB_TECHNICIAN, PHARMACIST, ACCOUNTANT
+    active INTEGER DEFAULT 1,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Seed Default Users for each role (default password: password123)
+INSERT OR IGNORE INTO clinical_user (username, password_hash, full_name, role) VALUES
+('admin', '$2a$10$7R4Q7zP1y7A2E5Z6G7H8I9J0K1L2M3N4O5P6Q7R8S9T0U1V2W3X4Y', 'System Administrator', 'ADMIN'),
+('receptionist', '$2a$10$7R4Q7zP1y7A2E5Z6G7H8I9J0K1L2M3N4O5P6Q7R8S9T0U1V2W3X4Y', 'Anita Sharma', 'RECEPTIONIST'),
+('doctor', '$2a$10$7R4Q7zP1y7A2E5Z6G7H8I9J0K1L2M3N4O5P6Q7R8S9T0U1V2W3X4Y', 'Dr. Suresh Kumar', 'DOCTOR'),
+('labtech', '$2a$10$7R4Q7zP1y7A2E5Z6G7H8I9J0K1L2M3N4O5P6Q7R8S9T0U1V2W3X4Y', 'Ramesh Lab Tech', 'LAB_TECHNICIAN'),
+('pharmacist', '$2a$10$7R4Q7zP1y7A2E5Z6G7H8I9J0K1L2M3N4O5P6Q7R8S9T0U1V2W3X4Y', 'Priya Pharmacist', 'PHARMACIST'),
+('accountant', '$2a$10$7R4Q7zP1y7A2E5Z6G7H8I9J0K1L2M3N4O5P6Q7R8S9T0U1V2W3X4Y', 'Vikas Accountant', 'ACCOUNTANT');

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="15" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.clinical.ui.controller.BillingViewController"
+      style="-fx-background-color: #F8FAFC; -fx-padding: 20;">
+    <Label text="Billing &amp; Payment Receipts" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+    <GridPane hgap="15" vgap="10" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;">
+        <Label text="Visit ID:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+        <TextField fx:id="visitIdField" promptText="VISIT-2026-000001" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+        <Label text="Consultation Fee (₹):" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        <TextField fx:id="consultationFeeField" text="500" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+        <Label text="Lab Fee (₹):" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+        <TextField fx:id="labFeeField" text="300" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+        <Label text="Pharmacy Fee (₹):" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+        <TextField fx:id="pharmacyFeeField" text="200" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+        <Label text="Payment Mode:" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+        <ComboBox fx:id="paymentModeCombo" prefWidth="200" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+
+        <Button text="Generate Invoice &amp; Process Payment" onAction="#handleGenerateInvoice" style="-fx-background-color: #D97706; -fx-text-fill: white; -fx-font-weight: bold;" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+    </GridPane>
+</VBox>

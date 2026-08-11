@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.clinical.ui.controller.MainClinicalController"
+            style="-fx-background-color: #0F172A;">
+    <!-- Top Header -->
+    <top>
+        <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-background-color: #1E293B; -fx-padding: 15;">
+            <Label text="🏥 ClinicalOS - Enterprise Hospital Platform" style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="userRoleLabel" text="Not Logged In" style="-fx-text-fill: #94A3B8; -fx-font-size: 14px;"/>
+            <Button text="Sign Out" onAction="#handleSignOut" style="-fx-background-color: #DC2626; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;"/>
+        </HBox>
+    </top>
+
+    <!-- Sidebar Navigation -->
+    <left>
+        <VBox spacing="10" prefWidth="220" style="-fx-background-color: #1E293B; -fx-padding: 15;">
+            <Button fx:id="patientBtn" text="1. PatientOS" onAction="#showPatientModule" style="-fx-background-color: #334155; -fx-text-fill: white; -fx-alignment: BASELINE_LEFT;" prefWidth="190"/>
+            <Button fx:id="doctorRosterBtn" text="2. Doctor Roster" onAction="#showDoctorRosterModule" style="-fx-background-color: #334155; -fx-text-fill: white; -fx-alignment: BASELINE_LEFT;" prefWidth="190"/>
+            <Button fx:id="visitBtn" text="3. Visit Queue" onAction="#showVisitModule" style="-fx-background-color: #334155; -fx-text-fill: white; -fx-alignment: BASELINE_LEFT;" prefWidth="190"/>
+            <Button fx:id="doctorBtn" text="4. Doctor Consultation" onAction="#showDoctorModule" style="-fx-background-color: #334155; -fx-text-fill: white; -fx-alignment: BASELINE_LEFT;" prefWidth="190"/>
+            <Button fx:id="labBtn" text="5. Laboratory" onAction="#showLabModule" style="-fx-background-color: #334155; -fx-text-fill: white; -fx-alignment: BASELINE_LEFT;" prefWidth="190"/>
+            <Button fx:id="pharmacyBtn" text="6. Pharmacy" onAction="#showPharmacyModule" style="-fx-background-color: #334155; -fx-text-fill: white; -fx-alignment: BASELINE_LEFT;" prefWidth="190"/>
+            <Button fx:id="billingBtn" text="7. Billing &amp; Receipts" onAction="#showBillingModule" style="-fx-background-color: #334155; -fx-text-fill: white; -fx-alignment: BASELINE_LEFT;" prefWidth="190"/>
+            <Button fx:id="adminBtn" text="8. Administration" onAction="#showAdminModule" style="-fx-background-color: #334155; -fx-text-fill: white; -fx-alignment: BASELINE_LEFT;" prefWidth="190"/>
+        </VBox>
+    </left>
+
+    <!-- Main Content Area -->
+    <center>
+        <StackPane fx:id="mainContentArea"/>
+    </center>
+</BorderPane>

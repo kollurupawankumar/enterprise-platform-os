@@ -24,6 +24,7 @@
         <module>core-os/core-reporting</module>
         <module>core-os/core-search</module>
         <module>domain-os/society-os</module>
+        <module>domain-os/clinical-os</module>
     </modules>
 
     <properties>

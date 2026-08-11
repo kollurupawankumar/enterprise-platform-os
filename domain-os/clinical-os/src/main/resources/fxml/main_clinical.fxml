@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="15" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.clinical.ui.controller.ClinicalDashboardController"
+      style="-fx-background-color: #F8FAFC; -fx-padding: 20;">
+
+    <Label text="ClinicalOS - OPD &amp; Patient Management" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+
+    <HBox spacing="20">
+        <!-- Patient Registration Card -->
+        <VBox spacing="10" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);" prefWidth="320">
+            <Label text="New Patient Registration" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+            <TextField fx:id="firstNameField" promptText="First Name"/>
+            <TextField fx:id="lastNameField" promptText="Last Name"/>
+            <TextField fx:id="phoneField" promptText="Phone Number"/>
+            <ComboBox fx:id="genderCombo" promptText="Select Gender" prefWidth="300"/>
+            <Button text="Register Patient" onAction="#handleRegisterPatient" style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;"/>
+        </VBox>
+
+        <!-- Registered Patients Table -->
+        <VBox spacing="10" HBox.hgrow="ALWAYS" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);">
+            <Label text="Registered Longitudinal Patient Directory" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+            <TableView fx:id="patientTable" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="idCol" text="Patient ID" prefWidth="120"/>
+                    <TableColumn fx:id="nameCol" text="Name" prefWidth="180"/>
+                    <TableColumn fx:id="phoneCol" text="Phone" prefWidth="140"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </HBox>
+</VBox>
