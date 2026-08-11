@@ -1,28 +1,177 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
 <VBox spacing="15" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.clinical.ui.controller.PatientViewController"
       style="-fx-background-color: #F8FAFC; -fx-padding: 20;">
-    <Label text="PatientOS - Longitudinal Patient Directory" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
-    <HBox spacing="15">
-        <VBox spacing="8" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;" prefWidth="300">
-            <Label text="Register New Patient" style="-fx-font-weight: bold;"/>
-            <TextField fx:id="firstNameField" promptText="First Name"/>
-            <TextField fx:id="lastNameField" promptText="Last Name"/>
-            <TextField fx:id="phoneField" promptText="Phone Number"/>
-            <Button text="Register" onAction="#handleRegister" style="-fx-background-color: #2563EB; -fx-text-fill: white;"/>
-        </VBox>
-        <VBox spacing="8" HBox.hgrow="ALWAYS" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;">
-            <Label text="Patient Directory" style="-fx-font-weight: bold;"/>
-            <TableView fx:id="patientTable" VBox.vgrow="ALWAYS">
-                <columns>
-                    <TableColumn fx:id="idCol" text="Patient ID" prefWidth="120"/>
-                    <TableColumn fx:id="nameCol" text="Name" prefWidth="180"/>
-                    <TableColumn fx:id="phoneCol" text="Phone" prefWidth="140"/>
-                </columns>
-            </TableView>
-        </VBox>
-    </HBox>
+
+    <Label text="PatientOS - Longitudinal Patient Management" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+
+    <TabPane tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+
+        <!-- TAB 1: Structured V1 Patient Registration -->
+        <Tab text="Patient Registration (V1)">
+            <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;">
+                <VBox spacing="15" style="-fx-padding: 15;">
+
+                    <!-- 1. Identification & Type -->
+                    <TitledPane text="1. Identification &amp; Type" expanded="true">
+                        <GridPane hgap="15" vgap="10" style="-fx-padding: 10;">
+                            <Label text="Patient Type:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                            <ComboBox fx:id="patientTypeCombo" prefWidth="180" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                            <Label text="First Name *:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                            <TextField fx:id="firstNameField" promptText="First Name" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                            <Label text="Last Name *:" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+                            <TextField fx:id="lastNameField" promptText="Last Name" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
+
+                            <Label text="Gender *:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                            <ComboBox fx:id="genderCombo" prefWidth="180" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                            <Label text="Date of Birth:" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
+                            <HBox spacing="8" GridPane.columnIndex="3" GridPane.rowIndex="2">
+                                <DatePicker fx:id="dobPicker" prefWidth="160"/>
+                                <Label fx:id="ageLabel" text="Age: --" style="-fx-font-weight: bold; -fx-padding: 4 0 0 0;"/>
+                            </HBox>
+                        </GridPane>
+                    </TitledPane>
+
+                    <!-- 2. Contact Details -->
+                    <TitledPane text="2. Contact &amp; Address Details" expanded="true">
+                        <GridPane hgap="15" vgap="10" style="-fx-padding: 10;">
+                            <Label text="Mobile Number *:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                            <TextField fx:id="phoneField" promptText="10-digit mobile" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                            <Label text="Alternate Mobile:" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+                            <TextField fx:id="altPhoneField" promptText="Alternate mobile" GridPane.columnIndex="3" GridPane.rowIndex="0"/>
+
+                            <Label text="Email Address:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                            <TextField fx:id="emailField" promptText="Email" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                            <Label text="Address Line 1:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                            <TextField fx:id="address1Field" promptText="House/Building/Street" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                            <Label text="City:" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
+                            <TextField fx:id="cityField" promptText="City" GridPane.columnIndex="3" GridPane.rowIndex="2"/>
+
+                            <Label text="State:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                            <TextField fx:id="stateField" promptText="State" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+                            <Label text="PIN Code:" GridPane.columnIndex="2" GridPane.rowIndex="3"/>
+                            <TextField fx:id="pincodeField" promptText="PIN code" GridPane.columnIndex="3" GridPane.rowIndex="3"/>
+                        </GridPane>
+                    </TitledPane>
+
+                    <!-- 3. Identity Details -->
+                    <TitledPane text="3. Identity Verification" expanded="false">
+                        <GridPane hgap="15" vgap="10" style="-fx-padding: 10;">
+                            <Label text="Identity Type:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                            <ComboBox fx:id="identityTypeCombo" prefWidth="180" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                            <Label text="Identity Number:" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+                            <TextField fx:id="identityNumberField" promptText="e.g. Aadhaar / PAN / Passport" GridPane.columnIndex="3" GridPane.rowIndex="0"/>
+                        </GridPane>
+                    </TitledPane>
+
+                    <!-- 4. Demographics -->
+                    <TitledPane text="4. Demographic Details" expanded="false">
+                        <GridPane hgap="15" vgap="10" style="-fx-padding: 10;">
+                            <Label text="Marital Status:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                            <ComboBox fx:id="maritalCombo" prefWidth="180" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                            <Label text="Occupation:" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+                            <TextField fx:id="occupationField" promptText="Occupation" GridPane.columnIndex="3" GridPane.rowIndex="0"/>
+
+                            <Label text="Preferred Language:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                            <ComboBox fx:id="languageCombo" prefWidth="180" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                        </GridPane>
+                    </TitledPane>
+
+                    <!-- 5. Emergency Contact -->
+                    <TitledPane text="5. Emergency Contact" expanded="true">
+                        <GridPane hgap="15" vgap="10" style="-fx-padding: 10;">
+                            <Label text="Contact Name:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                            <TextField fx:id="emergNameField" promptText="Emergency contact name" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                            <Label text="Relationship:" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+                            <ComboBox fx:id="emergRelCombo" prefWidth="180" GridPane.columnIndex="3" GridPane.rowIndex="0"/>
+
+                            <Label text="Mobile Number:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                            <TextField fx:id="emergPhoneField" promptText="Emergency mobile" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                        </GridPane>
+                    </TitledPane>
+
+                    <!-- 6. Patient-Reported Medical Alerts -->
+                    <TitledPane text="6. Basic Medical Alerts (Patient Reported)" expanded="true">
+                        <GridPane hgap="15" vgap="10" style="-fx-padding: 10;">
+                            <Label text="Known Allergies:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                            <ComboBox fx:id="allergiesStatusCombo" prefWidth="180" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                            <Label text="Allergy Details:" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+                            <TextField fx:id="allergiesListField" promptText="Penicillin, Food, etc." GridPane.columnIndex="3" GridPane.rowIndex="0"/>
+
+                            <Label text="Patient Reported Alerts:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                            <TextField fx:id="reportedAlertsField" promptText="Diabetes, Hypertension, Asthma" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="1"/>
+                        </GridPane>
+                    </TitledPane>
+
+                    <!-- 7. Guardian Details (Conditional for Minor < 18) -->
+                    <TitledPane fx:id="guardianPane" text="7. Guardian Details (Required for Minors < 18)" expanded="true">
+                        <GridPane hgap="15" vgap="10" style="-fx-padding: 10;">
+                            <Label text="Guardian Name:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                            <TextField fx:id="guardianNameField" promptText="Parent / Guardian name" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                            <Label text="Relationship:" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+                            <ComboBox fx:id="guardianRelCombo" prefWidth="180" GridPane.columnIndex="3" GridPane.rowIndex="0"/>
+
+                            <Label text="Guardian Mobile:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                            <TextField fx:id="guardianPhoneField" promptText="Guardian phone" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                        </GridPane>
+                    </TitledPane>
+
+                    <!-- 8. Insurance / Payment Category -->
+                    <TitledPane text="8. Insurance / Payment Category" expanded="false">
+                        <GridPane hgap="15" vgap="10" style="-fx-padding: 10;">
+                            <Label text="Payment Category:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                            <ComboBox fx:id="paymentCategoryCombo" prefWidth="180" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                            <Label text="Insurance Provider:" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+                            <TextField fx:id="insuranceProviderField" promptText="Provider name" GridPane.columnIndex="3" GridPane.rowIndex="0"/>
+                        </GridPane>
+                    </TitledPane>
+
+                    <!-- Save Action -->
+                    <HBox alignment="CENTER_RIGHT" spacing="10">
+                        <Button text="Clear Form" onAction="#handleClearForm" style="-fx-background-color: #94A3B8; -fx-text-fill: white;"/>
+                        <Button text="Save Patient Registration" onAction="#handleRegister" style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 20 8 20;"/>
+                    </HBox>
+
+                </VBox>
+            </ScrollPane>
+        </Tab>
+
+        <!-- TAB 2: Longitudinal Directory & Patient Search -->
+        <Tab text="Longitudinal Patient Directory">
+            <VBox spacing="10" style="-fx-padding: 15;">
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="Quick Search:" style="-fx-font-weight: bold;"/>
+                    <TextField fx:id="searchField" promptText="Search by Patient ID, Mobile, or Name" prefWidth="300"/>
+                    <Button text="Search" onAction="#handleSearch" style="-fx-background-color: #475569; -fx-text-fill: white;"/>
+                </HBox>
+                <TableView fx:id="patientTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="idCol" text="Patient ID" prefWidth="140"/>
+                        <TableColumn fx:id="nameCol" text="Full Name" prefWidth="180"/>
+                        <TableColumn fx:id="genderCol" text="Gender" prefWidth="80"/>
+                        <TableColumn fx:id="ageCol" text="Age" prefWidth="60"/>
+                        <TableColumn fx:id="phoneCol" text="Mobile Number" prefWidth="130"/>
+                        <TableColumn fx:id="categoryCol" text="Category" prefWidth="110"/>
+                    </columns>
+                </TableView>
+            </VBox>
+        </Tab>
+    </TabPane>
 </VBox>

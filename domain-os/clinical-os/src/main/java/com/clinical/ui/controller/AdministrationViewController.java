@@ -1,5 +1,6 @@
 package com.clinical.ui.controller;
 
+import com.clinical.admin.service.ClinicSettingService;
 import com.clinical.admin.service.DatabaseBackupService;
 import com.clinical.security.entity.UserEntity;
 import com.clinical.security.repository.UserRepository;
@@ -13,6 +14,7 @@ public class AdministrationViewController {
 
     private final UserRepository userRepository;
     private final DatabaseBackupService backupService;
+    private final ClinicSettingService clinicSettingService;
 
     @FXML private TextField usernameField;
     @FXML private PasswordField passwordField;
@@ -21,11 +23,16 @@ public class AdministrationViewController {
 
     @FXML private TextField clinicNameField;
     @FXML private TextField registrationNoField;
+    @FXML private TextField idPrefixField;
+    @FXML private TextField idFormatField;
     @FXML private Label backupStatusLabel;
 
-    public AdministrationViewController(UserRepository userRepository, DatabaseBackupService backupService) {
+    public AdministrationViewController(UserRepository userRepository,
+                                        DatabaseBackupService backupService,
+                                        ClinicSettingService clinicSettingService) {
         this.userRepository = userRepository;
         this.backupService = backupService;
+        this.clinicSettingService = clinicSettingService;
     }
 
     @FXML
@@ -34,6 +41,12 @@ public class AdministrationViewController {
             roleCombo.setItems(FXCollections.observableArrayList(
                     "ADMIN", "RECEPTIONIST", "DOCTOR", "LAB_TECHNICIAN", "PHARMACIST", "ACCOUNTANT"
             ));
+        }
+        if (idPrefixField != null) {
+            idPrefixField.setText(clinicSettingService.getSetting("PATIENT_ID_PREFIX", "PAT"));
+        }
+        if (idFormatField != null) {
+            idFormatField.setText(clinicSettingService.getSetting("PATIENT_ID_FORMAT", "PAT-{YYYY}-{SEQ}"));
         }
     }
 
@@ -54,7 +67,18 @@ public class AdministrationViewController {
 
     @FXML
     public void handleSaveClinicSettings() {
-        // Save clinic profile metadata
+        if (idPrefixField != null && !idPrefixField.getText().isEmpty()) {
+            clinicSettingService.saveSetting("PATIENT_ID_PREFIX", idPrefixField.getText());
+        }
+        if (idFormatField != null && !idFormatField.getText().isEmpty()) {
+            clinicSettingService.saveSetting("PATIENT_ID_FORMAT", idFormatField.getText());
+        }
+        if (clinicNameField != null) {
+            clinicSettingService.saveSetting("CLINIC_NAME", clinicNameField.getText());
+        }
+        if (registrationNoField != null) {
+            clinicSettingService.saveSetting("REGISTRATION_NO", registrationNoField.getText());
+        }
     }
 
     @FXML

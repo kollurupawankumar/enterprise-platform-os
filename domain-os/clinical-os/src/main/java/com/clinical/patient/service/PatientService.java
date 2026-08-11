@@ -1,16 +1,20 @@
 package com.clinical.patient.service;
 
+import com.clinical.admin.service.ClinicSettingService;
 import com.clinical.patient.entity.PatientEntity;
 import com.clinical.patient.repository.PatientRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 public interface PatientService {
     PatientEntity registerPatient(PatientEntity patient);
+    PatientEntity updatePatient(PatientEntity patient);
     Optional<PatientEntity> findByPatientId(String patientId);
+    Optional<PatientEntity> findByMobileNumber(String mobileNumber);
     List<PatientEntity> getAllPatients();
 }
 
@@ -19,17 +23,37 @@ public interface PatientService {
 class PatientServiceImpl implements PatientService {
 
     private final PatientRepository patientRepository;
+    private final ClinicSettingService clinicSettingService;
 
-    public PatientServiceImpl(PatientRepository patientRepository) {
+    public PatientServiceImpl(PatientRepository patientRepository, ClinicSettingService clinicSettingService) {
         this.patientRepository = patientRepository;
+        this.clinicSettingService = clinicSettingService;
     }
 
     @Override
     public PatientEntity registerPatient(PatientEntity patient) {
         if (patient.getPatientId() == null || patient.getPatientId().isEmpty()) {
             long count = patientRepository.count() + 1;
-            patient.setPatientId(String.format("PAT-%06d", count));
+            String prefix = clinicSettingService.getSetting("PATIENT_ID_PREFIX", "PAT");
+            String format = clinicSettingService.getSetting("PATIENT_ID_FORMAT", "PAT-{YYYY}-{SEQ}");
+
+            String formattedSeq = String.format("%06d", count);
+            String year = String.valueOf(LocalDate.now().getYear());
+
+            String patientId = format.replace("{PREFIX}", prefix)
+                    .replace("PAT", prefix)
+                    .replace("{YYYY}", year)
+                    .replace("{YEAR}", year)
+                    .replace("{SEQ}", formattedSeq)
+                    .replace("{6DIGIT}", formattedSeq);
+
+            patient.setPatientId(patientId);
         }
+        return patientRepository.save(patient);
+    }
+
+    @Override
+    public PatientEntity updatePatient(PatientEntity patient) {
         return patientRepository.save(patient);
     }
 
@@ -37,6 +61,12 @@ class PatientServiceImpl implements PatientService {
     @Transactional(readOnly = true)
     public Optional<PatientEntity> findByPatientId(String patientId) {
         return patientRepository.findByPatientId(patientId);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<PatientEntity> findByMobileNumber(String mobileNumber) {
+        return patientRepository.findByPhone(mobileNumber);
     }
 
     @Override
