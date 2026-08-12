@@ -11,6 +11,7 @@ import java.util.Optional;
 public interface DoctorService {
     DoctorEntity registerDoctor(DoctorEntity doctor);
     DoctorEntity updateDoctor(DoctorEntity doctor);
+    void deleteDoctor(String doctorId);
     Optional<DoctorEntity> findByDoctorId(String doctorId);
     List<DoctorEntity> getAllDoctors();
     void deactivateDoctor(String doctorId);
@@ -38,6 +39,11 @@ class DoctorServiceImpl implements DoctorService {
     @Override
     public DoctorEntity updateDoctor(DoctorEntity doctor) {
         return doctorRepository.save(doctor);
+    }
+
+    @Override
+    public void deleteDoctor(String doctorId) {
+        doctorRepository.findByDoctorId(doctorId).ifPresent(doctorRepository::delete);
     }
 
     @Override

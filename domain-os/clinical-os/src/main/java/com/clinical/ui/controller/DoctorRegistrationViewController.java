@@ -7,6 +7,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -15,6 +16,10 @@ import java.math.BigDecimal;
 public class DoctorRegistrationViewController {
 
     private final DoctorService doctorService;
+
+    @FXML private ComboBox<String> doctorTypeCombo;
+    @FXML private HBox existingSearchBox;
+    @FXML private TextField existingSearchField;
 
     @FXML private ComboBox<String> titleCombo;
     @FXML private TextField firstNameField;
@@ -42,6 +47,8 @@ public class DoctorRegistrationViewController {
     @FXML private TableColumn<DoctorEntity, String> phoneCol;
     @FXML private TableColumn<DoctorEntity, BigDecimal> feeCol;
 
+    private DoctorEntity currentDoctor;
+
     public DoctorRegistrationViewController(DoctorService doctorService) {
         this.doctorService = doctorService;
     }
@@ -49,11 +56,71 @@ public class DoctorRegistrationViewController {
     @FXML
     public void initialize() {
         setupComboBoxes();
+        setupDoctorTypeListener();
         setupTableColumns();
         loadDoctors();
     }
 
+    private void setupDoctorTypeListener() {
+        if (doctorTypeCombo != null) {
+            doctorTypeCombo.valueProperty().addListener((obs, oldVal, newVal) -> {
+                boolean isExisting = "EXISTING".equals(newVal);
+                if (existingSearchBox != null) {
+                    existingSearchBox.setVisible(isExisting);
+                    existingSearchBox.setManaged(isExisting);
+                }
+            });
+        }
+    }
+
+    @FXML
+    public void handleLookupExistingDoctor() {
+        String query = existingSearchField != null ? existingSearchField.getText() : "";
+        if (query == null || query.trim().isEmpty()) return;
+
+        doctorService.getAllDoctors().stream()
+                .filter(d -> (d.getDoctorId() != null && d.getDoctorId().equalsIgnoreCase(query)) ||
+                             (d.getLicenseNumber() != null && d.getLicenseNumber().equalsIgnoreCase(query)) ||
+                             (d.getPhone() != null && d.getPhone().equalsIgnoreCase(query)) ||
+                             (d.getName() != null && d.getName().toLowerCase().contains(query.toLowerCase())))
+                .findFirst()
+                .ifPresent(d -> {
+                    this.currentDoctor = d;
+                    populateDoctorForm(d);
+                });
+    }
+
+    private void populateDoctorForm(DoctorEntity d) {
+        if (titleCombo != null) titleCombo.getSelectionModel().select(d.getTitle());
+        if (firstNameField != null) firstNameField.setText(d.getFirstName());
+        if (middleNameField != null) middleNameField.setText(d.getMiddleName());
+        if (lastNameField != null) lastNameField.setText(d.getLastName());
+        if (genderCombo != null) genderCombo.getSelectionModel().select(d.getGender());
+
+        if (licenseField != null) licenseField.setText(d.getLicenseNumber());
+        if (regAuthorityField != null) regAuthorityField.setText(d.getRegistrationAuthority());
+        if (specialtyCombo != null) specialtyCombo.getSelectionModel().select(d.getSpecialization());
+        if (qualificationField != null) qualificationField.setText(d.getQualification());
+
+        if (phoneField != null) phoneField.setText(d.getPhone());
+        if (altPhoneField != null) altPhoneField.setText(d.getAlternatePhone());
+        if (emailField != null) emailField.setText(d.getEmail());
+
+        if (feeField != null && d.getConsultationFee() != null) feeField.setText(d.getConsultationFee().toString());
+        if (statusCombo != null) statusCombo.getSelectionModel().select(d.getLifecycleStatus());
+    }
+
+    @FXML
+    public void handleDeleteDoctor() {
+        if (currentDoctor != null && currentDoctor.getDoctorId() != null) {
+            doctorService.deleteDoctor(currentDoctor.getDoctorId());
+            loadDoctors();
+            handleClearForm();
+        }
+    }
+
     private void setupComboBoxes() {
+        if (doctorTypeCombo != null) doctorTypeCombo.setItems(FXCollections.observableArrayList("NEW", "EXISTING"));
         if (titleCombo != null) titleCombo.setItems(FXCollections.observableArrayList("Dr.", "Prof. Dr."));
         if (genderCombo != null) genderCombo.setItems(FXCollections.observableArrayList("Male", "Female", "Other"));
         if (specialtyCombo != null) specialtyCombo.setItems(FXCollections.observableArrayList(
@@ -61,6 +128,7 @@ public class DoctorRegistrationViewController {
         ));
         if (statusCombo != null) statusCombo.setItems(FXCollections.observableArrayList("ACTIVE", "PENDING", "INACTIVE", "SUSPENDED", "TERMINATED"));
 
+        if (doctorTypeCombo != null) doctorTypeCombo.getSelectionModel().select("NEW");
         if (titleCombo != null) titleCombo.getSelectionModel().select("Dr.");
         if (specialtyCombo != null) specialtyCombo.getSelectionModel().select("General Medicine");
         if (statusCombo != null) statusCombo.getSelectionModel().select("ACTIVE");
@@ -81,7 +149,7 @@ public class DoctorRegistrationViewController {
     public void handleSaveDoctor() {
         if (firstNameField == null || firstNameField.getText().isEmpty() || licenseField == null || licenseField.getText().isEmpty()) return;
 
-        DoctorEntity doc = new DoctorEntity();
+        DoctorEntity doc = (currentDoctor != null) ? currentDoctor : new DoctorEntity();
         doc.setTitle(titleCombo != null ? titleCombo.getValue() : "Dr.");
         doc.setFirstName(firstNameField.getText());
         doc.setMiddleName(middleNameField != null ? middleNameField.getText() : "");
@@ -104,13 +172,18 @@ public class DoctorRegistrationViewController {
         }
         if (statusCombo != null) doc.setLifecycleStatus(statusCombo.getValue());
 
-        doctorService.registerDoctor(doc);
+        if (currentDoctor != null && currentDoctor.getId() != null) {
+            doctorService.updateDoctor(doc);
+        } else {
+            doctorService.registerDoctor(doc);
+        }
         loadDoctors();
         handleClearForm();
     }
 
     @FXML
     public void handleClearForm() {
+        this.currentDoctor = null;
         if (firstNameField != null) firstNameField.clear();
         if (middleNameField != null) middleNameField.clear();
         if (lastNameField != null) lastNameField.clear();
@@ -120,6 +193,7 @@ public class DoctorRegistrationViewController {
         if (phoneField != null) phoneField.clear();
         if (altPhoneField != null) altPhoneField.clear();
         if (emailField != null) emailField.clear();
+        if (existingSearchField != null) existingSearchField.clear();
         if (feeField != null) feeField.setText("500");
     }
 
