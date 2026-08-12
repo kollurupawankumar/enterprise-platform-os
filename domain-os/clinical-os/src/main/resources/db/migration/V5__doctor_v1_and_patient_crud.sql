@@ -1,22 +1,5 @@
 -- Migration V5: Doctor V1 Architecture and Patient Soft Delete
 
-ALTER TABLE doctor ADD COLUMN title VARCHAR(20) DEFAULT 'Dr.';
-ALTER TABLE doctor ADD COLUMN middle_name VARCHAR(50);
-ALTER TABLE doctor ADD COLUMN display_name VARCHAR(150);
-ALTER TABLE doctor ADD COLUMN dob DATE;
-ALTER TABLE doctor ADD COLUMN gender VARCHAR(20);
-ALTER TABLE doctor ADD COLUMN profile_photo_path VARCHAR(255);
-ALTER TABLE doctor ADD COLUMN registration_authority VARCHAR(150);
-ALTER TABLE doctor ADD COLUMN registration_state VARCHAR(100);
-ALTER TABLE doctor ADD COLUMN registration_date DATE;
-ALTER TABLE doctor ADD COLUMN qualification VARCHAR(255);
-ALTER TABLE doctor ADD COLUMN alternate_phone VARCHAR(20);
-ALTER TABLE doctor ADD COLUMN address TEXT;
-ALTER TABLE doctor ADD COLUMN city VARCHAR(100);
-ALTER TABLE doctor ADD COLUMN state VARCHAR(100);
-ALTER TABLE doctor ADD COLUMN pincode VARCHAR(20);
-ALTER TABLE doctor ADD COLUMN lifecycle_status VARCHAR(32) DEFAULT 'ACTIVE'; -- PENDING, ACTIVE, INACTIVE, SUSPENDED, TERMINATED
-
 -- Specialty Master Data
 CREATE TABLE IF NOT EXISTS specialty (
     id INTEGER PRIMARY KEY AUTOINCREMENT,

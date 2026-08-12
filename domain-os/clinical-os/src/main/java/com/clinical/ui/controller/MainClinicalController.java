@@ -112,7 +112,8 @@ public class MainClinicalController {
             if (mainContentArea != null) {
                 mainContentArea.getChildren().setAll(view);
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
+            e.printStackTrace();
             throw new RuntimeException("Failed to load view: " + fxmlPath, e);
         }
     }
