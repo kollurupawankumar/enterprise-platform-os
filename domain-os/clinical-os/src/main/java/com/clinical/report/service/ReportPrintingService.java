@@ -1,5 +1,6 @@
 package com.clinical.report.service;
 
+import com.clinical.admin.service.ClinicSettingService;
 import com.clinical.billing.entity.InvoiceEntity;
 import com.clinical.doctor.entity.ClinicalEncounterEntity;
 import com.clinical.doctor.entity.DoctorEntity;
@@ -12,6 +13,7 @@ import com.clinical.prescription.entity.PrescriptionItemEntity;
 import javafx.print.PrinterJob;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -23,6 +25,17 @@ import java.util.List;
 public class ReportPrintingService {
 
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd-MMM-yyyy HH:mm");
+
+    private final ClinicSettingService clinicSettingService;
+
+    @Autowired
+    public ReportPrintingService(ClinicSettingService clinicSettingService) {
+        this.clinicSettingService = clinicSettingService;
+    }
+
+    public ReportPrintingService() {
+        this.clinicSettingService = null;
+    }
 
     // 1. Patient EHR Summary HTML Report
     public String generatePatientEhrReportHtml(PatientEntity patient, List<ClinicalEncounterEntity> encounters) {
@@ -193,11 +206,20 @@ public class ReportPrintingService {
     }
 
     private void appendReportHeader(StringBuilder html, String title) {
+        String clinicName = clinicSettingService != null ? clinicSettingService.getSetting("CLINIC_NAME", "Apex Multispecialty Clinic") : "Apex Multispecialty Clinic";
+        String regNo = clinicSettingService != null ? clinicSettingService.getSetting("REGISTRATION_NO", "REG-2026-CLINIC-88") : "REG-2026-CLINIC-88";
+        String address = clinicSettingService != null ? clinicSettingService.getSetting("ADDRESS", "123 Healthcare Boulevard, Tech City") : "123 Healthcare Boulevard, Tech City";
+        String phone = clinicSettingService != null ? clinicSettingService.getSetting("PHONE", "+91 9988776655") : "+91 9988776655";
+        String email = clinicSettingService != null ? clinicSettingService.getSetting("EMAIL", "contact@apexclinic.com") : "contact@apexclinic.com";
+
+        String contactInfo = address + " | Ph: " + phone + " | Email: " + email + " | Reg No: " + regNo;
+
         html.append("<!DOCTYPE html><html><head><style>")
             .append("body { font-family: 'Helvetica Neue', Arial, sans-serif; margin: 20px; color: #1E293B; }")
             .append(".header { text-align: center; border-bottom: 2px solid #0284C7; padding-bottom: 10px; margin-bottom: 20px; }")
             .append(".header h1 { margin: 0; color: #0284C7; font-size: 22px; }")
             .append(".header h2 { margin: 5px 0 0 0; color: #475569; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }")
+            .append(".header p { margin: 4px 0 0 0; color: #64748B; font-size: 12px; }")
             .append(".section { margin-bottom: 20px; }")
             .append("table { width: 100%; border-collapse: collapse; margin-top: 10px; }")
             .append("th, td { border: 1px solid #CBD5E1; padding: 8px 12px; text-align: left; font-size: 13px; }")
@@ -208,7 +230,7 @@ public class ReportPrintingService {
             .append(".alert { color: #DC2626; font-weight: bold; }")
             .append(".footer { margin-top: 40px; border-top: 1px solid #E2E8F0; padding-top: 10px; font-size: 11px; color: #94A3B8; text-align: center; }")
             .append("</style></head><body>")
-            .append("<div class='header'><h1>APEX MULTISPECIALTY CLINIC</h1><p>123 Healthcare Boulevard, Tech City | Reg No: REG-2026-CLINIC-88</p><h2>").append(title).append("</h2></div>");
+            .append("<div class='header'><h1>").append(clinicName.toUpperCase()).append("</h1><p>").append(contactInfo).append("</p><h2>").append(title).append("</h2></div>");
     }
 
     private void appendReportFooter(StringBuilder html) {
@@ -217,3 +239,4 @@ public class ReportPrintingService {
             .append("</div></body></html>");
     }
 }
+

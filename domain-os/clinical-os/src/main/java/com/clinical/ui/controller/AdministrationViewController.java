@@ -37,6 +37,9 @@ public class AdministrationViewController {
     @FXML private TextField logoPathField;
     @FXML private ImageView logoPreviewImageView;
     @FXML private TextField registrationNoField;
+    @FXML private TextField clinicAddressField;
+    @FXML private TextField clinicPhoneField;
+    @FXML private TextField clinicEmailField;
     @FXML private TextField patientIdFormatField;
     @FXML private TextField doctorIdFormatField;
     @FXML private TextField visitIdFormatField;
@@ -69,6 +72,18 @@ public class AdministrationViewController {
             String logoPath = clinicSettingService.getSetting("CLINIC_LOGO_PATH", "images/default_logo.png");
             logoPathField.setText(logoPath);
             loadLogoPreview(logoPath);
+        }
+        if (registrationNoField != null) {
+            registrationNoField.setText(clinicSettingService.getSetting("REGISTRATION_NO", "REG-2026-CLINIC-88"));
+        }
+        if (clinicAddressField != null) {
+            clinicAddressField.setText(clinicSettingService.getSetting("ADDRESS", "123 Healthcare Boulevard, Tech City"));
+        }
+        if (clinicPhoneField != null) {
+            clinicPhoneField.setText(clinicSettingService.getSetting("PHONE", "+91 9988776655"));
+        }
+        if (clinicEmailField != null) {
+            clinicEmailField.setText(clinicSettingService.getSetting("EMAIL", "contact@apexclinic.com"));
         }
         if (patientIdFormatField != null) {
             patientIdFormatField.setText(clinicSettingService.getSetting("PATIENT_ID_FORMAT", "PAT-{YYYY}-{SEQ}"));
@@ -168,6 +183,15 @@ public class AdministrationViewController {
         }
         if (registrationNoField != null) {
             clinicSettingService.saveSetting("REGISTRATION_NO", registrationNoField.getText());
+        }
+        if (clinicAddressField != null) {
+            clinicSettingService.saveSetting("ADDRESS", clinicAddressField.getText());
+        }
+        if (clinicPhoneField != null) {
+            clinicSettingService.saveSetting("PHONE", clinicPhoneField.getText());
+        }
+        if (clinicEmailField != null) {
+            clinicSettingService.saveSetting("EMAIL", clinicEmailField.getText());
         }
         if (patientIdFormatField != null) {
             clinicSettingService.saveSetting("PATIENT_ID_FORMAT", patientIdFormatField.getText());

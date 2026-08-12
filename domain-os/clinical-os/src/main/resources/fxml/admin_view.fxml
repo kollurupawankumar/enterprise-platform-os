@@ -79,6 +79,20 @@
                             <Label text="Clinic Registration No:" style="-fx-font-size: 12px; -fx-text-fill: #475569;"/>
                             <TextField fx:id="registrationNoField" text="REG-2026-CLINIC-88" promptText="Registration No."/>
                         </VBox>
+                        <VBox spacing="4">
+                            <Label text="Clinic Street Address / Location (Included on Reports &amp; Invoices):" style="-fx-font-size: 12px; -fx-text-fill: #475569; -fx-font-weight: bold;"/>
+                            <TextField fx:id="clinicAddressField" promptText="e.g. 123 Healthcare Boulevard, Tech City, NY 10001"/>
+                        </VBox>
+                        <HBox spacing="15">
+                            <VBox spacing="4" HBox.hgrow="ALWAYS">
+                                <Label text="Contact Phone Number:" style="-fx-font-size: 12px; -fx-text-fill: #475569;"/>
+                                <TextField fx:id="clinicPhoneField" promptText="e.g. +91 9988776655"/>
+                            </VBox>
+                            <VBox spacing="4" HBox.hgrow="ALWAYS">
+                                <Label text="Contact Email Address:" style="-fx-font-size: 12px; -fx-text-fill: #475569;"/>
+                                <TextField fx:id="clinicEmailField" promptText="e.g. contact@apexclinic.com"/>
+                            </VBox>
+                        </HBox>
                     </VBox>
 
                     <!-- Auto-generated ID Patterns -->
