@@ -28,6 +28,10 @@ public class MedicineInventoryEntity {
     private BigDecimal sellingPrice;
 
     private Integer quantity = 0;
+    
+    @Column(name = "reorder_level")
+    private Integer reorderLevel = 20;
+
     private String supplier;
     private String location;
 
@@ -53,6 +57,9 @@ public class MedicineInventoryEntity {
 
     public Integer getQuantity() { return quantity; }
     public void setQuantity(Integer quantity) { this.quantity = quantity; }
+
+    public Integer getReorderLevel() { return reorderLevel; }
+    public void setReorderLevel(Integer reorderLevel) { this.reorderLevel = reorderLevel; }
 
     public String getSupplier() { return supplier; }
     public void setSupplier(String supplier) { this.supplier = supplier; }

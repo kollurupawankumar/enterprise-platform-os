@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="15" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.clinical.ui.controller.DashboardViewController"
+      style="-fx-background-color: #F8FAFC; -fx-padding: 20;">
+
+    <Label text="Executive Healthcare Analytics &amp; Clinic Dashboard" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+
+    <!-- KPI Summary Cards -->
+    <HBox spacing="15">
+        <VBox spacing="5" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;" HBox.hgrow="ALWAYS">
+            <Label text="Total Patients Registered" style="-fx-text-fill: #64748B; -fx-font-size: 12px;"/>
+            <Label fx:id="totalPatientsLabel" text="0" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #0284C7;"/>
+        </VBox>
+
+        <VBox spacing="5" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;" HBox.hgrow="ALWAYS">
+            <Label text="Active Queue Visits" style="-fx-text-fill: #64748B; -fx-font-size: 12px;"/>
+            <Label fx:id="activeVisitsLabel" text="0" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #D97706;"/>
+        </VBox>
+
+        <VBox spacing="5" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;" HBox.hgrow="ALWAYS">
+            <Label text="Total Revenue Collected (₹)" style="-fx-text-fill: #64748B; -fx-font-size: 12px;"/>
+            <Label fx:id="totalRevenueLabel" text="₹ 0.00" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #059669;"/>
+        </VBox>
+
+        <VBox spacing="5" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;" HBox.hgrow="ALWAYS">
+            <Label text="Completed Lab Tests" style="-fx-text-fill: #64748B; -fx-font-size: 12px;"/>
+            <Label fx:id="completedLabsLabel" text="0" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2563EB;"/>
+        </VBox>
+
+        <VBox spacing="5" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;" HBox.hgrow="ALWAYS">
+            <Label text="Low Stock Medicine Alerts" style="-fx-text-fill: #64748B; -fx-font-size: 12px;"/>
+            <Label fx:id="lowStockLabel" text="0" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #DC2626;"/>
+        </VBox>
+    </HBox>
+
+    <!-- Visual Charts -->
+    <HBox spacing="15" VBox.vgrow="ALWAYS">
+        <!-- Revenue Distribution Pie Chart -->
+        <VBox style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;" HBox.hgrow="ALWAYS">
+            <Label text="Revenue Breakdown by Payment Mode" style="-fx-font-weight: bold; -fx-text-fill: #334155;"/>
+            <PieChart fx:id="paymentPieChart" legendSide="BOTTOM" VBox.vgrow="ALWAYS"/>
+        </VBox>
+
+        <!-- Patient Footfall Bar Chart -->
+        <VBox style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;" HBox.hgrow="ALWAYS">
+            <Label text="Patient Footfall &amp; OPD Visits Queue" style="-fx-font-weight: bold; -fx-text-fill: #334155;"/>
+            <BarChart fx:id="footfallBarChart" VBox.vgrow="ALWAYS">
+                <xAxis><CategoryAxis label="Visit Status"/></xAxis>
+                <yAxis><NumberAxis label="Patient Count"/></yAxis>
+            </BarChart>
+        </VBox>
+    </HBox>
+</VBox>

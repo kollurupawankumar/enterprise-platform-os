@@ -19,6 +19,7 @@
     <!-- Sidebar Navigation -->
     <left>
         <VBox spacing="10" prefWidth="220" style="-fx-background-color: #1E293B; -fx-padding: 15;">
+            <Button fx:id="dashboardBtn" text="📊 Dashboard" onAction="#showDashboardModule" style="-fx-background-color: #0284C7; -fx-text-fill: white; -fx-alignment: BASELINE_LEFT; -fx-font-weight: bold;" prefWidth="190"/>
             <Button fx:id="patientBtn" text="1. Patients" onAction="#showPatientModule" style="-fx-background-color: #334155; -fx-text-fill: white; -fx-alignment: BASELINE_LEFT;" prefWidth="190"/>
             <Button fx:id="doctorRosterBtn" text="2. Doctor Roster" onAction="#showDoctorRosterModule" style="-fx-background-color: #334155; -fx-text-fill: white; -fx-alignment: BASELINE_LEFT;" prefWidth="190"/>
             <Button fx:id="visitBtn" text="3. Visit Queue" onAction="#showVisitModule" style="-fx-background-color: #334155; -fx-text-fill: white; -fx-alignment: BASELINE_LEFT;" prefWidth="190"/>
@@ -26,7 +27,8 @@
             <Button fx:id="labBtn" text="5. Laboratory" onAction="#showLabModule" style="-fx-background-color: #334155; -fx-text-fill: white; -fx-alignment: BASELINE_LEFT;" prefWidth="190"/>
             <Button fx:id="pharmacyBtn" text="6. Pharmacy" onAction="#showPharmacyModule" style="-fx-background-color: #334155; -fx-text-fill: white; -fx-alignment: BASELINE_LEFT;" prefWidth="190"/>
             <Button fx:id="billingBtn" text="7. Billing &amp; Receipts" onAction="#showBillingModule" style="-fx-background-color: #334155; -fx-text-fill: white; -fx-alignment: BASELINE_LEFT;" prefWidth="190"/>
-            <Button fx:id="adminBtn" text="8. Administration" onAction="#showAdminModule" style="-fx-background-color: #334155; -fx-text-fill: white; -fx-alignment: BASELINE_LEFT;" prefWidth="190"/>
+            <Button fx:id="reportsBtn" text="8. Reports Center" onAction="#showReportsModule" style="-fx-background-color: #7C3AED; -fx-text-fill: white; -fx-alignment: BASELINE_LEFT; -fx-font-weight: bold;" prefWidth="190"/>
+            <Button fx:id="adminBtn" text="9. Administration" onAction="#showAdminModule" style="-fx-background-color: #334155; -fx-text-fill: white; -fx-alignment: BASELINE_LEFT;" prefWidth="190"/>
         </VBox>
     </left>
 

@@ -83,9 +83,12 @@ CREATE TABLE IF NOT EXISTS lab_order (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     order_id VARCHAR(32) NOT NULL UNIQUE,
     visit_id VARCHAR(32) NOT NULL,
+    patient_id VARCHAR(32),
+    encounter_id VARCHAR(32),
     test_name VARCHAR(150) NOT NULL,
     status VARCHAR(32) DEFAULT 'ORDERED', -- ORDERED, SAMPLE_COLLECTED, IN_PROCESS, COMPLETED, REVIEWED
     result TEXT,
+    remarks TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (visit_id) REFERENCES visit(visit_id)
 );
@@ -98,6 +101,7 @@ CREATE TABLE IF NOT EXISTS medicine_inventory (
     purchase_price DECIMAL(10,2),
     selling_price DECIMAL(10,2),
     quantity INTEGER DEFAULT 0,
+    reorder_level INTEGER DEFAULT 20,
     supplier VARCHAR(100),
     location VARCHAR(100)
 );
