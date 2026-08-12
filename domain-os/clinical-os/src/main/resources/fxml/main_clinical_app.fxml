@@ -8,8 +8,9 @@
             style="-fx-background-color: #0F172A;">
     <!-- Top Header -->
     <top>
-        <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-background-color: #1E293B; -fx-padding: 15;">
-            <Label text="🏥 ClinicalOS - Enterprise Hospital Platform" style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;"/>
+        <HBox spacing="12" alignment="CENTER_LEFT" style="-fx-background-color: #1E293B; -fx-padding: 12 20 12 20;">
+            <ImageView fx:id="clinicLogoImageView" fitWidth="36" fitHeight="36" preserveRatio="true"/>
+            <Label fx:id="clinicNameLabel" text="Apex Multispecialty Clinic" style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;"/>
             <Region HBox.hgrow="ALWAYS"/>
             <Label fx:id="userRoleLabel" text="Not Logged In" style="-fx-text-fill: #94A3B8; -fx-font-size: 14px;"/>
             <Button text="Sign Out" onAction="#handleSignOut" style="-fx-background-color: #DC2626; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;"/>

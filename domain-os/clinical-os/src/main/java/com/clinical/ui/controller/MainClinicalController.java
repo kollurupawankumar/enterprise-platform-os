@@ -18,9 +18,12 @@ public class MainClinicalController {
 
     private final ApplicationContext applicationContext;
     private final AuthService authService;
+    private final com.clinical.admin.service.ClinicSettingService clinicSettingService;
 
     @FXML private StackPane mainContentArea;
     @FXML private Label userRoleLabel;
+    @FXML private javafx.scene.image.ImageView clinicLogoImageView;
+    @FXML private Label clinicNameLabel;
 
     @FXML private Button dashboardBtn;
     @FXML private Button patientBtn;
@@ -33,14 +36,36 @@ public class MainClinicalController {
     @FXML private Button reportsBtn;
     @FXML private Button adminBtn;
 
-    public MainClinicalController(ApplicationContext applicationContext, AuthService authService) {
+    public MainClinicalController(ApplicationContext applicationContext, AuthService authService, com.clinical.admin.service.ClinicSettingService clinicSettingService) {
         this.applicationContext = applicationContext;
         this.authService = authService;
+        this.clinicSettingService = clinicSettingService;
     }
 
     @FXML
     public void initialize() {
+        updateClinicBranding();
         showLoginView();
+    }
+
+    public void updateClinicBranding() {
+        if (clinicNameLabel != null) {
+            clinicNameLabel.setText(clinicSettingService.getSetting("CLINIC_NAME", "Apex Multispecialty Clinic"));
+        }
+        if (clinicLogoImageView != null) {
+            String path = clinicSettingService.getSetting("CLINIC_LOGO_PATH", "images/default_logo.png");
+            try {
+                javafx.scene.image.Image img;
+                if (path.startsWith("images/")) {
+                    img = new javafx.scene.image.Image(getClass().getResourceAsStream("/" + path));
+                } else {
+                    img = new javafx.scene.image.Image(new java.io.File(path).toURI().toString());
+                }
+                clinicLogoImageView.setImage(img);
+            } catch (Exception e) {
+                // Ignore image load error
+            }
+        }
     }
 
     @FXML

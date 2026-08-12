@@ -47,4 +47,5 @@ INSERT OR IGNORE INTO clinic_setting (setting_key, setting_value) VALUES
 ('CLINIC_NAME', 'Apex Multispecialty Clinic'),
 ('REGISTRATION_NO', 'REG-2026-CLINIC-88'),
 ('ADDRESS', '123 Healthcare Boulevard, Tech City'),
-('PHONE', '+91 9988776655');
+('PHONE', '+91 9988776655'),
+('CLINIC_LOGO_PATH', 'images/default_logo.png');

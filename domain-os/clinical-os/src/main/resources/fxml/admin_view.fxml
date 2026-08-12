@@ -36,14 +36,23 @@
         <!-- Clinic Profile & Database Snapshot -->
         <VBox spacing="15" HBox.hgrow="ALWAYS">
             <VBox spacing="8" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;">
-                <Label text="Clinic Information Setup &amp; ID Formatting" style="-fx-font-weight: bold;"/>
-                <TextField fx:id="clinicNameField" text="Apex Multispecialty Clinic" promptText="Clinic Name"/>
+                <Label text="Clinic Information Setup &amp; Branding" style="-fx-font-weight: bold;"/>
+                <HBox spacing="15" alignment="CENTER_LEFT">
+                    <ImageView fx:id="logoPreviewImageView" fitWidth="60" fitHeight="60" preserveRatio="true"/>
+                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <TextField fx:id="clinicNameField" text="Apex Multispecialty Clinic" promptText="Clinic Name"/>
+                        <HBox spacing="10">
+                            <TextField fx:id="logoPathField" promptText="Logo Image File Path" HBox.hgrow="ALWAYS"/>
+                            <Button text="Browse Logo" onAction="#handleBrowseLogo" style="-fx-background-color: #0284C7; -fx-text-fill: white;"/>
+                        </HBox>
+                    </VBox>
+                </HBox>
                 <TextField fx:id="registrationNoField" text="REG-2026-CLINIC-88" promptText="Registration No."/>
                 <HBox spacing="10">
                     <TextField fx:id="idPrefixField" text="PAT" promptText="ID Prefix (e.g. PAT)"/>
                     <TextField fx:id="idFormatField" text="PAT-{YYYY}-{SEQ}" promptText="Format Pattern (e.g. PAT-{YYYY}-{SEQ})" HBox.hgrow="ALWAYS"/>
                 </HBox>
-                <Button text="Save Clinic Settings" onAction="#handleSaveClinicSettings" style="-fx-background-color: #059669; -fx-text-fill: white;"/>
+                <Button text="Save Clinic Settings &amp; Logo" onAction="#handleSaveClinicSettings" style="-fx-background-color: #059669; -fx-text-fill: white; -fx-font-weight: bold;"/>
             </VBox>
 
             <VBox spacing="8" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;">
