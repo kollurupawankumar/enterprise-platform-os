@@ -23,16 +23,18 @@ public interface VisitService {
 class VisitServiceImpl implements VisitService {
 
     private final VisitRepository visitRepository;
+    private final com.clinical.admin.service.IdPatternGeneratorService idGenerator;
 
-    public VisitServiceImpl(VisitRepository visitRepository) {
+    public VisitServiceImpl(VisitRepository visitRepository, com.clinical.admin.service.IdPatternGeneratorService idGenerator) {
         this.visitRepository = visitRepository;
+        this.idGenerator = idGenerator;
     }
 
     @Override
     public VisitEntity createVisit(String patientId, String doctorName, String visitType) {
         VisitEntity visit = new VisitEntity();
         long count = visitRepository.count() + 1;
-        visit.setVisitId(String.format("VISIT-%d-%06d", LocalDate.now().getYear(), count));
+        visit.setVisitId(idGenerator.generateId("VISIT_ID_FORMAT", "VISIT-{YYYY}-{SEQ6}", count));
         visit.setPatientId(patientId);
         visit.setDoctorName(doctorName);
         visit.setVisitDate(LocalDate.now());

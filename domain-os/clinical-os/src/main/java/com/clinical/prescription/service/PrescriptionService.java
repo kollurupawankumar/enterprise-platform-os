@@ -13,15 +13,17 @@ import java.util.List;
 public class PrescriptionService {
 
     private final PrescriptionRepository prescriptionRepository;
+    private final com.clinical.admin.service.IdPatternGeneratorService idGenerator;
 
-    public PrescriptionService(PrescriptionRepository prescriptionRepository) {
+    public PrescriptionService(PrescriptionRepository prescriptionRepository, com.clinical.admin.service.IdPatternGeneratorService idGenerator) {
         this.prescriptionRepository = prescriptionRepository;
+        this.idGenerator = idGenerator;
     }
 
     public PrescriptionEntity createPrescription(String visitId, List<PrescriptionItemEntity> items) {
         PrescriptionEntity rx = new PrescriptionEntity();
         long count = prescriptionRepository.count() + 1;
-        rx.setPrescriptionId(String.format("RX-%06d", count));
+        rx.setPrescriptionId(idGenerator.generateId("PRESCRIPTION_ID_FORMAT", "RX-{YYYY}-{SEQ6}", count));
         rx.setVisitId(visitId);
         rx.setItems(items);
         rx.setStatus("PENDING");

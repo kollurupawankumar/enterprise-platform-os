@@ -19,14 +19,20 @@ class DoctorConsultationServiceImpl implements DoctorConsultationService {
 
     private final ClinicalEncounterRepository encounterRepository;
     private final VisitService visitService;
+    private final com.clinical.admin.service.IdPatternGeneratorService idGenerator;
 
-    public DoctorConsultationServiceImpl(ClinicalEncounterRepository encounterRepository, VisitService visitService) {
+    public DoctorConsultationServiceImpl(ClinicalEncounterRepository encounterRepository, VisitService visitService, com.clinical.admin.service.IdPatternGeneratorService idGenerator) {
         this.encounterRepository = encounterRepository;
         this.visitService = visitService;
+        this.idGenerator = idGenerator;
     }
 
     @Override
     public ClinicalEncounterEntity recordEncounter(ClinicalEncounterEntity encounter) {
+        if (encounter.getEncounterId() == null || encounter.getEncounterId().isEmpty()) {
+            long count = encounterRepository.count() + 1;
+            encounter.setEncounterId(idGenerator.generateId("ENCOUNTER_ID_FORMAT", "ENC-{YYYY}-{SEQ6}", count));
+        }
         ClinicalEncounterEntity saved = encounterRepository.save(encounter);
         // Automatically update visit status to IN_CONSULTATION or COMPLETED
         visitService.updateStatus(encounter.getVisitId(), "COMPLETED");

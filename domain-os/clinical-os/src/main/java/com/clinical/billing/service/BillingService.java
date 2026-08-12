@@ -19,16 +19,18 @@ public interface BillingService {
 class BillingServiceImpl implements BillingService {
 
     private final InvoiceRepository invoiceRepository;
+    private final com.clinical.admin.service.IdPatternGeneratorService idGenerator;
 
-    public BillingServiceImpl(InvoiceRepository invoiceRepository) {
+    public BillingServiceImpl(InvoiceRepository invoiceRepository, com.clinical.admin.service.IdPatternGeneratorService idGenerator) {
         this.invoiceRepository = invoiceRepository;
+        this.idGenerator = idGenerator;
     }
 
     @Override
     public InvoiceEntity generateInvoice(String visitId, String patientId, BigDecimal consultation, BigDecimal lab, BigDecimal pharmacy) {
         InvoiceEntity invoice = new InvoiceEntity();
         long count = invoiceRepository.count() + 1;
-        invoice.setInvoiceId(String.format("INV-%06d", count));
+        invoice.setInvoiceId(idGenerator.generateId("INVOICE_ID_FORMAT", "INV-{YYYY}-{SEQ6}", count));
         invoice.setVisitId(visitId);
         invoice.setPatientId(patientId);
         invoice.setConsultationFee(consultation != null ? consultation : BigDecimal.ZERO);

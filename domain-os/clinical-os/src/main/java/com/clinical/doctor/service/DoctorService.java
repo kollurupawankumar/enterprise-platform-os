@@ -22,16 +22,18 @@ public interface DoctorService {
 class DoctorServiceImpl implements DoctorService {
 
     private final DoctorRepository doctorRepository;
+    private final com.clinical.admin.service.IdPatternGeneratorService idGenerator;
 
-    public DoctorServiceImpl(DoctorRepository doctorRepository) {
+    public DoctorServiceImpl(DoctorRepository doctorRepository, com.clinical.admin.service.IdPatternGeneratorService idGenerator) {
         this.doctorRepository = doctorRepository;
+        this.idGenerator = idGenerator;
     }
 
     @Override
     public DoctorEntity registerDoctor(DoctorEntity doctor) {
         if (doctor.getDoctorId() == null || doctor.getDoctorId().isEmpty()) {
             long count = doctorRepository.count() + 1;
-            doctor.setDoctorId(String.format("DOC-%06d", count));
+            doctor.setDoctorId(idGenerator.generateId("DOCTOR_ID_FORMAT", "DOC-{SEQ6}", count));
         }
         return doctorRepository.save(doctor);
     }

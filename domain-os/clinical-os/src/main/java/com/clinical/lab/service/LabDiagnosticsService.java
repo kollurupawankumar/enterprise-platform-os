@@ -20,16 +20,18 @@ public interface LabDiagnosticsService {
 class LabDiagnosticsServiceImpl implements LabDiagnosticsService {
 
     private final LabOrderRepository labOrderRepository;
+    private final com.clinical.admin.service.IdPatternGeneratorService idGenerator;
 
-    public LabDiagnosticsServiceImpl(LabOrderRepository labOrderRepository) {
+    public LabDiagnosticsServiceImpl(LabOrderRepository labOrderRepository, com.clinical.admin.service.IdPatternGeneratorService idGenerator) {
         this.labOrderRepository = labOrderRepository;
+        this.idGenerator = idGenerator;
     }
 
     @Override
     public LabOrderEntity createLabOrder(String visitId, String testName) {
         LabOrderEntity order = new LabOrderEntity();
         long count = labOrderRepository.count() + 1;
-        order.setOrderId(String.format("LAB-%06d", count));
+        order.setOrderId(idGenerator.generateId("LAB_ORDER_ID_FORMAT", "LAB-{YYYY}-{SEQ6}", count));
         order.setVisitId(visitId);
         order.setTestName(testName);
         order.setStatus("ORDERED");

@@ -12,15 +12,17 @@ import java.util.List;
 public class ReferralService {
 
     private final ReferralRepository referralRepository;
+    private final com.clinical.admin.service.IdPatternGeneratorService idGenerator;
 
-    public ReferralService(ReferralRepository referralRepository) {
+    public ReferralService(ReferralRepository referralRepository, com.clinical.admin.service.IdPatternGeneratorService idGenerator) {
         this.referralRepository = referralRepository;
+        this.idGenerator = idGenerator;
     }
 
     public ReferralEntity createReferral(ReferralEntity referral) {
         if (referral.getReferralId() == null || referral.getReferralId().isEmpty()) {
             long count = referralRepository.count() + 1;
-            referral.setReferralId(String.format("REF-%06d", count));
+            referral.setReferralId(idGenerator.generateId("REFERRAL_ID_FORMAT", "REF-{YYYY}-{SEQ6}", count));
         }
         return referralRepository.save(referral);
     }
