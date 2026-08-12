@@ -16,6 +16,7 @@ public interface PatientService {
     Optional<PatientEntity> findByPatientId(String patientId);
     Optional<PatientEntity> findByMobileNumber(String mobileNumber);
     List<PatientEntity> getAllPatients();
+    void deletePatient(String patientId);
 }
 
 @Service
@@ -73,5 +74,10 @@ class PatientServiceImpl implements PatientService {
     @Transactional(readOnly = true)
     public List<PatientEntity> getAllPatients() {
         return patientRepository.findAll();
+    }
+
+    @Override
+    public void deletePatient(String patientId) {
+        patientRepository.findByPatientId(patientId).ifPresent(patientRepository::delete);
     }
 }

@@ -70,6 +70,8 @@ public class PatientViewController {
     @FXML private TableColumn<PatientEntity, String> phoneCol;
     @FXML private TableColumn<PatientEntity, String> categoryCol;
 
+    private PatientEntity currentPatient;
+
     public PatientViewController(PatientService patientService) {
         this.patientService = patientService;
     }
@@ -105,7 +107,19 @@ public class PatientViewController {
                              p.getPhone().equalsIgnoreCase(query) ||
                              (p.getFirstName() + " " + p.getLastName()).equalsIgnoreCase(query))
                 .findFirst()
-                .ifPresent(this::populatePatientForm);
+                .ifPresent(p -> {
+                    this.currentPatient = p;
+                    populatePatientForm(p);
+                });
+    }
+
+    @FXML
+    public void handleDeletePatient() {
+        if (currentPatient != null && currentPatient.getPatientId() != null) {
+            patientService.deletePatient(currentPatient.getPatientId());
+            loadPatients();
+            handleClearForm();
+        }
     }
 
     private void populatePatientForm(PatientEntity p) {
@@ -156,11 +170,7 @@ public class PatientViewController {
 
         if (patientTypeCombo != null) patientTypeCombo.getSelectionModel().select("NEW");
         if (genderCombo != null) genderCombo.getSelectionModel().select("Male");
-        if (knownAllergiesComboHasDefault()) allergiesStatusCombo.getSelectionModel().select("UNKNOWN");
-    }
-
-    private boolean knownAllergiesComboHasDefault() {
-        return allergiesStatusCombo != null;
+        if (allergiesStatusCombo != null) allergiesStatusCombo.getSelectionModel().select("UNKNOWN");
     }
 
     private void setupDobListener() {
@@ -192,7 +202,7 @@ public class PatientViewController {
     public void handleRegister() {
         if (firstNameField == null || firstNameField.getText().isEmpty() || phoneField == null || phoneField.getText().isEmpty()) return;
 
-        PatientEntity p = new PatientEntity();
+        PatientEntity p = (currentPatient != null) ? currentPatient : new PatientEntity();
         p.setPatientType(patientTypeCombo != null ? patientTypeCombo.getValue() : "NEW");
         p.setFirstName(firstNameField.getText());
         p.setLastName(lastNameField != null ? lastNameField.getText() : "");
@@ -228,13 +238,18 @@ public class PatientViewController {
         if (paymentCategoryCombo != null) p.setPaymentCategory(paymentCategoryCombo.getValue());
         if (insuranceProviderField != null) p.setInsuranceProvider(insuranceProviderField.getText());
 
-        patientService.registerPatient(p);
+        if (currentPatient != null && currentPatient.getId() != null) {
+            patientService.updatePatient(p);
+        } else {
+            patientService.registerPatient(p);
+        }
         loadPatients();
         handleClearForm();
     }
 
     @FXML
     public void handleClearForm() {
+        this.currentPatient = null;
         if (firstNameField != null) firstNameField.clear();
         if (lastNameField != null) lastNameField.clear();
         if (phoneField != null) phoneField.clear();

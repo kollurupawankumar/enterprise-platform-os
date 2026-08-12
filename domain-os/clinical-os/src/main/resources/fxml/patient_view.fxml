@@ -148,8 +148,9 @@
                         </GridPane>
                     </TitledPane>
 
-                    <!-- Save Action -->
+                    <!-- Save & Delete Actions -->
                     <HBox alignment="CENTER_RIGHT" spacing="10">
+                        <Button text="Delete / Deactivate" onAction="#handleDeletePatient" style="-fx-background-color: #DC2626; -fx-text-fill: white; -fx-font-weight: bold;"/>
                         <Button text="Clear Form" onAction="#handleClearForm" style="-fx-background-color: #94A3B8; -fx-text-fill: white;"/>
                         <Button text="Save Patient Registration" onAction="#handleRegister" style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 20 8 20;"/>
                     </HBox>
