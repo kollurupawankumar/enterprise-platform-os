@@ -67,9 +67,10 @@ class EndToEndClinicalWorkflowTest {
         // 3. Doctor Consultation & Vitals
         ClinicalEncounterEntity encounter = new ClinicalEncounterEntity();
         encounter.setVisitId(visit.getVisitId());
-        encounter.setChiefComplaints("Fever, Cough");
-        encounter.setBp("120/80");
-        encounter.setTemperature("99.5F");
+        encounter.setChiefComplaint("Fever, Cough");
+        encounter.setSystolicBp(120);
+        encounter.setDiastolicBp(80);
+        encounter.setTemperature(BigDecimal.valueOf(99.5));
         encounter.setDiagnosis("Viral Fever");
         ClinicalEncounterEntity recordedEncounter = doctorConsultationService.recordEncounter(encounter);
         assertNotNull(recordedEncounter.getId());

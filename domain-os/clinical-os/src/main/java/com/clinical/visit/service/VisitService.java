@@ -14,6 +14,7 @@ public interface VisitService {
     Optional<VisitEntity> findByVisitId(String visitId);
     List<VisitEntity> getPatientVisits(String patientId);
     List<VisitEntity> getQueueByStatus(String status);
+    List<VisitEntity> getActiveVisits();
     VisitEntity updateStatus(String visitId, String status);
 }
 
@@ -56,6 +57,12 @@ class VisitServiceImpl implements VisitService {
     @Transactional(readOnly = true)
     public List<VisitEntity> getQueueByStatus(String status) {
         return visitRepository.findByStatus(status);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<VisitEntity> getActiveVisits() {
+        return visitRepository.findAll();
     }
 
     @Override

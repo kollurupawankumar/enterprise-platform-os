@@ -1,68 +1,64 @@
 package com.clinical.workflow.service;
 
-import com.clinical.audit.service.ClinicalAuditService;
 import com.clinical.billing.entity.InvoiceEntity;
 import com.clinical.billing.service.BillingService;
-import com.clinical.doctor.entity.ClinicalEncounterEntity;
-import com.clinical.doctor.service.DoctorConsultationService;
-import com.clinical.lab.entity.LabOrderEntity;
-import com.clinical.lab.service.LabDiagnosticsService;
-import com.clinical.patient.entity.PatientEntity;
-import com.clinical.patient.service.PatientService;
-import com.clinical.pharmacy.service.PharmacyService;
-import com.clinical.prescription.entity.PrescriptionEntity;
+import com.clinical.followup.entity.FollowupEntity;
+import com.clinical.followup.service.FollowupService;
 import com.clinical.visit.entity.VisitEntity;
 import com.clinical.visit.service.VisitService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.List;
+import java.time.LocalDate;
+import java.util.Optional;
 
 @Service
 @Transactional
 public class PatientCheckoutWorkflowService {
 
-    private final PatientService patientService;
     private final VisitService visitService;
-    private final DoctorConsultationService doctorConsultationService;
-    private final LabDiagnosticsService labDiagnosticsService;
-    private final PharmacyService pharmacyService;
     private final BillingService billingService;
-    private final ClinicalAuditService auditService;
+    private final FollowupService followupService;
 
-    public PatientCheckoutWorkflowService(PatientService patientService,
-                                           VisitService visitService,
-                                           DoctorConsultationService doctorConsultationService,
-                                           LabDiagnosticsService labDiagnosticsService,
-                                           PharmacyService pharmacyService,
-                                           BillingService billingService,
-                                           ClinicalAuditService auditService) {
-        this.patientService = patientService;
+    public PatientCheckoutWorkflowService(VisitService visitService,
+                                         BillingService billingService,
+                                         FollowupService followupService) {
         this.visitService = visitService;
-        this.doctorConsultationService = doctorConsultationService;
-        this.labDiagnosticsService = labDiagnosticsService;
-        this.pharmacyService = pharmacyService;
         this.billingService = billingService;
-        this.auditService = auditService;
+        this.followupService = followupService;
     }
 
-    public InvoiceEntity processPatientCheckout(String visitId, String paymentMode, BigDecimal consultationFee, BigDecimal labFee, BigDecimal pharmacyFee) {
-        VisitEntity visit = visitService.findByVisitId(visitId)
-                .orElseThrow(() -> new IllegalArgumentException("Visit not found: " + visitId));
+    public InvoiceEntity processPatientCheckout(String visitId, Integer followupDays) {
+        return processPatientCheckout(visitId, "CASH", BigDecimal.valueOf(500), BigDecimal.ZERO, BigDecimal.ZERO);
+    }
 
-        // Generate Invoice
-        InvoiceEntity invoice = billingService.generateInvoice(visitId, visit.getPatientId(), consultationFee, labFee, pharmacyFee);
-        
-        // Process Payment
-        InvoiceEntity paidInvoice = billingService.processPayment(invoice.getInvoiceId(), paymentMode);
+    public InvoiceEntity processPatientCheckout(String visitId, String paymentMethod, BigDecimal consultationFee, BigDecimal pharmacyFee, BigDecimal labFee) {
+        Optional<VisitEntity> visitOpt = visitService.getActiveVisits().stream()
+                .filter(v -> v.getVisitId().equals(visitId))
+                .findFirst();
 
-        // Update Visit Status
-        visitService.updateStatus(visitId, "COMPLETED");
+        if (visitOpt.isEmpty()) {
+            throw new IllegalArgumentException("Active visit not found: " + visitId);
+        }
 
-        // Log Audit Event
-        auditService.logEvent("RECEPTIONIST", "CHECKOUT_COMPLETED", "Completed checkout for Visit: " + visitId + ", Total Paid: " + paidInvoice.getTotalAmount());
+        VisitEntity visit = visitOpt.get();
 
-        return paidInvoice;
+        // 1. Generate Consolidated Bill
+        InvoiceEntity invoice = billingService.generateInvoice(
+                visit.getPatientId(),
+                visit.getVisitId(),
+                consultationFee,
+                pharmacyFee,
+                labFee
+        );
+
+        // 2. Mark Paid
+        billingService.processPayment(invoice.getInvoiceId(), paymentMethod);
+
+        // 3. Mark Visit Checked Out
+        visitService.updateStatus(visitId, "CHECKED_OUT");
+
+        return invoice;
     }
 }
