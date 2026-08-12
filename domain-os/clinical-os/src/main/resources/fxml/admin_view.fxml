@@ -9,14 +9,28 @@
     <Label text="Hospital Administration &amp; Security Settings" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
 
     <HBox spacing="15">
-        <!-- User Management Card -->
-        <VBox spacing="8" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;" prefWidth="320">
-            <Label text="Create System User" style="-fx-font-weight: bold;"/>
-            <TextField fx:id="usernameField" promptText="Username"/>
-            <PasswordField fx:id="passwordField" promptText="Password"/>
-            <TextField fx:id="fullNameField" promptText="Full Name"/>
-            <ComboBox fx:id="roleCombo" promptText="Assign Role" prefWidth="300"/>
-            <Button text="Create User Account" onAction="#handleCreateUser" style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-font-weight: bold;"/>
+        <!-- User Management Card & Users Table -->
+        <VBox spacing="15" prefWidth="420">
+            <VBox spacing="8" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;">
+                <Label text="Create System User Account" style="-fx-font-weight: bold;"/>
+                <TextField fx:id="usernameField" promptText="Username"/>
+                <PasswordField fx:id="passwordField" promptText="Password"/>
+                <TextField fx:id="fullNameField" promptText="Full Name"/>
+                <ComboBox fx:id="roleCombo" promptText="Assign Role" prefWidth="400"/>
+                <Button text="Create User Account" onAction="#handleCreateUser" style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-font-weight: bold;"/>
+            </VBox>
+
+            <VBox spacing="8" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;" VBox.vgrow="ALWAYS">
+                <Label text="Existing System Users &amp; Roles" style="-fx-font-weight: bold;"/>
+                <TableView fx:id="userTable" prefHeight="220">
+                    <columns>
+                        <TableColumn fx:id="usernameCol" text="Username" prefWidth="100"/>
+                        <TableColumn fx:id="fullNameCol" text="Full Name" prefWidth="130"/>
+                        <TableColumn fx:id="roleCol" text="Role" prefWidth="100"/>
+                        <TableColumn fx:id="passwordCol" text="Password" prefWidth="90"/>
+                    </columns>
+                </TableView>
+            </VBox>
         </VBox>
 
         <!-- Clinic Profile & Database Snapshot -->

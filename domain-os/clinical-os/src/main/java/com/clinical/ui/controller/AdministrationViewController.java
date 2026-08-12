@@ -4,6 +4,7 @@ import com.clinical.admin.service.ClinicSettingService;
 import com.clinical.admin.service.DatabaseBackupService;
 import com.clinical.security.entity.UserEntity;
 import com.clinical.security.repository.UserRepository;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -20,6 +21,12 @@ public class AdministrationViewController {
     @FXML private PasswordField passwordField;
     @FXML private TextField fullNameField;
     @FXML private ComboBox<String> roleCombo;
+
+    @FXML private TableView<UserEntity> userTable;
+    @FXML private TableColumn<UserEntity, String> usernameCol;
+    @FXML private TableColumn<UserEntity, String> fullNameCol;
+    @FXML private TableColumn<UserEntity, String> roleCol;
+    @FXML private TableColumn<UserEntity, String> passwordCol;
 
     @FXML private TextField clinicNameField;
     @FXML private TextField registrationNoField;
@@ -48,6 +55,23 @@ public class AdministrationViewController {
         if (idFormatField != null) {
             idFormatField.setText(clinicSettingService.getSetting("PATIENT_ID_FORMAT", "PAT-{YYYY}-{SEQ}"));
         }
+        setupTableColumns();
+        loadUsers();
+    }
+
+    private void setupTableColumns() {
+        if (userTable != null && usernameCol != null) {
+            usernameCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getUsername()));
+            fullNameCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getFullName()));
+            roleCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getRole()));
+            passwordCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getPasswordHash()));
+        }
+    }
+
+    private void loadUsers() {
+        if (userTable != null) {
+            userTable.setItems(FXCollections.observableArrayList(userRepository.findAll()));
+        }
     }
 
     @FXML
@@ -63,6 +87,7 @@ public class AdministrationViewController {
         usernameField.clear();
         passwordField.clear();
         fullNameField.clear();
+        loadUsers();
     }
 
     @FXML
