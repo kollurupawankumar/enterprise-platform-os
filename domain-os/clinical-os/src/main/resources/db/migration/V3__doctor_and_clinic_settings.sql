@@ -42,10 +42,18 @@ INSERT OR IGNORE INTO doctor (doctor_id, title, first_name, last_name, display_n
 ('DOC-000001', 'Dr.', 'Suresh', 'Kumar', 'Dr. Suresh Kumar', 'Dr. Suresh Kumar', 'General Medicine', 'MCI-12345', '9876543210', 'suresh@clinicalos.com', 500.00),
 ('DOC-000002', 'Dr.', 'Ananya', 'Sharma', 'Dr. Ananya Sharma', 'Dr. Ananya Sharma', 'Pediatrics', 'MCI-67890', '9876543211', 'ananya@clinicalos.com', 600.00);
 
--- Seed Default Clinic Settings
+-- Seed Default Clinic Settings & ID Format Patterns
 INSERT OR IGNORE INTO clinic_setting (setting_key, setting_value) VALUES
 ('CLINIC_NAME', 'Apex Multispecialty Clinic'),
 ('REGISTRATION_NO', 'REG-2026-CLINIC-88'),
 ('ADDRESS', '123 Healthcare Boulevard, Tech City'),
 ('PHONE', '+91 9988776655'),
-('CLINIC_LOGO_PATH', 'images/default_logo.png');
+('CLINIC_LOGO_PATH', 'images/default_logo.png'),
+('PATIENT_ID_FORMAT', 'PAT-{YYYY}-{SEQ}'),
+('DOCTOR_ID_FORMAT', 'DOC-{SEQ6}'),
+('VISIT_ID_FORMAT', 'VISIT-{YYYY}-{SEQ6}'),
+('ENCOUNTER_ID_FORMAT', 'ENC-{YYYY}-{SEQ6}'),
+('INVOICE_ID_FORMAT', 'INV-{YYYY}-{SEQ6}'),
+('LAB_ORDER_ID_FORMAT', 'LAB-{YYYY}-{SEQ6}'),
+('PRESCRIPTION_ID_FORMAT', 'RX-{YYYY}-{SEQ6}'),
+('REFERRAL_ID_FORMAT', 'REF-{YYYY}-{SEQ6}');

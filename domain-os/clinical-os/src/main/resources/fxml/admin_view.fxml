@@ -49,11 +49,40 @@
                     </VBox>
                 </HBox>
                 <TextField fx:id="registrationNoField" text="REG-2026-CLINIC-88" promptText="Registration No."/>
-                <HBox spacing="10">
-                    <TextField fx:id="idPrefixField" text="PAT" promptText="ID Prefix (e.g. PAT)"/>
-                    <TextField fx:id="idFormatField" text="PAT-{YYYY}-{SEQ}" promptText="Format Pattern (e.g. PAT-{YYYY}-{SEQ})" HBox.hgrow="ALWAYS"/>
-                </HBox>
-                <Button text="Save Clinic Settings &amp; Logo" onAction="#handleSaveClinicSettings" style="-fx-background-color: #059669; -fx-text-fill: white; -fx-font-weight: bold;"/>
+            <VBox spacing="10" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;">
+                <Label text="System Auto-Generated ID Patterns" style="-fx-font-weight: bold; -fx-font-size: 14px; -fx-text-fill: #1E293B;"/>
+                <Label text="Configure prefix, year tags ({YYYY}), and sequence padding ({SEQ6}, {SEQ4}) for all entity IDs" style="-fx-text-fill: #64748B; -fx-font-size: 11px;"/>
+                <GridPane hgap="10" vgap="8">
+                    <columnConstraints>
+                        <ColumnConstraints prefWidth="140"/>
+                        <ColumnConstraints hgrow="ALWAYS"/>
+                    </columnConstraints>
+                    
+                    <Label text="Patient ID Pattern:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                    <TextField fx:id="patientIdFormatField" promptText="PAT-{YYYY}-{SEQ}" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                    <Label text="Doctor ID Pattern:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                    <TextField fx:id="doctorIdFormatField" promptText="DOC-{SEQ6}" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                    <Label text="Visit ID Pattern:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                    <TextField fx:id="visitIdFormatField" promptText="VISIT-{YYYY}-{SEQ6}" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+                    <Label text="Encounter ID Pattern:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                    <TextField fx:id="encounterIdFormatField" promptText="ENC-{YYYY}-{SEQ6}" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+                    <Label text="Invoice ID Pattern:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                    <TextField fx:id="invoiceIdFormatField" promptText="INV-{YYYY}-{SEQ6}" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+                    <Label text="Lab Order ID Pattern:" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+                    <TextField fx:id="labOrderIdFormatField" promptText="LAB-{YYYY}-{SEQ6}" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+
+                    <Label text="Prescription ID Pattern:" GridPane.rowIndex="6" GridPane.columnIndex="0"/>
+                    <TextField fx:id="prescriptionIdFormatField" promptText="RX-{YYYY}-{SEQ6}" GridPane.rowIndex="6" GridPane.columnIndex="1"/>
+
+                    <Label text="Referral ID Pattern:" GridPane.rowIndex="7" GridPane.columnIndex="0"/>
+                    <TextField fx:id="referralIdFormatField" promptText="REF-{YYYY}-{SEQ6}" GridPane.rowIndex="7" GridPane.columnIndex="1"/>
+                </GridPane>
+                <Button text="Save Clinic Settings &amp; ID Patterns" onAction="#handleSaveClinicSettings" style="-fx-background-color: #059669; -fx-text-fill: white; -fx-font-weight: bold;"/>
             </VBox>
 
             <VBox spacing="8" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;">

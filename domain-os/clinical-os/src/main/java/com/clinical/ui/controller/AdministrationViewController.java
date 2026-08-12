@@ -37,8 +37,14 @@ public class AdministrationViewController {
     @FXML private TextField logoPathField;
     @FXML private ImageView logoPreviewImageView;
     @FXML private TextField registrationNoField;
-    @FXML private TextField idPrefixField;
-    @FXML private TextField idFormatField;
+    @FXML private TextField patientIdFormatField;
+    @FXML private TextField doctorIdFormatField;
+    @FXML private TextField visitIdFormatField;
+    @FXML private TextField encounterIdFormatField;
+    @FXML private TextField invoiceIdFormatField;
+    @FXML private TextField labOrderIdFormatField;
+    @FXML private TextField prescriptionIdFormatField;
+    @FXML private TextField referralIdFormatField;
     @FXML private Label backupStatusLabel;
 
     public AdministrationViewController(UserRepository userRepository,
@@ -64,11 +70,29 @@ public class AdministrationViewController {
             logoPathField.setText(logoPath);
             loadLogoPreview(logoPath);
         }
-        if (idPrefixField != null) {
-            idPrefixField.setText(clinicSettingService.getSetting("PATIENT_ID_PREFIX", "PAT"));
+        if (patientIdFormatField != null) {
+            patientIdFormatField.setText(clinicSettingService.getSetting("PATIENT_ID_FORMAT", "PAT-{YYYY}-{SEQ}"));
         }
-        if (idFormatField != null) {
-            idFormatField.setText(clinicSettingService.getSetting("PATIENT_ID_FORMAT", "PAT-{YYYY}-{SEQ}"));
+        if (doctorIdFormatField != null) {
+            doctorIdFormatField.setText(clinicSettingService.getSetting("DOCTOR_ID_FORMAT", "DOC-{SEQ6}"));
+        }
+        if (visitIdFormatField != null) {
+            visitIdFormatField.setText(clinicSettingService.getSetting("VISIT_ID_FORMAT", "VISIT-{YYYY}-{SEQ6}"));
+        }
+        if (encounterIdFormatField != null) {
+            encounterIdFormatField.setText(clinicSettingService.getSetting("ENCOUNTER_ID_FORMAT", "ENC-{YYYY}-{SEQ6}"));
+        }
+        if (invoiceIdFormatField != null) {
+            invoiceIdFormatField.setText(clinicSettingService.getSetting("INVOICE_ID_FORMAT", "INV-{YYYY}-{SEQ6}"));
+        }
+        if (labOrderIdFormatField != null) {
+            labOrderIdFormatField.setText(clinicSettingService.getSetting("LAB_ORDER_ID_FORMAT", "LAB-{YYYY}-{SEQ6}"));
+        }
+        if (prescriptionIdFormatField != null) {
+            prescriptionIdFormatField.setText(clinicSettingService.getSetting("PRESCRIPTION_ID_FORMAT", "RX-{YYYY}-{SEQ6}"));
+        }
+        if (referralIdFormatField != null) {
+            referralIdFormatField.setText(clinicSettingService.getSetting("REFERRAL_ID_FORMAT", "REF-{YYYY}-{SEQ6}"));
         }
         setupTableColumns();
         loadUsers();
@@ -136,12 +160,6 @@ public class AdministrationViewController {
 
     @FXML
     public void handleSaveClinicSettings() {
-        if (idPrefixField != null && !idPrefixField.getText().isEmpty()) {
-            clinicSettingService.saveSetting("PATIENT_ID_PREFIX", idPrefixField.getText());
-        }
-        if (idFormatField != null && !idFormatField.getText().isEmpty()) {
-            clinicSettingService.saveSetting("PATIENT_ID_FORMAT", idFormatField.getText());
-        }
         if (clinicNameField != null) {
             clinicSettingService.saveSetting("CLINIC_NAME", clinicNameField.getText());
         }
@@ -150,6 +168,30 @@ public class AdministrationViewController {
         }
         if (registrationNoField != null) {
             clinicSettingService.saveSetting("REGISTRATION_NO", registrationNoField.getText());
+        }
+        if (patientIdFormatField != null) {
+            clinicSettingService.saveSetting("PATIENT_ID_FORMAT", patientIdFormatField.getText());
+        }
+        if (doctorIdFormatField != null) {
+            clinicSettingService.saveSetting("DOCTOR_ID_FORMAT", doctorIdFormatField.getText());
+        }
+        if (visitIdFormatField != null) {
+            clinicSettingService.saveSetting("VISIT_ID_FORMAT", visitIdFormatField.getText());
+        }
+        if (encounterIdFormatField != null) {
+            clinicSettingService.saveSetting("ENCOUNTER_ID_FORMAT", encounterIdFormatField.getText());
+        }
+        if (invoiceIdFormatField != null) {
+            clinicSettingService.saveSetting("INVOICE_ID_FORMAT", invoiceIdFormatField.getText());
+        }
+        if (labOrderIdFormatField != null) {
+            clinicSettingService.saveSetting("LAB_ORDER_ID_FORMAT", labOrderIdFormatField.getText());
+        }
+        if (prescriptionIdFormatField != null) {
+            clinicSettingService.saveSetting("PRESCRIPTION_ID_FORMAT", prescriptionIdFormatField.getText());
+        }
+        if (referralIdFormatField != null) {
+            clinicSettingService.saveSetting("REFERRAL_ID_FORMAT", referralIdFormatField.getText());
         }
     }
 

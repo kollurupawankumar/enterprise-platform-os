@@ -24,30 +24,18 @@ public interface PatientService {
 class PatientServiceImpl implements PatientService {
 
     private final PatientRepository patientRepository;
-    private final ClinicSettingService clinicSettingService;
+    private final com.clinical.admin.service.IdPatternGeneratorService idGenerator;
 
-    public PatientServiceImpl(PatientRepository patientRepository, ClinicSettingService clinicSettingService) {
+    public PatientServiceImpl(PatientRepository patientRepository, com.clinical.admin.service.IdPatternGeneratorService idGenerator) {
         this.patientRepository = patientRepository;
-        this.clinicSettingService = clinicSettingService;
+        this.idGenerator = idGenerator;
     }
 
     @Override
     public PatientEntity registerPatient(PatientEntity patient) {
         if (patient.getPatientId() == null || patient.getPatientId().isEmpty()) {
             long count = patientRepository.count() + 1;
-            String prefix = clinicSettingService.getSetting("PATIENT_ID_PREFIX", "PAT");
-            String format = clinicSettingService.getSetting("PATIENT_ID_FORMAT", "PAT-{YYYY}-{SEQ}");
-
-            String formattedSeq = String.format("%06d", count);
-            String year = String.valueOf(LocalDate.now().getYear());
-
-            String patientId = format.replace("{PREFIX}", prefix)
-                    .replace("PAT", prefix)
-                    .replace("{YYYY}", year)
-                    .replace("{YEAR}", year)
-                    .replace("{SEQ}", formattedSeq)
-                    .replace("{6DIGIT}", formattedSeq);
-
+            String patientId = idGenerator.generateId("PATIENT_ID_FORMAT", "PAT-{YYYY}-{SEQ}", count);
             patient.setPatientId(patientId);
         }
         return patientRepository.save(patient);
