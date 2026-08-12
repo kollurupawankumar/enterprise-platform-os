@@ -7,16 +7,14 @@ import com.clinical.pharmacy.entity.MedicineInventoryEntity;
 import com.clinical.pharmacy.repository.MedicineInventoryRepository;
 import com.clinical.visit.entity.VisitEntity;
 import com.clinical.visit.repository.VisitRepository;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.chart.*;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
@@ -35,7 +33,14 @@ public class DashboardViewController {
     @FXML private Label lowStockLabel;
     @FXML private Label pendingConsultationsLabel;
 
-    @FXML private BarChart<String, Number> footfallBarChart;
+    @FXML private TableView<VisitEntity> queueSummaryTable;
+    @FXML private TableColumn<VisitEntity, String> visitIdCol;
+    @FXML private TableColumn<VisitEntity, String> patientIdCol;
+    @FXML private TableColumn<VisitEntity, String> doctorCol;
+    @FXML private TableColumn<VisitEntity, String> visitTypeCol;
+    @FXML private TableColumn<VisitEntity, String> visitDateCol;
+    @FXML private TableColumn<VisitEntity, String> statusCol;
+
     @FXML private ListView<String> criticalStockListView;
 
     public DashboardViewController(PatientRepository patientRepository,
@@ -53,8 +58,9 @@ public class DashboardViewController {
     @FXML
     public void initialize() {
         loadKpis();
+        setupTable();
+        loadQueueData();
         loadClinicalAlerts();
-        loadCharts();
     }
 
     private void loadKpis() {
@@ -77,6 +83,24 @@ public class DashboardViewController {
         if (lowStockLabel != null) lowStockLabel.setText(String.valueOf(lowStockMeds.size()));
     }
 
+    private void setupTable() {
+        if (queueSummaryTable != null && visitIdCol != null) {
+            visitIdCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getVisitId()));
+            patientIdCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getPatientId()));
+            doctorCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDoctorName()));
+            visitTypeCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getVisitType()));
+            visitDateCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getVisitDate() != null ? data.getValue().getVisitDate().toString() : ""));
+            statusCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getStatus()));
+        }
+    }
+
+    private void loadQueueData() {
+        if (queueSummaryTable != null) {
+            List<VisitEntity> visits = visitRepository.findAll();
+            queueSummaryTable.setItems(FXCollections.observableArrayList(visits));
+        }
+    }
+
     private void loadClinicalAlerts() {
         if (criticalStockListView != null) {
             ObservableList<String> items = FXCollections.observableArrayList();
@@ -93,19 +117,6 @@ public class DashboardViewController {
         long waitingDoctors = visitRepository.findAll().stream().filter(v -> "WAITING".equals(v.getStatus()) || "IN_CONSULTATION".equals(v.getStatus())).count();
         if (pendingConsultationsLabel != null) {
             pendingConsultationsLabel.setText(waitingDoctors + " Patient consultations pending note");
-        }
-    }
-
-    private void loadCharts() {
-        if (footfallBarChart != null) {
-            Map<String, Long> statusMap = visitRepository.findAll().stream()
-                    .collect(Collectors.groupingBy(VisitEntity::getStatus, Collectors.counting()));
-
-            XYChart.Series<String, Number> series = new XYChart.Series<>();
-            series.setName("Patients");
-            statusMap.forEach((status, count) -> series.getData().add(new XYChart.Data<>(status, count)));
-
-            footfallBarChart.setData(FXCollections.observableArrayList(List.of(series)));
         }
     }
 }
