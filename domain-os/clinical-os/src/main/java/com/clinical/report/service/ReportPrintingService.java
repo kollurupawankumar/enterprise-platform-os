@@ -104,6 +104,10 @@ public class ReportPrintingService {
         return html.toString();
     }
 
+    public String generateLabReportHtml(LabOrderEntity labOrder) {
+        return generateLabReportHtml(labOrder, null);
+    }
+
     // 4. Doctor Schedule & Performance Report HTML
     public String generateDoctorRosterReportHtml(List<DoctorEntity> doctors) {
         StringBuilder html = new StringBuilder();

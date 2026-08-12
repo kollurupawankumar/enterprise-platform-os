@@ -13,6 +13,7 @@ public interface PharmacyService {
     MedicineInventoryEntity addOrUpdateStock(MedicineInventoryEntity medicine);
     boolean dispensePrescription(PrescriptionEntity prescription);
     List<MedicineInventoryEntity> searchMedicine(String medicineName);
+    List<MedicineInventoryEntity> getAllStock();
 }
 
 @Service
@@ -50,5 +51,11 @@ class PharmacyServiceImpl implements PharmacyService {
     @Transactional(readOnly = true)
     public List<MedicineInventoryEntity> searchMedicine(String medicineName) {
         return inventoryRepository.findByMedicineName(medicineName);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<MedicineInventoryEntity> getAllStock() {
+        return inventoryRepository.findAll();
     }
 }

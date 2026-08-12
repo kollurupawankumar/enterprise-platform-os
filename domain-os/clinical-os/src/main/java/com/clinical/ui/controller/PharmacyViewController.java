@@ -39,6 +39,13 @@ public class PharmacyViewController {
             qtyCol.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getQuantity()));
             priceCol.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getSellingPrice()));
         }
+        loadStockData();
+    }
+
+    private void loadStockData() {
+        if (inventoryTable != null) {
+            inventoryTable.setItems(FXCollections.observableArrayList(pharmacyService.getAllStock()));
+        }
     }
 
     @FXML
@@ -50,6 +57,7 @@ public class PharmacyViewController {
         med.setQuantity(Integer.parseInt(quantityField.getText()));
         med.setSellingPrice(new BigDecimal(priceField.getText()));
         pharmacyService.addOrUpdateStock(med);
+        loadStockData();
         medicineNameField.clear();
         batchNumberField.clear();
         quantityField.clear();
