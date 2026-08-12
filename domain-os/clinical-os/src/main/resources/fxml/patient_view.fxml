@@ -7,7 +7,7 @@
       fx:controller="com.clinical.ui.controller.PatientViewController"
       style="-fx-background-color: #F8FAFC; -fx-padding: 20;">
 
-    <Label text="PatientOS - Longitudinal Patient Management" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+    <Label text="Patients - Registration &amp; Longitudinal Directory" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
 
     <TabPane tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
 
@@ -21,6 +21,11 @@
                         <GridPane hgap="15" vgap="10" style="-fx-padding: 10;">
                             <Label text="Patient Type:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
                             <ComboBox fx:id="patientTypeCombo" prefWidth="180" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                            <HBox fx:id="existingSearchBox" spacing="10" alignment="CENTER_LEFT" visible="false" managed="false" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="0">
+                                <TextField fx:id="existingSearchField" promptText="Search Patient ID, Phone or Name" prefWidth="240"/>
+                                <Button text="Lookup Patient" onAction="#handleLookupExistingPatient" style="-fx-background-color: #0284C7; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                            </HBox>
 
                             <Label text="First Name *:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
                             <TextField fx:id="firstNameField" promptText="First Name" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
@@ -119,7 +124,7 @@
                     </TitledPane>
 
                     <!-- 7. Guardian Details (Conditional for Minor < 18) -->
-                    <TitledPane fx:id="guardianPane" text="7. Guardian Details (Required for Minors < 18)" expanded="true">
+                    <TitledPane fx:id="guardianPane" text="7. Guardian Details (Required for Minors &lt; 18)" expanded="true">
                         <GridPane hgap="15" vgap="10" style="-fx-padding: 10;">
                             <Label text="Guardian Name:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
                             <TextField fx:id="guardianNameField" promptText="Parent / Guardian name" GridPane.columnIndex="1" GridPane.rowIndex="0"/>

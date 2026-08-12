@@ -19,7 +19,7 @@
     <!-- Sidebar Navigation -->
     <left>
         <VBox spacing="10" prefWidth="220" style="-fx-background-color: #1E293B; -fx-padding: 15;">
-            <Button fx:id="patientBtn" text="1. PatientOS" onAction="#showPatientModule" style="-fx-background-color: #334155; -fx-text-fill: white; -fx-alignment: BASELINE_LEFT;" prefWidth="190"/>
+            <Button fx:id="patientBtn" text="1. Patients" onAction="#showPatientModule" style="-fx-background-color: #334155; -fx-text-fill: white; -fx-alignment: BASELINE_LEFT;" prefWidth="190"/>
             <Button fx:id="doctorRosterBtn" text="2. Doctor Roster" onAction="#showDoctorRosterModule" style="-fx-background-color: #334155; -fx-text-fill: white; -fx-alignment: BASELINE_LEFT;" prefWidth="190"/>
             <Button fx:id="visitBtn" text="3. Visit Queue" onAction="#showVisitModule" style="-fx-background-color: #334155; -fx-text-fill: white; -fx-alignment: BASELINE_LEFT;" prefWidth="190"/>
             <Button fx:id="doctorBtn" text="4. Doctor Consultation" onAction="#showDoctorModule" style="-fx-background-color: #334155; -fx-text-fill: white; -fx-alignment: BASELINE_LEFT;" prefWidth="190"/>

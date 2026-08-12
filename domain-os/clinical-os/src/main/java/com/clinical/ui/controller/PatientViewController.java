@@ -7,6 +7,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -19,6 +20,9 @@ public class PatientViewController {
 
     // Tab 1 Fields
     @FXML private ComboBox<String> patientTypeCombo;
+    @FXML private HBox existingSearchBox;
+    @FXML private TextField existingSearchField;
+
     @FXML private TextField firstNameField;
     @FXML private TextField lastNameField;
     @FXML private ComboBox<String> genderCombo;
@@ -73,9 +77,70 @@ public class PatientViewController {
     @FXML
     public void initialize() {
         setupComboBoxes();
+        setupPatientTypeListener();
         setupDobListener();
         setupTableColumns();
         loadPatients();
+    }
+
+    private void setupPatientTypeListener() {
+        if (patientTypeCombo != null) {
+            patientTypeCombo.valueProperty().addListener((obs, oldVal, newVal) -> {
+                boolean isExisting = "EXISTING".equals(newVal);
+                if (existingSearchBox != null) {
+                    existingSearchBox.setVisible(isExisting);
+                    existingSearchBox.setManaged(isExisting);
+                }
+            });
+        }
+    }
+
+    @FXML
+    public void handleLookupExistingPatient() {
+        String query = existingSearchField != null ? existingSearchField.getText() : "";
+        if (query == null || query.trim().isEmpty()) return;
+
+        patientService.getAllPatients().stream()
+                .filter(p -> p.getPatientId().equalsIgnoreCase(query) ||
+                             p.getPhone().equalsIgnoreCase(query) ||
+                             (p.getFirstName() + " " + p.getLastName()).equalsIgnoreCase(query))
+                .findFirst()
+                .ifPresent(this::populatePatientForm);
+    }
+
+    private void populatePatientForm(PatientEntity p) {
+        if (firstNameField != null) firstNameField.setText(p.getFirstName());
+        if (lastNameField != null) lastNameField.setText(p.getLastName());
+        if (genderCombo != null) genderCombo.getSelectionModel().select(p.getGender());
+        if (dobPicker != null) dobPicker.setValue(p.getDob());
+        if (phoneField != null) phoneField.setText(p.getPhone());
+        if (altPhoneField != null) altPhoneField.setText(p.getAlternatePhone());
+        if (emailField != null) emailField.setText(p.getEmail());
+        if (address1Field != null) address1Field.setText(p.getAddress());
+        if (cityField != null) cityField.setText(p.getCity());
+        if (stateField != null) stateField.setText(p.getState());
+        if (pincodeField != null) pincodeField.setText(p.getPincode());
+
+        if (identityTypeCombo != null) identityTypeCombo.getSelectionModel().select(p.getIdentityType());
+        if (identityNumberField != null) identityNumberField.setText(p.getIdentityNumber());
+        if (maritalCombo != null) maritalCombo.getSelectionModel().select(p.getMaritalStatus());
+        if (occupationField != null) occupationField.setText(p.getOccupation());
+        if (languageCombo != null) languageCombo.getSelectionModel().select(p.getPreferredLanguage());
+
+        if (emergNameField != null) emergNameField.setText(p.getEmergencyContactName());
+        if (emergRelCombo != null) emergRelCombo.getSelectionModel().select(p.getEmergencyRelationship());
+        if (emergPhoneField != null) emergPhoneField.setText(p.getEmergencyContactPhone());
+
+        if (allergiesStatusCombo != null) allergiesStatusCombo.getSelectionModel().select(p.getKnownAllergiesStatus());
+        if (allergiesListField != null) allergiesListField.setText(p.getAllergies());
+        if (reportedAlertsField != null) reportedAlertsField.setText(p.getPatientReportedAlerts());
+
+        if (guardianNameField != null) guardianNameField.setText(p.getGuardianName());
+        if (guardianRelCombo != null) guardianRelCombo.getSelectionModel().select(p.getGuardianRelationship());
+        if (guardianPhoneField != null) guardianPhoneField.setText(p.getGuardianPhone());
+
+        if (paymentCategoryCombo != null) paymentCategoryCombo.getSelectionModel().select(p.getPaymentCategory());
+        if (insuranceProviderField != null) insuranceProviderField.setText(p.getInsuranceProvider());
     }
 
     private void setupComboBoxes() {
