@@ -2,11 +2,11 @@
 
 -- 1. Seed Patients
 INSERT OR IGNORE INTO patient (patient_id, first_name, last_name, gender, dob, phone, email, address, emergency_contact_name, emergency_contact_phone, allergies, medical_history) VALUES
-('PAT-2026-000001', 'Rajesh', 'Sharma', 'Male', '1985-06-15', '9876543210', 'rajesh@example.com', 'Flat 402, Sunshine Apts, Jubilee Hills, Hyderabad', 'Sunita Sharma', '9876543299', 'Penicillin', 'Hypertension since 2020'),
-('PAT-2026-000002', 'Priya', 'Verma', 'Female', '1992-11-20', '9876543211', 'priya@example.com', 'Plot 12, Hitec City, Hyderabad', 'Amit Verma', '9876543298', 'Dust, Pollen', 'Asthma'),
-('PAT-2026-000003', 'Vikram', 'Reddy', 'Male', '1978-03-10', '9876543212', 'vikram@example.com', 'Road No 5, Banjara Hills, Hyderabad', 'Kavita Reddy', '9876543297', 'None', 'Type 2 Diabetes'),
-('PAT-2026-000004', 'Ananya', 'Gupta', 'Female', '2018-08-05', '9876543213', 'ananya@example.com', 'House 45, Gachibowli, Hyderabad', 'Suresh Gupta', '9876543296', 'Peanuts', 'None'),
-('PAT-2026-000005', 'Kalyan', 'Chakravarthy', 'Male', '1965-12-01', '9876543214', 'kalyan@example.com', 'Sector 3, Madhapur, Hyderabad', 'Latha Chakravarthy', '9876543295', 'Sulfa Drugs', 'Coronary Artery Disease');
+('PAT-2026-000001', 'Rajesh', 'Sharma', 'Male', '1985-06-15 00:00:00.000', '9876543210', 'rajesh@example.com', 'Flat 402, Sunshine Apts, Jubilee Hills, Hyderabad', 'Sunita Sharma', '9876543299', 'Penicillin', 'Hypertension since 2020'),
+('PAT-2026-000002', 'Priya', 'Verma', 'Female', '1992-11-20 00:00:00.000', '9876543211', 'priya@example.com', 'Plot 12, Hitec City, Hyderabad', 'Amit Verma', '9876543298', 'Dust, Pollen', 'Asthma'),
+('PAT-2026-000003', 'Vikram', 'Reddy', 'Male', '1978-03-10 00:00:00.000', '9876543212', 'vikram@example.com', 'Road No 5, Banjara Hills, Hyderabad', 'Kavita Reddy', '9876543297', 'None', 'Type 2 Diabetes'),
+('PAT-2026-000004', 'Ananya', 'Gupta', 'Female', '2018-08-05 00:00:00.000', '9876543213', 'ananya@example.com', 'House 45, Gachibowli, Hyderabad', 'Suresh Gupta', '9876543296', 'Peanuts', 'None'),
+('PAT-2026-000005', 'Kalyan', 'Chakravarthy', 'Male', '1965-12-01 00:00:00.000', '9876543214', 'kalyan@example.com', 'Sector 3, Madhapur, Hyderabad', 'Latha Chakravarthy', '9876543295', 'Sulfa Drugs', 'Coronary Artery Disease');
 
 -- 2. Seed Visits & Encounters
 INSERT OR IGNORE INTO visit (visit_id, patient_id, doctor_name, visit_date, visit_type, status) VALUES
