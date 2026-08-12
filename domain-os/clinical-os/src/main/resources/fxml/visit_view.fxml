@@ -7,22 +7,43 @@
       style="-fx-background-color: #F8FAFC; -fx-padding: 20;">
     <Label text="Visit &amp; Encounter Management" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
     <HBox spacing="15">
-        <VBox spacing="8" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;" prefWidth="300">
-            <Label text="Create Visit / OPD Token" style="-fx-font-weight: bold;"/>
-            <TextField fx:id="patientIdField" promptText="Patient ID (e.g. PAT-000001)"/>
-            <TextField fx:id="doctorNameField" promptText="Assigned Doctor"/>
-            <Button text="Create Visit" onAction="#handleCreateVisit" style="-fx-background-color: #2563EB; -fx-text-fill: white;"/>
+        <VBox spacing="12" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;" prefWidth="350">
+            <Label text="Create Visit / OPD Token" style="-fx-font-weight: bold; -fx-font-size: 14px; -fx-text-fill: #1E293B;"/>
+
+            <VBox spacing="4">
+                <Label text="Patient Selection:" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #475569;"/>
+                <HBox spacing="6">
+                    <ComboBox fx:id="patientSelectCombo" promptText="Search Name, Mobile or ID" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                    <Button text="+ Quick Add" onAction="#handleQuickRegisterPatient" style="-fx-background-color: #059669; -fx-text-fill: white; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+                </HBox>
+            </VBox>
+
+            <VBox spacing="4">
+                <Label text="Assigned Doctor:" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #475569;"/>
+                <ComboBox fx:id="doctorSelectCombo" promptText="Select Doctor" maxWidth="Infinity"/>
+            </VBox>
+
+            <VBox spacing="4">
+                <Label text="Visit Type:" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #475569;"/>
+                <ComboBox fx:id="visitTypeCombo" promptText="Select Visit Type" maxWidth="Infinity"/>
+            </VBox>
+
+            <Button text="Create Visit &amp; Issue Token" onAction="#handleCreateVisit" style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 16 8 16;" maxWidth="Infinity"/>
         </VBox>
+
         <VBox spacing="8" HBox.hgrow="ALWAYS" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;">
-            <Label text="Active OPD Queue" style="-fx-font-weight: bold;"/>
+            <Label text="Active OPD Queue" style="-fx-font-weight: bold; -fx-font-size: 14px; -fx-text-fill: #1E293B;"/>
             <TableView fx:id="visitQueueTable" VBox.vgrow="ALWAYS">
                 <columns>
-                    <TableColumn fx:id="visitIdCol" text="Visit ID" prefWidth="140"/>
-                    <TableColumn fx:id="patientCol" text="Patient ID" prefWidth="120"/>
-                    <TableColumn fx:id="doctorCol" text="Doctor" prefWidth="150"/>
-                    <TableColumn fx:id="statusCol" text="Status" prefWidth="100"/>
+                    <TableColumn fx:id="visitIdCol" text="Visit ID" prefWidth="120"/>
+                    <TableColumn fx:id="patientNameCol" text="Patient Name" prefWidth="140"/>
+                    <TableColumn fx:id="patientPhoneCol" text="Mobile No." prefWidth="110"/>
+                    <TableColumn fx:id="patientIdCol" text="Patient ID" prefWidth="110"/>
+                    <TableColumn fx:id="doctorCol" text="Assigned Doctor" prefWidth="140"/>
+                    <TableColumn fx:id="statusCol" text="Status" prefWidth="90"/>
                 </columns>
             </TableView>
         </VBox>
     </HBox>
 </VBox>
+

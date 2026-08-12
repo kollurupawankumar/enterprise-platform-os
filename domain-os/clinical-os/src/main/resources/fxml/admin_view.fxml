@@ -5,96 +5,141 @@
 
 <VBox spacing="15" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.clinical.ui.controller.AdministrationViewController"
-      style="-fx-background-color: #F8FAFC; -fx-padding: 20;">
+      style="-fx-background-color: #F8FAFC; -fx-padding: 20;" VBox.vgrow="ALWAYS">
 
     <Label text="Hospital Administration &amp; Security Settings" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
 
-    <HBox spacing="15">
-        <!-- User Management Card & Users Table -->
-        <VBox spacing="15" prefWidth="420">
-            <VBox spacing="8" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;">
-                <Label text="Create System User Account" style="-fx-font-weight: bold;"/>
-                <TextField fx:id="usernameField" promptText="Username"/>
-                <PasswordField fx:id="passwordField" promptText="Password"/>
-                <TextField fx:id="fullNameField" promptText="Full Name"/>
-                <ComboBox fx:id="roleCombo" promptText="Assign Role" prefWidth="400"/>
-                <Button text="Create User Account" onAction="#handleCreateUser" style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-font-weight: bold;"/>
-            </VBox>
+    <TabPane tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS" style="-fx-background-color: transparent;">
+        <!-- TAB 1: USER MANAGEMENT -->
+        <Tab text="👤 User Management">
+            <VBox spacing="15" style="-fx-padding: 15;">
+                <HBox spacing="15" VBox.vgrow="ALWAYS">
+                    <!-- Create User Card -->
+                    <VBox spacing="10" style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 8;" prefWidth="350">
+                        <Label text="Create System User Account" style="-fx-font-weight: bold; -fx-font-size: 14px; -fx-text-fill: #1E293B;"/>
+                        <VBox spacing="4">
+                            <Label text="Username:" style="-fx-font-size: 12px; -fx-text-fill: #475569;"/>
+                            <TextField fx:id="usernameField" promptText="Enter username"/>
+                        </VBox>
+                        <VBox spacing="4">
+                            <Label text="Password:" style="-fx-font-size: 12px; -fx-text-fill: #475569;"/>
+                            <PasswordField fx:id="passwordField" promptText="Enter password"/>
+                        </VBox>
+                        <VBox spacing="4">
+                            <Label text="Full Name:" style="-fx-font-size: 12px; -fx-text-fill: #475569;"/>
+                            <TextField fx:id="fullNameField" promptText="Enter full name"/>
+                        </VBox>
+                        <VBox spacing="4">
+                            <Label text="System Role:" style="-fx-font-size: 12px; -fx-text-fill: #475569;"/>
+                            <ComboBox fx:id="roleCombo" promptText="Assign Role" maxWidth="Infinity"/>
+                        </VBox>
+                        <Button text="Create User Account" onAction="#handleCreateUser" style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 16 8 16;" maxWidth="Infinity"/>
+                    </VBox>
 
-            <VBox spacing="8" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;" VBox.vgrow="ALWAYS">
-                <Label text="Existing System Users &amp; Roles" style="-fx-font-weight: bold;"/>
-                <TableView fx:id="userTable" prefHeight="220">
-                    <columns>
-                        <TableColumn fx:id="usernameCol" text="Username" prefWidth="100"/>
-                        <TableColumn fx:id="fullNameCol" text="Full Name" prefWidth="130"/>
-                        <TableColumn fx:id="roleCol" text="Role" prefWidth="100"/>
-                        <TableColumn fx:id="passwordCol" text="Password" prefWidth="90"/>
-                    </columns>
-                </TableView>
-            </VBox>
-        </VBox>
-
-        <!-- Clinic Profile & Database Snapshot -->
-        <VBox spacing="15" HBox.hgrow="ALWAYS">
-            <VBox spacing="10" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;">
-                <Label text="Clinic Information Setup &amp; Branding" style="-fx-font-weight: bold;"/>
-                <HBox spacing="15" alignment="CENTER_LEFT">
-                    <ImageView fx:id="logoPreviewImageView" fitWidth="60" fitHeight="60" preserveRatio="true"/>
-                    <VBox spacing="5" HBox.hgrow="ALWAYS">
-                        <TextField fx:id="clinicNameField" text="Apex Multispecialty Clinic" promptText="Clinic Name"/>
-                        <HBox spacing="10">
-                            <TextField fx:id="logoPathField" promptText="Logo Image File Path" HBox.hgrow="ALWAYS"/>
-                            <Button text="Browse Logo" onAction="#handleBrowseLogo" style="-fx-background-color: #0284C7; -fx-text-fill: white;"/>
-                        </HBox>
+                    <!-- Users List Table -->
+                    <VBox spacing="10" style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 8;" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+                        <Label text="Existing System Users &amp; Security Roles" style="-fx-font-weight: bold; -fx-font-size: 14px; -fx-text-fill: #1E293B;"/>
+                        <TableView fx:id="userTable" VBox.vgrow="ALWAYS">
+                            <columns>
+                                <TableColumn fx:id="usernameCol" text="Username" prefWidth="130"/>
+                                <TableColumn fx:id="fullNameCol" text="Full Name" prefWidth="180"/>
+                                <TableColumn fx:id="roleCol" text="Assigned Role" prefWidth="140"/>
+                                <TableColumn fx:id="passwordCol" text="Password Hash" prefWidth="160"/>
+                            </columns>
+                        </TableView>
                     </VBox>
                 </HBox>
-                <TextField fx:id="registrationNoField" text="REG-2026-CLINIC-88" promptText="Registration No."/>
             </VBox>
+        </Tab>
 
-            <VBox spacing="10" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;">
-                <Label text="System Auto-Generated ID Patterns" style="-fx-font-weight: bold; -fx-font-size: 14px; -fx-text-fill: #1E293B;"/>
-                <Label text="Configure prefix, year tags ({YYYY}), and sequence padding ({SEQ6}, {SEQ4}) for all entity IDs" style="-fx-text-fill: #64748B; -fx-font-size: 11px;"/>
-                <GridPane hgap="10" vgap="8">
-                    <columnConstraints>
-                        <ColumnConstraints prefWidth="140"/>
-                        <ColumnConstraints hgrow="ALWAYS"/>
-                    </columnConstraints>
-                    
-                    <Label text="Patient ID Pattern:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-                    <TextField fx:id="patientIdFormatField" promptText="PAT-{YYYY}-{SEQ}" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+        <!-- TAB 2: HOSPITAL MANAGEMENT -->
+        <Tab text="🏥 Hospital Management">
+            <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent;">
+                <VBox spacing="15" style="-fx-padding: 15;">
+                    <!-- Clinic Information & Branding -->
+                    <VBox spacing="12" style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 8;">
+                        <Label text="Clinic Information Setup &amp; Branding" style="-fx-font-weight: bold; -fx-font-size: 14px; -fx-text-fill: #1E293B;"/>
+                        <HBox spacing="15" alignment="CENTER_LEFT">
+                            <ImageView fx:id="logoPreviewImageView" fitWidth="70" fitHeight="70" preserveRatio="true"/>
+                            <VBox spacing="8" HBox.hgrow="ALWAYS">
+                                <VBox spacing="4">
+                                    <Label text="Clinic Name:" style="-fx-font-size: 12px; -fx-text-fill: #475569;"/>
+                                    <TextField fx:id="clinicNameField" text="Apex Multispecialty Clinic" promptText="Clinic Name"/>
+                                </VBox>
+                                <VBox spacing="4">
+                                    <Label text="Logo Image File Path:" style="-fx-font-size: 12px; -fx-text-fill: #475569;"/>
+                                    <HBox spacing="10">
+                                        <TextField fx:id="logoPathField" promptText="Logo Image File Path" HBox.hgrow="ALWAYS"/>
+                                        <Button text="Browse Logo" onAction="#handleBrowseLogo" style="-fx-background-color: #0284C7; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                                    </HBox>
+                                </VBox>
+                            </VBox>
+                        </HBox>
+                        <VBox spacing="4">
+                            <Label text="Clinic Registration No:" style="-fx-font-size: 12px; -fx-text-fill: #475569;"/>
+                            <TextField fx:id="registrationNoField" text="REG-2026-CLINIC-88" promptText="Registration No."/>
+                        </VBox>
+                    </VBox>
 
-                    <Label text="Doctor ID Pattern:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-                    <TextField fx:id="doctorIdFormatField" promptText="DOC-{SEQ6}" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                    <!-- Auto-generated ID Patterns -->
+                    <VBox spacing="12" style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 8;">
+                        <Label text="System Auto-Generated ID Patterns" style="-fx-font-weight: bold; -fx-font-size: 14px; -fx-text-fill: #1E293B;"/>
+                        <Label text="Configure prefix, year tags ({YYYY}), and sequence padding ({SEQ6}, {SEQ4}) for all entity IDs" style="-fx-text-fill: #64748B; -fx-font-size: 12px;"/>
+                        <GridPane hgap="15" vgap="10">
+                            <columnConstraints>
+                                <ColumnConstraints prefWidth="180"/>
+                                <ColumnConstraints hgrow="ALWAYS"/>
+                            </columnConstraints>
 
-                    <Label text="Visit ID Pattern:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-                    <TextField fx:id="visitIdFormatField" promptText="VISIT-{YYYY}-{SEQ6}" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                            <Label text="Patient ID Pattern:" GridPane.rowIndex="0" GridPane.columnIndex="0" style="-fx-font-weight: bold; -fx-text-fill: #334155;"/>
+                            <TextField fx:id="patientIdFormatField" promptText="PAT-{YYYY}-{SEQ}" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
 
-                    <Label text="Encounter ID Pattern:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-                    <TextField fx:id="encounterIdFormatField" promptText="ENC-{YYYY}-{SEQ6}" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+                            <Label text="Doctor ID Pattern:" GridPane.rowIndex="1" GridPane.columnIndex="0" style="-fx-font-weight: bold; -fx-text-fill: #334155;"/>
+                            <TextField fx:id="doctorIdFormatField" promptText="DOC-{SEQ6}" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
 
-                    <Label text="Invoice ID Pattern:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
-                    <TextField fx:id="invoiceIdFormatField" promptText="INV-{YYYY}-{SEQ6}" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+                            <Label text="Visit ID Pattern:" GridPane.rowIndex="2" GridPane.columnIndex="0" style="-fx-font-weight: bold; -fx-text-fill: #334155;"/>
+                            <TextField fx:id="visitIdFormatField" promptText="VISIT-{YYYY}-{SEQ6}" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
 
-                    <Label text="Lab Order ID Pattern:" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
-                    <TextField fx:id="labOrderIdFormatField" promptText="LAB-{YYYY}-{SEQ6}" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+                            <Label text="Encounter ID Pattern:" GridPane.rowIndex="3" GridPane.columnIndex="0" style="-fx-font-weight: bold; -fx-text-fill: #334155;"/>
+                            <TextField fx:id="encounterIdFormatField" promptText="ENC-{YYYY}-{SEQ6}" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
 
-                    <Label text="Prescription ID Pattern:" GridPane.rowIndex="6" GridPane.columnIndex="0"/>
-                    <TextField fx:id="prescriptionIdFormatField" promptText="RX-{YYYY}-{SEQ6}" GridPane.rowIndex="6" GridPane.columnIndex="1"/>
+                            <Label text="Invoice ID Pattern:" GridPane.rowIndex="4" GridPane.columnIndex="0" style="-fx-font-weight: bold; -fx-text-fill: #334155;"/>
+                            <TextField fx:id="invoiceIdFormatField" promptText="INV-{YYYY}-{SEQ6}" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
 
-                    <Label text="Referral ID Pattern:" GridPane.rowIndex="7" GridPane.columnIndex="0"/>
-                    <TextField fx:id="referralIdFormatField" promptText="REF-{YYYY}-{SEQ6}" GridPane.rowIndex="7" GridPane.columnIndex="1"/>
-                </GridPane>
-                <Button text="Save Clinic Settings &amp; ID Patterns" onAction="#handleSaveClinicSettings" style="-fx-background-color: #059669; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                            <Label text="Lab Order ID Pattern:" GridPane.rowIndex="5" GridPane.columnIndex="0" style="-fx-font-weight: bold; -fx-text-fill: #334155;"/>
+                            <TextField fx:id="labOrderIdFormatField" promptText="LAB-{YYYY}-{SEQ6}" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+
+                            <Label text="Prescription ID Pattern:" GridPane.rowIndex="6" GridPane.columnIndex="0" style="-fx-font-weight: bold; -fx-text-fill: #334155;"/>
+                            <TextField fx:id="prescriptionIdFormatField" promptText="RX-{YYYY}-{SEQ6}" GridPane.rowIndex="6" GridPane.columnIndex="1"/>
+
+                            <Label text="Referral ID Pattern:" GridPane.rowIndex="7" GridPane.columnIndex="0" style="-fx-font-weight: bold; -fx-text-fill: #334155;"/>
+                            <TextField fx:id="referralIdFormatField" promptText="REF-{YYYY}-{SEQ6}" GridPane.rowIndex="7" GridPane.columnIndex="1"/>
+                        </GridPane>
+                        <Button text="Save Clinic Settings &amp; ID Patterns" onAction="#handleSaveClinicSettings" style="-fx-background-color: #059669; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 20 8 20;"/>
+                    </VBox>
+                </VBox>
+            </ScrollPane>
+        </Tab>
+
+        <!-- TAB 3: BACKUP & RECOVERY -->
+        <Tab text="💾 Backup &amp; Recovery">
+            <VBox spacing="15" style="-fx-padding: 15;">
+                <VBox spacing="12" style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 8;">
+                    <Label text="Database Backup &amp; Disaster Recovery" style="-fx-font-weight: bold; -fx-font-size: 14px; -fx-text-fill: #1E293B;"/>
+                    <Label text="Create a complete snapshot of all clinical records, patients, consultations, invoices, and lab results." style="-fx-text-fill: #64748B; -fx-font-size: 12px;"/>
+                    <HBox spacing="15" alignment="CENTER_LEFT">
+                        <Button text="💾 Create Database Snapshot" onAction="#handleBackup" style="-fx-background-color: #475569; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20 10 20;"/>
+                        <Label fx:id="backupStatusLabel" style="-fx-text-fill: #059669; -fx-font-weight: bold; -fx-font-size: 13px;"/>
+                    </HBox>
+                </VBox>
+
+                <VBox spacing="10" style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 8;">
+                    <Label text="Backup Directory &amp; Security Policy" style="-fx-font-weight: bold; -fx-font-size: 13px; -fx-text-fill: #1E293B;"/>
+                    <Label text="• Automated database snapshots are stored in the local system database directory under /backup." style="-fx-text-fill: #475569; -fx-font-size: 12px;"/>
+                    <Label text="• It is recommended to perform a snapshot before executing batch migrations or system updates." style="-fx-text-fill: #475569; -fx-font-size: 12px;"/>
+                </VBox>
             </VBox>
-
-            <VBox spacing="8" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;">
-                <Label text="Database Backup &amp; Recovery" style="-fx-font-weight: bold;"/>
-                <Label text="Create full snapshot of clinical records database" style="-fx-text-fill: #64748B;"/>
-                <HBox spacing="10">
-                    <Button text="💾 Create Database Snapshot" onAction="#handleBackup" style="-fx-background-color: #475569; -fx-text-fill: white; -fx-font-weight: bold;"/>
-                    <Label fx:id="backupStatusLabel" style="-fx-text-fill: #059669; -fx-font-weight: bold;"/>
-                </HBox>
-            </VBox>
-        </VBox>
-    </HBox>
+        </Tab>
+    </TabPane>
 </VBox>
+
