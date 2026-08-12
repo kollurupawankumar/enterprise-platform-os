@@ -36,7 +36,7 @@
 
         <!-- Clinic Profile & Database Snapshot -->
         <VBox spacing="15" HBox.hgrow="ALWAYS">
-            <VBox spacing="8" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;">
+            <VBox spacing="10" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;">
                 <Label text="Clinic Information Setup &amp; Branding" style="-fx-font-weight: bold;"/>
                 <HBox spacing="15" alignment="CENTER_LEFT">
                     <ImageView fx:id="logoPreviewImageView" fitWidth="60" fitHeight="60" preserveRatio="true"/>
@@ -49,6 +49,8 @@
                     </VBox>
                 </HBox>
                 <TextField fx:id="registrationNoField" text="REG-2026-CLINIC-88" promptText="Registration No."/>
+            </VBox>
+
             <VBox spacing="10" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;">
                 <Label text="System Auto-Generated ID Patterns" style="-fx-font-weight: bold; -fx-font-size: 14px; -fx-text-fill: #1E293B;"/>
                 <Label text="Configure prefix, year tags ({YYYY}), and sequence padding ({SEQ6}, {SEQ4}) for all entity IDs" style="-fx-text-fill: #64748B; -fx-font-size: 11px;"/>
