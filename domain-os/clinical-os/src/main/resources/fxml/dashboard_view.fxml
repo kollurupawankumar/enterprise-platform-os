@@ -3,55 +3,69 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox spacing="15" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+<VBox spacing="20" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.clinical.ui.controller.DashboardViewController"
-      style="-fx-background-color: #F8FAFC; -fx-padding: 20;">
+      style="-fx-background-color: #F8FAFC; -fx-padding: 24;">
 
-    <Label text="Executive Healthcare Analytics &amp; Clinic Dashboard" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+    <!-- Dashboard Header -->
+    <VBox spacing="4">
+        <Label text="Clinical &amp; Operational Analytics" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+        <Label text="Real-time clinical metrics, OPD patient flow, and pharmacy inventory oversight" style="-fx-text-fill: #64748B; -fx-font-size: 13px;"/>
+    </VBox>
 
-    <!-- KPI Summary Cards -->
-    <HBox spacing="15">
-        <VBox spacing="5" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;" HBox.hgrow="ALWAYS">
-            <Label text="Total Patients Registered" style="-fx-text-fill: #64748B; -fx-font-size: 12px;"/>
-            <Label fx:id="totalPatientsLabel" text="0" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #0284C7;"/>
+    <!-- Top KPI Cards Row -->
+    <HBox spacing="16">
+        <VBox spacing="6" style="-fx-background-color: white; -fx-padding: 16; -fx-background-radius: 10; -fx-border-color: #E2E8F0; -fx-border-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.03), 6, 0, 0, 2);" HBox.hgrow="ALWAYS">
+            <Label text="TOTAL REGISTERED PATIENTS" style="-fx-text-fill: #64748B; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+            <Label fx:id="totalPatientsLabel" text="0" style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #0284C7;"/>
+            <Label text="Active master index" style="-fx-text-fill: #94A3B8; -fx-font-size: 11px;"/>
         </VBox>
 
-        <VBox spacing="5" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;" HBox.hgrow="ALWAYS">
-            <Label text="Active Queue Visits" style="-fx-text-fill: #64748B; -fx-font-size: 12px;"/>
-            <Label fx:id="activeVisitsLabel" text="0" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #D97706;"/>
+        <VBox spacing="6" style="-fx-background-color: white; -fx-padding: 16; -fx-background-radius: 10; -fx-border-color: #E2E8F0; -fx-border-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.03), 6, 0, 0, 2);" HBox.hgrow="ALWAYS">
+            <Label text="ACTIVE OPD QUEUE" style="-fx-text-fill: #64748B; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+            <Label fx:id="activeVisitsLabel" text="0" style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #D97706;"/>
+            <Label text="Patients currently in clinic" style="-fx-text-fill: #94A3B8; -fx-font-size: 11px;"/>
         </VBox>
 
-        <VBox spacing="5" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;" HBox.hgrow="ALWAYS">
-            <Label text="Total Revenue Collected (₹)" style="-fx-text-fill: #64748B; -fx-font-size: 12px;"/>
-            <Label fx:id="totalRevenueLabel" text="₹ 0.00" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #059669;"/>
+        <VBox spacing="6" style="-fx-background-color: white; -fx-padding: 16; -fx-background-radius: 10; -fx-border-color: #E2E8F0; -fx-border-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.03), 6, 0, 0, 2);" HBox.hgrow="ALWAYS">
+            <Label text="ACTIVE MEDICAL DOCTORS" style="-fx-text-fill: #64748B; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+            <Label fx:id="totalDoctorsLabel" text="0" style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #059669;"/>
+            <Label text="Registered medical staff" style="-fx-text-fill: #94A3B8; -fx-font-size: 11px;"/>
         </VBox>
 
-        <VBox spacing="5" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;" HBox.hgrow="ALWAYS">
-            <Label text="Completed Lab Tests" style="-fx-text-fill: #64748B; -fx-font-size: 12px;"/>
-            <Label fx:id="completedLabsLabel" text="0" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2563EB;"/>
+        <VBox spacing="6" style="-fx-background-color: white; -fx-padding: 16; -fx-background-radius: 10; -fx-border-color: #E2E8F0; -fx-border-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.03), 6, 0, 0, 2);" HBox.hgrow="ALWAYS">
+            <Label text="COMPLETED LAB TESTS" style="-fx-text-fill: #64748B; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+            <Label fx:id="completedLabsLabel" text="0" style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #2563EB;"/>
+            <Label text="Diagnostic results ready" style="-fx-text-fill: #94A3B8; -fx-font-size: 11px;"/>
         </VBox>
 
-        <VBox spacing="5" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;" HBox.hgrow="ALWAYS">
-            <Label text="Low Stock Medicine Alerts" style="-fx-text-fill: #64748B; -fx-font-size: 12px;"/>
-            <Label fx:id="lowStockLabel" text="0" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #DC2626;"/>
+        <VBox spacing="6" style="-fx-background-color: white; -fx-padding: 16; -fx-background-radius: 10; -fx-border-color: #E2E8F0; -fx-border-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.03), 6, 0, 0, 2);" HBox.hgrow="ALWAYS">
+            <Label text="LOW STOCK ALERTS" style="-fx-text-fill: #64748B; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+            <Label fx:id="lowStockLabel" text="0" style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #DC2626;"/>
+            <Label text="Medicines below reorder level" style="-fx-text-fill: #94A3B8; -fx-font-size: 11px;"/>
         </VBox>
     </HBox>
 
-    <!-- Visual Charts -->
-    <HBox spacing="15" VBox.vgrow="ALWAYS">
-        <!-- Revenue Distribution Pie Chart -->
-        <VBox style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;" HBox.hgrow="ALWAYS">
-            <Label text="Revenue Breakdown by Payment Mode" style="-fx-font-weight: bold; -fx-text-fill: #334155;"/>
-            <PieChart fx:id="paymentPieChart" legendSide="BOTTOM" VBox.vgrow="ALWAYS"/>
-        </VBox>
-
-        <!-- Patient Footfall Bar Chart -->
-        <VBox style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;" HBox.hgrow="ALWAYS">
-            <Label text="Patient Footfall &amp; OPD Visits Queue" style="-fx-font-weight: bold; -fx-text-fill: #334155;"/>
-            <BarChart fx:id="footfallBarChart" VBox.vgrow="ALWAYS">
-                <xAxis><CategoryAxis label="Visit Status"/></xAxis>
+    <!-- Operational Analytics Section -->
+    <HBox spacing="16" VBox.vgrow="ALWAYS">
+        <!-- Patient Flow Bar Chart -->
+        <VBox spacing="10" style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 10; -fx-border-color: #E2E8F0; -fx-border-radius: 10;" HBox.hgrow="ALWAYS" prefWidth="600">
+            <Label text="Patient OPD Queue Status &amp; Volume" style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+            <BarChart fx:id="footfallBarChart" legendVisible="false" VBox.vgrow="ALWAYS">
+                <xAxis><CategoryAxis label="Patient Status"/></xAxis>
                 <yAxis><NumberAxis label="Patient Count"/></yAxis>
             </BarChart>
+        </VBox>
+
+        <!-- Low Stock Inventory & Clinical Alerts Summary Card -->
+        <VBox spacing="12" style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 10; -fx-border-color: #E2E8F0; -fx-border-radius: 10;" prefWidth="380">
+            <Label text="Clinical &amp; Inventory Attention Required" style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+            <VBox spacing="8" VBox.vgrow="ALWAYS">
+                <Label text="Critical Pharmacy Stock Items:" style="-fx-font-weight: bold; -fx-text-fill: #475569; -fx-font-size: 12px;"/>
+                <ListView fx:id="criticalStockListView" prefHeight="180" VBox.vgrow="ALWAYS"/>
+                <Label text="Consultations Pending Doctor Note:" style="-fx-font-weight: bold; -fx-text-fill: #475569; -fx-font-size: 12px;"/>
+                <Label fx:id="pendingConsultationsLabel" text="0 Consultations awaiting completion" style="-fx-text-fill: #D97706; -fx-font-size: 13px; -fx-font-weight: bold;"/>
+            </VBox>
         </VBox>
     </HBox>
 </VBox>
