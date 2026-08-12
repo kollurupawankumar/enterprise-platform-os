@@ -24,6 +24,7 @@ public class MainClinicalController {
     @FXML private Label userRoleLabel;
     @FXML private javafx.scene.image.ImageView clinicLogoImageView;
     @FXML private Label clinicNameLabel;
+    @FXML private Button signOutBtn;
 
     @FXML private Button dashboardBtn;
     @FXML private Button patientBtn;
@@ -45,6 +46,7 @@ public class MainClinicalController {
     @FXML
     public void initialize() {
         updateClinicBranding();
+        hideAllNavigationButtons();
         showLoginView();
     }
 
@@ -68,12 +70,34 @@ public class MainClinicalController {
         }
     }
 
+    public void hideAllNavigationButtons() {
+        setButtonState(dashboardBtn, false);
+        setButtonState(patientBtn, false);
+        setButtonState(doctorRosterBtn, false);
+        setButtonState(visitBtn, false);
+        setButtonState(doctorBtn, false);
+        setButtonState(labBtn, false);
+        setButtonState(pharmacyBtn, false);
+        setButtonState(billingBtn, false);
+        setButtonState(reportsBtn, false);
+        setButtonState(adminBtn, false);
+        if (signOutBtn != null) signOutBtn.setVisible(false);
+    }
+
+    private void setButtonState(Button btn, boolean visible) {
+        if (btn != null) {
+            btn.setVisible(visible);
+            btn.setManaged(visible);
+        }
+    }
+
     @FXML
     public void handleSignOut() {
         authService.setCurrentUser(null);
         if (userRoleLabel != null) {
             userRoleLabel.setText("Not Logged In");
         }
+        hideAllNavigationButtons();
         showLoginView();
     }
 
@@ -99,20 +123,21 @@ public class MainClinicalController {
         if (userRoleLabel != null) {
             userRoleLabel.setText("User: " + currentUser.getFullName() + " (" + currentUser.getRole() + ")");
         }
+        if (signOutBtn != null) signOutBtn.setVisible(true);
 
         String role = currentUser.getRole();
 
         // Control sidebar button visibility based on user role
-        if (dashboardBtn != null) dashboardBtn.setVisible(true);
-        if (patientBtn != null) patientBtn.setVisible("ADMIN".equals(role) || "RECEPTIONIST".equals(role));
-        if (doctorRosterBtn != null) doctorRosterBtn.setVisible("ADMIN".equals(role) || "RECEPTIONIST".equals(role));
-        if (visitBtn != null) visitBtn.setVisible("ADMIN".equals(role) || "RECEPTIONIST".equals(role) || "DOCTOR".equals(role));
-        if (doctorBtn != null) doctorBtn.setVisible("ADMIN".equals(role) || "DOCTOR".equals(role));
-        if (labBtn != null) labBtn.setVisible("ADMIN".equals(role) || "LAB_TECHNICIAN".equals(role) || "DOCTOR".equals(role));
-        if (pharmacyBtn != null) pharmacyBtn.setVisible("ADMIN".equals(role) || "PHARMACIST".equals(role));
-        if (billingBtn != null) billingBtn.setVisible("ADMIN".equals(role) || "ACCOUNTANT".equals(role) || "RECEPTIONIST".equals(role));
-        if (reportsBtn != null) reportsBtn.setVisible(true);
-        if (adminBtn != null) adminBtn.setVisible("ADMIN".equals(role));
+        setButtonState(dashboardBtn, true);
+        setButtonState(patientBtn, "ADMIN".equals(role) || "RECEPTIONIST".equals(role));
+        setButtonState(doctorRosterBtn, "ADMIN".equals(role) || "RECEPTIONIST".equals(role));
+        setButtonState(visitBtn, "ADMIN".equals(role) || "RECEPTIONIST".equals(role) || "DOCTOR".equals(role));
+        setButtonState(doctorBtn, "ADMIN".equals(role) || "DOCTOR".equals(role));
+        setButtonState(labBtn, "ADMIN".equals(role) || "LAB_TECHNICIAN".equals(role) || "DOCTOR".equals(role));
+        setButtonState(pharmacyBtn, "ADMIN".equals(role) || "PHARMACIST".equals(role));
+        setButtonState(billingBtn, "ADMIN".equals(role) || "ACCOUNTANT".equals(role) || "RECEPTIONIST".equals(role));
+        setButtonState(reportsBtn, true);
+        setButtonState(adminBtn, "ADMIN".equals(role));
 
         // Route default view per role
         switch (role) {
@@ -136,6 +161,10 @@ public class MainClinicalController {
     @FXML public void showAdminModule() { loadView("/fxml/admin_view.fxml"); }
 
     private void loadView(String fxmlPath) {
+        if (authService.getCurrentUser() == null) {
+            showLoginView();
+            return;
+        }
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             loader.setControllerFactory(applicationContext::getBean);

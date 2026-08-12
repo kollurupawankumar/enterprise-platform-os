@@ -14,7 +14,7 @@
             <Label fx:id="clinicNameLabel" text="Apex Multispecialty Clinic" style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;"/>
             <Region HBox.hgrow="ALWAYS"/>
             <Label fx:id="userRoleLabel" text="Not Logged In" style="-fx-text-fill: #94A3B8; -fx-font-size: 14px;"/>
-            <Button text="Sign Out" onAction="#handleSignOut" style="-fx-background-color: #DC2626; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;"/>
+            <Button fx:id="signOutBtn" text="Sign Out" onAction="#handleSignOut" style="-fx-background-color: #DC2626; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;"/>
         </HBox>
     </top>
 
