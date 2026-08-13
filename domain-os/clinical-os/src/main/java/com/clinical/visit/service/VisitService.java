@@ -12,9 +12,11 @@ import java.util.Optional;
 public interface VisitService {
     VisitEntity createVisit(String patientId, String doctorName, String visitType);
     Optional<VisitEntity> findByVisitId(String visitId);
+    Optional<VisitEntity> getVisitById(String visitId);
     List<VisitEntity> getPatientVisits(String patientId);
     List<VisitEntity> getQueueByStatus(String status);
     List<VisitEntity> getActiveVisits();
+    List<VisitEntity> getAllVisits();
     VisitEntity updateStatus(String visitId, String status);
 }
 
@@ -51,6 +53,12 @@ class VisitServiceImpl implements VisitService {
 
     @Override
     @Transactional(readOnly = true)
+    public Optional<VisitEntity> getVisitById(String visitId) {
+        return findByVisitId(visitId);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public List<VisitEntity> getPatientVisits(String patientId) {
         return visitRepository.findByPatientIdOrderByVisitDateDesc(patientId);
     }
@@ -64,6 +72,12 @@ class VisitServiceImpl implements VisitService {
     @Override
     @Transactional(readOnly = true)
     public List<VisitEntity> getActiveVisits() {
+        return visitRepository.findAll();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<VisitEntity> getAllVisits() {
         return visitRepository.findAll();
     }
 
