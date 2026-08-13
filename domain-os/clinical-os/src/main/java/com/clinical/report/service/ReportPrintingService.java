@@ -96,22 +96,50 @@ public class ReportPrintingService {
         return html.toString();
     }
 
-    // 3. Official Laboratory Test Report HTML
+    // 3. Official Laboratory Diagnostic Test Certificate HTML
     public String generateLabReportHtml(LabOrderEntity labOrder, PatientEntity patient) {
         StringBuilder html = new StringBuilder();
-        appendReportHeader(html, "LABORATORY DIAGNOSTIC TEST REPORT");
+        appendReportHeader(html, "OFFICIAL LABORATORY DIAGNOSTIC CERTIFICATE");
+
+        String ageGender = (patient != null && patient.getCalculatedAge() != null) ? patient.getCalculatedAge() + " Yrs / " + patient.getGender() : "N/A";
+        String pName = patient != null ? patient.getFirstName() + " " + patient.getLastName() : (labOrder.getPatientId() != null ? labOrder.getPatientId() : "Walk-in Patient");
 
         html.append("<div class='section'>")
-            .append("<p><b>Order ID:</b> ").append(labOrder.getOrderId()).append(" &nbsp;&nbsp;&nbsp;&nbsp; <b>Date:</b> ").append(labOrder.getCreatedAt() != null ? labOrder.getCreatedAt().format(DATE_FORMATTER) : "N/A").append("</p>")
-            .append("<p><b>Patient Name:</b> ").append(patient != null ? patient.getFirstName() + " " + patient.getLastName() : labOrder.getPatientId()).append(" &nbsp;&nbsp;&nbsp;&nbsp; <b>Test Name:</b> ").append(labOrder.getTestName()).append("</p>")
-            .append("<p><b>Test Status:</b> <span class='badge paid'>").append(labOrder.getStatus()).append("</span></p>")
-            .append("</div>");
+            .append("<table style='border:none;'>")
+            .append("<tr><td><b>Order ID:</b> ").append(labOrder.getOrderId()).append("</td><td><b>Date / Time:</b> ").append(labOrder.getCreatedAt() != null ? labOrder.getCreatedAt().format(DATE_FORMATTER) : "N/A").append("</td></tr>")
+            .append("<tr><td><b>Patient Name:</b> ").append(pName).append(" (ID: ").append(labOrder.getPatientId() != null ? labOrder.getPatientId() : "N/A").append(")</td><td><b>Age / Gender:</b> ").append(ageGender).append("</td></tr>")
+            .append("<tr><td><b>Referred By Doctor:</b> ").append(labOrder.getDoctorName() != null ? labOrder.getDoctorName() : "Self / Walk-in").append("</td><td><b>Test Status:</b> <span class='badge paid'>").append(labOrder.getStatus()).append("</span></td></tr>")
+            .append("</table></div>");
 
-        html.append("<div class='section'><h3>Observed Findings & Result Parameters</h3>")
-            .append("<div style='background-color:#F8FAFC; padding:15px; border-radius:6px; border:1px solid #CBD5E1;'>")
-            .append("<p><b>Result Values:</b></p><p style='font-family:monospace; font-size:14px;'>").append(labOrder.getResult() != null ? labOrder.getResult() : "Awaiting lab analysis...").append("</p>")
-            .append("<br/><p><b>Pathologist / Technician Remarks:</b> ").append(labOrder.getRemarks() != null ? labOrder.getRemarks() : "None").append("</p>")
-            .append("</div></div>");
+        html.append("<div class='section'><h3>Diagnostic Findings & Parameter Results</h3>");
+
+        if (labOrder.getItems() != null && !labOrder.getItems().isEmpty()) {
+            html.append("<table><thead><tr><th>Test / Parameter Name</th><th>Observed Result</th><th>Units</th><th>Normal Reference Range</th><th>Flag Alert</th></tr></thead><tbody>");
+            for (com.clinical.lab.entity.LabOrderItemEntity item : labOrder.getItems()) {
+                String val = item.getResultValue() != null ? item.getResultValue() : "Pending";
+                String flag = item.getFlag() != null ? item.getFlag() : "NORMAL";
+                String flagBadge = "NORMAL".equalsIgnoreCase(flag) ? "<span class='badge paid'>NORMAL</span>" :
+                        ("<span style='background-color:#FEF2F2; color:#DC2626; padding:3px 8px; border-radius:4px; font-weight:bold;'>⚠️ " + flag + "</span>");
+
+                html.append("<tr>")
+                    .append("<td><b>").append(item.getTestName()).append("</b> <small style='color:#64748B;'>(").append(item.getTestCode()).append(")</small></td>")
+                    .append("<td style='font-weight:bold; font-size:14px;'>").append(val).append("</td>")
+                    .append("<td>").append(item.getUnits() != null ? item.getUnits() : "--").append("</td>")
+                    .append("<td>").append(item.getNormalRange() != null ? item.getNormalRange() : "--").append("</td>")
+                    .append("<td>").append(flagBadge).append("</td>")
+                    .append("</tr>");
+            }
+            html.append("</tbody></table>");
+        } else {
+            html.append("<div style='background-color:#F8FAFC; padding:15px; border-radius:6px; border:1px solid #CBD5E1;'>")
+                .append("<p><b>Tests Requested:</b> ").append(labOrder.getTestName()).append("</p>")
+                .append("<p><b>Result Findings:</b></p><p style='font-family:monospace;'>").append(labOrder.getResult() != null ? labOrder.getResult() : "Awaiting lab analysis...").append("</p>")
+                .append("<p><b>Pathologist Remarks:</b> ").append(labOrder.getRemarks() != null ? labOrder.getRemarks() : "None").append("</p>")
+                .append("</div>");
+        }
+        html.append("</div>");
+
+        html.append("<br/><div style='margin-top:30px; text-align:right;'><p style='border-top:1px solid #94A3B8; display:inline-block; padding-top:5px; width:220px; text-align:center;'><b>Authorized Pathologist Signature</b></p></div>");
 
         appendReportFooter(html);
         return html.toString();
@@ -120,6 +148,37 @@ public class ReportPrintingService {
     public String generateLabReportHtml(LabOrderEntity labOrder) {
         return generateLabReportHtml(labOrder, null);
     }
+
+    // 3b. Standalone Laboratory Receipt HTML
+    public String generateLabReceiptHtml(LabOrderEntity labOrder, PatientEntity patient) {
+        StringBuilder html = new StringBuilder();
+        appendReportHeader(html, "LABORATORY PAYMENT RECEIPT & INVOICE");
+
+        String pName = patient != null ? patient.getFirstName() + " " + patient.getLastName() : (labOrder.getPatientId() != null ? labOrder.getPatientId() : "Walk-in Patient");
+
+        html.append("<div class='section'>")
+            .append("<p><b>Receipt Order No:</b> ").append(labOrder.getOrderId()).append(" &nbsp;&nbsp;&nbsp;&nbsp; <b>Date:</b> ").append(labOrder.getCreatedAt() != null ? labOrder.getCreatedAt().format(DATE_FORMATTER) : LocalDateTime.now().format(DATE_FORMATTER)).append("</p>")
+            .append("<p><b>Patient Name:</b> ").append(pName).append(" &nbsp;&nbsp;&nbsp;&nbsp; <b>Doctor Name:</b> ").append(labOrder.getDoctorName() != null ? labOrder.getDoctorName() : "Self / Walk-in").append("</p>")
+            .append("<p><b>Payment Status:</b> <span class='badge ").append("PAID".equalsIgnoreCase(labOrder.getPaymentStatus()) ? "paid" : "unpaid").append("'>").append(labOrder.getPaymentStatus()).append("</span> &nbsp;&nbsp; <b>Payment Mode:</b> ").append(labOrder.getPaymentMode() != null ? labOrder.getPaymentMode() : "CASH").append("</p>")
+            .append("</div>");
+
+        html.append("<div class='section'><h3>Diagnostic Test Itemization</h3><table><thead><tr><th>Test Code</th><th>Test Name</th><th style='text-align:right;'>Price (₹)</th></tr></thead><tbody>");
+
+        if (labOrder.getItems() != null && !labOrder.getItems().isEmpty()) {
+            for (com.clinical.lab.entity.LabOrderItemEntity item : labOrder.getItems()) {
+                html.append("<tr><td>").append(item.getTestCode()).append("</td><td>").append(item.getTestName()).append("</td><td style='text-align:right;'>₹ ").append(item.getPrice()).append("</td></tr>");
+            }
+        } else {
+            html.append("<tr><td>LAB-001</td><td>").append(labOrder.getTestName()).append("</td><td style='text-align:right;'>₹ ").append(labOrder.getTotalAmount() != null ? labOrder.getTotalAmount() : "0.00").append("</td></tr>");
+        }
+
+        html.append("<tr style='font-weight:bold; background-color:#F1F5F9;'><td colspan='2'>Total Amount Paid</td><td style='text-align:right;'>₹ ").append(labOrder.getTotalAmount() != null ? labOrder.getTotalAmount() : "0.00").append("</td></tr>");
+        html.append("</tbody></table></div>");
+
+        appendReportFooter(html);
+        return html.toString();
+    }
+
 
     // 4. Doctor Schedule & Performance Report HTML
     public String generateDoctorRosterReportHtml(List<DoctorEntity> doctors) {

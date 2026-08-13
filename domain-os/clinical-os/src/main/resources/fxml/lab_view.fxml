@@ -5,51 +5,120 @@
 
 <VBox spacing="15" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.clinical.ui.controller.LabViewController"
-      style="-fx-background-color: #F8FAFC; -fx-padding: 20;">
+      style="-fx-background-color: #F8FAFC; -fx-padding: 20;" VBox.vgrow="ALWAYS">
+    
     <Label text="Laboratory &amp; Diagnostic Test Center" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
 
     <HBox spacing="15" VBox.vgrow="ALWAYS">
-        <!-- Order Test & Record Result Panel -->
-        <VBox spacing="12" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;" prefWidth="320">
-            <Label text="Order New Diagnostic Test" style="-fx-font-weight: bold; -fx-font-size: 14px;"/>
-            <TextField fx:id="visitIdField" promptText="Visit ID (e.g. VISIT-2026-000001)"/>
-            <TextField fx:id="testNameField" promptText="Test Name (e.g. Lipid Profile, CBC)"/>
-            <Button text="Create Lab Order" onAction="#handleCreateLabOrder" style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-font-weight: bold;" prefWidth="290"/>
-
-            <Separator style="-fx-padding: 10 0 10 0;"/>
-
-            <Label text="Update Test Status &amp; Result" style="-fx-font-weight: bold; -fx-font-size: 14px;"/>
-            <TextField fx:id="selectedOrderField" promptText="Selected Order ID" editable="false"/>
-            <ComboBox fx:id="statusCombo" promptText="Update Status" prefWidth="290"/>
-            <TextArea fx:id="resultArea" promptText="Enter lab findings and pathologist observations..." prefHeight="100"/>
-            <Button text="💾 Save Lab Result &amp; Update Status" onAction="#handleSaveResult" style="-fx-background-color: #059669; -fx-text-fill: white; -fx-font-weight: bold;" prefWidth="290"/>
-            <Button text="🖨️ Print Lab Report" onAction="#handlePrintReport" style="-fx-background-color: #7C3AED; -fx-text-fill: white; -fx-font-weight: bold;" prefWidth="290"/>
-        </VBox>
-
-        <!-- Complete Lab History Table & Report Viewer Split -->
-        <VBox spacing="10" HBox.hgrow="ALWAYS">
-            <VBox spacing="8" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;" VBox.vgrow="ALWAYS">
-                <HBox alignment="CENTER_LEFT" spacing="10">
-                    <Label text="Complete Diagnostic Test Orders &amp; Report History" style="-fx-font-weight: bold; -fx-font-size: 14px;"/>
-                    <Region HBox.hgrow="ALWAYS"/>
-                    <Button text="Show All History" onAction="#loadAllLabOrders" style="-fx-background-color: #475569; -fx-text-fill: white;"/>
-                </HBox>
-                <TableView fx:id="labOrderTable" VBox.vgrow="ALWAYS" prefHeight="220">
-                    <columns>
-                        <TableColumn fx:id="orderIdCol" text="Order ID" prefWidth="130"/>
-                        <TableColumn fx:id="visitIdCol" text="Visit ID" prefWidth="130"/>
-                        <TableColumn fx:id="testNameCol" text="Test Name" prefWidth="160"/>
-                        <TableColumn fx:id="statusCol" text="Status" prefWidth="120"/>
-                        <TableColumn fx:id="resultCol" text="Findings / Results Summary" prefWidth="220"/>
-                    </columns>
-                </TableView>
+        <!-- LEFT PANEL: Multi-Test Order Cart & Requisition -->
+        <VBox spacing="12" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;" prefWidth="360">
+            <Label text="Create Lab Order &amp; Requisition" style="-fx-font-weight: bold; -fx-font-size: 14px; -fx-text-fill: #1E293B;"/>
+            
+            <VBox spacing="4">
+                <Label text="Select Patient (OPD / Walk-in) *:" style="-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #475569;"/>
+                <ComboBox fx:id="patientCombo" prefWidth="330" promptText="Select or Search Patient"/>
             </VBox>
 
-            <!-- Printable HTML Preview Pane -->
-            <VBox spacing="5" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;" prefHeight="260">
-                <Label text="Printable Diagnostic Report Preview" style="-fx-font-weight: bold; -fx-text-fill: #334155;"/>
+            <VBox spacing="4">
+                <Label text="Referring Doctor:" style="-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #475569;"/>
+                <ComboBox fx:id="doctorCombo" prefWidth="330" promptText="Select Doctor (Default: Self/Walk-in)"/>
+            </VBox>
+
+            <VBox spacing="4">
+                <Label text="Add Diagnostic Test from Catalog:" style="-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #475569;"/>
+                <HBox spacing="6">
+                    <ComboBox fx:id="catalogCombo" HBox.hgrow="ALWAYS" maxWidth="230" promptText="Select Test"/>
+                    <Button text="+ Add" onAction="#handleAddToCart" style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                </HBox>
+            </VBox>
+
+            <VBox spacing="4" VBox.vgrow="ALWAYS">
+                <Label text="Selected Order Items Cart:" style="-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #475569;"/>
+                <ListView fx:id="cartListView" prefHeight="130" VBox.vgrow="ALWAYS"/>
+                <HBox alignment="CENTER_RIGHT" spacing="5">
+                    <Button text="Clear Cart" onAction="#handleClearCart" style="-fx-background-color: #EF4444; -fx-text-fill: white; -fx-font-size: 10px;"/>
+                </HBox>
+            </VBox>
+
+            <VBox spacing="8" style="-fx-background-color: #F8FAFC; -fx-padding: 10; -fx-background-radius: 6; -fx-border-color: #CBD5E1; -fx-border-radius: 6;">
+                <HBox alignment="CENTER_LEFT">
+                    <Label text="Total Payable Amount:" style="-fx-font-weight: bold; -fx-font-size: 12px;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label fx:id="cartTotalLabel" text="₹ 0.00" style="-fx-font-weight: bold; -fx-font-size: 15px; -fx-text-fill: #059669;"/>
+                </HBox>
+
+                <HBox spacing="8" alignment="CENTER_LEFT">
+                    <Label text="Payment Mode:" style="-fx-font-size: 11px; -fx-font-weight: bold;"/>
+                    <ComboBox fx:id="paymentModeCombo" prefWidth="170"/>
+                </HBox>
+            </VBox>
+
+            <Button text="🧾 Create Order &amp; Issue Lab Bill" onAction="#handleCreateOrderAndBill" style="-fx-background-color: #059669; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 13px;" prefWidth="330"/>
+        </VBox>
+
+        <!-- RIGHT MAIN AREA: Orders, Parameter Results & Report Viewer -->
+        <VBox spacing="10" HBox.hgrow="ALWAYS">
+            <VBox spacing="8" style="-fx-background-color: white; -fx-padding: 12; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;" VBox.vgrow="ALWAYS">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="Diagnostic Orders &amp; Parameter Findings" style="-fx-font-weight: bold; -fx-font-size: 13px; -fx-text-fill: #1E293B;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button text="🔄 Refresh Orders" onAction="#loadAllLabOrders" style="-fx-background-color: #475569; -fx-text-fill: white; -fx-font-size: 11px;"/>
+                </HBox>
+                
+                <TableView fx:id="labOrderTable" prefHeight="130">
+                    <columns>
+                        <TableColumn fx:id="orderIdCol" text="Order ID" prefWidth="110"/>
+                        <TableColumn fx:id="patientIdCol" text="Patient ID / Name" prefWidth="160"/>
+                        <TableColumn fx:id="testNameCol" text="Tests Included" prefWidth="190"/>
+                        <TableColumn fx:id="totalAmountCol" text="Total Amount" prefWidth="100"/>
+                        <TableColumn fx:id="paymentStatusCol" text="Payment" prefWidth="90"/>
+                        <TableColumn fx:id="statusCol" text="Order Status" prefWidth="110"/>
+                    </columns>
+                </TableView>
+
+                <Separator/>
+
+                <!-- Itemized Parameter Result Editor -->
+                <VBox spacing="8">
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+                        <Label text="Parameter Findings for Selected Order:" style="-fx-font-weight: bold; -fx-font-size: 12px; -fx-text-fill: #334155;"/>
+                        <Label fx:id="selectedItemLabel" text="Select an order item to record findings" style="-fx-font-style: italic; -fx-text-fill: #0284C7;"/>
+                    </HBox>
+
+                    <HBox spacing="10">
+                        <TableView fx:id="labItemTable" HBox.hgrow="ALWAYS" prefHeight="110">
+                            <columns>
+                                <TableColumn fx:id="itemCodeCol" text="Test Code" prefWidth="90"/>
+                                <TableColumn fx:id="itemNameCol" text="Test Name" prefWidth="140"/>
+                                <TableColumn fx:id="itemResultCol" text="Observed Value" prefWidth="110"/>
+                                <TableColumn fx:id="itemUnitsCol" text="Units" prefWidth="70"/>
+                                <TableColumn fx:id="itemRangeCol" text="Normal Range" prefWidth="110"/>
+                                <TableColumn fx:id="itemFlagCol" text="Flag Alert" prefWidth="85"/>
+                                <TableColumn fx:id="itemStatusCol" text="Status" prefWidth="90"/>
+                            </columns>
+                        </TableView>
+
+                        <VBox spacing="6" prefWidth="250" style="-fx-background-color: #F8FAFC; -fx-padding: 10; -fx-background-radius: 6;">
+                            <Label text="Record Test Value:" style="-fx-font-weight: bold; -fx-font-size: 11px;"/>
+                            <TextField fx:id="resultValueField" promptText="e.g. 14.5 or 240"/>
+                            <TextField fx:id="remarksField" promptText="Pathologist remarks..."/>
+                            <Button text="💾 Save Result Value" onAction="#handleSaveItemResult" style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-font-weight: bold;" prefWidth="230"/>
+                        </VBox>
+                    </HBox>
+                </VBox>
+            </VBox>
+
+            <!-- Printable Certificate & Receipt Web Preview Pane -->
+            <VBox spacing="8" style="-fx-background-color: white; -fx-padding: 12; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;" prefHeight="220">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="Diagnostic Certificate &amp; Receipt Preview" style="-fx-font-weight: bold; -fx-text-fill: #334155;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button text="🖨️ Print Diagnostic Certificate" onAction="#handlePrintCertificate" style="-fx-background-color: #7C3AED; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                    <Button text="🧾 Print Lab Payment Receipt" onAction="#handlePrintReceipt" style="-fx-background-color: #0284C7; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                </HBox>
                 <WebView fx:id="reportWebView" VBox.vgrow="ALWAYS"/>
             </VBox>
         </VBox>
     </HBox>
 </VBox>
+
