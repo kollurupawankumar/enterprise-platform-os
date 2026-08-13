@@ -4,134 +4,212 @@
 
 <VBox spacing="15" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.clinical.ui.controller.DoctorViewController"
-      style="-fx-background-color: #F8FAFC; -fx-padding: 20;">
+      style="-fx-background-color: #F8FAFC; -fx-padding: 20;" VBox.vgrow="ALWAYS">
 
     <Label text="Doctor Consultation Workspace - Clinical Flow Engine" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
 
-    <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-background-color: white; -fx-padding: 10; -fx-background-radius: 8;">
-        <Label text="Select Active Visit Queue:" style="-fx-font-weight: bold;"/>
-        <ComboBox fx:id="visitQueueCombo" prefWidth="300" promptText="Select Patient Visit"/>
-        <Button text="Load Patient Record" onAction="#handleLoadVisit" style="-fx-background-color: #0284C7; -fx-text-fill: white; -fx-font-weight: bold;"/>
-        <Label fx:id="patientSummaryLabel" style="-fx-font-weight: bold; -fx-text-fill: #059669;"/>
+    <!-- Top Filter Bar -->
+    <HBox spacing="15" alignment="CENTER_LEFT" style="-fx-background-color: white; -fx-padding: 12; -fx-background-radius: 8;">
+        <VBox spacing="2">
+            <Label text="Filter by Doctor:" style="-fx-font-weight: bold; -fx-font-size: 11px; -fx-text-fill: #475569;"/>
+            <ComboBox fx:id="doctorFilterCombo" prefWidth="240" promptText="All Doctors"/>
+        </VBox>
+
+        <VBox spacing="2" HBox.hgrow="ALWAYS">
+            <Label text="Waiting Patient Queue:" style="-fx-font-weight: bold; -fx-font-size: 11px; -fx-text-fill: #475569;"/>
+            <HBox spacing="8">
+                <ComboBox fx:id="visitQueueCombo" HBox.hgrow="ALWAYS" maxWidth="Infinity" promptText="Select Patient Visit Queue"/>
+                <Button text="Load Patient Record" onAction="#handleLoadVisit" style="-fx-background-color: #0284C7; -fx-text-fill: white; -fx-font-weight: bold;"/>
+            </HBox>
+        </VBox>
     </HBox>
 
-    <TabPane tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+    <!-- Patient Demographics & Allergy Safety Banner -->
+    <VBox spacing="6" style="-fx-background-color: white; -fx-padding: 12 15 12 15; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;">
+        <HBox spacing="20" alignment="CENTER_LEFT">
+            <Label fx:id="patientSummaryLabel" text="No Patient Loaded" style="-fx-font-weight: bold; -fx-font-size: 14px; -fx-text-fill: #1E293B;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="allergiesAlertLabel" text="⚠️ Allergies: None Recorded" style="-fx-background-color: #FEF2F2; -fx-text-fill: #DC2626; -fx-padding: 4 10 4 10; -fx-background-radius: 4; -fx-font-weight: bold; -fx-font-size: 12px;"/>
+        </HBox>
+    </VBox>
 
-        <!-- TAB 1: Vitals & History -->
-        <Tab text="1. Vitals &amp; Medical History">
-            <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;">
-                <VBox spacing="15" style="-fx-padding: 15;">
-                    <GridPane hgap="15" vgap="10">
-                        <Label text="Chief Complaint *:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-                        <TextField fx:id="chiefComplaintField" promptText="e.g. Fever, Cough for 3 days" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="0"/>
+    <!-- Workspace Main Tabs -->
+    <TabPane tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS" style="-fx-background-color: transparent;">
 
-                        <Label text="Systolic BP (mmHg):" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-                        <TextField fx:id="systolicBpField" promptText="120" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+        <!-- TAB 1: ACTIVE CONSULTATION -->
+        <Tab text="📋 Active Consultation Workspace">
+            <TabPane tabClosingPolicy="UNAVAILABLE" style="-fx-background-color: transparent;">
+                <!-- Sub-Tab 1: Vitals & Medical History -->
+                <Tab text="1. Vitals &amp; Medical History">
+                    <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;">
+                        <VBox spacing="15" style="-fx-padding: 15;">
+                            <GridPane hgap="15" vgap="10">
+                                <Label text="Chief Complaint *:" GridPane.columnIndex="0" GridPane.rowIndex="0" style="-fx-font-weight: bold;"/>
+                                <TextField fx:id="chiefComplaintField" promptText="e.g. Fever, Cough for 3 days" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="0"/>
 
-                        <Label text="Diastolic BP (mmHg):" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
-                        <TextField fx:id="diastolicBpField" promptText="80" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
+                                <Label text="Systolic BP (mmHg):" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                                <TextField fx:id="systolicBpField" promptText="120" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
 
-                        <Label text="Pulse Rate (bpm):" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-                        <TextField fx:id="pulseField" promptText="72" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                                <Label text="Diastolic BP (mmHg):" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+                                <TextField fx:id="diastolicBpField" promptText="80" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
 
-                        <Label text="Temperature (°F):" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
-                        <TextField fx:id="tempField" promptText="98.6" GridPane.columnIndex="3" GridPane.rowIndex="2"/>
+                                <Label text="Pulse Rate (bpm):" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                                <TextField fx:id="pulseField" promptText="72" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
 
-                        <Label text="SpO2 (%):" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
-                        <TextField fx:id="spo2Field" promptText="99" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                                <Label text="Temperature (°F):" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
+                                <TextField fx:id="tempField" promptText="98.6" GridPane.columnIndex="3" GridPane.rowIndex="2"/>
 
-                        <Label text="Weight (kg):" GridPane.columnIndex="2" GridPane.rowIndex="3"/>
-                        <TextField fx:id="weightField" promptText="70" GridPane.columnIndex="3" GridPane.rowIndex="3"/>
+                                <Label text="SpO2 (%):" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                                <TextField fx:id="spo2Field" promptText="99" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
 
-                        <Label text="Height (cm):" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
-                        <TextField fx:id="heightField" promptText="170" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+                                <Label text="Weight (kg):" GridPane.columnIndex="2" GridPane.rowIndex="3"/>
+                                <TextField fx:id="weightField" promptText="70" GridPane.columnIndex="3" GridPane.rowIndex="3"/>
 
-                        <Label text="Calculated BMI:" GridPane.columnIndex="2" GridPane.rowIndex="4"/>
-                        <Label fx:id="bmiLabel" text="--.--" style="-fx-font-weight: bold;"/>
-                    </GridPane>
+                                <Label text="Height (cm):" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+                                <TextField fx:id="heightField" promptText="170" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
 
-                    <VBox spacing="5">
-                        <Label text="Longitudinal Medical &amp; Surgical History:" style="-fx-font-weight: bold;"/>
-                        <TextArea fx:id="historyArea" prefRowCount="3" promptText="Past history, chronic conditions, family history..."/>
+                                <Label text="Calculated BMI:" GridPane.columnIndex="2" GridPane.rowIndex="4"/>
+                                <Label fx:id="bmiLabel" text="--.--" style="-fx-font-weight: bold; -fx-text-fill: #0284C7;"/>
+                            </GridPane>
+
+                            <VBox spacing="5">
+                                <Label text="Longitudinal Medical &amp; Surgical History:" style="-fx-font-weight: bold;"/>
+                                <TextArea fx:id="historyArea" prefRowCount="3" promptText="Past history, chronic conditions, family history..."/>
+                            </VBox>
+                        </VBox>
+                    </ScrollPane>
+                </Tab>
+
+                <!-- Sub-Tab 2: Physical Exam & Assessment -->
+                <Tab text="2. Examination &amp; Assessment">
+                    <VBox spacing="15" style="-fx-padding: 15;">
+                        <VBox spacing="5">
+                            <Label text="Physical Examination Findings:" style="-fx-font-weight: bold;"/>
+                            <TextArea fx:id="examArea" prefRowCount="4" promptText="Systemic examination, pallor, edema, chest clear, P/A soft..."/>
+                        </VBox>
+                        <VBox spacing="5">
+                            <Label text="Clinical Assessment &amp; Impression:" style="-fx-font-weight: bold;"/>
+                            <TextArea fx:id="assessmentArea" prefRowCount="4" promptText="Doctor's clinical reasoning, differential diagnosis..."/>
+                        </VBox>
                     </VBox>
-                </VBox>
-            </ScrollPane>
-        </Tab>
+                </Tab>
 
-        <!-- TAB 2: Physical Exam & Assessment -->
-        <Tab text="2. Examination &amp; Assessment">
-            <VBox spacing="15" style="-fx-padding: 15;">
-                <VBox spacing="5">
-                    <Label text="Physical Examination Findings:" style="-fx-font-weight: bold;"/>
-                    <TextArea fx:id="examArea" prefRowCount="4" promptText="Systemic examination, pallor, edema, chest clear, P/A soft..."/>
-                </VBox>
-                <VBox spacing="5">
-                    <Label text="Clinical Assessment &amp; Impression:" style="-fx-font-weight: bold;"/>
-                    <TextArea fx:id="assessmentArea" prefRowCount="4" promptText="Doctor's clinical reasoning, differential diagnosis..."/>
-                </VBox>
-            </VBox>
-        </Tab>
+                <!-- Sub-Tab 3: Diagnosis & ICD-10 -->
+                <Tab text="3. Diagnosis (ICD-10)">
+                    <VBox spacing="15" style="-fx-padding: 15;">
+                        <GridPane hgap="15" vgap="10">
+                            <Label text="ICD-10 Code:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                            <TextField fx:id="icdCodeField" promptText="e.g. J06.9" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
 
-        <!-- TAB 3: Diagnosis & ICD-10 -->
-        <Tab text="3. Diagnosis (ICD-10)">
-            <VBox spacing="15" style="-fx-padding: 15;">
-                <GridPane hgap="15" vgap="10">
-                    <Label text="ICD-10 Code:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-                    <TextField fx:id="icdCodeField" promptText="e.g. J06.9" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                            <Label text="ICD Description:" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+                            <TextField fx:id="icdDescField" promptText="Acute upper respiratory infection" GridPane.columnIndex="3" GridPane.rowIndex="0"/>
 
-                    <Label text="ICD Description:" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
-                    <TextField fx:id="icdDescField" promptText="Acute upper respiratory infection" GridPane.columnIndex="3" GridPane.rowIndex="0"/>
-
-                    <Label text="Provisional / Final Diagnosis *:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-                    <TextField fx:id="diagnosisField" promptText="Clinical Diagnosis" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="1"/>
-                </GridPane>
-            </VBox>
-        </Tab>
-
-        <!-- TAB 4: Orders & Referral -->
-        <Tab text="4. Orders (Prescription &amp; Lab) &amp; Referral">
-            <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;">
-                <VBox spacing="15" style="-fx-padding: 15;">
-                    <TitledPane text="Prescription Items (Pharmacy Order)" expanded="true">
-                        <VBox spacing="8" style="-fx-padding: 10;">
-                            <HBox spacing="10">
-                                <TextField fx:id="medNameField" promptText="Medicine Name (e.g. Paracetamol 500mg)" prefWidth="250"/>
-                                <TextField fx:id="medDosageField" promptText="Dosage (e.g. 1-0-1)" prefWidth="120"/>
-                                <TextField fx:id="medDurationField" promptText="Duration (e.g. 5 Days)" prefWidth="120"/>
-                                <Button text="Add Medicine" onAction="#handleAddMedicine" style="-fx-background-color: #2563EB; -fx-text-fill: white;"/>
-                            </HBox>
-                            <ListView fx:id="prescriptionListView" prefHeight="90"/>
-                        </VBox>
-                    </TitledPane>
-
-                    <TitledPane text="Laboratory Orders (Lab Test Request)" expanded="true">
-                        <VBox spacing="8" style="-fx-padding: 10;">
-                            <HBox spacing="10">
-                                <TextField fx:id="labTestNameField" promptText="Lab Test (e.g. Complete Blood Count / Lipid Profile)" prefWidth="350"/>
-                                <Button text="Add Lab Order" onAction="#handleAddLabOrder" style="-fx-background-color: #059669; -fx-text-fill: white;"/>
-                            </HBox>
-                            <ListView fx:id="labOrderListView" prefHeight="90"/>
-                        </VBox>
-                    </TitledPane>
-
-                    <TitledPane text="Patient Referral (Specialist / Hospital Transfer)" expanded="false">
-                        <GridPane hgap="15" vgap="10" style="-fx-padding: 10;">
-                            <Label text="Target Specialty:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-                            <TextField fx:id="refSpecialtyField" promptText="Cardiology / Neurology" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
-
-                            <Label text="Target Hospital:" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
-                            <TextField fx:id="refHospitalField" promptText="City General Hospital" GridPane.columnIndex="3" GridPane.rowIndex="0"/>
-
-                            <Label text="Referral Reason:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-                            <TextField fx:id="refReasonField" promptText="Specialist evaluation" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="1"/>
+                            <Label text="Provisional / Final Diagnosis *:" GridPane.columnIndex="0" GridPane.rowIndex="1" style="-fx-font-weight: bold;"/>
+                            <TextField fx:id="diagnosisField" promptText="Clinical Diagnosis" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="1"/>
                         </GridPane>
-                    </TitledPane>
+                    </VBox>
+                </Tab>
 
-                    <HBox alignment="CENTER_RIGHT" spacing="10">
-                        <Button text="Submit Encounter &amp; Forward to Pharmacy/Lab" onAction="#handleSubmitEncounter" style="-fx-background-color: #10B981; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 25 10 25;"/>
-                    </HBox>
+                <!-- Sub-Tab 4: Orders & Referral -->
+                <Tab text="4. Orders (Prescription &amp; Lab) &amp; Referral">
+                    <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;">
+                        <VBox spacing="15" style="-fx-padding: 15;">
+                            <TitledPane text="Prescription Items (Pharmacy Order)" expanded="true">
+                                <VBox spacing="8" style="-fx-padding: 10;">
+                                    <HBox spacing="10">
+                                        <TextField fx:id="medNameField" promptText="Medicine Name (e.g. Paracetamol 500mg)" prefWidth="250"/>
+                                        <TextField fx:id="medDosageField" promptText="Dosage (e.g. 1-0-1)" prefWidth="120"/>
+                                        <TextField fx:id="medDurationField" promptText="Duration (e.g. 5 Days)" prefWidth="120"/>
+                                        <Button text="Add Medicine" onAction="#handleAddMedicine" style="-fx-background-color: #2563EB; -fx-text-fill: white;"/>
+                                    </HBox>
+                                    <ListView fx:id="prescriptionListView" prefHeight="90"/>
+                                </VBox>
+                            </TitledPane>
+
+                            <TitledPane text="Laboratory Orders (Lab Test Request)" expanded="true">
+                                <VBox spacing="8" style="-fx-padding: 10;">
+                                    <HBox spacing="10">
+                                        <TextField fx:id="labTestNameField" promptText="Lab Test (e.g. Complete Blood Count / Lipid Profile)" prefWidth="350"/>
+                                        <Button text="Add Lab Order" onAction="#handleAddLabOrder" style="-fx-background-color: #059669; -fx-text-fill: white;"/>
+                                    </HBox>
+                                    <ListView fx:id="labOrderListView" prefHeight="90"/>
+                                </VBox>
+                            </TitledPane>
+
+                            <TitledPane text="Patient Referral (Specialist / Hospital Transfer)" expanded="false">
+                                <GridPane hgap="15" vgap="10" style="-fx-padding: 10;">
+                                    <Label text="Target Specialty:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                                    <TextField fx:id="refSpecialtyField" promptText="Cardiology / Neurology" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                                    <Label text="Target Hospital:" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+                                    <TextField fx:id="refHospitalField" promptText="City General Hospital" GridPane.columnIndex="3" GridPane.rowIndex="0"/>
+
+                                    <Label text="Referral Reason:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                                    <TextField fx:id="refReasonField" promptText="Specialist evaluation" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="1"/>
+                                </GridPane>
+                            </TitledPane>
+
+                            <HBox alignment="CENTER_RIGHT" spacing="10">
+                                <Button text="Save / Submit Encounter &amp; Forward Orders" onAction="#handleSubmitEncounter" style="-fx-background-color: #10B981; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 25 10 25;"/>
+                            </HBox>
+                        </VBox>
+                    </ScrollPane>
+                </Tab>
+            </TabPane>
+        </Tab>
+
+        <!-- TAB 2: PATIENT LONGITUDINAL HISTORY -->
+        <Tab text="📜 Patient Medical History">
+            <HBox spacing="15" style="-fx-padding: 15;">
+                <VBox spacing="8" prefWidth="320" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;">
+                    <Label text="Past Encounters &amp; Visits" style="-fx-font-weight: bold; -fx-font-size: 13px; -fx-text-fill: #1E293B;"/>
+                    <ListView fx:id="historyEncountersListView" VBox.vgrow="ALWAYS"/>
                 </VBox>
-            </ScrollPane>
+                <VBox spacing="10" HBox.hgrow="ALWAYS" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;" VBox.vgrow="ALWAYS">
+                    <Label text="Selected Visit Clinical Details" style="-fx-font-weight: bold; -fx-font-size: 13px; -fx-text-fill: #1E293B;"/>
+                    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" style="-fx-background-color: transparent;">
+                        <VBox spacing="12">
+                            <Label fx:id="historyVitalsLabel" style="-fx-font-size: 12px; -fx-text-fill: #334155; -fx-font-weight: bold;" wrapText="true"/>
+                            <Label fx:id="historyNotesLabel" style="-fx-font-size: 12px; -fx-text-fill: #475569;" wrapText="true"/>
+                            
+                            <VBox spacing="6">
+                                <HBox alignment="CENTER_LEFT" spacing="10">
+                                    <Label text="Prescribed Medicines in this Visit:" style="-fx-font-weight: bold; -fx-font-size: 12px;"/>
+                                    <Region HBox.hgrow="ALWAYS"/>
+                                    <Button text="📋 Copy All to Active Prescription" onAction="#handleCopyHistoryPrescription" style="-fx-background-color: #0284C7; -fx-text-fill: white; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+                                </HBox>
+                                <ListView fx:id="historyPrescriptionListView" prefHeight="110"/>
+                            </VBox>
+
+                            <VBox spacing="6">
+                                <Label text="Ordered Labs &amp; Findings:" style="-fx-font-weight: bold; -fx-font-size: 12px;"/>
+                                <ListView fx:id="historyLabListView" prefHeight="90"/>
+                            </VBox>
+                        </VBox>
+                    </ScrollPane>
+                </VBox>
+            </HBox>
+        </Tab>
+
+        <!-- TAB 3: MY DOCTOR CONSULTATIONS & EDIT -->
+        <Tab text="🩺 My Doctor Consultations &amp; Edit">
+            <VBox spacing="10" style="-fx-padding: 15;">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="Doctor's Completed &amp; Ongoing Consultations" style="-fx-font-weight: bold; -fx-font-size: 13px; -fx-text-fill: #1E293B;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button text="✏️ Load &amp; Edit Selected Visit" onAction="#handleEditSelectedEncounter" style="-fx-background-color: #D97706; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 6 15 6 15;"/>
+                </HBox>
+                <TableView fx:id="doctorVisitsTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="docVisitIdCol" text="Visit ID" prefWidth="120"/>
+                        <TableColumn fx:id="docVisitDateCol" text="Date / Time" prefWidth="140"/>
+                        <TableColumn fx:id="docPatientCol" text="Patient ID / Name" prefWidth="180"/>
+                        <TableColumn fx:id="docDiagnosisCol" text="Diagnosis" prefWidth="200"/>
+                        <TableColumn fx:id="docStatusCol" text="Visit Status" prefWidth="110"/>
+                    </columns>
+                </TableView>
+            </VBox>
         </Tab>
     </TabPane>
 </VBox>
+
