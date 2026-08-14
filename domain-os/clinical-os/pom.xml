@@ -177,6 +177,43 @@
                             </resources>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>copy-ai-to-dist</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.basedir}/../../dist/ai</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.basedir}/../../ai</directory>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>prepare-jpackage-input</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/jpackage-input</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.build.directory}</directory>
+                                    <includes>
+                                        <include>clinical-os.jar</include>
+                                    </includes>
+                                </resource>
+                                <resource>
+                                    <directory>${project.basedir}/../../ai</directory>
+                                    <targetPath>ai</targetPath>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
             <plugin>
@@ -263,7 +300,7 @@
                                         <argument>--app-version</argument>
                                         <argument>1.0.0</argument>
                                         <argument>--input</argument>
-                                        <argument>${project.build.directory}</argument>
+                                        <argument>${project.build.directory}/jpackage-input</argument>
                                         <argument>--main-jar</argument>
                                         <argument>clinical-os.jar</argument>
                                         <argument>--main-class</argument>
@@ -289,7 +326,7 @@
                                         <argument>--app-version</argument>
                                         <argument>1.0.0</argument>
                                         <argument>--input</argument>
-                                        <argument>${project.build.directory}</argument>
+                                        <argument>${project.build.directory}/jpackage-input</argument>
                                         <argument>--main-jar</argument>
                                         <argument>clinical-os.jar</argument>
                                         <argument>--main-class</argument>
@@ -332,7 +369,7 @@
                                         <argument>--app-version</argument>
                                         <argument>1.0.0</argument>
                                         <argument>--input</argument>
-                                        <argument>${project.build.directory}</argument>
+                                        <argument>${project.build.directory}/jpackage-input</argument>
                                         <argument>--main-jar</argument>
                                         <argument>clinical-os.jar</argument>
                                         <argument>--main-class</argument>
@@ -358,7 +395,7 @@
                                         <argument>--app-version</argument>
                                         <argument>1.0.0</argument>
                                         <argument>--input</argument>
-                                        <argument>${project.build.directory}</argument>
+                                        <argument>${project.build.directory}/jpackage-input</argument>
                                         <argument>--main-jar</argument>
                                         <argument>clinical-os.jar</argument>
                                         <argument>--main-class</argument>
@@ -376,3 +413,4 @@
 
     </profiles>
 </project>
+
