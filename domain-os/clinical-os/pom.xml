@@ -283,9 +283,6 @@
                                         <argument>ClinicalOS</argument>
                                         <argument>--app-version</argument>
                                         <argument>1.0.0</argument>
-                                        <argument>--win-dir-chooser</argument>
-                                        <argument>--win-shortcut</argument>
-                                        <argument>--win-menu</argument>
                                         <argument>--input</argument>
                                         <argument>${project.build.directory}</argument>
                                         <argument>--main-jar</argument>
@@ -312,9 +309,6 @@
                                         <argument>ClinicalOS-Installer</argument>
                                         <argument>--app-version</argument>
                                         <argument>1.0.0</argument>
-                                        <argument>--win-dir-chooser</argument>
-                                        <argument>--win-shortcut</argument>
-                                        <argument>--win-menu</argument>
                                         <argument>--input</argument>
                                         <argument>${project.build.directory}</argument>
                                         <argument>--main-jar</argument>
@@ -331,6 +325,7 @@
                 </plugins>
             </build>
         </profile>
+
     </profiles>
 </project>
 
