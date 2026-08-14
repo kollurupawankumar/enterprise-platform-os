@@ -73,6 +73,25 @@ public class PharmacyViewController {
     @FXML private TextField addQtyField;
     @FXML private TextField addPriceField;
 
+    // Generated Invoices History Tab Controls
+    @FXML private TableView<PharmacyInvoiceEntity> invoiceTable;
+    @FXML private TableColumn<PharmacyInvoiceEntity, String> invIdCol;
+    @FXML private TableColumn<PharmacyInvoiceEntity, String> invDateCol;
+    @FXML private TableColumn<PharmacyInvoiceEntity, String> invPatientCol;
+    @FXML private TableColumn<PharmacyInvoiceEntity, String> invDoctorCol;
+    @FXML private TableColumn<PharmacyInvoiceEntity, String> invAmountCol;
+    @FXML private TableColumn<PharmacyInvoiceEntity, String> invPayStatusCol;
+    @FXML private TableColumn<PharmacyInvoiceEntity, String> invPayModeCol;
+
+    @FXML private TableView<PharmacyInvoiceItemEntity> invoiceItemTable;
+    @FXML private TableColumn<PharmacyInvoiceItemEntity, String> histMedCodeCol;
+    @FXML private TableColumn<PharmacyInvoiceItemEntity, String> histMedNameCol;
+    @FXML private TableColumn<PharmacyInvoiceItemEntity, String> histBatchCol;
+    @FXML private TableColumn<PharmacyInvoiceItemEntity, String> histExpiryCol;
+    @FXML private TableColumn<PharmacyInvoiceItemEntity, Integer> histQtyCol;
+    @FXML private TableColumn<PharmacyInvoiceItemEntity, String> histUnitPriceCol;
+    @FXML private TableColumn<PharmacyInvoiceItemEntity, String> histLineTotalCol;
+
     @FXML private WebView reportWebView;
 
     private final List<PharmacyInvoiceItemEntity> cartItems = new ArrayList<>();
@@ -82,6 +101,7 @@ public class PharmacyViewController {
 
     private PrescriptionEntity activePrescription;
     private PharmacyInvoiceEntity lastIssuedInvoice;
+    private PharmacyInvoiceEntity selectedHistoryInvoice;
 
     public PharmacyViewController(PharmacyService pharmacyService,
                                   PrescriptionService prescriptionService,
@@ -106,12 +126,15 @@ public class PharmacyViewController {
         setupInventoryPickerCombo();
         setupPaymentModeCombo();
         setupInventoryTable();
+        setupInvoiceTables();
         loadInventoryStock();
+        loadInvoicesHistory();
 
         if (discountField != null) {
             discountField.textProperty().addListener((o, oldV, newV) -> calculateCartTotals());
         }
     }
+
 
     private void setupPrescriptionQueueCombo() {
         if (prescriptionQueueCombo == null) return;
@@ -364,6 +387,68 @@ public class PharmacyViewController {
         alert.show();
     }
 
+    private void setupInvoiceTables() {
+        if (invoiceTable == null) return;
+        invIdCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getInvoiceId()));
+        invDateCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCreatedAt() != null ? data.getValue().getCreatedAt().toString() : "N/A"));
+        invPatientCol.setCellValueFactory(data -> {
+            String pid = data.getValue().getPatientId();
+            if (pid == null || pid.isBlank()) return new SimpleStringProperty("Walk-in OTC Customer");
+            PatientEntity p = patientCache != null ? patientCache.get(pid) : null;
+            return new SimpleStringProperty(p != null ? p.getFirstName() + " " + p.getLastName() + " (" + pid + ")" : pid);
+        });
+        invDoctorCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDoctorName() != null ? data.getValue().getDoctorName() : "Self / OTC"));
+        invAmountCol.setCellValueFactory(data -> new SimpleStringProperty("₹ " + data.getValue().getTotalAmount()));
+        invPayStatusCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getPaymentStatus()));
+        invPayModeCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getPaymentMode()));
+
+        invoiceTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSel, newSel) -> {
+            if (newSel != null) {
+                this.selectedHistoryInvoice = newSel;
+                this.lastIssuedInvoice = newSel;
+                loadInvoiceItemDetails(newSel.getInvoiceId());
+                renderPharmacyInvoicePreview(newSel);
+            }
+        });
+
+        if (invoiceItemTable != null) {
+            histMedCodeCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getMedicineCode() != null ? data.getValue().getMedicineCode() : "MED-GEN"));
+            histMedNameCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getMedicineName()));
+            histBatchCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getBatchNumber()));
+            histExpiryCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getExpiryDate() != null ? data.getValue().getExpiryDate() : "N/A"));
+            histQtyCol.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getQuantity()));
+            histUnitPriceCol.setCellValueFactory(data -> new SimpleStringProperty("₹ " + data.getValue().getUnitPrice()));
+            histLineTotalCol.setCellValueFactory(data -> new SimpleStringProperty("₹ " + data.getValue().getLineTotal()));
+        }
+    }
+
+    @FXML
+    public void loadInvoicesHistory() {
+        if (invoiceTable == null) return;
+        List<PharmacyInvoiceEntity> invoices = pharmacyService.getAllInvoices();
+        invoiceTable.setItems(FXCollections.observableArrayList(invoices));
+        if (!invoices.isEmpty() && selectedHistoryInvoice == null) {
+            invoiceTable.getSelectionModel().selectFirst();
+        }
+    }
+
+    private void loadInvoiceItemDetails(String invoiceId) {
+        if (invoiceItemTable == null) return;
+        List<PharmacyInvoiceItemEntity> items = pharmacyService.getInvoiceItems(invoiceId);
+        invoiceItemTable.setItems(FXCollections.observableArrayList(items));
+    }
+
+    @FXML
+    public void handlePrintSelectedHistoryInvoice() {
+        if (selectedHistoryInvoice != null && reportWebView != null) {
+            renderPharmacyInvoicePreview(selectedHistoryInvoice);
+            reportWebView.getEngine().print(null);
+        } else {
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Please select an issued pharmacy invoice from the history table first.", ButtonType.OK);
+            alert.show();
+        }
+    }
+
     @FXML
     public void handleShowAddStockDialog() {
         // Toggle or clear add stock form
@@ -415,4 +500,5 @@ public class PharmacyViewController {
         }
     }
 }
+
 
