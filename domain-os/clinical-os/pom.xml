@@ -184,18 +184,40 @@
 
     <profiles>
         <profile>
-            <id>mac-installer</id>
+            <id>os-mac-detect</id>
             <activation>
                 <os>
                     <family>mac</family>
                 </os>
             </activation>
+            <properties>
+                <skip.jpackage.mac>false</skip.jpackage.mac>
+                <skip.jpackage.win>true</skip.jpackage.win>
+            </properties>
+        </profile>
+        <profile>
+            <id>os-win-detect</id>
+            <activation>
+                <os>
+                    <family>windows</family>
+                </os>
+            </activation>
+            <properties>
+                <skip.jpackage.mac>true</skip.jpackage.mac>
+                <skip.jpackage.win>false</skip.jpackage.win>
+            </properties>
+        </profile>
+        <profile>
+            <id>mac-installer</id>
             <build>
                 <plugins>
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>exec-maven-plugin</artifactId>
                         <version>3.5.0</version>
+                        <configuration>
+                            <skip>${skip.jpackage.mac}</skip>
+                        </configuration>
                         <executions>
                             <execution>
                                 <id>build-mac-dmg</id>
@@ -256,17 +278,15 @@
         </profile>
         <profile>
             <id>win-installer</id>
-            <activation>
-                <os>
-                    <family>windows</family>
-                </os>
-            </activation>
             <build>
                 <plugins>
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>exec-maven-plugin</artifactId>
                         <version>3.5.0</version>
+                        <configuration>
+                            <skip>${skip.jpackage.win}</skip>
+                        </configuration>
                         <executions>
                             <execution>
                                 <id>build-win-msi</id>
@@ -328,4 +348,3 @@
 
     </profiles>
 </project>
-
