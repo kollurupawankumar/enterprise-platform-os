@@ -179,6 +179,48 @@ public class ReportPrintingService {
         return html.toString();
     }
 
+    // 3c. Official Pharmacy Invoice & Dispensing Advice HTML
+    public String generatePharmacyInvoiceHtml(com.clinical.pharmacy.entity.PharmacyInvoiceEntity invoice, PatientEntity patient) {
+        StringBuilder html = new StringBuilder();
+        appendReportHeader(html, "PHARMACY DISPENSING INVOICE & RECEIPT");
+
+        String pName = patient != null ? patient.getFirstName() + " " + patient.getLastName() : (invoice.getPatientId() != null ? invoice.getPatientId() : "Walk-in OTC Customer");
+
+        html.append("<div class='section'>")
+            .append("<p><b>Invoice No:</b> ").append(invoice.getInvoiceId()).append(" &nbsp;&nbsp;&nbsp;&nbsp; <b>Date / Time:</b> ").append(invoice.getCreatedAt() != null ? invoice.getCreatedAt().format(DATE_FORMATTER) : LocalDateTime.now().format(DATE_FORMATTER)).append("</p>")
+            .append("<p><b>Patient Name:</b> ").append(pName).append(" &nbsp;&nbsp;&nbsp;&nbsp; <b>Prescribing Doctor:</b> ").append(invoice.getDoctorName() != null ? invoice.getDoctorName() : "Self / OTC").append("</p>")
+            .append("<p><b>Payment Status:</b> <span class='badge ").append("PAID".equalsIgnoreCase(invoice.getPaymentStatus()) ? "paid" : "unpaid").append("'>").append(invoice.getPaymentStatus()).append("</span> &nbsp;&nbsp; <b>Payment Mode:</b> ").append(invoice.getPaymentMode() != null ? invoice.getPaymentMode() : "CASH").append("</p>")
+            .append("</div>");
+
+        html.append("<div class='section'><h3>Dispensed Medications &amp; Dosage Instructions</h3><table><thead><tr><th>Medicine Name</th><th>Batch #</th><th>Expiry</th><th>Qty</th><th>Unit Price</th><th>Dosage / Instructions</th><th style='text-align:right;'>Total (₹)</th></tr></thead><tbody>");
+
+        if (invoice.getItems() != null && !invoice.getItems().isEmpty()) {
+            for (com.clinical.pharmacy.entity.PharmacyInvoiceItemEntity item : invoice.getItems()) {
+                html.append("<tr>")
+                    .append("<td><b>").append(item.getMedicineName()).append("</b></td>")
+                    .append("<td>").append(item.getBatchNumber()).append("</td>")
+                    .append("<td>").append(item.getExpiryDate() != null ? item.getExpiryDate() : "N/A").append("</td>")
+                    .append("<td>").append(item.getQuantity()).append("</td>")
+                    .append("<td>₹ ").append(item.getUnitPrice()).append("</td>")
+                    .append("<td>").append(item.getDosageInstruction() != null ? item.getDosageInstruction() : "As directed").append("</td>")
+                    .append("<td style='text-align:right;'>₹ ").append(item.getLineTotal()).append("</td>")
+                    .append("</tr>");
+            }
+        }
+
+        html.append("<tr><td colspan='6' style='text-align:right;'><b>Subtotal:</b></td><td style='text-align:right;'>₹ ").append(invoice.getSubtotal()).append("</td></tr>")
+            .append("<tr><td colspan='6' style='text-align:right;'>Discount Amount:</td><td style='text-align:right;'>- ₹ ").append(invoice.getDiscountAmount()).append("</td></tr>")
+            .append("<tr><td colspan='6' style='text-align:right;'>GST / Tax (5%):</td><td style='text-align:right;'>+ ₹ ").append(invoice.getTaxAmount()).append("</td></tr>")
+            .append("<tr style='font-weight:bold; background-color:#F1F5F9;'><td colspan='6' style='text-align:right;'>Net Payable Amount:</td><td style='text-align:right;'>₹ ").append(invoice.getTotalAmount()).append("</td></tr>")
+            .append("</tbody></table></div>");
+
+        html.append("<br/><div style='margin-top:20px;'><p style='font-size:11px; color:#64748B;'>* Medicines once sold will not be taken back or exchanged. Please consult your physician before taking medications.</p></div>");
+
+        appendReportFooter(html);
+        return html.toString();
+    }
+
+
 
     // 4. Doctor Schedule & Performance Report HTML
     public String generateDoctorRosterReportHtml(List<DoctorEntity> doctors) {

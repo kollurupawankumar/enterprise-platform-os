@@ -12,8 +12,13 @@ public class MedicineInventoryEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "medicine_code")
+    private String medicineCode;
+
     @Column(name = "medicine_name", nullable = false)
     private String medicineName;
+
+    private String category = "General";
 
     @Column(name = "batch_number", nullable = false)
     private String batchNumber;
@@ -22,10 +27,12 @@ public class MedicineInventoryEntity {
     private LocalDate expiryDate;
 
     @Column(name = "purchase_price")
-    private BigDecimal purchasePrice;
+    private BigDecimal purchasePrice = BigDecimal.ZERO;
 
     @Column(name = "selling_price")
-    private BigDecimal sellingPrice;
+    private BigDecimal sellingPrice = BigDecimal.ZERO;
+
+    private BigDecimal mrp = BigDecimal.ZERO;
 
     private Integer quantity = 0;
     
@@ -40,8 +47,14 @@ public class MedicineInventoryEntity {
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
+    public String getMedicineCode() { return medicineCode; }
+    public void setMedicineCode(String medicineCode) { this.medicineCode = medicineCode; }
+
     public String getMedicineName() { return medicineName; }
     public void setMedicineName(String medicineName) { this.medicineName = medicineName; }
+
+    public String getCategory() { return category; }
+    public void setCategory(String category) { this.category = category; }
 
     public String getBatchNumber() { return batchNumber; }
     public void setBatchNumber(String batchNumber) { this.batchNumber = batchNumber; }
@@ -55,6 +68,9 @@ public class MedicineInventoryEntity {
     public BigDecimal getSellingPrice() { return sellingPrice; }
     public void setSellingPrice(BigDecimal sellingPrice) { this.sellingPrice = sellingPrice; }
 
+    public BigDecimal getMrp() { return mrp; }
+    public void setMrp(BigDecimal mrp) { this.mrp = mrp; }
+
     public Integer getQuantity() { return quantity; }
     public void setQuantity(Integer quantity) { this.quantity = quantity; }
 
@@ -67,3 +83,4 @@ public class MedicineInventoryEntity {
     public String getLocation() { return location; }
     public void setLocation(String location) { this.location = location; }
 }
+

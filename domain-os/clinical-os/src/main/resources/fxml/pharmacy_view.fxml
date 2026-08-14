@@ -1,30 +1,128 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.web.WebView?>
 
 <VBox spacing="15" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.clinical.ui.controller.PharmacyViewController"
-      style="-fx-background-color: #F8FAFC; -fx-padding: 20;">
-    <Label text="Pharmacy Inventory &amp; Dispensing" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
-    <HBox spacing="15">
-        <VBox spacing="8" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;" prefWidth="300">
-            <Label text="Add Stock" style="-fx-font-weight: bold;"/>
-            <TextField fx:id="medicineNameField" promptText="Medicine Name"/>
-            <TextField fx:id="batchNumberField" promptText="Batch Number"/>
-            <TextField fx:id="quantityField" promptText="Quantity"/>
-            <TextField fx:id="priceField" promptText="Selling Price"/>
-            <Button text="Add Stock Item" onAction="#handleAddStock" style="-fx-background-color: #2563EB; -fx-text-fill: white;"/>
+      style="-fx-background-color: #F8FAFC; -fx-padding: 20;" VBox.vgrow="ALWAYS">
+    
+    <Label text="Pharmacy POS &amp; OPD Prescription Dispensing Desk" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+
+    <HBox spacing="15" VBox.vgrow="ALWAYS">
+        <!-- LEFT PANEL: Dispensing POS Cart & Checkout -->
+        <VBox spacing="12" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;" prefWidth="380">
+            <Label text="Pharmacy POS &amp; Dispensing Cart" style="-fx-font-weight: bold; -fx-font-size: 14px; -fx-text-fill: #1E293B;"/>
+
+            <VBox spacing="4" style="-fx-background-color: #F0F9FF; -fx-padding: 8; -fx-background-radius: 6; -fx-border-color: #BAE6FD; -fx-border-radius: 6;">
+                <Label text="📜 Load Pending OPD Doctor Prescription:" style="-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #0369A1;"/>
+                <HBox spacing="6">
+                    <ComboBox fx:id="prescriptionQueueCombo" HBox.hgrow="ALWAYS" maxWidth="250" promptText="Select Doctor Prescription"/>
+                    <Button text="Load 🛒" onAction="#handleLoadPrescription" style="-fx-background-color: #0284C7; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                </HBox>
+            </VBox>
+
+            <VBox spacing="4">
+                <Label text="Patient (OPD / Walk-in Customer):" style="-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #475569;"/>
+                <ComboBox fx:id="patientCombo" prefWidth="350" promptText="Select or Search Patient"/>
+            </VBox>
+
+            <VBox spacing="4">
+                <Label text="Add Medicine from Stock Inventory:" style="-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #475569;"/>
+                <HBox spacing="6">
+                    <ComboBox fx:id="inventoryPickerCombo" HBox.hgrow="ALWAYS" maxWidth="210" promptText="Select Medicine"/>
+                    <TextField fx:id="qtyField" promptText="Qty" prefWidth="55" text="1"/>
+                    <Button text="+ Add" onAction="#handleAddToCart" style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                </HBox>
+            </VBox>
+
+            <VBox spacing="4" VBox.vgrow="ALWAYS">
+                <Label text="Dispensing Cart Line Items:" style="-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #475569;"/>
+                <ListView fx:id="cartListView" prefHeight="130" VBox.vgrow="ALWAYS"/>
+                <HBox alignment="CENTER_RIGHT" spacing="5">
+                    <Button text="Clear Cart" onAction="#handleClearCart" style="-fx-background-color: #EF4444; -fx-text-fill: white; -fx-font-size: 10px;"/>
+                </HBox>
+            </VBox>
+
+            <!-- Checkout Calculations Card -->
+            <VBox spacing="6" style="-fx-background-color: #F8FAFC; -fx-padding: 10; -fx-background-radius: 6; -fx-border-color: #CBD5E1; -fx-border-radius: 6;">
+                <HBox alignment="CENTER_LEFT">
+                    <Label text="Subtotal:" style="-fx-font-size: 11px;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label fx:id="subtotalLabel" text="₹ 0.00" style="-fx-font-weight: bold;"/>
+                </HBox>
+                <HBox alignment="CENTER_LEFT" spacing="6">
+                    <Label text="Discount (₹):" style="-fx-font-size: 11px;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <TextField fx:id="discountField" promptText="0.00" prefWidth="70" text="0.00"/>
+                </HBox>
+                <HBox alignment="CENTER_LEFT">
+                    <Label text="GST Tax (5%):" style="-fx-font-size: 11px;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label fx:id="taxLabel" text="₹ 0.00" style="-fx-font-weight: bold;"/>
+                </HBox>
+                <Separator/>
+                <HBox alignment="CENTER_LEFT">
+                    <Label text="Net Payable Amount:" style="-fx-font-weight: bold; -fx-font-size: 12px;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label fx:id="totalPayableLabel" text="₹ 0.00" style="-fx-font-weight: bold; -fx-font-size: 15px; -fx-text-fill: #059669;"/>
+                </HBox>
+
+                <HBox spacing="8" alignment="CENTER_LEFT">
+                    <Label text="Payment Mode:" style="-fx-font-size: 11px; -fx-font-weight: bold;"/>
+                    <ComboBox fx:id="paymentModeCombo" prefWidth="190"/>
+                </HBox>
+            </VBox>
+
+            <Button text="🧾 Pay &amp; Dispense Pharmacy Bill" onAction="#handlePayAndDispense" style="-fx-background-color: #059669; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 13px;" prefWidth="350"/>
         </VBox>
-        <VBox spacing="8" HBox.hgrow="ALWAYS" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;">
-            <Label text="Pharmacy Stock Directory" style="-fx-font-weight: bold;"/>
-            <TableView fx:id="inventoryTable" VBox.vgrow="ALWAYS">
-                <columns>
-                    <TableColumn fx:id="nameCol" text="Medicine" prefWidth="160"/>
-                    <TableColumn fx:id="batchCol" text="Batch" prefWidth="100"/>
-                    <TableColumn fx:id="qtyCol" text="Quantity" prefWidth="90"/>
-                    <TableColumn fx:id="priceCol" text="Price (₹)" prefWidth="100"/>
-                </columns>
-            </TableView>
+
+        <!-- RIGHT MAIN AREA: Stock Inventory Table & Printable Invoice Preview -->
+        <VBox spacing="10" HBox.hgrow="ALWAYS">
+            <!-- Stock Inventory Directory -->
+            <VBox spacing="8" style="-fx-background-color: white; -fx-padding: 12; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;" VBox.vgrow="ALWAYS">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="Pharmacy Medicine Inventory &amp; Batch Directory" style="-fx-font-weight: bold; -fx-font-size: 13px; -fx-text-fill: #1E293B;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button text="+ Add Stock Batch" onAction="#handleShowAddStockDialog" style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+                    <Button text="🔄 Refresh Stock" onAction="#loadInventoryStock" style="-fx-background-color: #475569; -fx-text-fill: white; -fx-font-size: 11px;"/>
+                </HBox>
+
+                <TableView fx:id="inventoryTable" VBox.vgrow="ALWAYS" prefHeight="180">
+                    <columns>
+                        <TableColumn fx:id="codeCol" text="Code" prefWidth="80"/>
+                        <TableColumn fx:id="nameCol" text="Medicine Name" prefWidth="160"/>
+                        <TableColumn fx:id="categoryCol" text="Category" prefWidth="110"/>
+                        <TableColumn fx:id="batchCol" text="Batch #" prefWidth="100"/>
+                        <TableColumn fx:id="expiryCol" text="Expiry Date" prefWidth="95"/>
+                        <TableColumn fx:id="qtyCol" text="Stock Qty" prefWidth="85"/>
+                        <TableColumn fx:id="priceCol" text="Selling Price" prefWidth="90"/>
+                        <TableColumn fx:id="statusCol" text="Stock Alert" prefWidth="110"/>
+                    </columns>
+                </TableView>
+
+                <!-- Add Stock Form (Collapsible / Inline) -->
+                <HBox fx:id="addStockPane" spacing="8" alignment="CENTER_LEFT" style="-fx-background-color: #F8FAFC; -fx-padding: 8; -fx-background-radius: 6; -fx-border-color: #CBD5E1; -fx-border-radius: 6;">
+                    <TextField fx:id="addCodeField" promptText="Code (e.g. MED-109)" prefWidth="100"/>
+                    <TextField fx:id="addNameField" promptText="Medicine Name" prefWidth="160"/>
+                    <TextField fx:id="addBatchField" promptText="Batch #" prefWidth="100"/>
+                    <TextField fx:id="addExpiryField" promptText="YYYY-MM-DD" prefWidth="100"/>
+                    <TextField fx:id="addQtyField" promptText="Qty" prefWidth="60"/>
+                    <TextField fx:id="addPriceField" promptText="Price (₹)" prefWidth="70"/>
+                    <Button text="Save Stock" onAction="#handleSaveStockItem" style="-fx-background-color: #059669; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                </HBox>
+            </VBox>
+
+            <!-- Printable Invoice Web Preview Pane -->
+            <VBox spacing="8" style="-fx-background-color: white; -fx-padding: 12; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;" prefHeight="230">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="Printable Pharmacy Invoice &amp; Receipt Preview" style="-fx-font-weight: bold; -fx-text-fill: #334155;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button text="🖨️ Print Pharmacy Invoice &amp; Receipt" onAction="#handlePrintReceipt" style="-fx-background-color: #7C3AED; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                </HBox>
+                <WebView fx:id="reportWebView" VBox.vgrow="ALWAYS"/>
+            </VBox>
         </VBox>
     </HBox>
 </VBox>
+
