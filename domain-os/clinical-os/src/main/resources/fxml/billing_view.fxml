@@ -101,8 +101,8 @@
                         <Separator/>
 
                         <VBox spacing="10">
-                            <Button text="🧾 Settle &amp; Generate Master Invoice" onAction="#handleGenerateMasterInvoice" prefHeight="45" maxWidth="MAX_VALUE" style="-fx-background-color: #059669; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-cursor: hand;"/>
-                            <Button text="🖨️ Print OPD Master Hospital Bill" onAction="#handlePrintCurrentInvoice" prefHeight="38" maxWidth="MAX_VALUE" style="-fx-background-color: #0EA5E9; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;"/>
+                            <Button text="🧾 Settle &amp; Generate Master Invoice" onAction="#handleGenerateMasterInvoice" prefHeight="45" maxWidth="Infinity" style="-fx-background-color: #059669; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-cursor: hand;"/>
+                            <Button text="🖨️ Print OPD Master Hospital Bill" onAction="#handlePrintCurrentInvoice" prefHeight="38" maxWidth="Infinity" style="-fx-background-color: #0EA5E9; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;"/>
                         </VBox>
                     </VBox>
                 </HBox>
