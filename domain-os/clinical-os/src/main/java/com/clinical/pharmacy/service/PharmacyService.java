@@ -23,6 +23,7 @@ public interface PharmacyService {
     List<MedicineInventoryEntity> getAllStock();
     PharmacyInvoiceEntity createPharmacyInvoice(String patientId, String visitId, String doctorName, List<PharmacyInvoiceItemEntity> items, BigDecimal discount, String paymentStatus, String paymentMode);
     List<PharmacyInvoiceEntity> getAllInvoices();
+    List<PharmacyInvoiceEntity> getInvoicesByVisit(String visitId);
     List<PharmacyInvoiceItemEntity> getInvoiceItems(String invoiceId);
 }
 
@@ -139,8 +140,24 @@ class PharmacyServiceImpl implements PharmacyService {
 
     @Override
     @Transactional(readOnly = true)
+    public List<PharmacyInvoiceEntity> getInvoicesByVisit(String visitId) {
+        List<PharmacyInvoiceEntity> invoices = invoiceRepository.findAll();
+        List<PharmacyInvoiceEntity> result = new ArrayList<>();
+        if (visitId == null) return result;
+        for (PharmacyInvoiceEntity inv : invoices) {
+            if (visitId.equalsIgnoreCase(inv.getVisitId())) {
+                inv.setItems(invoiceItemRepository.findByInvoiceId(inv.getInvoiceId()));
+                result.add(inv);
+            }
+        }
+        return result;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public List<PharmacyInvoiceItemEntity> getInvoiceItems(String invoiceId) {
         return invoiceItemRepository.findByInvoiceId(invoiceId);
     }
 }
+
 

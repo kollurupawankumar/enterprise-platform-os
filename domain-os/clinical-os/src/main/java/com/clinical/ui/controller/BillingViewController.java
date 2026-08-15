@@ -3,7 +3,7 @@ package com.clinical.ui.controller;
 import com.clinical.billing.entity.InvoiceEntity;
 import com.clinical.billing.service.BillingService;
 import com.clinical.lab.entity.LabOrderEntity;
-import com.clinical.lab.service.LabService;
+import com.clinical.lab.service.LabDiagnosticsService;
 import com.clinical.patient.entity.PatientEntity;
 import com.clinical.patient.service.PatientService;
 import com.clinical.pharmacy.entity.PharmacyInvoiceEntity;
@@ -35,9 +35,10 @@ public class BillingViewController {
     private final BillingService billingService;
     private final VisitService visitService;
     private final PatientService patientService;
-    private final LabService labService;
+    private final LabDiagnosticsService labDiagnosticsService;
     private final PharmacyService pharmacyService;
     private final ReportPrintingService reportPrintingService;
+
 
     // FXML Controls - Tab 1 Billing Counter
     @FXML private ComboBox<String> visitSelectorCombo;
@@ -65,7 +66,6 @@ public class BillingViewController {
     @FXML private Label statCashLabel;
     @FXML private Label statUpiLabel;
     @FXML private Label statCardLabel;
-    @FXML textStatDiscountLabel;
     @FXML private Label statDiscountLabel;
 
     @FXML private TableView<InvoiceEntity> historyTable;
@@ -89,13 +89,13 @@ public class BillingViewController {
     public BillingViewController(BillingService billingService,
                                 VisitService visitService,
                                 PatientService patientService,
-                                LabService labService,
+                                LabDiagnosticsService labDiagnosticsService,
                                 PharmacyService pharmacyService,
                                 ReportPrintingService reportPrintingService) {
         this.billingService = billingService;
         this.visitService = visitService;
         this.patientService = patientService;
-        this.labService = labService;
+        this.labDiagnosticsService = labDiagnosticsService;
         this.pharmacyService = pharmacyService;
         this.reportPrintingService = reportPrintingService;
     }
@@ -146,10 +146,10 @@ public class BillingViewController {
         for (VisitEntity v : visits) {
             String pName = "Patient " + v.getPatientId();
             try {
-                PatientEntity p = patientService.getPatientById(v.getPatientId()).orElse(null);
+                PatientEntity p = patientService.findByPatientId(v.getPatientId()).orElse(null);
                 if (p != null) pName = p.getFirstName() + " " + p.getLastName();
             } catch (Exception ignored) {}
-            options.add(v.getVisitId() + " - " + pName + " (" + (v.getDoctorId() != null ? v.getDoctorId() : "General OPD") + ")");
+            options.add(v.getVisitId() + " - " + pName + " (" + (v.getDoctorName() != null ? v.getDoctorName() : "General OPD") + ")");
         }
         visitSelectorCombo.setItems(options);
         if (!options.isEmpty()) {
@@ -171,9 +171,9 @@ public class BillingViewController {
         if (visit == null) return;
 
         visitIdLabel.setText(visit.getVisitId());
-        doctorNameLabel.setText(visit.getDoctorId() != null ? visit.getDoctorId() : "General OPD Doctor");
+        doctorNameLabel.setText(visit.getDoctorName() != null ? visit.getDoctorName() : "General OPD Doctor");
 
-        PatientEntity patient = patientService.getPatientById(visit.getPatientId()).orElse(null);
+        PatientEntity patient = patientService.findByPatientId(visit.getPatientId()).orElse(null);
         if (patient != null) {
             patientNameLabel.setText(patient.getFirstName() + " " + patient.getLastName() + " (" + patient.getPatientId() + ")");
         } else {
@@ -192,10 +192,10 @@ public class BillingViewController {
 
         // 2. Lab Requisitions Total
         try {
-            List<LabOrderEntity> labOrders = labService.getLabOrdersByVisit(visitId);
+            List<LabOrderEntity> labOrders = labDiagnosticsService.getLabOrdersByVisit(visitId);
             StringBuilder labDesc = new StringBuilder();
             for (LabOrderEntity lo : labOrders) {
-                if (lo.getCost() != null) labTotal = labTotal.add(lo.getCost());
+                if (lo.getTotalAmount() != null) labTotal = labTotal.add(lo.getTotalAmount());
                 if (labDesc.length() > 0) labDesc.append(", ");
                 labDesc.append(lo.getTestName());
             }
@@ -208,7 +208,7 @@ public class BillingViewController {
         try {
             List<PharmacyInvoiceEntity> pharmInvoices = pharmacyService.getInvoicesByVisit(visitId);
             for (PharmacyInvoiceEntity pi : pharmInvoices) {
-                if (pi.getGrandTotal() != null) pharmTotal = pharmTotal.add(pi.getGrandTotal());
+                if (pi.getTotalAmount() != null) pharmTotal = pharmTotal.add(pi.getTotalAmount());
             }
             if (pharmTotal.compareTo(BigDecimal.ZERO) > 0) {
                 feeItems.add(new FeeItem("Pharmacy & Medications", "Dispensed Medication Items", pharmTotal));
@@ -304,8 +304,8 @@ public class BillingViewController {
     }
 
     private void printMasterInvoice(InvoiceEntity invoice) {
-        PatientEntity patient = patientService.getPatientById(invoice.getPatientId()).orElse(null);
-        List<LabOrderEntity> labOrders = labService.getLabOrdersByVisit(invoice.getVisitId());
+        PatientEntity patient = patientService.findByPatientId(invoice.getPatientId()).orElse(null);
+        List<LabOrderEntity> labOrders = labDiagnosticsService.getLabOrdersByVisit(invoice.getVisitId());
         List<PharmacyInvoiceEntity> pharmInvoices = pharmacyService.getInvoicesByVisit(invoice.getVisitId());
 
         String html = reportPrintingService.generateMasterOpdInvoiceHtml(invoice, patient, labOrders, pharmInvoices);
