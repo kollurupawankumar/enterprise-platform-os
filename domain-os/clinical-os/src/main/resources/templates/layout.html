@@ -31,18 +31,38 @@
                 </a>
             </li>
             <li>
+                <a th:href="@{/consultation}" th:classappend="${activeTab == 'consultation'} ? 'active' : ''" class="nav-link">
+                    <span>👨‍⚕️</span> Doctor EMR &amp; Rx
+                </a>
+            </li>
+            <li>
                 <a th:href="@{/billing}" th:classappend="${activeTab == 'billing'} ? 'active' : ''" class="nav-link">
                     <span>💳</span> Master POS Billing
                 </a>
             </li>
             <li>
                 <a th:href="@{/pharmacy}" th:classappend="${activeTab == 'pharmacy'} ? 'active' : ''" class="nav-link">
-                    <span>💊</span> Pharmacy Stock &amp; POS
+                    <span>💊</span> Pharmacy Stock
                 </a>
             </li>
             <li>
                 <a th:href="@{/lab}" th:classappend="${activeTab == 'lab'} ? 'active' : ''" class="nav-link">
                     <span>🔬</span> Lab Diagnostics
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/documents}" th:classappend="${activeTab == 'documents'} ? 'active' : ''" class="nav-link">
+                    <span>📁</span> EMR Document Vault
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/reports}" th:classappend="${activeTab == 'reports'} ? 'active' : ''" class="nav-link">
+                    <span>📈</span> Reports &amp; Analytics
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/settings}" th:classappend="${activeTab == 'settings'} ? 'active' : ''" class="nav-link">
+                    <span>⚙️</span> Clinic Settings
                 </a>
             </li>
         </ul>
@@ -54,13 +74,13 @@
             <div class="header-title" th:text="${pageTitle}">Executive Dashboard</div>
             <div class="user-profile">
                 <span style="color: var(--text-muted); font-size: 0.9rem;">Connected Doctor: </span>
-                <strong style="color: var(--accent-color);">Dr. Pawan Kumar</strong>
+                <strong style="color: var(--primary-color);">Dr. Pawan Kumar</strong>
             </div>
         </header>
 
         <main class="content-container">
             <div th:replace="${content}">
-                <!-- Page specific content will be injected here -->
+                <!-- Content injected here -->
             </div>
         </main>
     </div>

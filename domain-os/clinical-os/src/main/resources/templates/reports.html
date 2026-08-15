@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Practice Analytics - Clinical OS Web Platform</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+    <div style="display: flex; min-height: 100vh;">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="brand">
+                <img th:src="@{/images/default_logo.png}" alt="Logo" style="width:38px; height:38px;" onerror="this.style.display='none'">
+                <h2>Clinical OS</h2>
+            </div>
+            <ul class="nav-menu">
+                <li><a th:href="@{/dashboard}" class="nav-link"><span>📊</span> Dashboard</a></li>
+                <li><a th:href="@{/patients}" class="nav-link"><span>👤</span> Patients Directory</a></li>
+                <li><a th:href="@{/appointments}" class="nav-link"><span>📅</span> Appointments</a></li>
+                <li><a th:href="@{/consultation}" class="nav-link"><span>👨‍⚕️</span> Doctor EMR &amp; Rx</a></li>
+                <li><a th:href="@{/billing}" class="nav-link"><span>💳</span> POS Master Billing</a></li>
+                <li><a th:href="@{/pharmacy}" class="nav-link"><span>💊</span> Pharmacy Stock</a></li>
+                <li><a th:href="@{/lab}" class="nav-link"><span>🔬</span> Lab Diagnostics</a></li>
+                <li><a th:href="@{/documents}" class="nav-link"><span>📁</span> EMR Document Vault</a></li>
+                <li><a th:href="@{/reports}" class="nav-link active"><span>📈</span> Reports &amp; Analytics</a></li>
+                <li><a th:href="@{/settings}" class="nav-link"><span>⚙️</span> Clinic Settings</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Wrapper -->
+        <div class="main-wrapper">
+            <header class="top-header">
+                <div class="header-title">Practice Revenue Analytics &amp; Day-End Cash Register</div>
+                <div><span class="badge badge-success">Analytics Engine</span></div>
+            </header>
+
+            <main class="content-container">
+                <!-- Summary KPI Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">💰</div>
+                        <div class="stat-info">
+                            <h3>Total Revenue Realized</h3>
+                            <div class="value" th:text="${formattedTotalRevenue}">₹1,45,800</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">🩺</div>
+                        <div class="stat-info">
+                            <h3>Consultation Fees</h3>
+                            <div class="value" th:text="${formattedConsultationRevenue}">₹85,000</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">💊</div>
+                        <div class="stat-info">
+                            <h3>Pharmacy Sales</h3>
+                            <div class="value" th:text="${formattedPharmacyRevenue}">₹42,300</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">🔬</div>
+                        <div class="stat-info">
+                            <h3>Lab Test Collections</h3>
+                            <div class="value" th:text="${formattedLabRevenue}">₹18,500</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Export & Print Actions Card -->
+                <div class="data-card">
+                    <div class="card-header">
+                        <h2>Generate Statutory Practice Reports</h2>
+                    </div>
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <button class="btn btn-primary" onclick="window.print();">🖨️ Print Day-End Settlement Summary</button>
+                        <button class="btn btn-success" onclick="alert('Exporting Practice Audit Report to CSV...');">📊 Export Audit Log (CSV)</button>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+</body>
+</html>

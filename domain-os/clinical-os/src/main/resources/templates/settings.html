@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Clinic Settings - Clinical OS Web Platform</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+    <div style="display: flex; min-height: 100vh;">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="brand">
+                <img th:src="@{/images/default_logo.png}" alt="Logo" style="width:38px; height:38px;" onerror="this.style.display='none'">
+                <h2>Clinical OS</h2>
+            </div>
+            <ul class="nav-menu">
+                <li><a th:href="@{/dashboard}" class="nav-link"><span>📊</span> Dashboard</a></li>
+                <li><a th:href="@{/patients}" class="nav-link"><span>👤</span> Patients Directory</a></li>
+                <li><a th:href="@{/appointments}" class="nav-link"><span>📅</span> Appointments</a></li>
+                <li><a th:href="@{/consultation}" class="nav-link"><span>👨‍⚕️</span> Doctor EMR &amp; Rx</a></li>
+                <li><a th:href="@{/billing}" class="nav-link"><span>💳</span> POS Master Billing</a></li>
+                <li><a th:href="@{/pharmacy}" class="nav-link"><span>💊</span> Pharmacy Stock</a></li>
+                <li><a th:href="@{/lab}" class="nav-link"><span>🔬</span> Lab Diagnostics</a></li>
+                <li><a th:href="@{/documents}" class="nav-link"><span>📁</span> EMR Document Vault</a></li>
+                <li><a th:href="@{/reports}" class="nav-link"><span>📈</span> Reports &amp; Analytics</a></li>
+                <li><a th:href="@{/settings}" class="nav-link active"><span>⚙️</span> Clinic Settings</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Wrapper -->
+        <div class="main-wrapper">
+            <header class="top-header">
+                <div class="header-title">Clinic Organization &amp; Header Branding Settings</div>
+                <div><span class="badge badge-success">System Config</span></div>
+            </header>
+
+            <main class="content-container">
+                <!-- Clinic Details Form Card -->
+                <div class="data-card">
+                    <div class="card-header">
+                        <h2>Clinic Profile &amp; Prescription Branding</h2>
+                    </div>
+                    <form th:action="@{/settings/save}" method="post" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem;">
+                        <div>
+                            <label style="font-size: 0.8rem; color: var(--text-muted);">Clinic / Hospital Name</label>
+                            <input type="text" name="clinicName" class="form-control" th:value="${clinicName}" required>
+                        </div>
+                        <div>
+                            <label style="font-size: 0.8rem; color: var(--text-muted);">Medical License / Reg No</label>
+                            <input type="text" name="registrationNumber" class="form-control" th:value="${registrationNumber}">
+                        </div>
+                        <div>
+                            <label style="font-size: 0.8rem; color: var(--text-muted);">Primary Contact Phone</label>
+                            <input type="text" name="contactPhone" class="form-control" th:value="${contactPhone}">
+                        </div>
+                        <div>
+                            <label style="font-size: 0.8rem; color: var(--text-muted);">Clinic Email Address</label>
+                            <input type="email" name="contactEmail" class="form-control" th:value="${contactEmail}">
+                        </div>
+                        <div style="grid-column: 1 / -1;">
+                            <label style="font-size: 0.8rem; color: var(--text-muted);">Full Clinic Street Address</label>
+                            <input type="text" name="address" class="form-control" th:value="${address}">
+                        </div>
+                        <div style="grid-column: 1 / -1; display: flex; justify-content: flex-end;">
+                            <button type="submit" class="btn btn-primary">💾 Save Clinic Settings</button>
+                        </div>
+                    </form>
+                </div>
+            </main>
+        </div>
+    </div>
+
+</body>
+</html>

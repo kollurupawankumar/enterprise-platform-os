@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>EMR Document Vault - Clinical OS Web Platform</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+    <div style="display: flex; min-height: 100vh;">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="brand">
+                <img th:src="@{/images/default_logo.png}" alt="Logo" style="width:38px; height:38px;" onerror="this.style.display='none'">
+                <h2>Clinical OS</h2>
+            </div>
+            <ul class="nav-menu">
+                <li><a th:href="@{/dashboard}" class="nav-link"><span>📊</span> Dashboard</a></li>
+                <li><a th:href="@{/patients}" class="nav-link"><span>👤</span> Patients Directory</a></li>
+                <li><a th:href="@{/appointments}" class="nav-link"><span>📅</span> Appointments</a></li>
+                <li><a th:href="@{/consultation}" class="nav-link"><span>👨‍⚕️</span> Doctor EMR &amp; Rx</a></li>
+                <li><a th:href="@{/billing}" class="nav-link"><span>💳</span> POS Master Billing</a></li>
+                <li><a th:href="@{/pharmacy}" class="nav-link"><span>💊</span> Pharmacy Stock</a></li>
+                <li><a th:href="@{/lab}" class="nav-link"><span>🔬</span> Lab Diagnostics</a></li>
+                <li><a th:href="@{/documents}" class="nav-link active"><span>📁</span> EMR Document Vault</a></li>
+                <li><a th:href="@{/reports}" class="nav-link"><span>📈</span> Reports &amp; Analytics</a></li>
+                <li><a th:href="@{/settings}" class="nav-link"><span>⚙️</span> Clinic Settings</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Wrapper -->
+        <div class="main-wrapper">
+            <header class="top-header">
+                <div class="header-title">Digital EMR Patient Document Cabinet</div>
+                <div><span class="badge badge-success">Document Storage</span></div>
+            </header>
+
+            <main class="content-container">
+                <!-- Document Vault List Card -->
+                <div class="data-card">
+                    <div class="card-header">
+                        <h2>Attached Medical Records &amp; Diagnostic Reports</h2>
+                        <form th:action="@{/documents}" method="get" style="display: flex; gap: 0.5rem; width: 350px;">
+                            <input type="text" name="query" class="form-control" placeholder="Search Patient ID, Document..." th:value="${query}">
+                            <button type="submit" class="btn btn-primary">Search</button>
+                        </form>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Document ID</th>
+                                    <th>Patient ID</th>
+                                    <th>Document Name</th>
+                                    <th>Category Type</th>
+                                    <th>File Format</th>
+                                    <th>Uploaded At</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="doc : ${documents}">
+                                    <td><strong style="color:var(--primary-color);" th:text="${doc.documentId}">DOC-1001</strong></td>
+                                    <td th:text="${doc.patientId}">PAT-1001</td>
+                                    <td><strong th:text="${doc.documentName}">Chest X-Ray Scan.pdf</strong></td>
+                                    <td><span class="badge badge-warning" th:text="${doc.documentType != null ? doc.documentType : 'X-RAY'}">X-RAY</span></td>
+                                    <td th:text="${doc.fileExtension != null ? doc.fileExtension : 'PDF'}">PDF</td>
+                                    <td th:text="${doc.createdAt}">2026-08-15</td>
+                                </tr>
+                                <tr th:if="${#lists.isEmpty(documents)}">
+                                    <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 2rem;">No EMR patient documents uploaded yet.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+</body>
+</html>
