@@ -90,15 +90,15 @@
                             </thead>
                             <tbody>
                                 <tr th:each="inv : ${invoices}">
-                                    <td><strong style="color:var(--accent-color);" th:text="${inv.invoiceNumber}">INV-1001</strong></td>
-                                    <td th:text="${inv.patientName}">Pawan Kumar</td>
+                                    <td><strong style="color:var(--primary-color);" th:text="${inv.invoiceId}">INV-1001</strong></td>
+                                    <td th:text="${inv.patientId}">Pawan Kumar</td>
                                     <td th:text="${'₹' + inv.consultationFee}">₹500.00</td>
                                     <td th:text="${'₹' + inv.labFee}">₹0.00</td>
                                     <td th:text="${'₹' + inv.pharmacyFee}">₹0.00</td>
                                     <td><strong style="color:var(--success-color);" th:text="${'₹' + inv.totalAmount}">₹500.00</strong></td>
                                     <td th:text="${inv.paymentMode}">CASH</td>
                                     <td>
-                                        <span class="badge badge-success" th:text="${inv.status}">PAID</span>
+                                        <span class="badge badge-success" th:text="${inv.paymentStatus}">PAID</span>
                                     </td>
                                 </tr>
                                 <tr th:if="${#lists.isEmpty(invoices)}">
