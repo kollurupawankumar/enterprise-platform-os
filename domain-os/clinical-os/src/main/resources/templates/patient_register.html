@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>New Patient Onboarding - Clinical OS Web Platform</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Reusable Left Sidebar Navigation -->
+        <aside th:replace="~{fragments/nav :: sidebar('patient-register')}"></aside>
+
+        <!-- Main Content Area -->
+        <div class="main-wrapper">
+            <!-- Reusable Top Header -->
+            <header th:replace="~{fragments/nav :: header('New Patient Registration Workstation')}"></header>
+
+            <main class="content-container">
+                <!-- Dedicated Registration Card Container -->
+                <div class="data-card">
+                    <div class="card-header">
+                        <h2>Complete Patient Onboarding Form</h2>
+                        <a th:href="@{/patients}" class="btn btn-logout">⬅️ Back to Patient Directory</a>
+                    </div>
+
+                    <form th:action="@{/patients/register}" method="post">
+                        <!-- Section A: Personal Demographics -->
+                        <div class="form-section-card">
+                            <div class="section-title">👤 Section A: Personal Demographics &amp; Contact Information</div>
+                            <div class="form-grid-3">
+                                <div class="form-group">
+                                    <label class="form-label">Patient Category</label>
+                                    <select name="patientType" class="form-control">
+                                        <option value="NEW">New General Patient</option>
+                                        <option value="REGULAR">Regular Patient</option>
+                                        <option value="VIP">VIP / Priority Patient</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">First Name *</label>
+                                    <input type="text" name="firstName" class="form-control" placeholder="First Name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Last Name *</label>
+                                    <input type="text" name="lastName" class="form-control" placeholder="Last Name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Gender *</label>
+                                    <select name="gender" class="form-control">
+                                        <option value="MALE">Male</option>
+                                        <option value="FEMALE">Female</option>
+                                        <option value="OTHER">Other</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Date of Birth</label>
+                                    <input type="date" name="dob" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Primary Mobile Number *</label>
+                                    <input type="text" name="phone" class="form-control" placeholder="+91 98765 43210" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Alternate Phone</label>
+                                    <input type="text" name="alternatePhone" class="form-control" placeholder="Alternate Mobile">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Email Address</label>
+                                    <input type="email" name="email" class="form-control" placeholder="patient@example.com">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Government Identity Type</label>
+                                    <select name="identityType" class="form-control">
+                                        <option value="AADHAAR">Aadhaar Card</option>
+                                        <option value="PASSPORT">Passport</option>
+                                        <option value="VOTER_ID">Voter ID</option>
+                                        <option value="DRIVING_LICENSE">Driving License</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Identity ID Number</label>
+                                    <input type="text" name="identityNumber" class="form-control" placeholder="e.g. 1234-5678-9012">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Marital Status</label>
+                                    <select name="maritalStatus" class="form-control">
+                                        <option value="SINGLE">Single</option>
+                                        <option value="MARRIED">Married</option>
+                                        <option value="OTHER">Other</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Occupation</label>
+                                    <input type="text" name="occupation" class="form-control" placeholder="e.g. Software Engineer">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section B: Address & Emergency Contacts -->
+                        <div class="form-section-card">
+                            <div class="section-title">🏠 Section B: Residential Address &amp; Emergency Contact</div>
+                            <div class="form-grid-3">
+                                <div class="form-group col-span-full">
+                                    <label class="form-label">Street Address Line 1</label>
+                                    <input type="text" name="address" class="form-control" placeholder="House / Flat No, Building Name, Street">
+                                </div>
+                                <div class="form-group col-span-full">
+                                    <label class="form-label">Address Line 2 / Landmark</label>
+                                    <input type="text" name="addressLine2" class="form-control" placeholder="Area, Landmark">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">City</label>
+                                    <input type="text" name="city" class="form-control" placeholder="City">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">State</label>
+                                    <input type="text" name="state" class="form-control" placeholder="State">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Pincode</label>
+                                    <input type="text" name="pincode" class="form-control" placeholder="500001">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Emergency Contact Name</label>
+                                    <input type="text" name="emergencyContactName" class="form-control" placeholder="Contact Person">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Emergency Relationship</label>
+                                    <input type="text" name="emergencyRelationship" class="form-control" placeholder="e.g. Spouse / Parent">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Emergency Phone Number</label>
+                                    <input type="text" name="emergencyContactPhone" class="form-control" placeholder="+91 98765 43210">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section C: Known Allergies -->
+                        <div class="form-section-card">
+                            <div class="section-title">🩺 Section C: Known Allergies &amp; Medical History Notes</div>
+                            <div class="form-grid-3">
+                                <div class="form-group">
+                                    <label class="form-label">Allergies Status</label>
+                                    <select name="knownAllergiesStatus" class="form-control">
+                                        <option value="NO_KNOWN_ALLERGIES">No Known Allergies (NKDA)</option>
+                                        <option value="ALLERGIES_PRESENT">Allergies Present</option>
+                                        <option value="UNKNOWN">Unknown / Not Tested</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-span-full">
+                                    <label class="form-label">Specific Drug / Medical Allergies Notes</label>
+                                    <input type="text" name="allergies" class="form-control" placeholder="e.g. Penicillin, Sulfa drugs, Peanuts">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Form Submission Actions -->
+                        <div class="form-group col-span-full d-flex justify-content-between align-end" style="margin-top: 1.5rem;">
+                            <a th:href="@{/patients}" class="btn btn-logout">⬅️ Cancel &amp; Return to Directory</a>
+                            <button type="submit" class="btn btn-success" style="padding: 0.75rem 1.75rem; font-size: 1rem;">➕ Save &amp; Register Patient</button>
+                        </div>
+                    </form>
+                </div>
+            </main>
+        </div>
+    </div>
+
+</body>
+</html>

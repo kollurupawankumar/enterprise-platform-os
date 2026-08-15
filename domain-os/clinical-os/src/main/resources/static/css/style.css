@@ -48,7 +48,7 @@ body {
     width: 100%;
 }
 
-/* Sidebar Navigation Component */
+/* Sidebar Navigation Component & Sub-Tree Menu */
 .sidebar {
     width: 260px;
     background-color: var(--bg-card);
@@ -110,6 +110,58 @@ body {
     background-color: #e0f2fe;
     color: var(--primary-color);
     font-weight: 600;
+}
+
+/* Sub-Tree Menu Component */
+.nav-tree-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.nav-tree-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 0.9rem;
+    border-radius: var(--radius-md);
+    cursor: default;
+}
+
+.nav-sub-menu {
+    list-style: none;
+    padding-left: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    margin-top: 0.25rem;
+    margin-bottom: 0.4rem;
+}
+
+.nav-sub-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.55rem 0.85rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    border-radius: var(--radius-md);
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.nav-sub-link:hover {
+    background-color: #f1f5f9;
+    color: var(--primary-color);
+}
+
+.nav-sub-link.active {
+    background-color: #e0f2fe;
+    color: var(--primary-color);
+    font-weight: 700;
 }
 
 /* Main Content & Top Header */
@@ -187,60 +239,6 @@ body {
 .content-container {
     padding: 2rem;
     flex: 1;
-}
-
-/* Card Integrated Tab Header (Matching User Sample) */
-.card-tab-container {
-    background-color: var(--bg-card);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-sm);
-    overflow: hidden;
-    margin-bottom: 2rem;
-}
-
-.card-tab-header {
-    display: flex;
-    background-color: #e2e8f0;
-    border-bottom: 1px solid var(--border-color);
-}
-
-.card-tab {
-    appearance: none;
-    -webkit-appearance: none;
-    border: none;
-    outline: none;
-    padding: 1rem 1.75rem;
-    font-size: 0.85rem;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    color: #475569;
-    background-color: #e2e8f0;
-    cursor: pointer;
-    border-right: 1px solid var(--border-color);
-    border-top: 3px solid transparent;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-}
-
-.card-tab:hover {
-    color: var(--primary-color);
-    background-color: #cbd5e1;
-}
-
-.card-tab.active {
-    background-color: #ffffff;
-    color: var(--primary-color);
-    border-top: 3px solid var(--primary-color);
-    border-bottom: 1px solid #ffffff;
-    margin-bottom: -1px;
-}
-
-.card-tab-body {
-    padding: 1.75rem;
 }
 
 /* Stat KPI Cards Grid */
@@ -454,6 +452,24 @@ body {
 
 .w-100 {
     width: 100%;
+}
+
+/* Alert Banners */
+.alert {
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius-md);
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.alert-success {
+    background-color: var(--success-bg);
+    color: var(--success-text);
+    border: 1px solid #a7f3d0;
 }
 
 /* Badges */

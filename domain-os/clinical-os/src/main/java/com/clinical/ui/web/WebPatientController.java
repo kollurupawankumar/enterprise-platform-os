@@ -22,8 +22,12 @@ public class WebPatientController {
     }
 
     @GetMapping("/patients")
-    public String listPatients(@RequestParam(value = "query", required = false) String query, Model model) {
-        model.addAttribute("pageTitle", "Patient Directory");
+    public String listPatients(
+            @RequestParam(value = "query", required = false) String query,
+            @RequestParam(value = "registered", required = false) Boolean registered,
+            Model model) {
+        
+        model.addAttribute("pageTitle", "Master Patient Directory");
         model.addAttribute("activeTab", "patients");
 
         List<PatientEntity> allPatients = patientService.getAllPatients();
@@ -43,8 +47,16 @@ public class WebPatientController {
 
         model.addAttribute("patients", patients);
         model.addAttribute("query", query != null ? query : "");
+        model.addAttribute("showSuccessAlert", Boolean.TRUE.equals(registered));
 
         return "patients";
+    }
+
+    @GetMapping("/patients/register")
+    public String registerPatientForm(Model model) {
+        model.addAttribute("pageTitle", "New Patient Onboarding");
+        model.addAttribute("activeTab", "patient-register");
+        return "patient_register";
     }
 
     @PostMapping("/patients/register")
@@ -105,6 +117,6 @@ public class WebPatientController {
         p.setAllergies(allergies != null ? allergies.trim() : null);
 
         patientService.registerPatient(p);
-        return "redirect:/patients";
+        return "redirect:/patients?registered=true";
     }
 }

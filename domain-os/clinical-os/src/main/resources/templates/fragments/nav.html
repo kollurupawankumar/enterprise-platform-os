@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 
-    <!-- Reusable Left Sidebar Navigation Menu -->
+    <!-- Reusable Left Sidebar Navigation Menu with Sub-Tree Support -->
     <aside th:fragment="sidebar(activeTab)" class="sidebar">
         <div class="brand">
             <img th:src="@{/images/default_logo.png}" alt="Logo" class="brand-logo" onerror="this.style.display='none'">
@@ -14,11 +14,27 @@
                     <span>📊</span> Dashboard
                 </a>
             </li>
-            <li>
-                <a th:href="@{/patients}" th:classappend="${activeTab == 'patients'} ? 'active' : ''" class="nav-link">
-                    <span>👤</span> Patient Directory
-                </a>
+            
+            <!-- Expandable Patient Management Tree Menu -->
+            <li class="nav-tree-item">
+                <div class="nav-tree-title">
+                    <span>📂 Patient Management</span>
+                    <span style="font-size:0.75rem; color:var(--text-muted);">▼</span>
+                </div>
+                <ul class="nav-sub-menu">
+                    <li>
+                        <a th:href="@{/patients}" th:classappend="${activeTab == 'patients'} ? 'active' : ''" class="nav-sub-link">
+                            <span>📄</span> Patient Directory
+                        </a>
+                    </li>
+                    <li>
+                        <a th:href="@{/patients/register}" th:classappend="${activeTab == 'patient-register'} ? 'active' : ''" class="nav-sub-link">
+                            <span>➕</span> New Registration
+                        </a>
+                    </li>
+                </ul>
             </li>
+
             <li>
                 <a th:href="@{/appointments}" th:classappend="${activeTab == 'appointments'} ? 'active' : ''" class="nav-link">
                     <span>📅</span> Appointments &amp; Queue
