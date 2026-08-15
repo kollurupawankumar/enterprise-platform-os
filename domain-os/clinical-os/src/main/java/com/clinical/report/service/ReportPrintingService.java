@@ -220,6 +220,75 @@ public class ReportPrintingService {
         return html.toString();
     }
 
+    // 3d. Official Unified OPD Master Hospital Bill & Settlement Receipt HTML
+    public String generateMasterOpdInvoiceHtml(com.clinical.billing.entity.InvoiceEntity invoice, PatientEntity patient, List<LabOrderEntity> labOrders, List<com.clinical.pharmacy.entity.PharmacyInvoiceEntity> pharmacyInvoices) {
+        StringBuilder html = new StringBuilder();
+        appendReportHeader(html, "UNIFIED OPD MASTER HOSPITAL BILL & SETTLEMENT RECEIPT");
+
+        String pName = patient != null ? patient.getFirstName() + " " + patient.getLastName() : (invoice.getPatientId() != null ? invoice.getPatientId() : "OPD Walk-in Patient");
+
+        html.append("<div class='section'>")
+            .append("<p><b>Master Invoice No:</b> ").append(invoice.getInvoiceId()).append(" &nbsp;&nbsp;&nbsp;&nbsp; <b>Date / Time:</b> ").append(invoice.getCreatedAt() != null ? invoice.getCreatedAt().format(DATE_FORMATTER) : LocalDateTime.now().format(DATE_FORMATTER)).append("</p>")
+            .append("<p><b>Visit ID:</b> ").append(invoice.getVisitId()).append(" &nbsp;&nbsp;&nbsp;&nbsp; <b>Patient Name:</b> ").append(pName).append("</p>")
+            .append("<p><b>Attending Doctor:</b> ").append(invoice.getDoctorName() != null ? invoice.getDoctorName() : "Dr. Prescriber").append(" &nbsp;&nbsp;&nbsp;&nbsp; <b>Payment Mode:</b> ").append(invoice.getPaymentMode() != null ? invoice.getPaymentMode() : "CASH").append("</p>")
+            .append("<p><b>Payment Status:</b> <span class='badge ").append("PAID".equalsIgnoreCase(invoice.getPaymentStatus()) ? "paid" : "unpaid").append("'>").append(invoice.getPaymentStatus()).append("</span> &nbsp;&nbsp; <b>Remarks:</b> ").append(invoice.getRemarks() != null ? invoice.getRemarks() : "Settled at OPD Counter").append("</p>")
+            .append("</div>");
+
+        html.append("<div class='section'><h3>Itemized Departmental Billing Summary</h3><table><thead><tr><th>Department / Service Category</th><th>Description / Items Summary</th><th style='text-align:right;'>Amount (₹)</th></tr></thead><tbody>");
+
+        // 1. Doctor Consultation Fee
+        html.append("<tr>")
+            .append("<td><b>Doctor OPD Consultation</b></td>")
+            .append("<td>OPD Specialist Consultation Fee (").append(invoice.getDoctorName() != null ? invoice.getDoctorName() : "Doctor").append(")</td>")
+            .append("<td style='text-align:right;'>₹ ").append(invoice.getConsultationFee() != null ? invoice.getConsultationFee() : "0.00").append("</td>")
+            .append("</tr>");
+
+        // 2. Laboratory Diagnostics
+        StringBuilder labDesc = new StringBuilder();
+        if (labOrders != null && !labOrders.isEmpty()) {
+            for (LabOrderEntity lo : labOrders) {
+                if (labDesc.length() > 0) labDesc.append(", ");
+                labDesc.append(lo.getTestName());
+            }
+        } else {
+            labDesc.append("No lab tests requisitions");
+        }
+        html.append("<tr>")
+            .append("<td><b>Laboratory &amp; Diagnostics</b></td>")
+            .append("<td>").append(labDesc.toString()).append("</td>")
+            .append("<td style='text-align:right;'>₹ ").append(invoice.getLabFee() != null ? invoice.getLabFee() : "0.00").append("</td>")
+            .append("</tr>");
+
+        // 3. Pharmacy Dispensing
+        StringBuilder pharmDesc = new StringBuilder();
+        if (pharmacyInvoices != null && !pharmacyInvoices.isEmpty()) {
+            for (com.clinical.pharmacy.entity.PharmacyInvoiceEntity pi : pharmacyInvoices) {
+                if (pharmDesc.length() > 0) pharmDesc.append(", ");
+                pharmDesc.append("Invoice ").append(pi.getInvoiceId());
+            }
+        } else {
+            pharmDesc.append("No pharmacy medications dispensed");
+        }
+        html.append("<tr>")
+            .append("<td><b>Pharmacy &amp; Medications</b></td>")
+            .append("<td>").append(pharmDesc.toString()).append("</td>")
+            .append("<td style='text-align:right;'>₹ ").append(invoice.getPharmacyFee() != null ? invoice.getPharmacyFee() : "0.00").append("</td>")
+            .append("</tr>");
+
+        // Subtotal, Discount, Tax & Net Total
+        html.append("<tr><td colspan='2' style='text-align:right;'><b>Subtotal Amount:</b></td><td style='text-align:right;'>₹ ").append(invoice.getSubtotal()).append("</td></tr>")
+            .append("<tr><td colspan='2' style='text-align:right;'>Discount Amount:</td><td style='text-align:right;'>- ₹ ").append(invoice.getDiscountAmount()).append("</td></tr>")
+            .append("<tr><td colspan='2' style='text-align:right;'>GST / Service Tax (5%):</td><td style='text-align:right;'>+ ₹ ").append(invoice.getTaxAmount()).append("</td></tr>")
+            .append("<tr style='font-weight:bold; background-color:#F1F5F9;'><td colspan='2' style='text-align:right;'>Net Settled Amount Paid:</td><td style='text-align:right; font-size:14px; color:#059669;'>₹ ").append(invoice.getTotalAmount()).append("</td></tr>")
+            .append("</tbody></table></div>");
+
+        html.append("<br/><div style='margin-top:20px;'><p style='font-size:11px; color:#64748B;'>* Computer generated OPD receipt. Valid without physical signature. Thank you for choosing our healthcare center.</p></div>");
+
+        appendReportFooter(html);
+        return html.toString();
+    }
+
+
 
 
     // 4. Doctor Schedule & Performance Report HTML

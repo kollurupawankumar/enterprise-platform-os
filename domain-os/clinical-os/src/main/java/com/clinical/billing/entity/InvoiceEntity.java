@@ -30,8 +30,21 @@ public class InvoiceEntity {
     @Column(name = "pharmacy_fee")
     private BigDecimal pharmacyFee = BigDecimal.ZERO;
 
+    private BigDecimal subtotal = BigDecimal.ZERO;
+
+    @Column(name = "discount_amount")
+    private BigDecimal discountAmount = BigDecimal.ZERO;
+
+    @Column(name = "tax_amount")
+    private BigDecimal taxAmount = BigDecimal.ZERO;
+
     @Column(name = "total_amount")
     private BigDecimal totalAmount = BigDecimal.ZERO;
+
+    @Column(name = "doctor_name")
+    private String doctorName;
+
+    private String remarks;
 
     @Column(name = "payment_status")
     private String paymentStatus = "UNPAID"; // UNPAID, PAID, PARTIAL
@@ -65,8 +78,23 @@ public class InvoiceEntity {
     public BigDecimal getPharmacyFee() { return pharmacyFee; }
     public void setPharmacyFee(BigDecimal pharmacyFee) { this.pharmacyFee = pharmacyFee; }
 
+    public BigDecimal getSubtotal() { return subtotal; }
+    public void setSubtotal(BigDecimal subtotal) { this.subtotal = subtotal; }
+
+    public BigDecimal getDiscountAmount() { return discountAmount; }
+    public void setDiscountAmount(BigDecimal discountAmount) { this.discountAmount = discountAmount; }
+
+    public BigDecimal getTaxAmount() { return taxAmount; }
+    public void setTaxAmount(BigDecimal taxAmount) { this.taxAmount = taxAmount; }
+
     public BigDecimal getTotalAmount() { return totalAmount; }
     public void setTotalAmount(BigDecimal totalAmount) { this.totalAmount = totalAmount; }
+
+    public String getDoctorName() { return doctorName; }
+    public void setDoctorName(String doctorName) { this.doctorName = doctorName; }
+
+    public String getRemarks() { return remarks; }
+    public void setRemarks(String remarks) { this.remarks = remarks; }
 
     public String getPaymentStatus() { return paymentStatus; }
     public void setPaymentStatus(String paymentStatus) { this.paymentStatus = paymentStatus; }
@@ -77,3 +105,4 @@ public class InvoiceEntity {
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }
+

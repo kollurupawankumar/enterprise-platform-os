@@ -1,27 +1,170 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
 <VBox spacing="15" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.clinical.ui.controller.BillingViewController"
-      style="-fx-background-color: #F8FAFC; -fx-padding: 20;">
-    <Label text="Billing &amp; Payment Receipts" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
-    <GridPane hgap="15" vgap="10" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;">
-        <Label text="Visit ID:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-        <TextField fx:id="visitIdField" promptText="VISIT-2026-000001" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+      style="-fx-background-color: #F8FAFC; -fx-padding: 20;" VBox.vgrow="ALWAYS">
 
-        <Label text="Consultation Fee (₹):" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-        <TextField fx:id="consultationFeeField" text="500" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+    <!-- Header Banner -->
+    <HBox alignment="CENTER_LEFT" spacing="15" style="-fx-background-color: white; -fx-padding: 15 20; -fx-background-radius: 10; -fx-border-color: #E2E8F0; -fx-border-radius: 10;">
+        <VBox HBox.hgrow="ALWAYS">
+            <Label text="Central OPD Billing &amp; Financial Register" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+            <Label text="Unified Master OPD Invoicing, Departmental Fee Aggregation &amp; Day-End Cash Register" style="-fx-font-size: 13px; -fx-text-fill: #64748B;"/>
+        </VBox>
+        <Button text="🔄 Refresh Counter" onAction="#handleRefreshAll" style="-fx-background-color: #F1F5F9; -fx-text-fill: #334155; -fx-font-weight: bold; -fx-cursor: hand; -fx-padding: 8 16;"/>
+    </HBox>
 
-        <Label text="Lab Fee (₹):" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-        <TextField fx:id="labFeeField" text="300" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+    <TabPane tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS" style="-fx-background-color: transparent;">
+        
+        <!-- TAB 1: UNIFIED MASTER OPD BILLING COUNTER -->
+        <Tab text="💳 Unified Master OPD Invoicing">
+            <VBox spacing="15" style="-fx-padding: 15 0 0 0;" VBox.vgrow="ALWAYS">
+                <HBox spacing="15" VBox.vgrow="ALWAYS">
+                    
+                    <!-- LEFT COLUMN: Patient Visit Selector & Line Items -->
+                    <VBox spacing="15" HBox.hgrow="ALWAYS" prefWidth="650">
+                        <!-- Visit Selector Bar -->
+                        <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-background-color: white; -fx-padding: 12; -fx-background-radius: 8; -fx-border-color: #CBD5E1; -fx-border-radius: 8;">
+                            <Label text="Select Visit:" style="-fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                            <ComboBox fx:id="visitSelectorCombo" prefWidth="320" promptText="Select Patient Visit..." HBox.hgrow="ALWAYS"/>
+                            <Button text="🔍 Auto-Fetch Fees" onAction="#handleFetchVisitFees" style="-fx-background-color: #0EA5E9; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;"/>
+                        </HBox>
 
-        <Label text="Pharmacy Fee (₹):" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
-        <TextField fx:id="pharmacyFeeField" text="200" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                        <!-- Patient Info Banner -->
+                        <HBox alignment="CENTER_LEFT" spacing="20" style="-fx-background-color: #EFF6FF; -fx-padding: 12; -fx-background-radius: 8; -fx-border-color: #BFDBFE; -fx-border-radius: 8;">
+                            <VBox>
+                                <Label text="Patient Name:" style="-fx-font-size: 11px; -fx-text-fill: #1E40AF;"/>
+                                <Label fx:id="patientNameLabel" text="[No Patient Selected]" style="-fx-font-weight: bold; -fx-font-size: 14px; -fx-text-fill: #1E3A8A;"/>
+                            </VBox>
+                            <VBox>
+                                <Label text="Visit ID:" style="-fx-font-size: 11px; -fx-text-fill: #1E40AF;"/>
+                                <Label fx:id="visitIdLabel" text="-" style="-fx-font-weight: bold; -fx-font-size: 13px; -fx-text-fill: #1E3A8A;"/>
+                            </VBox>
+                            <VBox>
+                                <Label text="Attending Doctor:" style="-fx-font-size: 11px; -fx-text-fill: #1E40AF;"/>
+                                <Label fx:id="doctorNameLabel" text="-" style="-fx-font-weight: bold; -fx-font-size: 13px; -fx-text-fill: #1E3A8A;"/>
+                            </VBox>
+                        </HBox>
 
-        <Label text="Payment Mode:" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
-        <ComboBox fx:id="paymentModeCombo" prefWidth="200" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+                        <!-- Department Fee Table -->
+                        <VBox spacing="8" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;" VBox.vgrow="ALWAYS">
+                            <Label text="Departmental Charges Breakdown" style="-fx-font-weight: bold; -fx-font-size: 14px; -fx-text-fill: #0F172A;"/>
+                            <TableView fx:id="feeBreakdownTable" VBox.vgrow="ALWAYS">
+                                <columns>
+                                    <TableColumn fx:id="colDept" text="Department / Category" prefWidth="180"/>
+                                    <TableColumn fx:id="colDesc" text="Description / Items Summary" prefWidth="320"/>
+                                    <TableColumn fx:id="colAmount" text="Amount (₹)" prefWidth="120" style="-fx-alignment: CENTER-RIGHT;"/>
+                                </columns>
+                            </TableView>
+                        </VBox>
+                    </VBox>
 
-        <Button text="Generate Invoice &amp; Process Payment" onAction="#handleGenerateInvoice" style="-fx-background-color: #D97706; -fx-text-fill: white; -fx-font-weight: bold;" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
-    </GridPane>
+                    <!-- RIGHT COLUMN: POS Billing Calculator & Payment Options -->
+                    <VBox spacing="15" prefWidth="380" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 10; -fx-border-color: #CBD5E1; -fx-border-radius: 10;">
+                        <Label text="POS Payment Calculator" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+                        
+                        <GridPane hgap="10" vgap="12">
+                            <Label text="Consultation Fee (₹):" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                            <TextField fx:id="consultationFeeField" text="0.00" onKeyReleased="#recalculateTotals" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                            <Label text="Lab Tests Fee (₹):" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                            <TextField fx:id="labFeeField" text="0.00" onKeyReleased="#recalculateTotals" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                            <Label text="Pharmacy Fee (₹):" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                            <TextField fx:id="pharmacyFeeField" text="0.00" onKeyReleased="#recalculateTotals" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                            <Separator GridPane.columnIndex="0" GridPane.rowIndex="3" GridPane.columnSpan="2"/>
+
+                            <Label text="Gross Subtotal:" style="-fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+                            <Label fx:id="subtotalLabel" text="₹ 0.00" style="-fx-font-weight: bold; -fx-font-size: 14px;" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+
+                            <Label text="Discount (₹):" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+                            <TextField fx:id="discountField" text="0.00" onKeyReleased="#recalculateTotals" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+
+                            <Label text="GST Tax (5%):" GridPane.columnIndex="0" GridPane.rowIndex="6"/>
+                            <Label fx:id="taxLabel" text="₹ 0.00" style="-fx-text-fill: #64748B;" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+
+                            <Separator GridPane.columnIndex="0" GridPane.rowIndex="7" GridPane.columnSpan="2"/>
+
+                            <Label text="Net Payable Amount:" style="-fx-font-weight: bold; -fx-font-size: 14px;" GridPane.columnIndex="0" GridPane.rowIndex="8"/>
+                            <Label fx:id="netTotalLabel" text="₹ 0.00" style="-fx-font-weight: bold; -fx-font-size: 20px; -fx-text-fill: #059669;" GridPane.columnIndex="1" GridPane.rowIndex="8"/>
+
+                            <Label text="Payment Mode:" GridPane.columnIndex="0" GridPane.rowIndex="9"/>
+                            <ComboBox fx:id="paymentModeCombo" prefWidth="180" GridPane.columnIndex="1" GridPane.rowIndex="9"/>
+
+                            <Label text="Remarks / Notes:" GridPane.columnIndex="0" GridPane.rowIndex="10"/>
+                            <TextField fx:id="remarksField" promptText="Settled at main counter" GridPane.columnIndex="1" GridPane.rowIndex="10"/>
+                        </GridPane>
+
+                        <Separator/>
+
+                        <VBox spacing="10">
+                            <Button text="🧾 Settle &amp; Generate Master Invoice" onAction="#handleGenerateMasterInvoice" prefHeight="45" maxWidth="MAX_VALUE" style="-fx-background-color: #059669; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-cursor: hand;"/>
+                            <Button text="🖨️ Print OPD Master Hospital Bill" onAction="#handlePrintCurrentInvoice" prefHeight="38" maxWidth="MAX_VALUE" style="-fx-background-color: #0EA5E9; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;"/>
+                        </VBox>
+                    </VBox>
+                </HBox>
+            </VBox>
+        </Tab>
+
+        <!-- TAB 2: ISSUED INVOICES & DAY-END CASH REGISTER -->
+        <Tab text="📊 Day-End Cash Register &amp; History">
+            <VBox spacing="15" style="-fx-padding: 15 0 0 0;" VBox.vgrow="ALWAYS">
+                <!-- Day-End Financial Summary Stat Cards -->
+                <HBox spacing="15">
+                    <VBox spacing="4" HBox.hgrow="ALWAYS" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;">
+                        <Label text="Today's Net Revenue" style="-fx-font-size: 12px; -fx-text-fill: #64748B;"/>
+                        <Label fx:id="statNetRevenueLabel" text="₹ 0.00" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #059669;"/>
+                    </VBox>
+
+                    <VBox spacing="4" HBox.hgrow="ALWAYS" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;">
+                        <Label text="Cash in Drawer" style="-fx-font-size: 12px; -fx-text-fill: #64748B;"/>
+                        <Label fx:id="statCashLabel" text="₹ 0.00" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #D97706;"/>
+                    </VBox>
+
+                    <VBox spacing="4" HBox.hgrow="ALWAYS" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;">
+                        <Label text="UPI / Online Payments" style="-fx-font-size: 12px; -fx-text-fill: #64748B;"/>
+                        <Label fx:id="statUpiLabel" text="₹ 0.00" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2563EB;"/>
+                    </VBox>
+
+                    <VBox spacing="4" HBox.hgrow="ALWAYS" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;">
+                        <Label text="Card Payments" style="-fx-font-size: 12px; -fx-text-fill: #64748B;"/>
+                        <Label fx:id="statCardLabel" text="₹ 0.00" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #7C3AED;"/>
+                    </VBox>
+
+                    <VBox spacing="4" HBox.hgrow="ALWAYS" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;">
+                        <Label text="Total Discounts Given" style="-fx-font-size: 12px; -fx-text-fill: #64748B;"/>
+                        <Label fx:id="statDiscountLabel" text="₹ 0.00" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #DC2626;"/>
+                    </VBox>
+                </HBox>
+
+                <!-- Issued Invoices Table -->
+                <VBox spacing="10" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;" VBox.vgrow="ALWAYS">
+                    <HBox alignment="CENTER_LEFT" spacing="15">
+                        <Label text="Master OPD Invoices Register" style="-fx-font-weight: bold; -fx-font-size: 15px; -fx-text-fill: #0F172A;" HBox.hgrow="ALWAYS"/>
+                        <Button text="🖨️ Re-Print Selected Bill" onAction="#handleReprintSelectedInvoice" style="-fx-background-color: #0EA5E9; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;"/>
+                    </HBox>
+
+                    <TableView fx:id="historyTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="colHistInvId" text="Invoice ID" prefWidth="120"/>
+                            <TableColumn fx:id="colHistVisitId" text="Visit ID" prefWidth="120"/>
+                            <TableColumn fx:id="colHistPatient" text="Patient ID" prefWidth="120"/>
+                            <TableColumn fx:id="colHistDoctor" text="Doctor" prefWidth="140"/>
+                            <TableColumn fx:id="colHistConsult" text="Consultation (₹)" prefWidth="100"/>
+                            <TableColumn fx:id="colHistLab" text="Lab (₹)" prefWidth="90"/>
+                            <TableColumn fx:id="colHistPharm" text="Pharmacy (₹)" prefWidth="100"/>
+                            <TableColumn fx:id="colHistSubtotal" text="Subtotal (₹)" prefWidth="100"/>
+                            <TableColumn fx:id="colHistDisc" text="Discount (₹)" prefWidth="90"/>
+                            <TableColumn fx:id="colHistNetPaid" text="Net Paid (₹)" prefWidth="110" style="-fx-alignment: CENTER-RIGHT; -fx-font-weight: bold;"/>
+                            <TableColumn fx:id="colHistMode" text="Mode" prefWidth="90"/>
+                            <TableColumn fx:id="colHistDate" text="Issued Date" prefWidth="140"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+            </VBox>
+        </Tab>
+    </TabPane>
 </VBox>
