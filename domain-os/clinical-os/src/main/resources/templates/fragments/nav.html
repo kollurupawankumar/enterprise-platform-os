@@ -67,12 +67,26 @@
         </ul>
     </aside>
 
-    <!-- Reusable Top Header Bar -->
+    <!-- Reusable Top Header Bar with User Profile & Sign Out -->
     <header th:fragment="header(titleText)" class="top-header">
         <div class="header-title" th:text="${titleText}">Executive Dashboard</div>
-        <div class="user-profile" style="display: flex; align-items: center; gap: 0.75rem;">
-            <span style="color: var(--text-muted); font-size: 0.85rem;">Doctor Connected:</span>
-            <strong style="color: var(--primary-color); font-weight: 600;">Dr. Pawan Kumar</strong>
+        
+        <div style="display: flex; align-items: center; gap: 1.25rem;">
+            <!-- Logged In User Info Badge -->
+            <div class="user-badge" style="display: flex; align-items: center; gap: 0.6rem; background-color: #f1f5f9; padding: 0.4rem 0.85rem; border-radius: 20px; border: 1px solid var(--border-color);">
+                <div style="width: 32px; height: 32px; border-radius: 50%; background-color: var(--primary-color); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem;">
+                    PK
+                </div>
+                <div style="display: flex; flex-direction: column;">
+                    <strong style="color: var(--text-main); font-size: 0.85rem; line-height: 1.1;">Dr. Pawan Kumar</strong>
+                    <span style="color: var(--text-muted); font-size: 0.7rem;">Senior Consultant</span>
+                </div>
+            </div>
+
+            <!-- Constant Sign Out Button -->
+            <a th:href="@{/login}" class="btn btn-logout" style="background-color: #fee2e2; color: #b91c1c; padding: 0.45rem 0.9rem; font-size: 0.8rem; text-decoration: none; border-radius: 8px; font-weight: 600; display: inline-flex; align-items: center; gap: 0.35rem; border: 1px solid #fca5a5;">
+                🚪 Sign Out
+            </a>
         </div>
     </header>
 
