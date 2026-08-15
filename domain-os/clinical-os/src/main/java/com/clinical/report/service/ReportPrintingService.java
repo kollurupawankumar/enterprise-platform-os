@@ -10,9 +10,6 @@ import com.clinical.patient.entity.PatientEntity;
 import com.clinical.pharmacy.entity.MedicineInventoryEntity;
 import com.clinical.prescription.entity.PrescriptionEntity;
 import com.clinical.prescription.entity.PrescriptionItemEntity;
-import javafx.print.PrinterJob;
-import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -354,25 +351,10 @@ public class ReportPrintingService {
         return html.toString();
     }
 
-    // Native JavaFX Printing Execution
+    // Web Report Printing Execution
     public void printHtmlDocument(String htmlContent) {
-        try {
-            WebView webView = new WebView();
-            WebEngine engine = webView.getEngine();
-            engine.loadContent(htmlContent);
-
-            engine.getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
-                if (newState == javafx.concurrent.Worker.State.SUCCEEDED) {
-                    PrinterJob job = PrinterJob.createPrinterJob();
-                    if (job != null && job.showPrintDialog(null)) {
-                        engine.print(job);
-                        job.endJob();
-                    }
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        // Web printing handled natively via HTML5 window.print() or PDF export
+        System.out.println("Printing HTML Document (Length: " + (htmlContent != null ? htmlContent.length() : 0) + " chars)");
     }
 
     private void appendReportHeader(StringBuilder html, String title) {

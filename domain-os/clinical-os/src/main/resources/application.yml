@@ -1,6 +1,9 @@
+server:
+  port: 8080
+
 spring:
   main:
-    web-application-type: none
+    web-application-type: servlet
   application:
     name: clinical-os
   jpa:

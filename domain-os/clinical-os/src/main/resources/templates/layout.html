@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pageTitle} + ' - Clinical OS Web Platform'">Clinical OS Web Platform</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div class="brand">
+            <img th:src="@{/images/default_logo.png}" alt="Clinical OS Logo" onerror="this.style.display='none'">
+            <h2>Clinical OS</h2>
+        </div>
+        <ul class="nav-menu">
+            <li>
+                <a th:href="@{/dashboard}" th:classappend="${activeTab == 'dashboard'} ? 'active' : ''" class="nav-link">
+                    <span>📊</span> Dashboard
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/patients}" th:classappend="${activeTab == 'patients'} ? 'active' : ''" class="nav-link">
+                    <span>👤</span> Patient Directory
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/appointments}" th:classappend="${activeTab == 'appointments'} ? 'active' : ''" class="nav-link">
+                    <span>📅</span> Appointments &amp; Queue
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/billing}" th:classappend="${activeTab == 'billing'} ? 'active' : ''" class="nav-link">
+                    <span>💳</span> Master POS Billing
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/pharmacy}" th:classappend="${activeTab == 'pharmacy'} ? 'active' : ''" class="nav-link">
+                    <span>💊</span> Pharmacy Stock &amp; POS
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/lab}" th:classappend="${activeTab == 'lab'} ? 'active' : ''" class="nav-link">
+                    <span>🔬</span> Lab Diagnostics
+                </a>
+            </li>
+        </ul>
+    </aside>
+
+    <!-- Main Wrapper -->
+    <div class="main-wrapper">
+        <header class="top-header">
+            <div class="header-title" th:text="${pageTitle}">Executive Dashboard</div>
+            <div class="user-profile">
+                <span style="color: var(--text-muted); font-size: 0.9rem;">Connected Doctor: </span>
+                <strong style="color: var(--accent-color);">Dr. Pawan Kumar</strong>
+            </div>
+        </header>
+
+        <main class="content-container">
+            <div th:replace="${content}">
+                <!-- Page specific content will be injected here -->
+            </div>
+        </main>
+    </div>
+
+</body>
+</html>
