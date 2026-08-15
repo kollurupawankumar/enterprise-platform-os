@@ -189,46 +189,58 @@ body {
     flex: 1;
 }
 
-/* Chrome-Style Modern Tabs System */
-.chrome-tabs-container {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    background-color: #f1f5f9;
-    padding: 0.35rem 0.5rem;
-    border-radius: 12px;
+/* Card Integrated Tab Header (Matching User Sample) */
+.card-tab-container {
+    background-color: var(--bg-card);
     border: 1px solid var(--border-color);
-    margin-bottom: 1.75rem;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    margin-bottom: 2rem;
 }
 
-.chrome-tab {
+.card-tab-header {
+    display: flex;
+    background-color: #e2e8f0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.card-tab {
     appearance: none;
     -webkit-appearance: none;
     border: none;
     outline: none;
-    background: transparent;
-    display: inline-flex;
+    padding: 1rem 1.75rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: #475569;
+    background-color: #e2e8f0;
+    cursor: pointer;
+    border-right: 1px solid var(--border-color);
+    border-top: 3px solid transparent;
+    transition: all 0.2s ease;
+    display: flex;
     align-items: center;
     gap: 0.6rem;
-    padding: 0.65rem 1.35rem;
-    border-radius: 9px;
-    font-weight: 600;
-    font-size: 0.9rem;
-    color: var(--text-muted);
-    cursor: pointer;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.chrome-tab:hover {
+.card-tab:hover {
     color: var(--primary-color);
-    background-color: rgba(255, 255, 255, 0.7);
+    background-color: #cbd5e1;
 }
 
-.chrome-tab.active {
+.card-tab.active {
     background-color: #ffffff;
     color: var(--primary-color);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
-    font-weight: 700;
+    border-top: 3px solid var(--primary-color);
+    border-bottom: 1px solid #ffffff;
+    margin-bottom: -1px;
+}
+
+.card-tab-body {
+    padding: 1.75rem;
 }
 
 /* Stat KPI Cards Grid */
@@ -352,6 +364,12 @@ body {
 }
 
 /* Form Grid System */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+}
+
 .form-grid-3 {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
