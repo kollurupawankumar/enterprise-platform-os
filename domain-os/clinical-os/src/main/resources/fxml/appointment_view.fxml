@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="15" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.clinical.ui.controller.AppointmentViewController"
+      style="-fx-background-color: #F8FAFC; -fx-padding: 20;" VBox.vgrow="ALWAYS">
+
+    <!-- Header Banner -->
+    <HBox alignment="CENTER_LEFT" spacing="15" style="-fx-background-color: white; -fx-padding: 15 20; -fx-background-radius: 10; -fx-border-color: #E2E8F0; -fx-border-radius: 10;">
+        <VBox HBox.hgrow="ALWAYS">
+            <Label text="Doctor Appointment Slot Calendar &amp; Front Desk Queue" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+            <Label text="Advance Time-Slot Booking, Token Assignment &amp; Patient Check-In Workspace" style="-fx-font-size: 13px; -fx-text-fill: #64748B;"/>
+        </VBox>
+        <Button text="➕ Book New Appointment" onAction="#handleOpenBookingDialog" style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand; -fx-padding: 10 18; -fx-font-size: 13px;"/>
+    </HBox>
+
+    <!-- Toolbar Controls -->
+    <HBox alignment="CENTER_LEFT" spacing="15" style="-fx-background-color: white; -fx-padding: 12 18; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;">
+        <Label text="Select Date:" style="-fx-font-weight: bold; -fx-text-fill: #334155;"/>
+        <DatePicker fx:id="datePicker" prefWidth="150"/>
+
+        <Label text="Attending Doctor:" style="-fx-font-weight: bold; -fx-text-fill: #334155;"/>
+        <ComboBox fx:id="doctorCombo" prefWidth="200" promptText="All Doctors"/>
+
+        <Label text="Filter Status:" style="-fx-font-weight: bold; -fx-text-fill: #334155;"/>
+        <ComboBox fx:id="statusFilterCombo" prefWidth="150"/>
+
+        <Button text="🔍 Filter Slots" onAction="#handleFilterAppointments" style="-fx-background-color: #F1F5F9; -fx-text-fill: #1E293B; -fx-font-weight: bold; -fx-cursor: hand;"/>
+    </HBox>
+
+    <!-- Main Workspace Split -->
+    <HBox spacing="15" VBox.vgrow="ALWAYS">
+        
+        <!-- LEFT PANEL: Interactive Time-Slot Grid -->
+        <VBox spacing="10" prefWidth="420" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;" VBox.vgrow="ALWAYS">
+            <Label text="Today's OPD Time-Slots Grid" style="-fx-font-weight: bold; -fx-font-size: 14px; -fx-text-fill: #0F172A;"/>
+            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" style="-fx-background-color: transparent;">
+                <VBox fx:id="slotsContainer" spacing="8" style="-fx-padding: 5;"/>
+            </ScrollPane>
+        </VBox>
+
+        <!-- RIGHT PANEL: Appointments List & Actions -->
+        <VBox spacing="12" HBox.hgrow="ALWAYS" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;" VBox.vgrow="ALWAYS">
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label text="Scheduled Appointments Directory" style="-fx-font-weight: bold; -fx-font-size: 15px; -fx-text-fill: #0F172A;" HBox.hgrow="ALWAYS"/>
+                <Button text="✅ Check-In Patient" onAction="#handleCheckInSelected" style="-fx-background-color: #059669; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;"/>
+                <Button text="❌ Cancel Booking" onAction="#handleCancelSelected" style="-fx-background-color: #EF4444; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;"/>
+            </HBox>
+
+            <TableView fx:id="appointmentsTable" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="colAptId" text="Apt ID" prefWidth="110"/>
+                    <TableColumn fx:id="colTime" text="Time Slot" prefWidth="90"/>
+                    <TableColumn fx:id="colToken" text="Token #" prefWidth="75" style="-fx-alignment: CENTER; -fx-font-weight: bold;"/>
+                    <TableColumn fx:id="colPatient" text="Patient Name &amp; ID" prefWidth="180"/>
+                    <TableColumn fx:id="colMobile" text="Mobile #" prefWidth="110"/>
+                    <TableColumn fx:id="colDoctor" text="Doctor Name" prefWidth="150"/>
+                    <TableColumn fx:id="colStatus" text="Status" prefWidth="110"/>
+                    <TableColumn fx:id="colNotes" text="Notes / Remarks" prefWidth="150"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </HBox>
+</VBox>

@@ -28,6 +28,7 @@ public class MainClinicalController {
 
     @FXML private Button dashboardBtn;
     @FXML private Button patientBtn;
+    @FXML private Button appointmentBtn;
     @FXML private Button doctorRosterBtn;
     @FXML private Button visitBtn;
     @FXML private Button doctorBtn;
@@ -73,6 +74,7 @@ public class MainClinicalController {
     public void hideAllNavigationButtons() {
         setButtonState(dashboardBtn, false);
         setButtonState(patientBtn, false);
+        setButtonState(appointmentBtn, false);
         setButtonState(doctorRosterBtn, false);
         setButtonState(visitBtn, false);
         setButtonState(doctorBtn, false);
@@ -130,6 +132,7 @@ public class MainClinicalController {
         // Control sidebar button visibility based on user role
         setButtonState(dashboardBtn, true);
         setButtonState(patientBtn, "ADMIN".equals(role) || "RECEPTIONIST".equals(role));
+        setButtonState(appointmentBtn, "ADMIN".equals(role) || "RECEPTIONIST".equals(role));
         setButtonState(doctorRosterBtn, "ADMIN".equals(role) || "RECEPTIONIST".equals(role));
         setButtonState(visitBtn, "ADMIN".equals(role) || "RECEPTIONIST".equals(role) || "DOCTOR".equals(role));
         setButtonState(doctorBtn, "ADMIN".equals(role) || "DOCTOR".equals(role));
@@ -151,6 +154,7 @@ public class MainClinicalController {
 
     @FXML public void showDashboardModule() { loadView("/fxml/dashboard_view.fxml"); }
     @FXML public void showPatientModule() { loadView("/fxml/patient_view.fxml"); }
+    @FXML public void showAppointmentModule() { loadView("/fxml/appointment_view.fxml"); }
     @FXML public void showDoctorRosterModule() { loadView("/fxml/doctor_registration_view.fxml"); }
     @FXML public void showVisitModule() { loadView("/fxml/visit_view.fxml"); }
     @FXML public void showDoctorModule() { loadView("/fxml/doctor_view.fxml"); }
