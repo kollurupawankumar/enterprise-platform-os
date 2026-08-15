@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Pharmacy Inventory - Clinical OS Web Platform</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+    <div style="display: flex; min-height: 100vh;">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="brand">
+                <img th:src="@{/images/default_logo.png}" alt="Logo" style="width:38px; height:38px;" onerror="this.style.display='none'">
+                <h2>Clinical OS</h2>
+            </div>
+            <ul class="nav-menu">
+                <li><a th:href="@{/dashboard}" class="nav-link"><span>📊</span> Dashboard</a></li>
+                <li><a th:href="@{/patients}" class="nav-link"><span>👤</span> Patients Directory</a></li>
+                <li><a th:href="@{/appointments}" class="nav-link"><span>📅</span> Appointments</a></li>
+                <li><a th:href="@{/billing}" class="nav-link"><span>💳</span> POS Master Billing</a></li>
+                <li><a th:href="@{/pharmacy}" class="nav-link active"><span>💊</span> Pharmacy Stock</a></li>
+                <li><a th:href="@{/lab}" class="nav-link"><span>🔬</span> Lab Diagnostics</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Wrapper -->
+        <div class="main-wrapper">
+            <header class="top-header">
+                <div class="header-title">Pharmacy Stock &amp; POS Inventory</div>
+                <div><span class="badge badge-success">Live Stock Engine</span></div>
+            </header>
+
+            <main class="content-container">
+                <!-- Add Stock Form -->
+                <div class="data-card" style="margin-bottom: 1.5rem;">
+                    <div class="card-header">
+                        <h2>Add Medicine Stock</h2>
+                    </div>
+                    <form th:action="@{/pharmacy/add}" method="post" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                        <div>
+                            <label style="font-size: 0.8rem; color: var(--text-muted);">Medicine Name</label>
+                            <input type="text" name="medicineName" class="form-control" placeholder="e.g. Paracetamol 500mg" required>
+                        </div>
+                        <div>
+                            <label style="font-size: 0.8rem; color: var(--text-muted);">Category / Form</label>
+                            <input type="text" name="category" class="form-control" placeholder="e.g. Tablet / Syrup" required>
+                        </div>
+                        <div>
+                            <label style="font-size: 0.8rem; color: var(--text-muted);">Selling Price (₹)</label>
+                            <input type="number" step="0.01" name="unitPrice" class="form-control" placeholder="Price" required>
+                        </div>
+                        <div>
+                            <label style="font-size: 0.8rem; color: var(--text-muted);">Quantity in Stock</label>
+                            <input type="number" name="stockQuantity" class="form-control" placeholder="Quantity" required>
+                        </div>
+                        <div style="display: flex; align-items: flex-end;">
+                            <button type="submit" class="btn btn-primary" style="width: 100%;">+ Add Stock</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Stock List Table -->
+                <div class="data-card">
+                    <div class="card-header">
+                        <h2>Current Pharmacy Inventory</h2>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Medicine Code</th>
+                                    <th>Medicine Name</th>
+                                    <th>Category</th>
+                                    <th>Selling Price</th>
+                                    <th>Available Stock</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="med : ${medicines}">
+                                    <td><strong style="color:var(--primary-color);" th:text="${med.medicineCode != null ? med.medicineCode : 'MED-100'}">MED-101</strong></td>
+                                    <td><strong th:text="${med.medicineName}">Paracetamol 500mg</strong></td>
+                                    <td th:text="${med.category != null ? med.category : 'General'}">General</td>
+                                    <td th:text="${'₹' + (med.sellingPrice != null ? med.sellingPrice : 0.0)}">₹15.00</td>
+                                    <td th:text="${med.quantity}">150</td>
+                                    <td>
+                                        <span class="badge" th:classappend="${med.quantity > 20} ? 'badge-success' : 'badge-danger'" th:text="${med.quantity > 20} ? 'IN STOCK' : 'LOW STOCK'">IN STOCK</span>
+                                    </td>
+                                </tr>
+                                <tr th:if="${#lists.isEmpty(medicines)}">
+                                    <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 2rem;">No medicine stock available.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+</body>
+</html>

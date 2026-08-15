@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lab Diagnostics - Clinical OS Web Platform</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+    <div style="display: flex; min-height: 100vh;">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="brand">
+                <img th:src="@{/images/default_logo.png}" alt="Logo" style="width:38px; height:38px;" onerror="this.style.display='none'">
+                <h2>Clinical OS</h2>
+            </div>
+            <ul class="nav-menu">
+                <li><a th:href="@{/dashboard}" class="nav-link"><span>📊</span> Dashboard</a></li>
+                <li><a th:href="@{/patients}" class="nav-link"><span>👤</span> Patients Directory</a></li>
+                <li><a th:href="@{/appointments}" class="nav-link"><span>📅</span> Appointments</a></li>
+                <li><a th:href="@{/billing}" class="nav-link"><span>💳</span> POS Master Billing</a></li>
+                <li><a th:href="@{/pharmacy}" class="nav-link"><span>💊</span> Pharmacy Stock</a></li>
+                <li><a th:href="@{/lab}" class="nav-link active"><span>🔬</span> Lab Diagnostics</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Wrapper -->
+        <div class="main-wrapper">
+            <header class="top-header">
+                <div class="header-title">Diagnostic Test Catalog &amp; Lab Orders</div>
+                <div><span class="badge badge-success">Lab Engine</span></div>
+            </header>
+
+            <main class="content-container">
+                <!-- Lab Catalog Table -->
+                <div class="data-card" style="margin-bottom: 1.5rem;">
+                    <div class="card-header">
+                        <h2>Available Diagnostic Test Catalog</h2>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Test Code</th>
+                                    <th>Test Name</th>
+                                    <th>Category</th>
+                                    <th>Standard Rate</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="test : ${catalog}">
+                                    <td><strong style="color:var(--primary-color);" th:text="${test.testCode}">CBC-101</strong></td>
+                                    <td><strong th:text="${test.testName}">Complete Blood Count (CBC)</strong></td>
+                                    <td th:text="${test.category}">Hematology</td>
+                                    <td th:text="${'₹' + test.standardCost}">₹350.00</td>
+                                </tr>
+                                <tr th:if="${#lists.isEmpty(catalog)}">
+                                    <td colspan="4" style="text-align: center; color: var(--text-muted); padding: 2rem;">No diagnostic tests in catalog.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Lab Orders Table -->
+                <div class="data-card">
+                    <div class="card-header">
+                        <h2>Recent Diagnostic Lab Orders</h2>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Order #</th>
+                                    <th>Patient ID</th>
+                                    <th>Ordering Doctor</th>
+                                    <th>Total Cost</th>
+                                    <th>Order Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="order : ${orders}">
+                                    <td><strong style="color:var(--primary-color);" th:text="${order.orderId}">LAB-1001</strong></td>
+                                    <td th:text="${order.patientId}">PAT-1001</td>
+                                    <td th:text="${order.doctorName}">Dr. Pawan Kumar</td>
+                                    <td th:text="${'₹' + (order.totalAmount != null ? order.totalAmount : 0.0)}">₹350.00</td>
+                                    <td>
+                                        <span class="badge badge-success" th:text="${order.orderStatus != null ? order.orderStatus : 'COMPLETED'}">COMPLETED</span>
+                                    </td>
+                                </tr>
+                                <tr th:if="${#lists.isEmpty(orders)}">
+                                    <td colspan="5" style="text-align: center; color: var(--text-muted); padding: 2rem;">No active lab orders found.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+</body>
+</html>
