@@ -1,5 +1,6 @@
 package com.clinical.ui.web;
 
+import com.clinical.appointment.entity.AppointmentEntity;
 import com.clinical.appointment.service.AppointmentService;
 import com.clinical.billing.service.BillingService;
 import com.clinical.patient.service.PatientService;
@@ -7,7 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import java.time.LocalDate;
+import java.util.List;
 
 @Controller
 public class WebDashboardController {
@@ -36,16 +37,16 @@ public class WebDashboardController {
         model.addAttribute("activeTab", "dashboard");
         model.addAttribute("totalPatients", patientService.getAllPatients().size());
         
-        var todayAppointments = appointmentService.getAppointmentsByDateAndDoctor(LocalDate.now(), "");
-        model.addAttribute("todayAppointments", todayAppointments.size());
-        model.addAttribute("recentAppointments", todayAppointments);
+        List<AppointmentEntity> appointments = appointmentService.getAllAppointments();
+        model.addAttribute("todayAppointmentsCount", appointments.size());
+        model.addAttribute("todayAppointments", appointments);
 
         double totalRevenue = billingService.getAllInvoices().stream()
                 .mapToDouble(inv -> inv.getTotalAmount() != null ? inv.getTotalAmount().doubleValue() : 0.0)
                 .sum();
 
-        model.addAttribute("formattedRevenue", String.format("₹%,.2f", totalRevenue));
-        model.addAttribute("pharmacyOrders", 8);
+        model.addAttribute("formattedTodayRevenue", String.format("₹%,.2f", totalRevenue));
+        model.addAttribute("pharmacyOrdersCount", 8);
 
         return "dashboard";
     }
