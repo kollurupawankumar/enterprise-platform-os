@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="15" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.clinical.ui.controller.DocumentViewController"
+      style="-fx-background-color: #F8FAFC; -fx-padding: 20;" VBox.vgrow="ALWAYS">
+
+    <!-- Header Banner -->
+    <HBox alignment="CENTER_LEFT" spacing="15" style="-fx-background-color: white; -fx-padding: 15 20; -fx-background-radius: 10; -fx-border-color: #E2E8F0; -fx-border-radius: 10;">
+        <VBox HBox.hgrow="ALWAYS">
+            <Label text="Patient Digital Medical File Cabinet &amp; EMR Records" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+            <Label text="Upload &amp; Manage External Scans, X-Rays, Lab Reports, MRI, and Discharge Summaries" style="-fx-font-size: 13px; -fx-text-fill: #64748B;"/>
+        </VBox>
+        <Button text="📤 Upload Medical Document" onAction="#handleOpenUploadDialog" style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand; -fx-padding: 10 18; -fx-font-size: 13px;"/>
+    </HBox>
+
+    <!-- Patient Selection Toolbar -->
+    <HBox alignment="CENTER_LEFT" spacing="15" style="-fx-background-color: white; -fx-padding: 12 18; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;">
+        <Label text="Select Patient Chart:" style="-fx-font-weight: bold; -fx-text-fill: #334155;"/>
+        <ComboBox fx:id="patientCombo" prefWidth="300" promptText="All Patient Medical Charts"/>
+
+        <Label text="Document Category:" style="-fx-font-weight: bold; -fx-text-fill: #334155;"/>
+        <ComboBox fx:id="categoryFilterCombo" prefWidth="200"/>
+
+        <Button text="🔄 Refresh Cabinet" onAction="#handleRefreshDocuments" style="-fx-background-color: #F1F5F9; -fx-text-fill: #1E293B; -fx-font-weight: bold; -fx-cursor: hand;"/>
+    </HBox>
+
+    <!-- Main Content Area -->
+    <VBox spacing="10" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;" VBox.vgrow="ALWAYS">
+        <HBox alignment="CENTER_LEFT" spacing="15">
+            <Label text="Attached Clinical Documents Directory" style="-fx-font-weight: bold; -fx-font-size: 15px; -fx-text-fill: #0F172A;" HBox.hgrow="ALWAYS"/>
+            <Button text="👁️ Open / View File" onAction="#handleOpenFile" style="-fx-background-color: #0EA5E9; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;"/>
+            <Button text="🗑️ Delete Document" onAction="#handleDeleteDocument" style="-fx-background-color: #EF4444; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;"/>
+        </HBox>
+
+        <TableView fx:id="documentTable" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="colDocId" text="Doc ID" prefWidth="120"/>
+                <TableColumn fx:id="colPatient" text="Patient ID" prefWidth="130"/>
+                <TableColumn fx:id="colVisit" text="Visit ID" prefWidth="120"/>
+                <TableColumn fx:id="colDocName" text="Document Title / Name" prefWidth="220"/>
+                <TableColumn fx:id="colType" text="Category" prefWidth="140"/>
+                <TableColumn fx:id="colSize" text="File Size" prefWidth="90"/>
+                <TableColumn fx:id="colUploadedBy" text="Uploaded By" prefWidth="130"/>
+                <TableColumn fx:id="colDate" text="Upload Date" prefWidth="140"/>
+                <TableColumn fx:id="colRemarks" text="Remarks / Clinical Tags" prefWidth="180"/>
+            </columns>
+        </TableView>
+    </VBox>
+</VBox>
