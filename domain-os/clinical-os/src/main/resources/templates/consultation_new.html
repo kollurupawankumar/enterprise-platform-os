@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>New Clinical Consultation - Clinical OS Web Platform</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Reusable Left Sidebar Navigation -->
+        <aside th:replace="~{fragments/nav :: sidebar('consultation-new')}"></aside>
+
+        <!-- Main Content Area -->
+        <div class="main-wrapper">
+            <!-- Reusable Top Header -->
+            <header th:replace="~{fragments/nav :: header('New Doctor EMR &amp; Clinical Vitals Consultation')}"></header>
+
+            <main class="content-container">
+                <!-- Dedicated Consultation Card Container -->
+                <div class="data-card">
+                    <div class="card-header">
+                        <h2>Record Clinical Examination &amp; Issue Rx</h2>
+                        <a th:href="@{/consultation}" class="btn btn-logout">⬅️ Return to Encounters History</a>
+                    </div>
+
+                    <form th:action="@{/consultation/record}" method="post">
+                        
+                        <!-- Section 1: Patient Lookup -->
+                        <div class="form-section-card">
+                            <div class="section-title">👤 Section 1: Patient Identification</div>
+                            <div class="form-grid-3">
+                                <div class="form-group col-span-full">
+                                    <label class="form-label">Select Patient for OPD Consultation *</label>
+                                    <div class="d-flex" style="gap: 0.75rem;">
+                                        <input type="hidden" id="selectedPatientId" name="patientId" required>
+                                        <input type="text" id="selectedPatientDisplay" class="form-control" placeholder="Click 'Lookup Patient' to search by Name, Phone, or ID..." readonly required style="background-color: #ffffff; cursor: pointer;" onclick="openPatientModal()">
+                                        <button type="button" class="btn btn-primary" onclick="openPatientModal()" style="white-space: nowrap; padding: 0.65rem 1.35rem;">
+                                            🔍 Lookup / Search Patient
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 2: Comprehensive Clinical Vitals -->
+                        <div class="form-section-card">
+                            <div class="section-title">🩺 Section 2: Clinical Vital Signs &amp; Anthropometrics</div>
+                            <div class="form-grid-3">
+                                <div class="form-group">
+                                    <label class="form-label">Systolic BP (mmHg)</label>
+                                    <input type="number" name="systolicBp" class="form-control" placeholder="e.g. 120" value="120">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Diastolic BP (mmHg)</label>
+                                    <input type="number" name="diastolicBp" class="form-control" placeholder="e.g. 80" value="80">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Pulse Rate (bpm)</label>
+                                    <input type="number" name="pulseRate" class="form-control" placeholder="e.g. 72" value="72">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Body Temperature (°F)</label>
+                                    <input type="number" step="0.1" name="temperature" class="form-control" placeholder="e.g. 98.6" value="98.6">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Oxygen Saturation SpO2 (%)</label>
+                                    <input type="number" name="spo2" class="form-control" placeholder="e.g. 98" value="98">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Weight (kg)</label>
+                                    <input type="number" step="0.1" id="weightKg" name="weightKg" class="form-control" placeholder="e.g. 68.5" oninput="calculateBMI()">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Height (cm)</label>
+                                    <input type="number" step="0.1" id="heightCm" name="heightCm" class="form-control" placeholder="e.g. 172" oninput="calculateBMI()">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Calculated Body Mass Index (BMI)</label>
+                                    <input type="text" id="calculatedBmi" class="form-control" placeholder="Auto-calculated" readonly style="background-color: #f1f5f9; font-weight: 700; color: var(--primary-color);">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 3: Chief Complaints & ICD Diagnosis -->
+                        <div class="form-section-card">
+                            <div class="section-title">📝 Section 3: Chief Symptoms, Physical Findings &amp; ICD-10 Diagnosis</div>
+                            <div class="form-grid-3">
+                                <div class="form-group col-span-full">
+                                    <label class="form-label">Chief Complaint / Symptoms *</label>
+                                    <input type="text" name="chiefComplaint" class="form-control" placeholder="e.g. High fever for 3 days, sore throat, severe fatigue" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">ICD-10 Code</label>
+                                    <input type="text" name="icdCode" class="form-control" placeholder="e.g. J06.9" value="J06.9">
+                                </div>
+                                <div class="form-group col-span-full">
+                                    <label class="form-label">ICD Diagnosis Title / Name</label>
+                                    <input type="text" name="icdDescription" class="form-control" placeholder="e.g. Acute Upper Respiratory Infection, Unspecified" value="Acute Upper Respiratory Infection">
+                                </div>
+                                <div class="form-group col-span-full">
+                                    <label class="form-label">Clinical Impression &amp; Physical Assessment</label>
+                                    <textarea name="clinicalAssessment" class="form-control" rows="2" placeholder="e.g. Throat congested, bilateral lungs clear, no neck lymphadenopathy."></textarea>
+                                </div>
+                                <div class="form-group col-span-full">
+                                    <label class="form-label">Treatment Plan &amp; Advice</label>
+                                    <textarea name="treatmentPlan" class="form-control" rows="2" placeholder="e.g. Take warm saline gargles, adequate hydration, rest for 3 days."></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Form Submission -->
+                        <div class="form-group col-span-full d-flex justify-content-between align-end" style="margin-top: 1.5rem;">
+                            <a th:href="@{/consultation}" class="btn btn-logout">⬅️ Cancel Consultation</a>
+                            <button type="submit" class="btn btn-success" style="padding: 0.75rem 1.75rem; font-size: 1rem;">👨‍⚕️ Save Encounter &amp; Issue Prescription</button>
+                        </div>
+                    </form>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Interactive Patient Lookup Modal Window -->
+    <div id="patientLookupModal" class="modal-backdrop" style="display: none;">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>🔍 Select Patient for Doctor Consultation</h3>
+                <button type="button" class="modal-close-btn" onclick="closePatientModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- Instant Live Filter Bar -->
+                <div class="form-group" style="margin-bottom: 1.25rem;">
+                    <label class="form-label">Search Patient by Name, Mobile Number, or Patient ID</label>
+                    <input type="text" id="modalPatientSearch" class="form-control" placeholder="Type name, phone (e.g. 98765), or PAT-1001..." onkeyup="filterPatientTable(this.value)">
+                </div>
+
+                <!-- Patient Selection Table -->
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Patient ID</th>
+                                <th>Full Name</th>
+                                <th>Gender / DOB</th>
+                                <th>Mobile Number</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="modalPatientTableBody">
+                            <tr th:each="p : ${patients}">
+                                <td><strong class="text-primary" th:text="${p.patientId}">PAT-1001</strong></td>
+                                <td>
+                                    <strong th:text="${p.firstName + ' ' + (p.lastName != null ? p.lastName : '')}">John Doe</strong>
+                                </td>
+                                <td th:text="${(p.gender != null ? p.gender : 'N/A') + ' / ' + (p.dob != null ? p.dob : 'N/A')}">MALE / 1990-05-12</td>
+                                <td th:text="${p.phone}">+91 98765 43210</td>
+                                <td>
+                                    <button type="button" class="btn btn-success btn-sm" th:data-id="${p.patientId}" th:data-display="${p.firstName + ' ' + (p.lastName != null ? p.lastName : '') + ' (' + p.patientId + ' - ' + p.phone + ')'}" onclick="selectPatientFromModal(this.getAttribute('data-id'), this.getAttribute('data-display'))">
+                                        Select Patient
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(patients)}">
+                                <td colspan="5" class="table-empty">No registered patients found. <a th:href="@{/patients/register}" class="text-primary">Click here to register a new patient</a>.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="d-flex justify-content-between align-end" style="margin-top: 1.25rem; font-size: 0.85rem; color: var(--text-muted);">
+                    <span>Patient not in directory? <a th:href="@{/patients/register}" class="text-primary" style="font-weight: 600;">+ Onboard New Patient</a></span>
+                    <button type="button" class="btn btn-logout btn-sm" onclick="closePatientModal()">Close Window</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Client-side Interactive Scripts -->
+    <script>
+        function openPatientModal() {
+            document.getElementById('patientLookupModal').style.display = 'flex';
+            document.getElementById('modalPatientSearch').focus();
+        }
+
+        function closePatientModal() {
+            document.getElementById('patientLookupModal').style.display = 'none';
+        }
+
+        function selectPatientFromModal(id, displayText) {
+            document.getElementById('selectedPatientId').value = id;
+            document.getElementById('selectedPatientDisplay').value = displayText;
+            closePatientModal();
+        }
+
+        function filterPatientTable(query) {
+            const q = query.trim().toLowerCase();
+            const rows = document.querySelectorAll('#modalPatientTableBody tr');
+            rows.forEach(function(row) {
+                const text = row.innerText.toLowerCase();
+                if (text.includes(q)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        function calculateBMI() {
+            const w = parseFloat(document.getElementById('weightKg').value);
+            const h = parseFloat(document.getElementById('heightCm').value);
+            if (w > 0 && h > 0) {
+                const heightM = h / 100.0;
+                const bmi = w / (heightM * heightM);
+                document.getElementById('calculatedBmi').value = bmi.toFixed(1) + ' kg/m²';
+            } else {
+                document.getElementById('calculatedBmi').value = '';
+            }
+        }
+    </script>
+
+</body>
+</html>

@@ -2,88 +2,75 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Doctor EMR Workstation - Clinical OS Web Platform</title>
+    <title>Doctor EMR & Rx Workstation - Clinical OS Web Platform</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
 
     <div class="app-container">
-        <!-- Reusable Left Sidebar -->
+        <!-- Reusable Left Sidebar Navigation -->
         <aside th:replace="~{fragments/nav :: sidebar('consultation')}"></aside>
 
         <!-- Main Content Area -->
         <div class="main-wrapper">
             <!-- Reusable Top Header -->
-            <header th:replace="~{fragments/nav :: header('Doctor Consultation EMR &amp; Electronic Rx Workstation')}"></header>
+            <header th:replace="~{fragments/nav :: header('Doctor EMR &amp; Rx Consultation Workstation')}"></header>
 
             <main class="content-container">
-                <!-- Encounter Form Card -->
-                <div class="data-card">
-                    <div class="card-header">
-                        <h2>Record Clinical Consultation &amp; Vitals</h2>
-                    </div>
-                    <form th:action="@{/consultation/record}" method="post" class="form-grid">
-                        <div class="form-group">
-                            <label class="form-label">Select Patient</label>
-                            <select name="patientId" class="form-control" required>
-                                <option th:each="p : ${patients}" th:value="${p.patientId}" th:text="${p.firstName + ' ' + (p.lastName != null ? p.lastName : '') + ' (' + p.patientId + ')'}">Patient Name</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Chief Complaint</label>
-                            <input type="text" name="chiefComplaint" class="form-control" placeholder="e.g. High Fever &amp; Cough" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">BP (Systolic/Diastolic)</label>
-                            <input type="text" name="bp" class="form-control" placeholder="120/80">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Pulse Rate (bpm)</label>
-                            <input type="number" name="pulseRate" class="form-control" placeholder="72">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">ICD Diagnosis Code</label>
-                            <input type="text" name="icdCode" class="form-control" placeholder="e.g. J06.9 (Acute Upper Respiratory)">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Clinical Notes / Advice</label>
-                            <input type="text" name="clinicalAssessment" class="form-control" placeholder="e.g. Rest &amp; Hydration for 3 days">
-                        </div>
-                        <div class="form-group col-span-full d-flex align-end">
-                            <button type="submit" class="btn btn-primary">👨‍⚕️ Save Consultation &amp; Prescribe</button>
-                        </div>
-                    </form>
+                
+                <!-- Success Alert Banner if redirected from recording consultation -->
+                <div th:if="${showSuccessAlert}" class="alert alert-success">
+                    <span>✅</span> Clinical encounter recorded and Electronic Prescription (Rx) generated successfully!
                 </div>
 
-                <!-- Recent Encounters Card -->
+                <!-- Consultation History Data Card -->
                 <div class="data-card">
                     <div class="card-header">
-                        <h2>Recent Clinical Encounters</h2>
+                        <h2>
+                            Clinical Encounter Records History
+                            <span class="badge badge-primary" th:text="${totalCount + ' Encounters Recorded'}">1 Encounters Recorded</span>
+                        </h2>
+
+                        <a th:href="@{/consultation/new}" class="btn btn-success">➕ Start New Consultation</a>
                     </div>
 
                     <div class="table-responsive">
                         <table class="data-table">
                             <thead>
                                 <tr>
-                                    <th>Encounter #</th>
+                                    <th>Encounter ID</th>
                                     <th>Patient ID</th>
                                     <th>Chief Complaint</th>
-                                    <th>Vitals (BP / Pulse)</th>
-                                    <th>ICD Code</th>
-                                    <th>Consultation Notes</th>
+                                    <th>Vital Signs (BP / Pulse / SpO2 / Temp)</th>
+                                    <th>ICD-10 Diagnosis</th>
+                                    <th>Treatment Plan / Assessment</th>
+                                    <th>Quick Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr th:each="enc : ${encounters}">
                                     <td><strong class="text-primary" th:text="${enc.encounterId}">ENC-1001</strong></td>
-                                    <td th:text="${enc.patientId}">PAT-1001</td>
-                                    <td th:text="${enc.chiefComplaint}">Fever &amp; Headache</td>
-                                    <td th:text="${(enc.systolicBp != null ? enc.systolicBp + '/' + enc.diastolicBp : '120/80') + ' | ' + (enc.pulseRate != null ? enc.pulseRate + ' bpm' : '72 bpm')}">120/80 | 72 bpm</td>
-                                    <td><span class="badge badge-warning" th:text="${enc.icdCode != null ? enc.icdCode : 'J06.9'}">J06.9</span></td>
-                                    <td th:text="${enc.clinicalAssessment != null ? enc.clinicalAssessment : 'Prescribed Paracetamol &amp; Rest'}">Prescribed Paracetamol</td>
+                                    <td>
+                                        <a th:href="@{'/patients/' + ${enc.patientId}}" class="text-primary" style="font-weight: 700;" th:text="${enc.patientId}">PAT-1001</a>
+                                    </td>
+                                    <td th:text="${enc.chiefComplaint}">High fever &amp; cough</td>
+                                    <td>
+                                        <strong class="text-primary" th:text="${(enc.systolicBp != null ? enc.systolicBp : 120) + '/' + (enc.diastolicBp != null ? enc.diastolicBp : 80) + ' mmHg'}">120/80 mmHg</strong>
+                                        <div style="font-size: 0.75rem; color: var(--text-muted);" th:text="${'Pulse: ' + (enc.pulseRate != null ? enc.pulseRate : 72) + ' bpm | SpO2: ' + (enc.spo2 != null ? enc.spo2 : 98) + '% | Temp: ' + (enc.temperature != null ? enc.temperature : 98.6) + '°F'}">Pulse: 72 bpm | SpO2: 98% | Temp: 98.6°F</div>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-warning" th:text="${(enc.icdCode != null ? enc.icdCode : 'J06.9') + ' - ' + (enc.icdDescription != null ? enc.icdDescription : 'Acute Infection')}">J06.9</span>
+                                    </td>
+                                    <td th:text="${enc.clinicalAssessment != null ? enc.clinicalAssessment : 'Prescribed Rest &amp; Meds'}">Prescribed Rest &amp; Meds</td>
+                                    <td>
+                                        <div class="d-flex" style="gap: 0.4rem;">
+                                            <a th:href="@{'/patients/' + ${enc.patientId}}" class="btn btn-primary btn-sm">📁 EMR File</a>
+                                            <a th:href="@{/pharmacy}" class="btn btn-success btn-sm">💊 Send Rx</a>
+                                        </div>
+                                    </td>
                                 </tr>
                                 <tr th:if="${#lists.isEmpty(encounters)}">
-                                    <td colspan="6" class="table-empty">No clinical encounters recorded.</td>
+                                    <td colspan="7" class="table-empty">No clinical encounters recorded yet. Click "Start New Consultation" above.</td>
                                 </tr>
                             </tbody>
                         </table>
