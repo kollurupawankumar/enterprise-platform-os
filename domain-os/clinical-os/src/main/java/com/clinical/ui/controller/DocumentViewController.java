@@ -31,7 +31,7 @@ public class DocumentViewController {
     private final VisitService visitService;
 
     // FXML Controls
-    @FXML private ComboBox<String> patientCombo;
+    @FXML private TextField patientSearchField;
     @FXML private ComboBox<String> categoryFilterCombo;
 
     @FXML private TableView<PatientDocumentEntity> documentTable;
@@ -58,28 +58,18 @@ public class DocumentViewController {
 
     @FXML
     public void initialize() {
+        if (patientSearchField != null) {
+            patientSearchField.textProperty().addListener((obs, oldVal, newVal) -> handleRefreshDocuments());
+        }
+
         if (categoryFilterCombo != null) {
             categoryFilterCombo.setItems(FXCollections.observableArrayList(CATEGORIES));
             categoryFilterCombo.setValue("ALL");
             categoryFilterCombo.valueProperty().addListener((obs, oldVal, newVal) -> handleRefreshDocuments());
         }
 
-        loadPatientCombo();
         setupTable();
         handleRefreshDocuments();
-    }
-
-    private void loadPatientCombo() {
-        if (patientCombo == null) return;
-        List<PatientEntity> patients = patientService.getAllPatients();
-        ObservableList<String> options = FXCollections.observableArrayList();
-        options.add("ALL - All Patient Charts");
-        for (PatientEntity p : patients) {
-            options.add(p.getPatientId() + " - " + p.getFirstName() + " " + p.getLastName());
-        }
-        patientCombo.setItems(options);
-        patientCombo.setValue("ALL - All Patient Charts");
-        patientCombo.valueProperty().addListener((obs, oldVal, newVal) -> handleRefreshDocuments());
     }
 
     private void setupTable() {
@@ -99,14 +89,27 @@ public class DocumentViewController {
 
     @FXML
     public void handleRefreshDocuments() {
-        String pSel = patientCombo != null && patientCombo.getValue() != null ? patientCombo.getValue() : "ALL";
-        String pId = pSel.split(" - ")[0].trim();
+        List<PatientDocumentEntity> docs = documentService.getAllDocuments();
+        String query = patientSearchField != null && patientSearchField.getText() != null ? patientSearchField.getText().trim().toLowerCase() : "";
 
-        List<PatientDocumentEntity> docs;
-        if ("ALL".equalsIgnoreCase(pId)) {
-            docs = documentService.getAllDocuments();
-        } else {
-            docs = documentService.getDocumentsByPatient(pId);
+        if (!query.isEmpty()) {
+            docs = docs.stream().filter(d -> {
+                boolean matchDocId = d.getDocumentId() != null && d.getDocumentId().toLowerCase().contains(query);
+                boolean matchPatientId = d.getPatientId() != null && d.getPatientId().toLowerCase().contains(query);
+                boolean matchDocName = d.getDocumentName() != null && d.getDocumentName().toLowerCase().contains(query);
+                boolean matchRemarks = d.getRemarks() != null && d.getRemarks().toLowerCase().contains(query);
+
+                // Match patient name from PatientService
+                boolean matchPatientName = false;
+                if (d.getPatientId() != null) {
+                    PatientEntity p = patientService.findByPatientId(d.getPatientId()).orElse(null);
+                    if (p != null) {
+                        String fullName = (p.getFirstName() + " " + p.getLastName()).toLowerCase();
+                        matchPatientName = fullName.contains(query) || (p.getPhone() != null && p.getPhone().contains(query));
+                    }
+                }
+                return matchDocId || matchPatientId || matchDocName || matchRemarks || matchPatientName;
+            }).toList();
         }
 
         String catFilter = categoryFilterCombo != null ? categoryFilterCombo.getValue() : "ALL";

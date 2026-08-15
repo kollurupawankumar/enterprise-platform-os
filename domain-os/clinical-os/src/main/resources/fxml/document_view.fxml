@@ -18,8 +18,8 @@
 
     <!-- Patient Selection Toolbar -->
     <HBox alignment="CENTER_LEFT" spacing="15" style="-fx-background-color: white; -fx-padding: 12 18; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;">
-        <Label text="Select Patient Chart:" style="-fx-font-weight: bold; -fx-text-fill: #334155;"/>
-        <ComboBox fx:id="patientCombo" prefWidth="300" promptText="All Patient Medical Charts"/>
+        <Label text="Search Patient Chart:" style="-fx-font-weight: bold; -fx-text-fill: #334155;"/>
+        <TextField fx:id="patientSearchField" prefWidth="320" promptText="🔍 Type Patient ID, Name, or Mobile #..."/>
 
         <Label text="Document Category:" style="-fx-font-weight: bold; -fx-text-fill: #334155;"/>
         <ComboBox fx:id="categoryFilterCombo" prefWidth="200"/>
