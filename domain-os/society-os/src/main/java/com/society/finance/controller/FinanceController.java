@@ -368,18 +368,49 @@ public class FinanceController extends BaseController {
         InvestmentEntity i = investmentTable.getSelectionModel().getSelectedItem();
         if (i == null) return;
 
+        double principal = i.getPrincipalAmount() != null ? i.getPrincipalAmount() : 0.0;
+        double rate = i.getInterestRate() != null ? i.getInterestRate() : 0.0;
+        
+        String maturityDateStr = i.getMaturityDate() != null ? i.getMaturityDate() : "";
+        String daysInfo = "N/A";
+        double estimatedMaturityValue = principal;
+
+        try {
+            if (!maturityDateStr.isBlank()) {
+                java.time.LocalDate matDate = java.time.LocalDate.parse(maturityDateStr);
+                java.time.LocalDate startDate = i.getStartDate() != null ? java.time.LocalDate.parse(i.getStartDate()) : java.time.LocalDate.now();
+                long totalDays = java.time.temporal.ChronoUnit.DAYS.between(startDate, matDate);
+                long daysRemaining = java.time.temporal.ChronoUnit.DAYS.between(java.time.LocalDate.now(), matDate);
+
+                if (daysRemaining < 0) {
+                    daysInfo = "⚠️ MATURED (" + Math.abs(daysRemaining) + " days ago)";
+                } else if (daysRemaining == 0) {
+                    daysInfo = "🔔 MATURING TODAY!";
+                } else {
+                    daysInfo = "🟢 " + daysRemaining + " days remaining until maturity";
+                }
+
+                if (totalDays > 0 && rate > 0) {
+                    double years = totalDays / 365.0;
+                    estimatedMaturityValue = principal * Math.pow(1 + (rate / 100.0), years);
+                }
+            }
+        } catch (Exception ignored) {}
+
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Fixed Deposit Details");
-        alert.setHeaderText("FD Certificate - " + i.getReferenceNumber());
+        alert.setTitle("Fixed Deposit (FD) Investment Details");
+        alert.setHeaderText("FD Certificate & Maturity Breakdown — " + i.getReferenceNumber());
         alert.setContentText(
                 "Financial Institution: " + i.getInstitution() + "\n" +
                 "FD Receipt/Ref No: " + i.getReferenceNumber() + "\n" +
                 "Investment Type: " + i.getInvestmentType() + "\n" +
-                "Principal Amount: " + com.society.common.util.CurrencyUtils.formatInr(i.getPrincipalAmount()) + "\n" +
+                "Principal Amount: " + com.society.common.util.CurrencyUtils.formatInr(principal) + "\n" +
                 "Interest Rate: " + (i.getInterestRate() != null ? i.getInterestRate() + " % p.a." : "N/A") + "\n" +
-                "Start Date: " + i.getStartDate() + "\n" +
+                "Start Date: " + (i.getStartDate() != null ? i.getStartDate() : "N/A") + "\n" +
                 "Maturity Date: " + (i.getMaturityDate() != null ? i.getMaturityDate() : "N/A") + "\n" +
-                "Status: " + i.getStatus()
+                "Maturity Timeline: " + daysInfo + "\n" +
+                "Estimated Maturity Value: " + com.society.common.util.CurrencyUtils.formatInr(estimatedMaturityValue) + "\n" +
+                "Current Status: " + i.getStatus()
         );
         alert.showAndWait();
     }
