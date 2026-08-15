@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+    <!-- Reusable Left Sidebar Navigation Menu -->
+    <aside th:fragment="sidebar(activeTab)" class="sidebar">
+        <div class="brand">
+            <img th:src="@{/images/default_logo.png}" alt="Logo" style="width:36px; height:36px;" onerror="this.style.display='none'">
+            <h2>Clinical OS</h2>
+        </div>
+        <ul class="nav-menu">
+            <li>
+                <a th:href="@{/dashboard}" th:classappend="${activeTab == 'dashboard'} ? 'active' : ''" class="nav-link">
+                    <span>📊</span> Dashboard
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/patients}" th:classappend="${activeTab == 'patients'} ? 'active' : ''" class="nav-link">
+                    <span>👤</span> Patient Directory
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/appointments}" th:classappend="${activeTab == 'appointments'} ? 'active' : ''" class="nav-link">
+                    <span>📅</span> Appointments &amp; Queue
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/consultation}" th:classappend="${activeTab == 'consultation'} ? 'active' : ''" class="nav-link">
+                    <span>👨‍⚕️</span> Doctor EMR &amp; Rx
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/doctors}" th:classappend="${activeTab == 'doctors'} ? 'active' : ''" class="nav-link">
+                    <span>🩺</span> Doctor Roster
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/billing}" th:classappend="${activeTab == 'billing'} ? 'active' : ''" class="nav-link">
+                    <span>💳</span> Master POS Billing
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/pharmacy}" th:classappend="${activeTab == 'pharmacy'} ? 'active' : ''" class="nav-link">
+                    <span>💊</span> Pharmacy Stock
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/lab}" th:classappend="${activeTab == 'lab'} ? 'active' : ''" class="nav-link">
+                    <span>🔬</span> Lab Diagnostics
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/documents}" th:classappend="${activeTab == 'documents'} ? 'active' : ''" class="nav-link">
+                    <span>📁</span> EMR Document Vault
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/reports}" th:classappend="${activeTab == 'reports'} ? 'active' : ''" class="nav-link">
+                    <span>📈</span> Reports &amp; Analytics
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/settings}" th:classappend="${activeTab == 'settings'} ? 'active' : ''" class="nav-link">
+                    <span>⚙️</span> Clinic Settings
+                </a>
+            </li>
+        </ul>
+    </aside>
+
+    <!-- Reusable Top Header Bar -->
+    <header th:fragment="header(titleText)" class="top-header">
+        <div class="header-title" th:text="${titleText}">Executive Dashboard</div>
+        <div class="user-profile" style="display: flex; align-items: center; gap: 0.75rem;">
+            <span style="color: var(--text-muted); font-size: 0.85rem;">Doctor Connected:</span>
+            <strong style="color: var(--primary-color); font-weight: 600;">Dr. Pawan Kumar</strong>
+        </div>
+    </header>
+
+</body>
+</html>

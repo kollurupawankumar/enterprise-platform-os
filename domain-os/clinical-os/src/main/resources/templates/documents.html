@@ -8,32 +8,13 @@
 <body>
 
     <div style="display: flex; min-height: 100vh;">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="brand">
-                <img th:src="@{/images/default_logo.png}" alt="Logo" style="width:38px; height:38px;" onerror="this.style.display='none'">
-                <h2>Clinical OS</h2>
-            </div>
-            <ul class="nav-menu">
-                <li><a th:href="@{/dashboard}" class="nav-link"><span>📊</span> Dashboard</a></li>
-                <li><a th:href="@{/patients}" class="nav-link"><span>👤</span> Patients Directory</a></li>
-                <li><a th:href="@{/appointments}" class="nav-link"><span>📅</span> Appointments</a></li>
-                <li><a th:href="@{/consultation}" class="nav-link"><span>👨‍⚕️</span> Doctor EMR &amp; Rx</a></li>
-                <li><a th:href="@{/billing}" class="nav-link"><span>💳</span> POS Master Billing</a></li>
-                <li><a th:href="@{/pharmacy}" class="nav-link"><span>💊</span> Pharmacy Stock</a></li>
-                <li><a th:href="@{/lab}" class="nav-link"><span>🔬</span> Lab Diagnostics</a></li>
-                <li><a th:href="@{/documents}" class="nav-link active"><span>📁</span> EMR Document Vault</a></li>
-                <li><a th:href="@{/reports}" class="nav-link"><span>📈</span> Reports &amp; Analytics</a></li>
-                <li><a th:href="@{/settings}" class="nav-link"><span>⚙️</span> Clinic Settings</a></li>
-            </ul>
-        </aside>
+        <!-- Reusable Left Sidebar -->
+        <aside th:replace="~{fragments/nav :: sidebar('documents')}"></aside>
 
-        <!-- Main Wrapper -->
+        <!-- Main Content Area -->
         <div class="main-wrapper">
-            <header class="top-header">
-                <div class="header-title">Digital EMR Patient Document Cabinet</div>
-                <div><span class="badge badge-success">Document Storage</span></div>
-            </header>
+            <!-- Reusable Top Header -->
+            <header th:replace="~{fragments/nav :: header('Digital EMR Patient Document Cabinet')}"></header>
 
             <main class="content-container">
                 <!-- Document Vault List Card -->
