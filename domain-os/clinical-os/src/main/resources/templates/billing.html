@@ -16,30 +16,37 @@
             </div>
             <ul class="nav-menu">
                 <li><a th:href="@{/dashboard}" class="nav-link"><span>📊</span> Dashboard</a></li>
-                <li><a th:href="@{/patients}" class="nav-link"><span>👤</span> Patients Directory</a></li>
-                <li><a th:href="@{/appointments}" class="nav-link"><span>📅</span> Appointments</a></li>
-                <li><a th:href="@{/billing}" class="nav-link active"><span>💳</span> POS Master Billing</a></li>
+                <li><a th:href="@{/patients}" class="nav-link"><span>👤</span> Patient Directory</a></li>
+                <li><a th:href="@{/appointments}" class="nav-link"><span>📅</span> Appointments &amp; Queue</a></li>
+                <li><a th:href="@{/consultation}" class="nav-link"><span>👨‍⚕️</span> Doctor EMR &amp; Rx</a></li>
+                <li><a th:href="@{/doctors}" class="nav-link"><span>🩺</span> Doctor Roster</a></li>
+                <li><a th:href="@{/billing}" class="nav-link active"><span>💳</span> Master POS Billing</a></li>
+                <li><a th:href="@{/pharmacy}" class="nav-link"><span>💊</span> Pharmacy Stock</a></li>
+                <li><a th:href="@{/lab}" class="nav-link"><span>🔬</span> Lab Diagnostics</a></li>
+                <li><a th:href="@{/documents}" class="nav-link"><span>📁</span> EMR Document Vault</a></li>
+                <li><a th:href="@{/reports}" class="nav-link"><span>📈</span> Reports &amp; Analytics</a></li>
+                <li><a th:href="@{/settings}" class="nav-link"><span>⚙️</span> Clinic Settings</a></li>
             </ul>
         </aside>
 
         <!-- Main Wrapper -->
         <div class="main-wrapper">
             <header class="top-header">
-                <div class="header-title">Master OPD Billing Workstation</div>
-                <div><span class="badge badge-success">Unified POS Engine</span></div>
+                <div class="header-title">Master OPD POS Billing Workstation</div>
+                <div><span class="badge badge-success">POS Engine</span></div>
             </header>
 
             <main class="content-container">
-                <!-- Create Invoice Form -->
+                <!-- Create Bill Form Card -->
                 <div class="data-card" style="margin-bottom: 1.5rem;">
                     <div class="card-header">
-                        <h2>Generate New Master OPD Bill</h2>
+                        <h2>Generate Consolidated OPD Invoice</h2>
                     </div>
                     <form th:action="@{/billing/create}" method="post" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
                         <div>
                             <label style="font-size: 0.8rem; color: var(--text-muted);">Select Patient</label>
                             <select name="patientId" class="form-control" required>
-                                <option th:each="p : ${patients}" th:value="${p.id}" th:text="${p.firstName + ' ' + (p.lastName != null ? p.lastName : '') + ' (' + p.patientId + ')'}">Patient Name</option>
+                                <option th:each="p : ${patients}" th:value="${p.patientId}" th:text="${p.firstName + ' ' + (p.lastName != null ? p.lastName : '') + ' (' + p.patientId + ')'}">Patient</option>
                             </select>
                         </div>
                         <div>
@@ -68,10 +75,10 @@
                     </form>
                 </div>
 
-                <!-- Recent Invoices Table -->
+                <!-- Invoices Table Card -->
                 <div class="data-card">
                     <div class="card-header">
-                        <h2>Master OPD Invoices Register</h2>
+                        <h2>Generated Invoices &amp; Realized Revenue</h2>
                     </div>
 
                     <div class="table-responsive">
@@ -79,7 +86,7 @@
                             <thead>
                                 <tr>
                                     <th>Invoice #</th>
-                                    <th>Patient Name</th>
+                                    <th>Patient ID</th>
                                     <th>Consultation</th>
                                     <th>Lab Fee</th>
                                     <th>Pharmacy</th>
@@ -91,7 +98,7 @@
                             <tbody>
                                 <tr th:each="inv : ${invoices}">
                                     <td><strong style="color:var(--primary-color);" th:text="${inv.invoiceId}">INV-1001</strong></td>
-                                    <td th:text="${inv.patientId}">Pawan Kumar</td>
+                                    <td th:text="${inv.patientId}">PAT-1001</td>
                                     <td th:text="${'₹' + inv.consultationFee}">₹500.00</td>
                                     <td th:text="${'₹' + inv.labFee}">₹0.00</td>
                                     <td th:text="${'₹' + inv.pharmacyFee}">₹0.00</td>

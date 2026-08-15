@@ -16,9 +16,16 @@
             </div>
             <ul class="nav-menu">
                 <li><a th:href="@{/dashboard}" class="nav-link active"><span>📊</span> Dashboard</a></li>
-                <li><a th:href="@{/patients}" class="nav-link"><span>👤</span> Patients Directory</a></li>
-                <li><a th:href="@{/appointments}" class="nav-link"><span>📅</span> Appointments</a></li>
-                <li><a th:href="@{/billing}" class="nav-link"><span>💳</span> POS Master Billing</a></li>
+                <li><a th:href="@{/patients}" class="nav-link"><span>👤</span> Patient Directory</a></li>
+                <li><a th:href="@{/appointments}" class="nav-link"><span>📅</span> Appointments &amp; Queue</a></li>
+                <li><a th:href="@{/consultation}" class="nav-link"><span>👨‍⚕️</span> Doctor EMR &amp; Rx</a></li>
+                <li><a th:href="@{/doctors}" class="nav-link"><span>🩺</span> Doctor Roster</a></li>
+                <li><a th:href="@{/billing}" class="nav-link"><span>💳</span> Master POS Billing</a></li>
+                <li><a th:href="@{/pharmacy}" class="nav-link"><span>💊</span> Pharmacy Stock</a></li>
+                <li><a th:href="@{/lab}" class="nav-link"><span>🔬</span> Lab Diagnostics</a></li>
+                <li><a th:href="@{/documents}" class="nav-link"><span>📁</span> EMR Document Vault</a></li>
+                <li><a th:href="@{/reports}" class="nav-link"><span>📈</span> Reports &amp; Analytics</a></li>
+                <li><a th:href="@{/settings}" class="nav-link"><span>⚙️</span> Clinic Settings</a></li>
             </ul>
         </aside>
 
@@ -30,13 +37,13 @@
             </header>
 
             <main class="content-container">
-                <!-- KPI Stats Grid -->
+                <!-- Stats Grid -->
                 <div class="stats-grid">
                     <div class="stat-card">
                         <div class="stat-icon">👥</div>
                         <div class="stat-info">
                             <h3>Total Patients</h3>
-                            <div class="value" th:text="${totalPatients}">148</div>
+                            <div class="value" th:text="${totalPatients}">0</div>
                         </div>
                     </div>
 
@@ -44,7 +51,7 @@
                         <div class="stat-icon">📅</div>
                         <div class="stat-info">
                             <h3>Today's Appointments</h3>
-                            <div class="value" th:text="${todayAppointments}">12</div>
+                            <div class="value" th:text="${todayAppointmentsCount}">0</div>
                         </div>
                     </div>
 
@@ -52,7 +59,7 @@
                         <div class="stat-icon">💰</div>
                         <div class="stat-info">
                             <h3>Today's Revenue</h3>
-                            <div class="value" th:text="${formattedRevenue}">₹48,500</div>
+                            <div class="value" th:text="${formattedTodayRevenue}">₹0.00</div>
                         </div>
                     </div>
 
@@ -60,17 +67,18 @@
                         <div class="stat-icon">💊</div>
                         <div class="stat-info">
                             <h3>Pharmacy Orders</h3>
-                            <div class="value" th:text="${pharmacyOrders}">24</div>
+                            <div class="value" th:text="${pharmacyOrdersCount}">0</div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Recent Appointments Table -->
+                <!-- Patient Queue Card -->
                 <div class="data-card">
                     <div class="card-header">
                         <h2>Today's Patient OPD Queue</h2>
                         <a th:href="@{/appointments}" class="btn btn-primary">+ Book Appointment</a>
                     </div>
+
                     <div class="table-responsive">
                         <table class="data-table">
                             <thead>
@@ -84,20 +92,22 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr th:each="apt : ${recentAppointments}">
-                                    <td><strong style="color:var(--accent-color);" th:text="${apt.tokenNumber != null ? '#' + apt.tokenNumber : '#101'}">#101</strong></td>
-                                    <td th:text="${apt.patientName}">Pawan Kumar</td>
-                                    <td th:text="${apt.doctorName}">Dr. Rajesh Sharma</td>
-                                    <td th:text="${apt.slotTime}">10:15 AM</td>
+                                <tr th:each="apt : ${todayAppointments}">
+                                    <td><strong style="color:var(--primary-color);" th:text="${apt.tokenNumber != null ? '#' + apt.tokenNumber : '#101'}">#101</strong></td>
                                     <td>
-                                        <span class="badge badge-success" th:text="${apt.status}">CHECKED_IN</span>
+                                        <strong th:text="${apt.patientName}">Rajesh Sharma</strong>
+                                    </td>
+                                    <td th:text="${apt.doctorName}">Dr. Suresh Kumar</td>
+                                    <td th:text="${apt.appointmentTime}">09:00 AM</td>
+                                    <td>
+                                        <span class="badge badge-warning" th:text="${apt.status}">BOOKED</span>
                                     </td>
                                     <td>
                                         <a th:href="@{/billing}" class="btn btn-primary" style="padding: 0.25rem 0.6rem; font-size: 0.8rem;">Bill Patient</a>
                                     </td>
                                 </tr>
-                                <tr th:if="${#lists.isEmpty(recentAppointments)}">
-                                    <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 2rem;">No appointments scheduled for today.</td>
+                                <tr th:if="${#lists.isEmpty(todayAppointments)}">
+                                    <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 2rem;">No appointments scheduled in today's OPD queue.</td>
                                 </tr>
                             </tbody>
                         </table>

@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Doctor Appointments - Clinical OS Web Platform</title>
+    <title>Appointments &amp; OPD Queue - Clinical OS Web Platform</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
@@ -16,51 +16,58 @@
             </div>
             <ul class="nav-menu">
                 <li><a th:href="@{/dashboard}" class="nav-link"><span>📊</span> Dashboard</a></li>
-                <li><a th:href="@{/patients}" class="nav-link"><span>👤</span> Patients Directory</a></li>
-                <li><a th:href="@{/appointments}" class="nav-link active"><span>📅</span> Appointments</a></li>
-                <li><a th:href="@{/billing}" class="nav-link"><span>💳</span> POS Master Billing</a></li>
+                <li><a th:href="@{/patients}" class="nav-link"><span>👤</span> Patient Directory</a></li>
+                <li><a th:href="@{/appointments}" class="nav-link active"><span>📅</span> Appointments &amp; Queue</a></li>
+                <li><a th:href="@{/consultation}" class="nav-link"><span>👨‍⚕️</span> Doctor EMR &amp; Rx</a></li>
+                <li><a th:href="@{/doctors}" class="nav-link"><span>🩺</span> Doctor Roster</a></li>
+                <li><a th:href="@{/billing}" class="nav-link"><span>💳</span> Master POS Billing</a></li>
+                <li><a th:href="@{/pharmacy}" class="nav-link"><span>💊</span> Pharmacy Stock</a></li>
+                <li><a th:href="@{/lab}" class="nav-link"><span>🔬</span> Lab Diagnostics</a></li>
+                <li><a th:href="@{/documents}" class="nav-link"><span>📁</span> EMR Document Vault</a></li>
+                <li><a th:href="@{/reports}" class="nav-link"><span>📈</span> Reports &amp; Analytics</a></li>
+                <li><a th:href="@{/settings}" class="nav-link"><span>⚙️</span> Clinic Settings</a></li>
             </ul>
         </aside>
 
         <!-- Main Wrapper -->
         <div class="main-wrapper">
             <header class="top-header">
-                <div class="header-title">Advance Doctor Slot Calendar &amp; Token Queue</div>
-                <div><span class="badge badge-success">15-Min Slots</span></div>
+                <div class="header-title">OPD Token Queue &amp; Appointment Scheduling</div>
+                <div><span class="badge badge-success">Queue Live Engine</span></div>
             </header>
 
             <main class="content-container">
-                <!-- Appointment Booking Form -->
+                <!-- Book Appointment Form -->
                 <div class="data-card" style="margin-bottom: 1.5rem;">
                     <div class="card-header">
-                        <h2>Book Doctor Appointment Slot</h2>
+                        <h2>Schedule OPD Appointment &amp; Issue Token</h2>
                     </div>
                     <form th:action="@{/appointments/book}" method="post" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
                         <div>
                             <label style="font-size: 0.8rem; color: var(--text-muted);">Select Patient</label>
                             <select name="patientId" class="form-control" required>
-                                <option th:each="p : ${patients}" th:value="${p.id}" th:text="${p.firstName + ' ' + (p.lastName != null ? p.lastName : '') + ' (' + p.patientId + ')'}">Patient Name</option>
+                                <option th:each="p : ${patients}" th:value="${p.patientId}" th:text="${p.firstName + ' ' + (p.lastName != null ? p.lastName : '') + ' (' + p.patientId + ')'}">Patient</option>
                             </select>
                         </div>
                         <div>
                             <label style="font-size: 0.8rem; color: var(--text-muted);">Consulting Doctor</label>
-                            <input type="text" name="doctorName" class="form-control" value="Dr. Pawan Kumar" required>
+                            <select name="doctorName" class="form-control">
+                                <option value="Dr. Suresh Kumar (Cardiology)">Dr. Suresh Kumar (Cardiology)</option>
+                                <option value="Dr. Ananya Sharma (General Medicine)">Dr. Ananya Sharma (General Medicine)</option>
+                                <option value="Dr. Rajesh Patel (Pediatrics)">Dr. Rajesh Patel (Pediatrics)</option>
+                            </select>
                         </div>
                         <div>
-                            <label style="font-size: 0.8rem; color: var(--text-muted);">Appointment Date</label>
-                            <input type="date" name="appointmentDate" class="form-control" th:value="${selectedDate}" required>
-                        </div>
-                        <div>
-                            <label style="font-size: 0.8rem; color: var(--text-muted);">Slot Time (15 Min Interval)</label>
-                            <input type="text" name="slotTime" class="form-control" placeholder="e.g. 10:15 AM" value="10:15 AM" required>
+                            <label style="font-size: 0.8rem; color: var(--text-muted);">Slot Time</label>
+                            <input type="text" name="appointmentTime" class="form-control" value="10:30 AM" required>
                         </div>
                         <div style="display: flex; align-items: flex-end;">
-                            <button type="submit" class="btn btn-primary" style="width: 100%;">+ Confirm Booking</button>
+                            <button type="submit" class="btn btn-primary" style="width: 100%;">📅 Issue Token &amp; Schedule</button>
                         </div>
                     </form>
                 </div>
 
-                <!-- Appointment List Grid -->
+                <!-- Appointment List Table -->
                 <div class="data-card">
                     <div class="card-header">
                         <h2>Scheduled OPD Appointments Queue</h2>
@@ -71,30 +78,30 @@
                             <thead>
                                 <tr>
                                     <th>Token #</th>
-                                    <th>Patient Name</th>
-                                    <th>Doctor Name</th>
-                                    <th>Date</th>
-                                    <th>Slot Time</th>
+                                    <th>Patient ID / Name</th>
+                                    <th>Consulting Doctor</th>
+                                    <th>Scheduled Time</th>
                                     <th>Status</th>
-                                    <th>Action</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr th:each="apt : ${appointments}">
-                                    <td><strong style="color:var(--accent-color);" th:text="${apt.tokenNumber != null ? '#' + apt.tokenNumber : '#101'}">#101</strong></td>
-                                    <td th:text="${apt.patientName}">Pawan Kumar</td>
-                                    <td th:text="${apt.doctorName}">Dr. Pawan Kumar</td>
-                                    <td th:text="${apt.appointmentDate}">2026-08-15</td>
-                                    <td th:text="${apt.slotTime}">10:15 AM</td>
+                                    <td><strong style="color:var(--primary-color);" th:text="${apt.tokenNumber != null ? '#' + apt.tokenNumber : '#101'}">#101</strong></td>
                                     <td>
-                                        <span class="badge badge-success" th:text="${apt.status}">SCHEDULED</span>
+                                        <strong th:text="${apt.patientName}">Rajesh Sharma</strong>
+                                    </td>
+                                    <td th:text="${apt.doctorName}">Dr. Suresh Kumar</td>
+                                    <td th:text="${apt.appointmentTime}">09:00 AM</td>
+                                    <td>
+                                        <span class="badge badge-warning" th:text="${apt.status}">BOOKED</span>
                                     </td>
                                     <td>
-                                        <a th:href="@{'/appointments/checkin/' + ${apt.id}}" class="btn btn-primary" style="padding: 0.25rem 0.6rem; font-size: 0.8rem;">Check In</a>
+                                        <a th:href="@{/billing}" class="btn btn-primary" style="padding: 0.25rem 0.6rem; font-size: 0.8rem;">Bill &amp; Pay</a>
                                     </td>
                                 </tr>
                                 <tr th:if="${#lists.isEmpty(appointments)}">
-                                    <td colspan="7" style="text-align: center; color: var(--text-muted); padding: 2rem;">No appointments booked.</td>
+                                    <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 2rem;">No appointments scheduled today.</td>
                                 </tr>
                             </tbody>
                         </table>
