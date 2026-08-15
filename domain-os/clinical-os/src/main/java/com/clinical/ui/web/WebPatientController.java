@@ -5,6 +5,7 @@ import com.clinical.patient.service.PatientService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -57,6 +58,20 @@ public class WebPatientController {
         model.addAttribute("pageTitle", "New Patient Onboarding");
         model.addAttribute("activeTab", "patient-register");
         return "patient_register";
+    }
+
+    @GetMapping("/patients/{patientId}")
+    public String viewPatientProfile(@PathVariable("patientId") String patientId, Model model) {
+        model.addAttribute("pageTitle", "Patient 360° EMR File");
+        model.addAttribute("activeTab", "patients");
+
+        PatientEntity patient = patientService.findByPatientId(patientId).orElse(null);
+        if (patient == null) {
+            return "redirect:/patients";
+        }
+
+        model.addAttribute("patient", patient);
+        return "patient_detail";
     }
 
     @PostMapping("/patients/register")

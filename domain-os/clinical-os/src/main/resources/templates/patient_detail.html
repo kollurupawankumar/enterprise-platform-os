@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Patient 360° EMR File - Clinical OS Web Platform</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Reusable Left Sidebar Navigation -->
+        <aside th:replace="~{fragments/nav :: sidebar('patients')}"></aside>
+
+        <!-- Main Content Area -->
+        <div class="main-wrapper">
+            <!-- Reusable Top Header -->
+            <header th:replace="~{fragments/nav :: header('Patient 360° Medical Record File')}"></header>
+
+            <main class="content-container">
+                <!-- Top Summary Header Card -->
+                <div class="data-card" style="margin-bottom: 1.5rem;">
+                    <div class="card-header">
+                        <div class="d-flex" style="align-items: center; gap: 1rem;">
+                            <div style="width: 54px; height: 54px; border-radius: 50%; background-color: var(--primary-color); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 700;">
+                                <span th:text="${#strings.substring(patient.firstName,0,1)}">P</span>
+                            </div>
+                            <div>
+                                <h2 style="margin: 0; font-size: 1.4rem;" th:text="${patient.firstName + ' ' + (patient.lastName != null ? patient.lastName : '')}">Rajesh Sharma</h2>
+                                <div class="d-flex" style="gap: 0.75rem; font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">
+                                    <span>UHID: <strong class="text-primary" th:text="${patient.patientId}">PAT-1001</strong></span>
+                                    <span>|</span>
+                                    <span th:text="${(patient.gender != null ? patient.gender : 'MALE') + ' / ' + (patient.dob != null ? patient.dob : 'N/A')}">MALE / 1990-05-12</span>
+                                    <span>|</span>
+                                    <span>Mobile: <strong th:text="${patient.phone}">+91 98765 43210</strong></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex" style="gap: 0.75rem;">
+                            <a th:href="@{/appointments}" class="btn btn-success">📅 Schedule OPD Visit</a>
+                            <a th:href="@{/billing}" class="btn btn-primary">💳 Generate Invoice</a>
+                            <a th:href="@{/patients}" class="btn btn-logout">⬅️ Back to Directory</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3-Column Detailed Information Grid -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+                    <!-- Column 1: Demographics & Identity -->
+                    <div class="data-card">
+                        <div class="section-title">👤 Demographics &amp; Identity</div>
+                        <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.85rem; font-size: 0.9rem;">
+                            <li><span class="text-muted">Category:</span> <strong th:text="${patient.patientType != null ? patient.patientType : 'GENERAL'}">NEW GENERAL</strong></li>
+                            <li><span class="text-muted">Primary Phone:</span> <strong th:text="${patient.phone}">+91 98765 43210</strong></li>
+                            <li><span class="text-muted">Alternate Phone:</span> <span th:text="${patient.alternatePhone != null ? patient.alternatePhone : 'N/A'}">N/A</span></li>
+                            <li><span class="text-muted">Email Address:</span> <span th:text="${patient.email != null ? patient.email : 'N/A'}">patient@example.com</span></li>
+                            <li><span class="text-muted">Govt Identity:</span> <strong th:text="${(patient.identityType != null ? patient.identityType : 'AADHAAR') + ': ' + (patient.identityNumber != null ? patient.identityNumber : 'N/A')}">AADHAAR: N/A</strong></li>
+                            <li><span class="text-muted">Marital Status:</span> <span th:text="${patient.maritalStatus != null ? patient.maritalStatus : 'SINGLE'}">SINGLE</span></li>
+                            <li><span class="text-muted">Occupation:</span> <span th:text="${patient.occupation != null ? patient.occupation : 'N/A'}">N/A</span></li>
+                        </ul>
+                    </div>
+
+                    <!-- Column 2: Residential Address & Emergency -->
+                    <div class="data-card">
+                        <div class="section-title">🏠 Residential Address &amp; Emergency</div>
+                        <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.85rem; font-size: 0.9rem;">
+                            <li><span class="text-muted">Street Address Line 1:</span> <strong th:text="${patient.address != null ? patient.address : 'N/A'}">N/A</strong></li>
+                            <li><span class="text-muted">Address Line 2:</span> <span th:text="${patient.addressLine2 != null ? patient.addressLine2 : 'N/A'}">N/A</span></li>
+                            <li><span class="text-muted">City / State:</span> <span th:text="${(patient.city != null ? patient.city : 'N/A') + ', ' + (patient.state != null ? patient.state : 'N/A')}">Hyderabad, Telangana</span></li>
+                            <li><span class="text-muted">Pincode:</span> <span th:text="${patient.pincode != null ? patient.pincode : '500001'}">500001</span></li>
+                            <li style="border-top: 1px dashed var(--border-color); padding-top: 0.5rem;"><span class="text-muted">Emergency Contact Name:</span> <strong th:text="${patient.emergencyContactName != null ? patient.emergencyContactName : 'N/A'}">N/A</strong></li>
+                            <li><span class="text-muted">Relationship:</span> <span th:text="${patient.emergencyRelationship != null ? patient.emergencyRelationship : 'N/A'}">N/A</span></li>
+                            <li><span class="text-muted">Emergency Phone:</span> <strong th:text="${patient.emergencyContactPhone != null ? patient.emergencyContactPhone : 'N/A'}">N/A</strong></li>
+                        </ul>
+                    </div>
+
+                    <!-- Column 3: Known Allergies & Clinical Alerts -->
+                    <div class="data-card">
+                        <div class="section-title">🩺 Medical Risk &amp; Known Allergies</div>
+                        <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.85rem; font-size: 0.9rem;">
+                            <li>
+                                <span class="text-muted">Allergies Status:</span> 
+                                <span class="badge" th:classappend="${patient.knownAllergiesStatus == 'ALLERGIES_PRESENT'} ? 'badge-danger' : 'badge-success'" th:text="${patient.knownAllergiesStatus != null ? patient.knownAllergiesStatus : 'NO_KNOWN_ALLERGIES'}">NKDA</span>
+                            </li>
+                            <li><span class="text-muted">Specific Allergies Notes:</span> <strong th:text="${patient.allergies != null ? patient.allergies : 'No drug or food allergies recorded.'}">No drug or food allergies recorded.</strong></li>
+                            <li style="border-top: 1px dashed var(--border-color); padding-top: 0.5rem;"><span class="text-muted">Patient Risk Alerts:</span> <span class="badge badge-warning" th:text="${patient.patientReportedAlerts != null ? patient.patientReportedAlerts : 'Standard Risk Group'}">Standard Risk Group</span></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Recent Clinical Encounters & Prescriptions History Card -->
+                <div class="data-card" style="margin-top: 1.5rem;">
+                    <div class="card-header">
+                        <h2>Recent Clinical OPD Visit History</h2>
+                        <a th:href="@{/consultation}" class="btn btn-primary btn-sm">+ Record New Consultation</a>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Encounter ID</th>
+                                    <th>Consulting Doctor</th>
+                                    <th>Chief Complaint</th>
+                                    <th>Vitals (BP/Pulse)</th>
+                                    <th>ICD Diagnosis</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong class="text-primary">ENC-2026-8801</strong></td>
+                                    <td>Dr. Suresh Kumar (Cardiology)</td>
+                                    <td>Chest tightness &amp; Fatigue</td>
+                                    <td>130/85 | 78 bpm</td>
+                                    <td><span class="badge badge-warning">I20.9 (Angina)</span></td>
+                                    <td><span class="badge badge-success">COMPLETED</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+</body>
+</html>
