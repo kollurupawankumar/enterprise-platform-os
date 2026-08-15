@@ -65,14 +65,22 @@ public class AppointmentViewController {
 
     @FXML
     public void initialize() {
-        if (datePicker != null) datePicker.setValue(LocalDate.now());
+        if (datePicker != null) {
+            datePicker.setValue(LocalDate.now());
+            datePicker.valueProperty().addListener((obs, oldVal, newVal) -> handleFilterAppointments());
+        }
 
         if (statusFilterCombo != null) {
             statusFilterCombo.setItems(FXCollections.observableArrayList("ALL", "BOOKED", "CHECKED_IN", "CANCELLED"));
             statusFilterCombo.setValue("ALL");
+            statusFilterCombo.valueProperty().addListener((obs, oldVal, newVal) -> handleFilterAppointments());
         }
 
         loadDoctorsCombo();
+        if (doctorCombo != null) {
+            doctorCombo.valueProperty().addListener((obs, oldVal, newVal) -> handleFilterAppointments());
+        }
+
         setupTable();
         handleFilterAppointments();
     }

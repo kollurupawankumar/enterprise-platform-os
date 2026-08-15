@@ -105,11 +105,21 @@ class AppointmentServiceImpl implements AppointmentService {
     @Override
     @Transactional(readOnly = true)
     public List<AppointmentEntity> getAppointmentsByDateAndDoctor(LocalDate date, String doctorId) {
-        LocalDate d = date != null ? date : LocalDate.now();
-        if (doctorId == null || doctorId.isBlank() || "ALL".equalsIgnoreCase(doctorId)) {
-            return appointmentRepository.findByAppointmentDate(d);
+        List<AppointmentEntity> all = appointmentRepository.findAll();
+        List<AppointmentEntity> result = new java.util.ArrayList<>();
+        LocalDate targetDate = date != null ? date : LocalDate.now();
+
+        for (AppointmentEntity apt : all) {
+            boolean dateMatches = apt.getAppointmentDate() == null || apt.getAppointmentDate().equals(targetDate);
+            if (dateMatches) {
+                if (doctorId == null || doctorId.isBlank() || "ALL".equalsIgnoreCase(doctorId) || "ALL - All Doctors".equalsIgnoreCase(doctorId)) {
+                    result.add(apt);
+                } else if (doctorId.equalsIgnoreCase(apt.getDoctorId()) || (apt.getDoctorName() != null && apt.getDoctorName().toLowerCase().contains(doctorId.toLowerCase()))) {
+                    result.add(apt);
+                }
+            }
         }
-        return appointmentRepository.findByAppointmentDateAndDoctorId(d, doctorId);
+        return result;
     }
 
     @Override
