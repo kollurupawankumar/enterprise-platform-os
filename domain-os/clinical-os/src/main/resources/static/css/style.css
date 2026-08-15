@@ -189,46 +189,46 @@ body {
     flex: 1;
 }
 
-/* Production SaaS Nav Tabs Component */
-.nav-tabs {
-    display: flex;
-    gap: 0.5rem;
-    border-bottom: 2px solid var(--border-color);
-    margin-bottom: 1.5rem;
-    list-style: none;
-    padding: 0;
+/* Chrome-Style Modern Tabs System */
+.chrome-tabs-container {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background-color: #f1f5f9;
+    padding: 0.35rem 0.5rem;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    margin-bottom: 1.75rem;
 }
 
-.nav-tab-btn {
+.chrome-tab {
     appearance: none;
     -webkit-appearance: none;
     border: none;
     outline: none;
     background: transparent;
-    padding: 0.75rem 1.25rem;
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: var(--text-muted);
-    cursor: pointer;
-    border-bottom: 3px solid transparent;
-    margin-bottom: -2px;
-    transition: all 0.2s ease;
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.6rem;
+    padding: 0.65rem 1.35rem;
+    border-radius: 9px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.nav-tab-btn:hover {
+.chrome-tab:hover {
     color: var(--primary-color);
-    background-color: #f1f5f9;
-    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+    background-color: rgba(255, 255, 255, 0.7);
 }
 
-.nav-tab-btn.active {
+.chrome-tab.active {
+    background-color: #ffffff;
     color: var(--primary-color);
-    border-bottom: 3px solid var(--primary-color);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
     font-weight: 700;
-    background-color: transparent;
 }
 
 /* Stat KPI Cards Grid */
@@ -277,12 +277,12 @@ body {
     margin-top: 0.25rem;
 }
 
-/* Data Cards & Tables */
+/* Data Cards & Form Containers */
 .data-card {
     background-color: var(--bg-card);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-lg);
-    padding: 1.5rem;
+    padding: 1.75rem;
     margin-bottom: 2rem;
     box-shadow: var(--shadow-sm);
 }
@@ -291,20 +291,28 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1.25rem;
+    margin-bottom: 1.5rem;
 }
 
 .card-header h2 {
-    font-size: 1.1rem;
+    font-size: 1.15rem;
     font-weight: 700;
     color: var(--text-main);
+}
+
+.form-section-card {
+    background-color: #f8fafc;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.5rem;
 }
 
 .section-title {
     font-size: 0.95rem;
     font-weight: 700;
     color: var(--primary-color);
-    margin: 1.5rem 0 1rem 0;
+    margin-bottom: 1rem;
     padding-bottom: 0.35rem;
     border-bottom: 1px solid var(--border-color);
     display: flex;
@@ -343,23 +351,17 @@ body {
     background-color: #f8fafc;
 }
 
-/* Form Layout Utilities */
-.form-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 1rem;
-}
-
+/* Form Grid System */
 .form-grid-3 {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 1rem;
+    gap: 1.25rem;
 }
 
 .form-group {
     display: flex;
     flex-direction: column;
-    gap: 0.35rem;
+    gap: 0.4rem;
 }
 
 .form-label {
@@ -385,9 +387,9 @@ body {
     box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
 }
 
-/* Button Component Utilities */
+/* Button System */
 .btn {
-    padding: 0.6rem 1.2rem;
+    padding: 0.65rem 1.25rem;
     border-radius: var(--radius-md);
     font-weight: 600;
     border: none;
@@ -428,7 +430,7 @@ body {
 }
 
 .btn-sm {
-    padding: 0.3rem 0.6rem;
+    padding: 0.35rem 0.75rem;
     font-size: 0.8rem;
 }
 
