@@ -7,7 +7,7 @@
 </head>
 <body>
 
-    <div style="display: flex; min-height: 100vh;">
+    <div class="app-container">
         <!-- Reusable Left Sidebar -->
         <aside th:replace="~{fragments/nav :: sidebar('settings')}"></aside>
 
@@ -22,28 +22,28 @@
                     <div class="card-header">
                         <h2>Clinic Profile &amp; Prescription Branding</h2>
                     </div>
-                    <form th:action="@{/settings/save}" method="post" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem;">
-                        <div>
-                            <label style="font-size: 0.8rem; color: var(--text-muted);">Clinic / Hospital Name</label>
+                    <form th:action="@{/settings/save}" method="post" class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Clinic / Hospital Name</label>
                             <input type="text" name="clinicName" class="form-control" th:value="${clinicName}" required>
                         </div>
-                        <div>
-                            <label style="font-size: 0.8rem; color: var(--text-muted);">Medical License / Reg No</label>
+                        <div class="form-group">
+                            <label class="form-label">Medical License / Reg No</label>
                             <input type="text" name="registrationNumber" class="form-control" th:value="${registrationNumber}">
                         </div>
-                        <div>
-                            <label style="font-size: 0.8rem; color: var(--text-muted);">Primary Contact Phone</label>
+                        <div class="form-group">
+                            <label class="form-label">Primary Contact Phone</label>
                             <input type="text" name="contactPhone" class="form-control" th:value="${contactPhone}">
                         </div>
-                        <div>
-                            <label style="font-size: 0.8rem; color: var(--text-muted);">Clinic Email Address</label>
+                        <div class="form-group">
+                            <label class="form-label">Clinic Email Address</label>
                             <input type="email" name="contactEmail" class="form-control" th:value="${contactEmail}">
                         </div>
-                        <div style="grid-column: 1 / -1;">
-                            <label style="font-size: 0.8rem; color: var(--text-muted);">Full Clinic Street Address</label>
+                        <div class="form-group col-span-full">
+                            <label class="form-label">Full Clinic Street Address</label>
                             <input type="text" name="address" class="form-control" th:value="${address}">
                         </div>
-                        <div style="grid-column: 1 / -1; display: flex; justify-content: flex-end;">
+                        <div class="form-group col-span-full d-flex align-end">
                             <button type="submit" class="btn btn-primary">💾 Save Clinic Settings</button>
                         </div>
                     </form>

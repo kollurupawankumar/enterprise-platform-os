@@ -7,7 +7,7 @@
 </head>
 <body>
 
-    <div style="display: flex; min-height: 100vh;">
+    <div class="app-container">
         <!-- Reusable Left Sidebar -->
         <aside th:replace="~{fragments/nav :: sidebar('patients')}"></aside>
 
@@ -18,37 +18,37 @@
 
             <main class="content-container">
                 <!-- Registration Form Card -->
-                <div class="data-card" style="margin-bottom: 1.5rem;">
+                <div class="data-card">
                     <div class="card-header">
                         <h2>Quick Patient Onboarding</h2>
                     </div>
-                    <form th:action="@{/patients/register}" method="post" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
-                        <div>
-                            <label style="font-size: 0.8rem; color: var(--text-muted);">First Name</label>
+                    <form th:action="@{/patients/register}" method="post" class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">First Name</label>
                             <input type="text" name="firstName" class="form-control" placeholder="First Name" required>
                         </div>
-                        <div>
-                            <label style="font-size: 0.8rem; color: var(--text-muted);">Last Name</label>
+                        <div class="form-group">
+                            <label class="form-label">Last Name</label>
                             <input type="text" name="lastName" class="form-control" placeholder="Last Name" required>
                         </div>
-                        <div>
-                            <label style="font-size: 0.8rem; color: var(--text-muted);">Gender</label>
+                        <div class="form-group">
+                            <label class="form-label">Gender</label>
                             <select name="gender" class="form-control">
                                 <option value="MALE">Male</option>
                                 <option value="FEMALE">Female</option>
                                 <option value="OTHER">Other</option>
                             </select>
                         </div>
-                        <div>
-                            <label style="font-size: 0.8rem; color: var(--text-muted);">Date of Birth</label>
+                        <div class="form-group">
+                            <label class="form-label">Date of Birth</label>
                             <input type="date" name="dob" class="form-control">
                         </div>
-                        <div>
-                            <label style="font-size: 0.8rem; color: var(--text-muted);">Mobile Number</label>
+                        <div class="form-group">
+                            <label class="form-label">Mobile Number</label>
                             <input type="text" name="phone" class="form-control" placeholder="+91 98765 43210" required>
                         </div>
-                        <div style="display: flex; align-items: flex-end;">
-                            <button type="submit" class="btn btn-primary" style="width: 100%;">+ Register Patient</button>
+                        <div class="form-group align-end">
+                            <button type="submit" class="btn btn-primary w-100">+ Register Patient</button>
                         </div>
                     </form>
                 </div>
@@ -72,18 +72,16 @@
                             </thead>
                             <tbody>
                                 <tr th:each="patient : ${patients}">
-                                    <td><strong style="color:var(--primary-color);" th:text="${patient.patientId}">PAT-1001</strong></td>
-                                    <td>
-                                        <strong th:text="${patient.firstName + ' ' + (patient.lastName != null ? patient.lastName : '')}">John Doe</strong>
-                                    </td>
+                                    <td><strong class="text-primary" th:text="${patient.patientId}">PAT-1001</strong></td>
+                                    <td><strong th:text="${patient.firstName + ' ' + (patient.lastName != null ? patient.lastName : '')}">John Doe</strong></td>
                                     <td th:text="${(patient.gender != null ? patient.gender : 'N/A') + ' / ' + (patient.dob != null ? patient.dob : 'N/A')}">MALE / 1990-05-12</td>
                                     <td th:text="${patient.phone}">+91 98765 43210</td>
                                     <td>
-                                        <a th:href="@{'/appointments'}" class="btn btn-primary" style="padding: 0.25rem 0.6rem; font-size: 0.8rem;">Book OPD Slot</a>
+                                        <a th:href="@{/appointments}" class="btn btn-primary btn-sm">Book OPD Slot</a>
                                     </td>
                                 </tr>
                                 <tr th:if="${#lists.isEmpty(patients)}">
-                                    <td colspan="5" style="text-align: center; color: var(--text-muted); padding: 2rem;">No registered patients found.</td>
+                                    <td colspan="5" class="table-empty">No registered patients found.</td>
                                 </tr>
                             </tbody>
                         </table>

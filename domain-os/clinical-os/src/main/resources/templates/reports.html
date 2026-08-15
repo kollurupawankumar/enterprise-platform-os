@@ -7,7 +7,7 @@
 </head>
 <body>
 
-    <div style="display: flex; min-height: 100vh;">
+    <div class="app-container">
         <!-- Reusable Left Sidebar -->
         <aside th:replace="~{fragments/nav :: sidebar('reports')}"></aside>
 
@@ -57,7 +57,7 @@
                     <div class="card-header">
                         <h2>Generate Statutory Practice Reports</h2>
                     </div>
-                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <div class="d-flex" style="gap: 1rem; flex-wrap: wrap;">
                         <button class="btn btn-primary" onclick="window.print();">🖨️ Print Day-End Settlement Summary</button>
                         <button class="btn btn-success" onclick="alert('Exporting Practice Audit Report to CSV...');">📊 Export Audit Log (CSV)</button>
                     </div>

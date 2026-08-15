@@ -1,17 +1,30 @@
+/* ==========================================================================
+   Clinical OS Enterprise Web Design System (Production Grade)
+   ========================================================================== */
+
 :root {
     --primary-color: #0284c7;
     --primary-hover: #0369a1;
     --accent-color: #0ea5e9;
     --bg-main: #f8fafc;
     --bg-card: #ffffff;
-    --text-main: #1e293b;
+    --text-main: #0f172a;
     --text-muted: #64748b;
     --border-color: #e2e8f0;
     --success-color: #10b981;
+    --success-bg: #dcfce7;
+    --success-text: #15803d;
     --warning-color: #f59e0b;
+    --warning-bg: #fef3c7;
+    --warning-text: #b45309;
     --danger-color: #ef4444;
+    --danger-bg: #fee2e2;
+    --danger-text: #b91c1c;
     --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --radius-sm: 6px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
 }
 
 * {
@@ -28,7 +41,14 @@ body {
     min-height: 100vh;
 }
 
-/* Sidebar Navigation */
+/* Base Layout Structure */
+.app-container {
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+}
+
+/* Sidebar Navigation Component */
 .sidebar {
     width: 260px;
     background-color: var(--bg-card);
@@ -37,6 +57,7 @@ body {
     flex-direction: column;
     padding: 1.5rem 1rem;
     box-shadow: var(--shadow-sm);
+    flex-shrink: 0;
 }
 
 .brand {
@@ -48,13 +69,13 @@ body {
     margin-bottom: 1.5rem;
 }
 
-.brand img {
-    width: 38px;
-    height: 38px;
-    border-radius: 8px;
+.brand-logo {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-sm);
 }
 
-.brand h2 {
+.brand-title {
     font-size: 1.2rem;
     font-weight: 700;
     color: var(--primary-color);
@@ -74,8 +95,9 @@ body {
     padding: 0.75rem 1rem;
     color: var(--text-muted);
     text-decoration: none;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     font-weight: 500;
+    font-size: 0.9rem;
     transition: all 0.2s ease;
 }
 
@@ -90,7 +112,7 @@ body {
     font-weight: 600;
 }
 
-/* Main Content Area */
+/* Main Content & Top Header */
 .main-wrapper {
     flex: 1;
     display: flex;
@@ -110,9 +132,56 @@ body {
 }
 
 .header-title {
-    font-size: 1.3rem;
+    font-size: 1.25rem;
     font-weight: 700;
     color: var(--text-main);
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+}
+
+/* User Badge Component */
+.user-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background-color: #f1f5f9;
+    padding: 0.4rem 0.85rem;
+    border-radius: 20px;
+    border: 1px solid var(--border-color);
+}
+
+.user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.85rem;
+}
+
+.user-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-name {
+    color: var(--text-main);
+    font-size: 0.85rem;
+    line-height: 1.1;
+    font-weight: 600;
+}
+
+.user-role {
+    color: var(--text-muted);
+    font-size: 0.7rem;
 }
 
 .content-container {
@@ -120,7 +189,7 @@ body {
     flex: 1;
 }
 
-/* Stat Cards */
+/* Stat KPI Cards Grid */
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -132,7 +201,7 @@ body {
     background-color: var(--bg-card);
     border: 1px solid var(--border-color);
     padding: 1.5rem;
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     display: flex;
     align-items: center;
     gap: 1rem;
@@ -166,11 +235,11 @@ body {
     margin-top: 0.25rem;
 }
 
-/* Tables & Data Cards */
+/* Data Cards & Tables */
 .data-card {
     background-color: var(--bg-card);
     border: 1px solid var(--border-color);
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     padding: 1.5rem;
     margin-bottom: 2rem;
     box-shadow: var(--shadow-sm);
@@ -220,19 +289,56 @@ body {
     background-color: #f8fafc;
 }
 
-/* Form Controls & Buttons */
+/* Form Layout Utilities */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.form-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.65rem 1rem;
+    background-color: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    color: var(--text-main);
+    outline: none;
+    font-size: 0.9rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+}
+
+/* Button Component Utilities */
 .btn {
     padding: 0.6rem 1.2rem;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     font-weight: 600;
     border: none;
     cursor: pointer;
     text-decoration: none;
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 0.5rem;
     font-size: 0.9rem;
-    transition: background 0.2s;
+    transition: all 0.2s ease;
 }
 
 .btn-primary {
@@ -249,29 +355,47 @@ body {
     color: white;
 }
 
-.form-control {
+.btn-logout {
+    background-color: var(--danger-bg);
+    color: var(--danger-text);
+    border: 1px solid #fca5a5;
+    padding: 0.45rem 0.9rem;
+    font-size: 0.8rem;
+}
+
+.btn-logout:hover {
+    background-color: #fca5a5;
+}
+
+.btn-sm {
+    padding: 0.3rem 0.75rem;
+    font-size: 0.8rem;
+}
+
+.w-100 {
     width: 100%;
-    padding: 0.65rem 1rem;
-    background-color: #ffffff;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    color: var(--text-main);
-    outline: none;
-    font-size: 0.9rem;
 }
 
-.form-control:focus {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
-}
-
+/* Badges */
 .badge {
     padding: 0.25rem 0.6rem;
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     font-size: 0.75rem;
     font-weight: 600;
+    display: inline-block;
 }
 
-.badge-success { background-color: #dcfce7; color: #15803d; }
-.badge-warning { background-color: #fef3c7; color: #b45309; }
-.badge-danger { background-color: #fee2e2; color: #b91c1c; }
+.badge-success { background-color: var(--success-bg); color: var(--success-text); }
+.badge-warning { background-color: var(--warning-bg); color: var(--warning-text); }
+.badge-danger { background-color: var(--danger-bg); color: var(--danger-text); }
+
+/* Utility Classes */
+.text-muted { color: var(--text-muted); }
+.text-primary { color: var(--primary-color); }
+.text-success { color: var(--success-color); }
+.text-center { text-align: center; }
+.d-flex { display: flex; }
+.align-end { align-self: flex-end; }
+.col-span-full { grid-column: 1 / -1; }
+.search-form { display: flex; gap: 0.5rem; width: 350px; }
+.table-empty { text-align: center; color: var(--text-muted); padding: 2rem; }

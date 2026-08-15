@@ -7,7 +7,7 @@
 </head>
 <body>
 
-    <div style="display: flex; min-height: 100vh;">
+    <div class="app-container">
         <!-- Reusable Left Sidebar -->
         <aside th:replace="~{fragments/nav :: sidebar('consultation')}"></aside>
 
@@ -18,38 +18,38 @@
 
             <main class="content-container">
                 <!-- Encounter Form Card -->
-                <div class="data-card" style="margin-bottom: 1.5rem;">
+                <div class="data-card">
                     <div class="card-header">
                         <h2>Record Clinical Consultation &amp; Vitals</h2>
                     </div>
-                    <form th:action="@{/consultation/record}" method="post" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem;">
-                        <div>
-                            <label style="font-size: 0.8rem; color: var(--text-muted);">Select Patient</label>
+                    <form th:action="@{/consultation/record}" method="post" class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Select Patient</label>
                             <select name="patientId" class="form-control" required>
                                 <option th:each="p : ${patients}" th:value="${p.patientId}" th:text="${p.firstName + ' ' + (p.lastName != null ? p.lastName : '') + ' (' + p.patientId + ')'}">Patient Name</option>
                             </select>
                         </div>
-                        <div>
-                            <label style="font-size: 0.8rem; color: var(--text-muted);">Chief Complaint</label>
+                        <div class="form-group">
+                            <label class="form-label">Chief Complaint</label>
                             <input type="text" name="chiefComplaint" class="form-control" placeholder="e.g. High Fever &amp; Cough" required>
                         </div>
-                        <div>
-                            <label style="font-size: 0.8rem; color: var(--text-muted);">BP (Systolic/Diastolic)</label>
+                        <div class="form-group">
+                            <label class="form-label">BP (Systolic/Diastolic)</label>
                             <input type="text" name="bp" class="form-control" placeholder="120/80">
                         </div>
-                        <div>
-                            <label style="font-size: 0.8rem; color: var(--text-muted);">Pulse Rate (bpm)</label>
+                        <div class="form-group">
+                            <label class="form-label">Pulse Rate (bpm)</label>
                             <input type="number" name="pulseRate" class="form-control" placeholder="72">
                         </div>
-                        <div>
-                            <label style="font-size: 0.8rem; color: var(--text-muted);">ICD Diagnosis Code</label>
+                        <div class="form-group">
+                            <label class="form-label">ICD Diagnosis Code</label>
                             <input type="text" name="icdCode" class="form-control" placeholder="e.g. J06.9 (Acute Upper Respiratory)">
                         </div>
-                        <div>
-                            <label style="font-size: 0.8rem; color: var(--text-muted);">Clinical Notes / Advice</label>
+                        <div class="form-group">
+                            <label class="form-label">Clinical Notes / Advice</label>
                             <input type="text" name="clinicalAssessment" class="form-control" placeholder="e.g. Rest &amp; Hydration for 3 days">
                         </div>
-                        <div style="grid-column: 1 / -1; display: flex; justify-content: flex-end;">
+                        <div class="form-group col-span-full d-flex align-end">
                             <button type="submit" class="btn btn-primary">👨‍⚕️ Save Consultation &amp; Prescribe</button>
                         </div>
                     </form>
@@ -75,7 +75,7 @@
                             </thead>
                             <tbody>
                                 <tr th:each="enc : ${encounters}">
-                                    <td><strong style="color:var(--primary-color);" th:text="${enc.encounterId}">ENC-1001</strong></td>
+                                    <td><strong class="text-primary" th:text="${enc.encounterId}">ENC-1001</strong></td>
                                     <td th:text="${enc.patientId}">PAT-1001</td>
                                     <td th:text="${enc.chiefComplaint}">Fever &amp; Headache</td>
                                     <td th:text="${(enc.systolicBp != null ? enc.systolicBp + '/' + enc.diastolicBp : '120/80') + ' | ' + (enc.pulseRate != null ? enc.pulseRate + ' bpm' : '72 bpm')}">120/80 | 72 bpm</td>
@@ -83,7 +83,7 @@
                                     <td th:text="${enc.clinicalAssessment != null ? enc.clinicalAssessment : 'Prescribed Paracetamol &amp; Rest'}">Prescribed Paracetamol</td>
                                 </tr>
                                 <tr th:if="${#lists.isEmpty(encounters)}">
-                                    <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 2rem;">No clinical encounters recorded.</td>
+                                    <td colspan="6" class="table-empty">No clinical encounters recorded.</td>
                                 </tr>
                             </tbody>
                         </table>
