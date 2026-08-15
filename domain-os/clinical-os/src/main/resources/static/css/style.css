@@ -48,7 +48,7 @@ body {
     width: 100%;
 }
 
-/* Sidebar Navigation Component & Sub-Tree Menu */
+/* Sidebar Navigation Component */
 .sidebar {
     width: 260px;
     background-color: var(--bg-card);
@@ -91,7 +91,7 @@ body {
 .nav-link {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    justify-content: space-between;
     padding: 0.75rem 1rem;
     color: var(--text-muted);
     text-decoration: none;
@@ -112,22 +112,16 @@ body {
     font-weight: 600;
 }
 
-/* Sub-Tree Menu Component */
-.nav-tree-item {
-    display: flex;
-    flex-direction: column;
+.toggle-icon {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    transition: transform 0.2s ease;
 }
 
-.nav-tree-title {
+/* Nav Sub-Menu Group */
+.nav-group {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0.75rem 1rem;
-    color: var(--text-main);
-    font-weight: 700;
-    font-size: 0.9rem;
-    border-radius: var(--radius-md);
-    cursor: default;
+    flex-direction: column;
 }
 
 .nav-sub-menu {
@@ -136,7 +130,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 0.3rem;
-    margin-top: 0.25rem;
+    margin-top: 0.3rem;
     margin-bottom: 0.4rem;
 }
 
@@ -151,7 +145,6 @@ body {
     font-size: 0.85rem;
     font-weight: 500;
     transition: all 0.2s ease;
-    border-left: 3px solid transparent;
 }
 
 .nav-sub-link:hover {
@@ -163,7 +156,6 @@ body {
     background-color: #e0f2fe;
     color: var(--primary-color);
     font-weight: 700;
-    border-left: 3px solid var(--primary-color);
 }
 
 /* Main Content & Top Header */

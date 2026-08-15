@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 
-    <!-- Reusable Left Sidebar Navigation Menu with Sub-Tree Support -->
+    <!-- Reusable Left Sidebar Navigation Menu -->
     <aside th:fragment="sidebar(activeTab)" class="sidebar">
         <div class="brand">
             <img th:src="@{/images/default_logo.png}" alt="Logo" class="brand-logo" onerror="this.style.display='none'">
@@ -15,13 +15,15 @@
                 </a>
             </li>
             
-            <!-- Expandable Patient Management Tree Menu -->
-            <li class="nav-tree-item">
-                <div class="nav-tree-title">
-                    <span>📂 Patient Management</span>
-                    <span style="font-size:0.75rem; color:var(--text-muted);">▼</span>
-                </div>
-                <ul class="nav-sub-menu">
+            <!-- Collapsible Patient Management Group -->
+            <li class="nav-group">
+                <a href="javascript:void(0)" class="nav-link nav-group-toggle" th:classappend="${activeTab == 'patients' || activeTab == 'patient-register'} ? 'active' : ''" onclick="toggleNavGroup(this)">
+                    <span style="display: flex; align-items: center; gap: 0.75rem;">
+                        <span>👤</span> Patient Management
+                    </span>
+                    <span class="toggle-icon">▼</span>
+                </a>
+                <ul class="nav-sub-menu" th:style="${activeTab == 'patients' || activeTab == 'patient-register'} ? 'display: flex;' : 'display: flex;'">
                     <li>
                         <a th:href="@{/patients}" th:classappend="${activeTab == 'patients'} ? 'active' : ''" class="nav-sub-link">
                             <span>📄</span> Patient Directory
@@ -81,6 +83,20 @@
                 </a>
             </li>
         </ul>
+
+        <script>
+            function toggleNavGroup(el) {
+                const subMenu = el.nextElementSibling;
+                const icon = el.querySelector('.toggle-icon');
+                if (subMenu.style.display === 'none') {
+                    subMenu.style.display = 'flex';
+                    if (icon) icon.textContent = '▼';
+                } else {
+                    subMenu.style.display = 'none';
+                    if (icon) icon.textContent = '▶';
+                }
+            }
+        </script>
     </aside>
 
     <!-- Reusable Top Header Bar with User Profile & Sign Out -->
