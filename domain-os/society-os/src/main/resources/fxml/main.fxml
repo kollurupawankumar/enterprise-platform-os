@@ -30,72 +30,72 @@
 
             <Button
                     fx:id="dashboardButton"
-                    text="Dashboard"
+                    text="📊 Dashboard"
                     onAction="#openDashboard"/>
 
             <Button
                     fx:id="membersButton"
-                    text="Members"
+                    text="👤 Members Directory"
                     onAction="#openMembers"/>
 
             <Button
                     fx:id="propertiesButton"
-                    text="Properties"
+                    text="🏠 Properties &amp; Flats"
                     onAction="#openProperties"/>
 
             <Button
                     fx:id="governanceButton"
-                    text="Governance"
+                    text="⚖️ Governance &amp; Meetings"
                     onAction="#openGovernance"/>
 
             <Button
                     fx:id="operationsButton"
-                    text="Operations"
+                    text="🛠️ Operations &amp; AMCs"
                     onAction="#openOperations"/>
 
             <Button
                     fx:id="financeButton"
-                    text="Finance"
+                    text="💰 Finance &amp; Accounts"
                     onAction="#openFinance"/>
 
             <Button
                     fx:id="searchButton"
-                    text="Universal Search"
+                    text="🔍 Universal Search"
                     onAction="#openSearch"/>
 
             <Button
                     fx:id="sharesButton"
-                    text="Shares"
+                    text="📜 Shares Register"
                     onAction="#openShares"/>
 
             <Button
                     fx:id="certificatesButton"
-                    text="Certificates"
+                    text="🏅 Certificates"
                     onAction="#openCertificates"/>
 
             <Button
                     fx:id="reportsButton"
-                    text="Reports"
+                    text="📈 Reports Center"
                     onAction="#openReports"/>
 
             <Button
                     fx:id="documentsButton"
-                    text="Documents"
+                    text="📁 Documents Vault"
                     onAction="#openDocuments"/>
 
             <Button
                     fx:id="knowledgeBaseButton"
-                    text="Knowledge Base"
+                    text="📚 Knowledge Base"
                     onAction="#openKnowledgeBase"/>
 
             <Button
                     fx:id="budgetAuditButton"
-                    text="Budgets &amp; Audits"
+                    text="📊 Budgets &amp; Audits"
                     onAction="#openBudgetAudit"/>
 
             <Button
                     fx:id="administrationButton"
-                    text="Administration"
+                    text="⚙️ Administration"
                     onAction="#openAdministration"/>
 
             <Button

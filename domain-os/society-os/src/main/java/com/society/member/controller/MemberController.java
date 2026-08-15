@@ -88,8 +88,11 @@ public class MemberController extends BaseController {
                     new SimpleStringProperty(data.getValue().status() != null ? data.getValue().status().name() : "ACTIVE"));
         }
 
-        loadMembers();
+        if (searchField != null) {
+            searchField.textProperty().addListener((obs, oldVal, newVal) -> searchMembers());
+        }
 
+        loadMembers();
     }
 
     private void loadMembers() {
