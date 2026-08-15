@@ -37,11 +37,28 @@
                 </ul>
             </li>
 
-            <li>
-                <a th:href="@{/appointments}" th:classappend="${activeTab == 'appointments'} ? 'active' : ''" class="nav-link">
-                    <span>📅</span> Appointments &amp; Queue
+            <!-- Collapsible Appointment Management Group -->
+            <li class="nav-group">
+                <a href="javascript:void(0)" class="nav-link nav-group-toggle" th:classappend="${activeTab == 'appointments' || activeTab == 'appointment-book'} ? 'active' : ''" onclick="toggleNavGroup(this)">
+                    <span style="display: flex; align-items: center; gap: 0.75rem;">
+                        <span>📅</span> Appointments &amp; Queue
+                    </span>
+                    <span class="toggle-icon" th:text="${activeTab == 'appointments' || activeTab == 'appointment-book'} ? '▼' : '▶'">▼</span>
                 </a>
+                <ul class="nav-sub-menu" th:style="${activeTab == 'appointments' || activeTab == 'appointment-book'} ? 'display: flex;' : 'display: none;'">
+                    <li>
+                        <a th:href="@{/appointments}" th:classappend="${activeTab == 'appointments'} ? 'active' : ''" class="nav-sub-link">
+                            <span>📋</span> OPD Token Queue
+                        </a>
+                    </li>
+                    <li>
+                        <a th:href="@{/appointments/book}" th:classappend="${activeTab == 'appointment-book'} ? 'active' : ''" class="nav-sub-link">
+                            <span>➕</span> Schedule Appointment
+                        </a>
+                    </li>
+                </ul>
             </li>
+
             <li>
                 <a th:href="@{/consultation}" th:classappend="${activeTab == 'consultation'} ? 'active' : ''" class="nav-link">
                     <span>👨‍⚕️</span> Doctor EMR &amp; Rx

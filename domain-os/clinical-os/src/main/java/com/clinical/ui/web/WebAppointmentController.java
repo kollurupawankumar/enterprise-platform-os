@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class WebAppointmentController {
@@ -26,28 +27,50 @@ public class WebAppointmentController {
     }
 
     @GetMapping("/appointments")
-    public String listAppointments(Model model) {
-        model.addAttribute("pageTitle", "Doctor Appointments & Queue");
+    public String listAppointments(
+            @RequestParam(value = "date", required = false) String dateStr,
+            @RequestParam(value = "doctor", required = false) String doctorFilter,
+            @RequestParam(value = "scheduled", required = false) Boolean scheduled,
+            Model model) {
+
+        model.addAttribute("pageTitle", "OPD Token Queue & Appointment Schedule");
         model.addAttribute("activeTab", "appointments");
 
-        LocalDate today = LocalDate.now();
-        model.addAttribute("selectedDate", today.toString());
+        LocalDate selectedDate = (dateStr != null && !dateStr.isBlank()) ? LocalDate.parse(dateStr) : LocalDate.now();
+        model.addAttribute("selectedDate", selectedDate.toString());
+        model.addAttribute("doctorFilter", doctorFilter != null ? doctorFilter : "");
 
-        List<AppointmentEntity> appointments = appointmentService.getAppointmentsByDateAndDoctor(today, "");
+        List<AppointmentEntity> appointments = appointmentService.getAppointmentsByDateAndDoctor(selectedDate, doctorFilter != null ? doctorFilter : "");
+        if (appointments.isEmpty()) {
+            appointments = appointmentService.getAllAppointments();
+        }
+
         model.addAttribute("appointments", appointments);
+        model.addAttribute("totalCount", appointments.size());
+        model.addAttribute("showSuccessAlert", Boolean.TRUE.equals(scheduled));
+
+        return "appointments";
+    }
+
+    @GetMapping("/appointments/book")
+    public String bookAppointmentForm(Model model) {
+        model.addAttribute("pageTitle", "Schedule OPD Appointment");
+        model.addAttribute("activeTab", "appointment-book");
 
         List<PatientEntity> patients = patientService.getAllPatients();
         model.addAttribute("patients", patients);
+        model.addAttribute("todayDate", LocalDate.now().toString());
 
-        return "appointments";
+        return "appointment_book";
     }
 
     @PostMapping("/appointments/book")
     public String bookAppointment(
             @RequestParam("patientId") String patientIdStr,
             @RequestParam("doctorName") String doctorName,
-            @RequestParam("appointmentDate") String appointmentDateStr,
-            @RequestParam("slotTime") String slotTime) {
+            @RequestParam(value = "appointmentDate", required = false) String appointmentDateStr,
+            @RequestParam(value = "slotTime", required = false) String slotTime,
+            @RequestParam(value = "notes", required = false) String notes) {
 
         PatientEntity p = patientService.findByPatientId(patientIdStr).orElse(null);
         if (p == null) {
@@ -65,19 +88,24 @@ public class WebAppointmentController {
             apt.setPatientName(p.getFirstName() + " " + (p.getLastName() != null ? p.getLastName() : ""));
             apt.setDoctorId("DOC-101");
             apt.setDoctorName(doctorName);
-            apt.setAppointmentDate(LocalDate.parse(appointmentDateStr));
-            apt.setSlotTime(slotTime);
+            
+            LocalDate aptDate = (appointmentDateStr != null && !appointmentDateStr.isBlank()) 
+                    ? LocalDate.parse(appointmentDateStr) 
+                    : LocalDate.now();
+            apt.setAppointmentDate(aptDate);
+            apt.setSlotTime(slotTime != null ? slotTime : "10:00 AM");
             apt.setStatus("SCHEDULED");
+            apt.setNotes(notes);
 
             appointmentService.bookAppointment(apt);
         }
 
-        return "redirect:/appointments";
+        return "redirect:/appointments?scheduled=true";
     }
 
-    @GetMapping("/appointments/checkin/{id}")
-    public String checkIn(@PathVariable("id") String id) {
-        appointmentService.updateStatus(id, "CHECKED_IN");
+    @GetMapping("/appointments/status/{id}/{status}")
+    public String updateStatus(@PathVariable("id") String id, @PathVariable("status") String status) {
+        appointmentService.updateStatus(id, status);
         return "redirect:/appointments";
     }
 }

@@ -2,13 +2,13 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Appointments &amp; OPD Queue - Clinical OS Web Platform</title>
+    <title>OPD Token Queue - Clinical OS Web Platform</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
 
     <div class="app-container">
-        <!-- Reusable Left Sidebar -->
+        <!-- Reusable Left Sidebar Navigation -->
         <aside th:replace="~{fragments/nav :: sidebar('appointments')}"></aside>
 
         <!-- Main Content Area -->
@@ -17,40 +17,40 @@
             <header th:replace="~{fragments/nav :: header('OPD Token Queue &amp; Appointment Scheduling')}"></header>
 
             <main class="content-container">
-                <!-- Book Appointment Form -->
-                <div class="data-card">
-                    <div class="card-header">
-                        <h2>Schedule OPD Appointment &amp; Issue Token</h2>
-                    </div>
-                    <form th:action="@{/appointments/book}" method="post" class="form-grid">
-                        <div class="form-group">
-                            <label class="form-label">Select Patient</label>
-                            <select name="patientId" class="form-control" required>
-                                <option th:each="p : ${patients}" th:value="${p.patientId}" th:text="${p.firstName + ' ' + (p.lastName != null ? p.lastName : '') + ' (' + p.patientId + ')'}">Patient</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Consulting Doctor</label>
-                            <select name="doctorName" class="form-control">
-                                <option value="Dr. Suresh Kumar (Cardiology)">Dr. Suresh Kumar (Cardiology)</option>
-                                <option value="Dr. Ananya Sharma (General Medicine)">Dr. Ananya Sharma (General Medicine)</option>
-                                <option value="Dr. Rajesh Patel (Pediatrics)">Dr. Rajesh Patel (Pediatrics)</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Slot Time</label>
-                            <input type="text" name="appointmentTime" class="form-control" value="10:30 AM" required>
-                        </div>
-                        <div class="form-group align-end">
-                            <button type="submit" class="btn btn-primary w-100">📅 Issue Token &amp; Schedule</button>
-                        </div>
-                    </form>
+                
+                <!-- Success Alert Banner if redirected from booking -->
+                <div th:if="${showSuccessAlert}" class="alert alert-success">
+                    <span>✅</span> OPD Appointment scheduled and token issued successfully!
                 </div>
 
-                <!-- Appointment List Table -->
+                <!-- OPD Queue Data Card -->
                 <div class="data-card">
                     <div class="card-header">
-                        <h2>Scheduled OPD Appointments Queue</h2>
+                        <h2>
+                            Scheduled OPD Appointments Queue
+                            <span class="badge badge-primary" th:text="${totalCount + ' Total Scheduled'}">3 Total Scheduled</span>
+                        </h2>
+
+                        <!-- Date Picker & Search Filter Bar -->
+                        <form th:action="@{/appointments}" method="get" class="d-flex" style="gap: 0.75rem; flex-wrap: wrap;">
+                            <div class="d-flex" style="align-items: center; gap: 0.35rem;">
+                                <label style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">Date:</label>
+                                <input type="date" name="date" class="form-control" style="padding: 0.45rem 0.75rem;" th:value="${selectedDate}">
+                            </div>
+
+                            <div class="d-flex" style="align-items: center; gap: 0.35rem;">
+                                <label style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">Doctor:</label>
+                                <select name="doctor" class="form-control" style="padding: 0.45rem 0.75rem;">
+                                    <option value="">All Doctors</option>
+                                    <option value="Dr. Suresh Kumar">Dr. Suresh Kumar (Cardiology)</option>
+                                    <option value="Dr. Ananya Sharma">Dr. Ananya Sharma (General)</option>
+                                    <option value="Dr. Rajesh Patel">Dr. Rajesh Patel (Pediatrics)</option>
+                                </select>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary btn-sm">Filter</button>
+                            <a th:href="@{/appointments/book}" class="btn btn-success">➕ Schedule OPD Visit</a>
+                        </form>
                     </div>
 
                     <div class="table-responsive">
@@ -58,28 +58,36 @@
                             <thead>
                                 <tr>
                                     <th>Token #</th>
-                                    <th>Patient ID / Name</th>
+                                    <th>Patient ID / Full Name</th>
                                     <th>Consulting Doctor</th>
-                                    <th>Scheduled Time</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
+                                    <th>Scheduled Time Slot</th>
+                                    <th>Queue Status</th>
+                                    <th>Quick Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr th:each="apt : ${appointments}">
-                                    <td><strong class="text-primary" th:text="${apt.tokenNumber != null ? '#' + apt.tokenNumber : '#101'}">#101</strong></td>
-                                    <td><strong th:text="${apt.patientName}">Rajesh Sharma</strong></td>
-                                    <td th:text="${apt.doctorName}">Dr. Suresh Kumar</td>
-                                    <td th:text="${apt.slotTime}">09:00 AM</td>
+                                    <td><strong class="text-primary" style="font-size: 1.05rem;" th:text="${apt.tokenNumber != null ? '#' + apt.tokenNumber : '#101'}">#101</strong></td>
                                     <td>
-                                        <span class="badge badge-warning" th:text="${apt.status}">BOOKED</span>
+                                        <strong th:text="${apt.patientName}">Rajesh Sharma</strong>
+                                        <div style="font-size: 0.75rem; color: var(--text-muted);" th:text="${'ID: ' + (apt.patientId != null ? apt.patientId : 'PAT-1001')}">ID: PAT-1001</div>
+                                    </td>
+                                    <td th:text="${apt.doctorName}">Dr. Suresh Kumar</td>
+                                    <td><strong th:text="${apt.slotTime}">09:00 AM</strong></td>
+                                    <td>
+                                        <span class="badge" th:classappend="${apt.status == 'CHECKED_IN'} ? 'badge-primary' : (${apt.status == 'COMPLETED'} ? 'badge-success' : 'badge-warning')" th:text="${apt.status}">BOOKED</span>
                                     </td>
                                     <td>
-                                        <a th:href="@{/billing}" class="btn btn-primary btn-sm">Bill &amp; Pay</a>
+                                        <div class="d-flex" style="gap: 0.4rem;">
+                                            <a th:href="@{'/appointments/status/' + ${apt.appointmentId} + '/CHECKED_IN'}" class="btn btn-primary btn-sm" th:if="${apt.status == 'SCHEDULED' || apt.status == 'BOOKED'}">Check-In</a>
+                                            <a th:href="@{/consultation}" class="btn btn-success btn-sm">👨‍⚕️ Consult</a>
+                                            <a th:href="@{/billing}" class="btn btn-primary btn-sm">💳 POS Bill</a>
+                                            <a th:href="@{'/appointments/status/' + ${apt.appointmentId} + '/CANCELLED'}" class="btn btn-logout btn-sm" th:if="${apt.status != 'CANCELLED'}">Cancel</a>
+                                        </div>
                                     </td>
                                 </tr>
                                 <tr th:if="${#lists.isEmpty(appointments)}">
-                                    <td colspan="6" class="table-empty">No appointments scheduled today.</td>
+                                    <td colspan="6" class="table-empty">No appointments scheduled for the selected date.</td>
                                 </tr>
                             </tbody>
                         </table>

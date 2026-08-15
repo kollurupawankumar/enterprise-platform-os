@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Schedule OPD Appointment - Clinical OS Web Platform</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Reusable Left Sidebar Navigation -->
+        <aside th:replace="~{fragments/nav :: sidebar('appointment-book')}"></aside>
+
+        <!-- Main Content Area -->
+        <div class="main-wrapper">
+            <!-- Reusable Top Header -->
+            <header th:replace="~{fragments/nav :: header('OPD Appointment Scheduling Workstation')}"></header>
+
+            <main class="content-container">
+                <!-- Dedicated Scheduling Card Container -->
+                <div class="data-card">
+                    <div class="card-header">
+                        <h2>Schedule New OPD Appointment &amp; Issue Token</h2>
+                        <a th:href="@{/appointments}" class="btn btn-logout">⬅️ Return to OPD Queue</a>
+                    </div>
+
+                    <form th:action="@{/appointments/book}" method="post">
+                        <div class="form-section-card">
+                            <div class="section-title">📅 OPD Appointment Details</div>
+                            <div class="form-grid-3">
+                                <div class="form-group col-span-full">
+                                    <label class="form-label">Select Registered Patient *</label>
+                                    <select name="patientId" class="form-control" required>
+                                        <option value="">-- Choose Registered Patient --</option>
+                                        <option th:each="p : ${patients}" th:value="${p.patientId}" th:text="${p.firstName + ' ' + (p.lastName != null ? p.lastName : '') + ' (' + p.patientId + ' - ' + p.phone + ')'}">Patient Name</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label">Consulting Doctor *</label>
+                                    <select name="doctorName" class="form-control" required>
+                                        <option value="Dr. Suresh Kumar (Cardiology)">Dr. Suresh Kumar (Cardiology)</option>
+                                        <option value="Dr. Ananya Sharma (General Medicine)">Dr. Ananya Sharma (General Medicine)</option>
+                                        <option value="Dr. Rajesh Patel (Pediatrics)">Dr. Rajesh Patel (Pediatrics)</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Appointment Date *</label>
+                                    <input type="date" name="appointmentDate" class="form-control" th:value="${todayDate}" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Preferred Time Slot *</label>
+                                    <select name="slotTime" class="form-control">
+                                        <option value="09:00 AM">09:00 AM (Morning Slot)</option>
+                                        <option value="09:30 AM">09:30 AM (Morning Slot)</option>
+                                        <option value="10:00 AM">10:00 AM (Morning Slot)</option>
+                                        <option value="10:30 AM">10:30 AM (Morning Slot)</option>
+                                        <option value="11:00 AM">11:00 AM (Morning Slot)</option>
+                                        <option value="02:00 PM">02:00 PM (Afternoon Slot)</option>
+                                        <option value="02:30 PM">02:30 PM (Afternoon Slot)</option>
+                                        <option value="03:00 PM">03:00 PM (Afternoon Slot)</option>
+                                        <option value="05:00 PM">05:00 PM (Evening Slot)</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group col-span-full">
+                                    <label class="form-label">Reason for Visit / Chief Symptoms</label>
+                                    <input type="text" name="notes" class="form-control" placeholder="e.g. Regular Followup / High Blood Pressure Check">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Submission Buttons -->
+                        <div class="form-group col-span-full d-flex justify-content-between align-end" style="margin-top: 1.5rem;">
+                            <a th:href="@{/appointments}" class="btn btn-logout">⬅️ Cancel &amp; Return to Queue</a>
+                            <button type="submit" class="btn btn-success" style="padding: 0.75rem 1.75rem; font-size: 1rem;">📅 Issue Token &amp; Schedule Appointment</button>
+                        </div>
+                    </form>
+                </div>
+            </main>
+        </div>
+    </div>
+
+</body>
+</html>
