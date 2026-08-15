@@ -36,6 +36,11 @@
                 </a>
             </li>
             <li>
+                <a th:href="@{/doctors}" th:classappend="${activeTab == 'doctors'} ? 'active' : ''" class="nav-link">
+                    <span>🩺</span> Doctor Roster
+                </a>
+            </li>
+            <li>
                 <a th:href="@{/billing}" th:classappend="${activeTab == 'billing'} ? 'active' : ''" class="nav-link">
                     <span>💳</span> Master POS Billing
                 </a>
