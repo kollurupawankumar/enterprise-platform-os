@@ -8,35 +8,89 @@
 <body>
 
     <div class="app-container">
-        <!-- Reusable Left Sidebar -->
+        <!-- Reusable Left Sidebar Navigation -->
         <aside th:replace="~{fragments/nav :: sidebar('patients')}"></aside>
 
         <!-- Main Content Area -->
         <div class="main-wrapper">
             <!-- Reusable Top Header -->
-            <header th:replace="~{fragments/nav :: header('Master Patient Registry')}"></header>
+            <header th:replace="~{fragments/nav :: header('Master Patient Directory &amp; Registration')}"></header>
 
             <main class="content-container">
-                <!-- 2-Tab Registration Form Card -->
+                
+                <!-- Main Page Card Container -->
                 <div class="data-card">
-                    <div class="card-header">
-                        <h2>Patient Onboarding &amp; Registration</h2>
+                    <!-- Top Page Tab Navigation -->
+                    <div class="tab-nav">
+                        <button type="button" class="tab-btn active" onclick="switchPageTab('tab-directory', this)">
+                            📋 1. Patient Directory &amp; Database
+                        </button>
+                        <button type="button" class="tab-btn" onclick="switchPageTab('tab-register', this)">
+                            ➕ 2. Register New Patient
+                        </button>
                     </div>
 
-                    <form th:action="@{/patients/register}" method="post">
-                        <!-- Tab Header Buttons -->
-                        <div class="tab-nav">
-                            <button type="button" class="tab-btn active" onclick="switchTab('tab-personal', this)">
-                                👤 1. Personal Details &amp; Contact
-                            </button>
-                            <button type="button" class="tab-btn" onclick="switchTab('tab-address', this)">
-                                🏠 2. Address, Emergency &amp; Medical History
-                            </button>
+                    <!-- TAB 1: Patient Directory & Master Database (Active Default) -->
+                    <div id="tab-directory" class="tab-pane active">
+                        <div class="card-header">
+                            <h2>Registered Patient Database</h2>
+                            <form th:action="@{/patients}" method="get" class="search-form">
+                                <input type="text" name="query" class="form-control" placeholder="Search ID, Name, Phone..." th:value="${query}">
+                                <button type="submit" class="btn btn-primary">Search</button>
+                            </form>
                         </div>
 
-                        <!-- TAB 1: Personal Details -->
-                        <div id="tab-personal" class="tab-pane active">
-                            <div class="form-grid">
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Patient ID</th>
+                                        <th>Full Name</th>
+                                        <th>Gender / DOB</th>
+                                        <th>Phone Number</th>
+                                        <th>Government Identity</th>
+                                        <th>Known Allergies</th>
+                                        <th>Quick Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="patient : ${patients}">
+                                        <td><strong class="text-primary" th:text="${patient.patientId}">PAT-1001</strong></td>
+                                        <td>
+                                            <strong th:text="${patient.firstName + ' ' + (patient.lastName != null ? patient.lastName : '')}">John Doe</strong>
+                                        </td>
+                                        <td th:text="${(patient.gender != null ? patient.gender : 'N/A') + ' / ' + (patient.dob != null ? patient.dob : 'N/A')}">MALE / 1990-05-12</td>
+                                        <td th:text="${patient.phone}">+91 98765 43210</td>
+                                        <td th:text="${(patient.identityType != null ? patient.identityType : 'AADHAAR') + ': ' + (patient.identityNumber != null ? patient.identityNumber : 'N/A')}">AADHAAR: N/A</td>
+                                        <td>
+                                            <span class="badge" th:classappend="${patient.knownAllergiesStatus == 'ALLERGIES_PRESENT'} ? 'badge-danger' : 'badge-success'" th:text="${patient.knownAllergiesStatus != null ? patient.knownAllergiesStatus : 'NKDA'}">NKDA</span>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex" style="gap: 0.35rem;">
+                                                <a th:href="@{/consultation}" class="btn btn-primary btn-sm">📁 EMR</a>
+                                                <a th:href="@{/appointments}" class="btn btn-success btn-sm">📅 OPD</a>
+                                                <a th:href="@{/billing}" class="btn btn-primary btn-sm">💳 POS</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr th:if="${#lists.isEmpty(patients)}">
+                                        <td colspan="7" class="table-empty">No registered patients found in database.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- TAB 2: Patient Registration Form -->
+                    <div id="tab-register" class="tab-pane">
+                        <div class="card-header">
+                            <h2>Complete Patient Registration &amp; Onboarding</h2>
+                        </div>
+
+                        <form th:action="@{/patients/register}" method="post">
+                            <!-- Section A: Personal Demographics -->
+                            <div class="section-title">👤 Section A: Personal Demographics &amp; Contact</div>
+                            <div class="form-grid-3">
                                 <div class="form-group">
                                     <label class="form-label">Patient Category</label>
                                     <select name="patientType" class="form-control">
@@ -104,17 +158,11 @@
                                 </div>
                             </div>
 
-                            <div class="form-group d-flex justify-content-between align-end" style="margin-top: 1.5rem;">
-                                <span></span>
-                                <button type="button" class="btn btn-primary" onclick="switchTab('tab-address', document.querySelectorAll('.tab-btn')[1])">Next: Address &amp; History ➔</button>
-                            </div>
-                        </div>
-
-                        <!-- TAB 2: Address, Emergency & Medical History -->
-                        <div id="tab-address" class="tab-pane">
-                            <div class="form-grid">
+                            <!-- Section B: Address & Emergency Contacts -->
+                            <div class="section-title">🏠 Section B: Residential Address &amp; Emergency Contact</div>
+                            <div class="form-grid-3">
                                 <div class="form-group col-span-full">
-                                    <label class="form-label">Residential Address Line 1</label>
+                                    <label class="form-label">Street Address Line 1</label>
                                     <input type="text" name="address" class="form-control" placeholder="House / Flat No, Building Name, Street">
                                 </div>
                                 <div class="form-group col-span-full">
@@ -145,6 +193,11 @@
                                     <label class="form-label">Emergency Phone Number</label>
                                     <input type="text" name="emergencyContactPhone" class="form-control" placeholder="+91 98765 43210">
                                 </div>
+                            </div>
+
+                            <!-- Section C: Known Allergies -->
+                            <div class="section-title">🩺 Section C: Known Allergies &amp; Medical History</div>
+                            <div class="form-grid-3">
                                 <div class="form-group">
                                     <label class="form-label">Allergies Status</label>
                                     <select name="knownAllergiesStatus" class="form-control">
@@ -154,60 +207,26 @@
                                     </select>
                                 </div>
                                 <div class="form-group col-span-full">
-                                    <label class="form-label">Specific Drug / Medical Allergies</label>
+                                    <label class="form-label">Specific Drug / Medical Allergies Notes</label>
                                     <input type="text" name="allergies" class="form-control" placeholder="e.g. Penicillin, Sulfa drugs, Peanuts">
                                 </div>
                             </div>
 
-                            <div class="form-group d-flex justify-content-between align-end" style="margin-top: 1.5rem;">
-                                <button type="button" class="btn btn-logout" onclick="switchTab('tab-personal', document.querySelectorAll('.tab-btn')[0])">⬅️ Back to Personal Details</button>
-                                <button type="submit" class="btn btn-success">+ Complete Full Patient Onboarding</button>
+                            <!-- Form Submission Button -->
+                            <div class="form-group col-span-full d-flex justify-content-between align-end" style="margin-top: 2rem;">
+                                <button type="button" class="btn btn-logout" onclick="switchPageTab('tab-directory', document.querySelectorAll('.tab-btn')[0])">⬅️ Cancel &amp; View Directory</button>
+                                <button type="submit" class="btn btn-success" style="padding: 0.75rem 1.75rem; font-size: 1rem;">➕ Complete Patient Registration</button>
                             </div>
-                        </div>
-                    </form>
-                </div>
-
-                <!-- Patient List Table Card -->
-                <div class="data-card">
-                    <div class="card-header">
-                        <h2>Registered Patient Database</h2>
-                    </div>
-
-                    <div class="table-responsive">
-                        <table class="data-table">
-                            <thead>
-                                <tr>
-                                    <th>Patient ID</th>
-                                    <th>Full Name</th>
-                                    <th>Gender / DOB</th>
-                                    <th>Phone Number</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr th:each="patient : ${patients}">
-                                    <td><strong class="text-primary" th:text="${patient.patientId}">PAT-1001</strong></td>
-                                    <td><strong th:text="${patient.firstName + ' ' + (patient.lastName != null ? patient.lastName : '')}">John Doe</strong></td>
-                                    <td th:text="${(patient.gender != null ? patient.gender : 'N/A') + ' / ' + (patient.dob != null ? patient.dob : 'N/A')}">MALE / 1990-05-12</td>
-                                    <td th:text="${patient.phone}">+91 98765 43210</td>
-                                    <td>
-                                        <a th:href="@{/appointments}" class="btn btn-primary btn-sm">Book OPD Slot</a>
-                                    </td>
-                                </tr>
-                                <tr th:if="${#lists.isEmpty(patients)}">
-                                    <td colspan="5" class="table-empty">No registered patients found.</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        </form>
                     </div>
                 </div>
             </main>
         </div>
     </div>
 
-    <!-- Client-side Tab Switcher Script -->
+    <!-- Interactive Client-side Tab Switcher Script -->
     <script>
-        function switchTab(tabId, btn) {
+        function switchPageTab(tabId, btn) {
             document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
