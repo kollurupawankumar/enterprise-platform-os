@@ -294,6 +294,8 @@
                                         <argument>society-os.jar</argument>
                                         <argument>--main-class</argument>
                                         <argument>com.society.Launcher</argument>
+                                        <argument>--icon</argument>
+                                        <argument>${project.basedir}/../../dist/icons/society-os.icns</argument>
                                         <argument>--dest</argument>
                                         <argument>${project.basedir}/../../dist/installers</argument>
                                     </arguments>

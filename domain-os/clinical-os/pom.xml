@@ -305,6 +305,8 @@
                                         <argument>clinical-os.jar</argument>
                                         <argument>--main-class</argument>
                                         <argument>com.clinical.Launcher</argument>
+                                        <argument>--icon</argument>
+                                        <argument>${project.basedir}/../../dist/icons/clinical-os.icns</argument>
                                         <argument>--dest</argument>
                                         <argument>${project.basedir}/../../dist/installers</argument>
                                     </arguments>
