@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Clinical OPD Case Summary & Prescription - Clinical OS</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        /* Printable Letterhead Styles */
+        .letterhead-card {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 2.5rem;
+            max-width: 900px;
+            margin: 0 auto 2rem auto;
+            box-shadow: var(--shadow-md);
+            position: relative;
+        }
+
+        .hospital-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 1.25rem;
+            border-bottom: 3px double var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .hospital-brand-title {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            letter-spacing: -0.5px;
+        }
+
+        .hospital-sub {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 0.2rem;
+        }
+
+        .doctor-meta-block {
+            text-align: right;
+            font-size: 0.85rem;
+        }
+
+        .doctor-name {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .patient-meta-grid {
+            background-color: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 1rem 1.25rem;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.75rem;
+            font-size: 0.85rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .vitals-banner-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .vital-box {
+            background-color: #e0f2fe;
+            border: 1px solid #bae6fd;
+            border-radius: var(--radius-md);
+            padding: 0.75rem;
+            text-align: center;
+        }
+
+        .vital-box .v-title {
+            font-size: 0.7rem;
+            color: var(--primary-hover);
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .vital-box .v-value {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-top: 0.2rem;
+        }
+
+        .clinical-section-box {
+            margin-bottom: 1.5rem;
+        }
+
+        .clinical-section-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.35rem;
+            margin-bottom: 0.65rem;
+        }
+
+        .rx-symbol {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .signature-block {
+            margin-top: 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            border-top: 1px dashed var(--border-color);
+            padding-top: 1.5rem;
+        }
+
+        /* Print Media Query Rules */
+        @media print {
+            .sidebar, .top-header, .no-print {
+                display: none !important;
+            }
+            .main-wrapper {
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            .content-container {
+                padding: 0 !important;
+            }
+            .letterhead-card {
+                border: none !important;
+                box-shadow: none !important;
+                padding: 0 !important;
+                max-width: 100% !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Reusable Left Sidebar Navigation -->
+        <aside th:replace="~{fragments/nav :: sidebar('consultation')}"></aside>
+
+        <!-- Main Content Area -->
+        <div class="main-wrapper">
+            <!-- Reusable Top Header -->
+            <header th:replace="~{fragments/nav :: header('OPD Case Summary &amp; Official Prescription Report')}"></header>
+
+            <main class="content-container">
+
+                <!-- Action Bar (Hidden during Print) -->
+                <div class="no-print d-flex justify-content-between align-end" style="max-width: 900px; margin: 0 auto 1.25rem auto;">
+                    <a th:href="@{/consultation}" class="btn btn-logout">⬅️ Return to Encounters History</a>
+                    <button type="button" class="btn btn-primary" onclick="window.print()" style="padding: 0.65rem 1.5rem;">
+                        🖨️ Print Prescription Report / Save PDF
+                    </button>
+                </div>
+
+                <!-- Hospital Letterhead Case Report Card -->
+                <div class="letterhead-card">
+                    <!-- Hospital Official Header -->
+                    <div class="hospital-header">
+                        <div>
+                            <div class="hospital-brand-title">CLINICAL OS HEALTHCARE NETWORK</div>
+                            <div class="hospital-sub">Super Specialty Multi-Facility OPD &amp; Diagnostic Centre</div>
+                            <div class="hospital-sub">Road No. 12, Jubilee Hills, Hyderabad - 500034 | Tel: +91 40 6789 0000</div>
+                        </div>
+                        <div class="doctor-meta-block">
+                            <div class="doctor-name">Dr. Pawan Kumar, MD, DM</div>
+                            <div class="text-muted">Senior Consultant Cardiologist &amp; Physician</div>
+                            <div class="text-muted">Reg No: TS-MMC/2018/88902</div>
+                        </div>
+                    </div>
+
+                    <!-- Patient & Visit Metadata Box -->
+                    <div class="patient-meta-grid">
+                        <div><span class="text-muted">Patient ID / UHID:</span><br><strong class="text-primary" th:text="${patient != null ? patient.patientId : encounter.patientId}">PAT-1001</strong></div>
+                        <div><span class="text-muted">Patient Name:</span><br><strong th:text="${patient != null ? (patient.firstName + ' ' + (patient.lastName != null ? patient.lastName : '')) : 'Patient Record'}">Rajesh Sharma</strong></div>
+                        <div><span class="text-muted">Gender / DOB:</span><br><strong th:text="${patient != null ? ((patient.gender != null ? patient.gender : 'MALE') + ' / ' + (patient.dob != null ? patient.dob : 'N/A')) : 'MALE'}">MALE / 1990-05-12</strong></div>
+                        <div><span class="text-muted">Phone Number:</span><br><strong th:text="${patient != null ? patient.phone : '+91 98765 43210'}">+91 98765 43210</strong></div>
+                        <div><span class="text-muted">Encounter No:</span><br><strong th:text="${encounter.encounterId != null ? encounter.encounterId : 'ENC-1001'}">ENC-1001</strong></div>
+                        <div><span class="text-muted">Visit ID:</span><br><strong th:text="${encounter.visitId}">VISIT-8801</strong></div>
+                        <div><span class="text-muted">Consultation Date:</span><br><strong th:text="${encounter.createdAt != null ? #temporals.format(encounter.createdAt, 'dd-MMM-yyyy hh:mm a') : '16-Aug-2026 10:30 AM'}">16-Aug-2026</strong></div>
+                        <div><span class="text-muted">Department:</span><br><strong>OPD Cardiology</strong></div>
+                    </div>
+
+                    <!-- Vital Signs Grid -->
+                    <div class="vitals-banner-grid">
+                        <div class="vital-box">
+                            <div class="v-title">Blood Pressure</div>
+                            <div class="v-value" th:text="${(encounter.systolicBp != null ? encounter.systolicBp : 120) + '/' + (encounter.diastolicBp != null ? encounter.diastolicBp : 80)}">120/80</div>
+                            <div style="font-size:0.65rem; color:var(--text-muted);">mmHg</div>
+                        </div>
+                        <div class="vital-box">
+                            <div class="v-title">Pulse Rate</div>
+                            <div class="v-value" th:text="${encounter.pulseRate != null ? encounter.pulseRate : 72}">72</div>
+                            <div style="font-size:0.65rem; color:var(--text-muted);">bpm</div>
+                        </div>
+                        <div class="vital-box">
+                            <div class="v-title">Body Temp</div>
+                            <div class="v-value" th:text="${encounter.temperature != null ? encounter.temperature : 98.6}">98.6</div>
+                            <div style="font-size:0.65rem; color:var(--text-muted);">°F</div>
+                        </div>
+                        <div class="vital-box">
+                            <div class="v-title">SpO2 Level</div>
+                            <div class="v-value" th:text="${encounter.spo2 != null ? encounter.spo2 : 98}">98%</div>
+                            <div style="font-size:0.65rem; color:var(--text-muted);">Oxygen %</div>
+                        </div>
+                        <div class="vital-box">
+                            <div class="v-title">Weight / Height</div>
+                            <div class="v-value" th:text="${(encounter.weightKg != null ? encounter.weightKg : 68) + 'kg / ' + (encounter.heightCm != null ? encounter.heightCm : 172) + 'cm'}">68kg / 172cm</div>
+                            <div style="font-size:0.65rem; color:var(--text-muted);">Weight &amp; Height</div>
+                        </div>
+                        <div class="vital-box">
+                            <div class="v-title">Calculated BMI</div>
+                            <div class="v-value" th:text="${encounter.bmi != null ? encounter.bmi : 23.0}">23.0</div>
+                            <div style="font-size:0.65rem; color:var(--text-muted);">kg/m²</div>
+                        </div>
+                    </div>
+
+                    <!-- Clinical Findings & Diagnosis -->
+                    <div class="clinical-section-box">
+                        <div class="clinical-section-title">🗣️ Chief Symptoms &amp; Presenting Complaints</div>
+                        <p style="font-size: 0.95rem; font-weight: 600;" th:text="${encounter.chiefComplaint}">High fever for 3 days, sore throat, severe body pain.</p>
+                    </div>
+
+                    <div class="clinical-section-box">
+                        <div class="clinical-section-title">🔍 Clinical Assessment &amp; ICD-10 Diagnosis</div>
+                        <div style="font-size: 0.95rem; margin-bottom: 0.4rem;">
+                            <strong class="text-primary">ICD-10 Code:</strong> <span class="badge badge-warning" th:text="${(encounter.icdCode != null ? encounter.icdCode : 'J06.9') + ' - ' + (encounter.icdDescription != null ? encounter.icdDescription : 'Acute Upper Respiratory Infection')}">J06.9 - Acute Upper Respiratory Infection</span>
+                        </div>
+                        <p style="font-size: 0.9rem; color: var(--text-main);" th:text="${encounter.clinicalAssessment}">Bilateral lungs clear, throat congested with mild tonsillar erythema. No lymphadenopathy.</p>
+                    </div>
+
+                    <!-- Rx Electronic Prescription Section -->
+                    <div class="clinical-section-box" style="margin-top: 1.75rem;">
+                        <div class="rx-symbol">℞ Prescribed Medication Schedule</div>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Medicine Name &amp; Strength</th>
+                                        <th>Dosage / Frequency</th>
+                                        <th>Duration</th>
+                                        <th>Instructions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td><strong>Tab. Paracetamol 650mg</strong></td>
+                                        <td><span class="badge badge-primary">1 - 0 - 1</span></td>
+                                        <td>5 Days</td>
+                                        <td>After Food with warm water</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td><strong>Cap. Amoxicillin 500mg</strong></td>
+                                        <td><span class="badge badge-primary">1 - 0 - 1</span></td>
+                                        <td>5 Days</td>
+                                        <td>After Food (Complete full course)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>3</td>
+                                        <td><strong>Syr. Ascoril-D Cough Syrup 10ml</strong></td>
+                                        <td><span class="badge badge-primary">0 - 0 - 1</span></td>
+                                        <td>5 Days</td>
+                                        <td>Before Bedtime</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Advice & Followup -->
+                    <div class="clinical-section-box" style="margin-top: 1.5rem;">
+                        <div class="clinical-section-title">📌 Doctor's Advice &amp; Follow-up Plan</div>
+                        <p style="font-size: 0.9rem;" th:text="${encounter.diagnosis != null ? encounter.diagnosis : 'Adequate hydration, warm saline gargles 3 times daily. Review in 5 days if fever persists.'}">Adequate hydration, warm saline gargles 3 times daily. Review in 5 days if fever persists.</p>
+                    </div>
+
+                    <!-- Doctor Digital Stamp & Signature Block -->
+                    <div class="signature-block">
+                        <div>
+                            <div style="font-size: 0.75rem; color: var(--text-muted);">Generated via Clinical OS EMR Engine</div>
+                            <div style="font-size: 0.75rem; color: var(--text-muted);">Valid Official Digital Medical Report</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-family: 'Brush Script MT', cursive, sans-serif; font-size: 1.8rem; color: var(--primary-color); font-weight: 700; line-height: 1;">Dr. Pawan Kumar</div>
+                            <div style="font-weight: 700; font-size: 0.9rem; margin-top: 0.25rem;">Dr. Pawan Kumar, MD</div>
+                            <div style="font-size: 0.75rem; color: var(--text-muted);">Authorized Medical Practitioner</div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+</body>
+</html>

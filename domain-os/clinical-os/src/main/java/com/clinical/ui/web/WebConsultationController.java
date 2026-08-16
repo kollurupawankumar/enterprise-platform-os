@@ -8,6 +8,7 @@ import com.clinical.patient.service.PatientService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -57,6 +58,24 @@ public class WebConsultationController {
         return "consultation_new";
     }
 
+    @GetMapping("/consultation/report/{id}")
+    public String viewConsultationReport(@PathVariable("id") Long id, Model model) {
+        model.addAttribute("pageTitle", "OPD Case Summary & Prescription Report");
+        model.addAttribute("activeTab", "consultation");
+
+        ClinicalEncounterEntity encounter = encounterRepository.findById(id).orElse(null);
+        if (encounter == null) {
+            return "redirect:/consultation";
+        }
+
+        PatientEntity patient = patientService.findByPatientId(encounter.getPatientId()).orElse(null);
+
+        model.addAttribute("encounter", encounter);
+        model.addAttribute("patient", patient);
+
+        return "consultation_report";
+    }
+
     @PostMapping("/consultation/record")
     public String recordConsultation(
             @RequestParam("patientId") String patientId,
@@ -75,6 +94,7 @@ public class WebConsultationController {
 
         ClinicalEncounterEntity enc = new ClinicalEncounterEntity();
         enc.setVisitId("VISIT-" + System.currentTimeMillis() % 10000);
+        enc.setEncounterId("ENC-" + (1000 + System.currentTimeMillis() % 9000));
         enc.setPatientId(patientId);
         enc.setDoctorId("DOC-101");
         enc.setChiefComplaint(chiefComplaint.trim());

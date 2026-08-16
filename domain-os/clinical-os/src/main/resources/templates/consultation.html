@@ -49,7 +49,7 @@
                             </thead>
                             <tbody>
                                 <tr th:each="enc : ${encounters}">
-                                    <td><strong class="text-primary" th:text="${enc.encounterId}">ENC-1001</strong></td>
+                                    <td><strong class="text-primary" th:text="${enc.encounterId != null ? enc.encounterId : 'ENC-' + enc.id}">ENC-1001</strong></td>
                                     <td>
                                         <a th:href="@{'/patients/' + ${enc.patientId}}" class="text-primary" style="font-weight: 700;" th:text="${enc.patientId}">PAT-1001</a>
                                     </td>
@@ -64,6 +64,7 @@
                                     <td th:text="${enc.clinicalAssessment != null ? enc.clinicalAssessment : 'Prescribed Rest &amp; Meds'}">Prescribed Rest &amp; Meds</td>
                                     <td>
                                         <div class="d-flex" style="gap: 0.4rem;">
+                                            <a th:href="@{'/consultation/report/' + ${enc.id}}" class="btn btn-primary btn-sm">📄 View Report</a>
                                             <a th:href="@{'/patients/' + ${enc.patientId}}" class="btn btn-primary btn-sm">📁 EMR File</a>
                                             <a th:href="@{/pharmacy}" class="btn btn-success btn-sm">💊 Send Rx</a>
                                         </div>
