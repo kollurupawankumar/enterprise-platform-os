@@ -71,6 +71,15 @@
             <div class="text-muted" style="font-size: 0.9rem; margin-top: 0.25rem;">Enterprise Multi-Role Healthcare Portal</div>
         </div>
 
+        <!-- Security Session Alerts -->
+        <div th:if="${showExpiredAlert}" class="alert alert-warning" style="margin-bottom: 1.25rem;">
+            <span>⚠️</span> Access Restricted: Please sign in with valid credentials to continue.
+        </div>
+
+        <div th:if="${showLogoutAlert}" class="alert alert-success" style="margin-bottom: 1.25rem;">
+            <span>✅</span> You have been signed out successfully.
+        </div>
+
         <!-- Role Quick Selection Bar -->
         <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); margin-bottom: 0.5rem; text-align: center;">SELECT DEMO ROLE CREDENTIALS:</div>
         <div class="role-pill-grid">

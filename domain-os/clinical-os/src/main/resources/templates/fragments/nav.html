@@ -155,22 +155,22 @@
         </script>
     </aside>
 
-    <!-- Reusable Top Header Bar with User Profile & Sign Out -->
+    <!-- Reusable Top Header Bar with Dynamic User Profile & Sign Out -->
     <header th:fragment="header(titleText)" class="top-header">
         <div class="header-title" th:text="${titleText}">Executive Dashboard</div>
         
         <div class="header-actions">
             <!-- Logged In User Info Badge -->
             <div class="user-badge">
-                <div class="user-avatar">PK</div>
+                <div class="user-avatar" th:text="${session.userName != null ? #strings.substring(session.userName,0,1) : 'P'}">P</div>
                 <div class="user-details">
-                    <span class="user-name">Dr. Pawan Kumar</span>
-                    <span class="user-role">Senior Consultant</span>
+                    <span class="user-name" th:text="${session.userName != null ? session.userName : 'Dr. Pawan Kumar'}">Dr. Pawan Kumar</span>
+                    <span class="user-role" th:text="${session.userRole != null ? session.userRole : 'Senior Consultant'}">Senior Consultant</span>
                 </div>
             </div>
 
             <!-- Constant Sign Out Button -->
-            <a th:href="@{/login}" class="btn btn-logout">
+            <a th:href="@{/logout}" class="btn btn-logout">
                 🚪 Sign Out
             </a>
         </div>
