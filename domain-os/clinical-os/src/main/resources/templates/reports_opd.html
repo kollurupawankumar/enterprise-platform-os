@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>OPD Footfall Analytics - Clinical OS</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Reusable Left Sidebar Navigation -->
+        <aside th:replace="~{fragments/nav :: sidebar('reports-opd')}"></aside>
+
+        <!-- Main Content Area -->
+        <div class="main-wrapper">
+            <!-- Reusable Top Header -->
+            <header th:replace="~{fragments/nav :: header('Patient OPD Footfall &amp; Volume Analytics')}"></header>
+
+            <main class="content-container">
+                <!-- OPD KPI Stats Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">👥</div>
+                        <div class="stat-info">
+                            <h3>Total Patient Footfalls</h3>
+                            <div class="value text-primary">6 Patients</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">➕</div>
+                        <div class="stat-info">
+                            <h3>New Patient Registrations</h3>
+                            <div class="value text-success">4 Patients</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🔁</div>
+                        <div class="stat-info">
+                            <h3>Follow-up Visits</h3>
+                            <div class="value">2 Patients</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🩺</div>
+                        <div class="stat-info">
+                            <h3>Top Specialty OPD</h3>
+                            <div class="value text-primary">Cardiology</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="data-card">
+                    <div class="card-header">
+                        <h2>Consultant Physician OPD Footfall Distribution</h2>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Doctor Name</th>
+                                    <th>Department</th>
+                                    <th>Completed Consultations</th>
+                                    <th>Avg Wait Time</th>
+                                    <th>Satisfaction Rate</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Dr. Suresh Kumar</strong></td>
+                                    <td><span class="badge badge-primary">Cardiology</span></td>
+                                    <td><strong>4 Consultations</strong></td>
+                                    <td>12 mins</td>
+                                    <td><span class="badge badge-success">98% Positive</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Dr. Ananya Sharma</strong></td>
+                                    <td><span class="badge badge-primary">General Medicine</span></td>
+                                    <td><strong>2 Consultations</strong></td>
+                                    <td>8 mins</td>
+                                    <td><span class="badge badge-success">100% Positive</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+</body>
+</html>

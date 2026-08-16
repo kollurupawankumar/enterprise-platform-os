@@ -2,29 +2,34 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>EMR Document Vault - Clinical OS Web Platform</title>
+    <title>EMR Document Vault - Clinical OS</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
 
     <div class="app-container">
-        <!-- Reusable Left Sidebar -->
+        <!-- Reusable Left Sidebar Navigation -->
         <aside th:replace="~{fragments/nav :: sidebar('documents')}"></aside>
 
         <!-- Main Content Area -->
         <div class="main-wrapper">
             <!-- Reusable Top Header -->
-            <header th:replace="~{fragments/nav :: header('Digital EMR Patient Document Cabinet')}"></header>
+            <header th:replace="~{fragments/nav :: header('Digital EMR Document Vault')}"></header>
 
             <main class="content-container">
-                <!-- Document Vault List Card -->
+                <!-- Success Alert Banner -->
+                <div th:if="${showSuccessAlert}" class="alert alert-success">
+                    <span>✅</span> Patient medical document uploaded to digital EMR vault successfully!
+                </div>
+
                 <div class="data-card">
                     <div class="card-header">
-                        <h2>Attached Medical Records &amp; Diagnostic Reports</h2>
-                        <form th:action="@{/documents}" method="get" class="search-form">
-                            <input type="text" name="query" class="form-control" placeholder="Search Patient ID, Document..." th:value="${query}">
-                            <button type="submit" class="btn btn-primary">Search</button>
-                        </form>
+                        <h2>
+                            Digital EMR Medical Documents Vault
+                            <span class="badge badge-primary" th:text="${totalCount + ' Documents Stored'}">2 Documents Stored</span>
+                        </h2>
+
+                        <a th:href="@{/documents/upload}" class="btn btn-success">➕ Upload New Document</a>
                     </div>
 
                     <div class="table-responsive">
@@ -32,24 +37,33 @@
                             <thead>
                                 <tr>
                                     <th>Document ID</th>
-                                    <th>Patient ID</th>
+                                    <th>Patient ID / Name</th>
                                     <th>Document Name</th>
-                                    <th>Category Type</th>
-                                    <th>File Format</th>
-                                    <th>Uploaded At</th>
+                                    <th>Category</th>
+                                    <th>Upload Date</th>
+                                    <th>File Size</th>
+                                    <th>Quick Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr th:each="doc : ${documents}">
-                                    <td><strong class="text-primary" th:text="${doc.documentId}">DOC-1001</strong></td>
-                                    <td th:text="${doc.patientId}">PAT-1001</td>
-                                    <td><strong th:text="${doc.documentName}">Chest X-Ray Scan.pdf</strong></td>
-                                    <td><span class="badge badge-warning" th:text="${doc.documentType != null ? doc.documentType : 'X-RAY'}">X-RAY</span></td>
-                                    <td th:text="${doc.fileExtension != null ? doc.fileExtension : 'PDF'}">PDF</td>
-                                    <td th:text="${doc.createdAt}">2026-08-15</td>
+                                    <td><strong class="text-primary" th:text="${doc.documentId}">DOC-2026-001</strong></td>
+                                    <td>
+                                        <a th:href="@{'/patients/' + ${doc.patientId}}" class="text-primary" style="font-weight: 700;" th:text="${doc.patientId}">PAT-1001</a>
+                                    </td>
+                                    <td><strong th:text="${doc.documentName}">Chest_XRay_Scan.pdf</strong></td>
+                                    <td><span class="badge badge-primary" th:text="${doc.category}">X-Ray Scan</span></td>
+                                    <td th:text="${doc.uploadedAt != null ? #temporals.format(doc.uploadedAt, 'dd-MMM-yyyy hh:mm a') : '16-Aug-2026'}">16-Aug-2026</td>
+                                    <td th:text="${(doc.fileSize != null ? (doc.fileSize / 1024 / 1024) : 2) + ' MB'}">2 MB</td>
+                                    <td>
+                                        <div class="d-flex" style="gap: 0.4rem;">
+                                            <button type="button" class="btn btn-primary btn-sm" onclick="alert('Document Preview triggered.')">👁️ View Document</button>
+                                            <a th:href="@{'/patients/' + ${doc.patientId}}" class="btn btn-primary btn-sm">📁 EMR File</a>
+                                        </div>
+                                    </td>
                                 </tr>
                                 <tr th:if="${#lists.isEmpty(documents)}">
-                                    <td colspan="6" class="table-empty">No EMR patient documents uploaded yet.</td>
+                                    <td colspan="7" class="table-empty">No medical documents stored in vault. Click "Upload New Document" above.</td>
                                 </tr>
                             </tbody>
                         </table>

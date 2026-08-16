@@ -2,64 +2,87 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Practice Analytics - Clinical OS Web Platform</title>
+    <title>Practice Financial Analytics - Clinical OS</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
 
     <div class="app-container">
-        <!-- Reusable Left Sidebar -->
-        <aside th:replace="~{fragments/nav :: sidebar('reports')}"></aside>
+        <!-- Reusable Left Sidebar Navigation -->
+        <aside th:replace="~{fragments/nav :: sidebar('reports-financial')}"></aside>
 
         <!-- Main Content Area -->
         <div class="main-wrapper">
             <!-- Reusable Top Header -->
-            <header th:replace="~{fragments/nav :: header('Practice Revenue Analytics &amp; Day-End Cash Register')}"></header>
+            <header th:replace="~{fragments/nav :: header('Practice Financial Analytics &amp; Revenue Reports')}"></header>
 
             <main class="content-container">
-                <!-- Summary KPI Cards -->
+                <!-- Financial KPI Cards Grid -->
                 <div class="stats-grid">
                     <div class="stat-card">
                         <div class="stat-icon">💰</div>
                         <div class="stat-info">
-                            <h3>Total Revenue Realized</h3>
-                            <div class="value" th:text="${formattedTotalRevenue}">₹1,45,800</div>
+                            <h3>Total Collections</h3>
+                            <div class="value text-success" th:text="${formattedTotalRevenue}">₹ 1,500.00</div>
                         </div>
                     </div>
-
                     <div class="stat-card">
                         <div class="stat-icon">🩺</div>
                         <div class="stat-info">
-                            <h3>Consultation Fees</h3>
-                            <div class="value" th:text="${formattedConsultationRevenue}">₹85,000</div>
+                            <h3>OPD Consultation Revenue</h3>
+                            <div class="value text-primary" th:text="${formattedConsultationRevenue}">₹ 500.00</div>
                         </div>
                     </div>
-
                     <div class="stat-card">
                         <div class="stat-icon">💊</div>
                         <div class="stat-info">
                             <h3>Pharmacy Sales</h3>
-                            <div class="value" th:text="${formattedPharmacyRevenue}">₹42,300</div>
+                            <div class="value" th:text="${formattedPharmacyRevenue}">₹ 400.00</div>
                         </div>
                     </div>
-
                     <div class="stat-card">
                         <div class="stat-icon">🔬</div>
                         <div class="stat-info">
-                            <h3>Lab Test Collections</h3>
-                            <div class="value" th:text="${formattedLabRevenue}">₹18,500</div>
+                            <h3>Lab Diagnostics Revenue</h3>
+                            <div class="value" th:text="${formattedLabRevenue}">₹ 600.00</div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Export & Print Actions Card -->
+                <!-- Financial Invoices Breakdown Card -->
                 <div class="data-card">
                     <div class="card-header">
-                        <h2>Generate Statutory Practice Reports</h2>
+                        <h2>Master POS Revenue Transactions Breakdown</h2>
                     </div>
-                    <div class="d-flex" style="gap: 1rem; flex-wrap: wrap;">
-                        <button class="btn btn-primary" onclick="window.print();">🖨️ Print Day-End Settlement Summary</button>
-                        <button class="btn btn-success" onclick="alert('Exporting Practice Audit Report to CSV...');">📊 Export Audit Log (CSV)</button>
+
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Invoice ID</th>
+                                    <th>Patient Billed</th>
+                                    <th>Consultation Fee</th>
+                                    <th>Lab Fee</th>
+                                    <th>Pharmacy Fee</th>
+                                    <th>Net Collection</th>
+                                    <th>Payment Mode</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="inv : ${invoices}">
+                                    <td><strong class="text-primary" th:text="${inv.invoiceId}">INV-2026-00501</strong></td>
+                                    <td th:text="${inv.patientName}">Rajesh Sharma</td>
+                                    <td th:text="${'₹ ' + (inv.consultationFee != null ? inv.consultationFee : '500.00')}">₹ 500.00</td>
+                                    <td th:text="${'₹ ' + (inv.labFee != null ? inv.labFee : '600.00')}">₹ 600.00</td>
+                                    <td th:text="${'₹ ' + (inv.pharmacyFee != null ? inv.pharmacyFee : '400.00')}">₹ 400.00</td>
+                                    <td><strong class="text-success" th:text="${'₹ ' + inv.totalAmount}">₹ 1,500.00</strong></td>
+                                    <td><span class="badge badge-primary" th:text="${inv.paymentMode}">CASH</span></td>
+                                </tr>
+                                <tr th:if="${#lists.isEmpty(invoices)}">
+                                    <td colspan="7" class="table-empty">No financial billing transactions recorded.</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </main>

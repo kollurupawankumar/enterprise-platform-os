@@ -6,7 +6,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Controller
@@ -19,9 +18,9 @@ public class WebReportController {
     }
 
     @GetMapping("/reports")
-    public String showReports(Model model) {
-        model.addAttribute("pageTitle", "Practice Analytics & Financial Reports");
-        model.addAttribute("activeTab", "reports");
+    public String showFinancialReports(Model model) {
+        model.addAttribute("pageTitle", "Revenue & Financial Practice Analytics");
+        model.addAttribute("activeTab", "reports-financial");
 
         List<InvoiceEntity> invoices = billingService.getAllInvoices();
 
@@ -45,7 +44,15 @@ public class WebReportController {
         model.addAttribute("formattedConsultationRevenue", String.format("₹%,.2f", totalConsultation));
         model.addAttribute("formattedPharmacyRevenue", String.format("₹%,.2f", totalPharmacy));
         model.addAttribute("formattedLabRevenue", String.format("₹%,.2f", totalLab));
+        model.addAttribute("invoices", invoices);
 
         return "reports";
+    }
+
+    @GetMapping("/reports/opd")
+    public String showOpdReports(Model model) {
+        model.addAttribute("pageTitle", "Patient Volume & OPD Footfall Analytics");
+        model.addAttribute("activeTab", "reports-opd");
+        return "reports_opd";
     }
 }

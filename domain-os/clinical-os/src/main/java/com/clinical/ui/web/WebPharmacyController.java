@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 @Controller
 public class WebPharmacyController {
@@ -21,11 +22,25 @@ public class WebPharmacyController {
     }
 
     @GetMapping("/pharmacy")
-    public String listPharmacy(Model model) {
-        model.addAttribute("pageTitle", "Pharmacy Stock & Inventory");
+    public String listPharmacy(
+            @RequestParam(value = "added", required = false) Boolean added,
+            Model model) {
+        model.addAttribute("pageTitle", "Pharmacy Inventory & Stock");
         model.addAttribute("activeTab", "pharmacy");
-        model.addAttribute("medicines", pharmacyService.getAllStock());
+
+        List<MedicineInventoryEntity> medicines = pharmacyService.getAllStock();
+        model.addAttribute("medicines", medicines);
+        model.addAttribute("totalCount", medicines.size());
+        model.addAttribute("showSuccessAlert", Boolean.TRUE.equals(added));
+
         return "pharmacy";
+    }
+
+    @GetMapping("/pharmacy/add")
+    public String addStockForm(Model model) {
+        model.addAttribute("pageTitle", "Add New Medicine to Stock");
+        model.addAttribute("activeTab", "pharmacy-add");
+        return "pharmacy_add";
     }
 
     @PostMapping("/pharmacy/add")
@@ -44,6 +59,6 @@ public class WebPharmacyController {
         med.setExpiryDate(LocalDate.now().plusYears(2));
 
         pharmacyService.addOrUpdateStock(med);
-        return "redirect:/pharmacy";
+        return "redirect:/pharmacy?added=true";
     }
 }

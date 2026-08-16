@@ -125,25 +125,92 @@
                 </ul>
             </li>
 
-            <li>
-                <a th:href="@{/pharmacy}" th:classappend="${activeTab == 'pharmacy'} ? 'active' : ''" class="nav-link">
-                    <span>💊</span> Pharmacy Stock
+            <!-- Collapsible Pharmacy & Inventory Group -->
+            <li class="nav-group">
+                <a href="javascript:void(0)" class="nav-link nav-group-toggle" th:classappend="${activeTab == 'pharmacy' || activeTab == 'pharmacy-add'} ? 'active' : ''" onclick="toggleNavGroup(this)">
+                    <span style="display: flex; align-items: center; gap: 0.75rem;">
+                        <span>💊</span> Pharmacy Stock
+                    </span>
+                    <span class="toggle-icon" th:text="${activeTab == 'pharmacy' || activeTab == 'pharmacy-add'} ? '▼' : '▶'">▼</span>
                 </a>
+                <ul class="nav-sub-menu" th:style="${activeTab == 'pharmacy' || activeTab == 'pharmacy-add'} ? 'display: flex;' : 'display: none;'">
+                    <li>
+                        <a th:href="@{/pharmacy}" th:classappend="${activeTab == 'pharmacy'} ? 'active' : ''" class="nav-sub-link">
+                            <span>📦</span> Inventory Stock
+                        </a>
+                    </li>
+                    <li>
+                        <a th:href="@{/pharmacy/add}" th:classappend="${activeTab == 'pharmacy-add'} ? 'active' : ''" class="nav-sub-link">
+                            <span>➕</span> Add Medicine Item
+                        </a>
+                    </li>
+                </ul>
             </li>
-            <li>
-                <a th:href="@{/lab}" th:classappend="${activeTab == 'lab'} ? 'active' : ''" class="nav-link">
-                    <span>🔬</span> Lab Diagnostics
+
+            <!-- Collapsible Lab Diagnostics Group -->
+            <li class="nav-group">
+                <a href="javascript:void(0)" class="nav-link nav-group-toggle" th:classappend="${activeTab == 'lab' || activeTab == 'lab-new'} ? 'active' : ''" onclick="toggleNavGroup(this)">
+                    <span style="display: flex; align-items: center; gap: 0.75rem;">
+                        <span>🔬</span> Lab Diagnostics
+                    </span>
+                    <span class="toggle-icon" th:text="${activeTab == 'lab' || activeTab == 'lab-new'} ? '▼' : '▶'">▼</span>
                 </a>
+                <ul class="nav-sub-menu" th:style="${activeTab == 'lab' || activeTab == 'lab-new'} ? 'display: flex;' : 'display: none;'">
+                    <li>
+                        <a th:href="@{/lab}" th:classappend="${activeTab == 'lab'} ? 'active' : ''" class="nav-sub-link">
+                            <span>📋</span> Test Orders Directory
+                        </a>
+                    </li>
+                    <li>
+                        <a th:href="@{/lab/new}" th:classappend="${activeTab == 'lab-new'} ? 'active' : ''" class="nav-sub-link">
+                            <span>➕</span> Create Lab Order
+                        </a>
+                    </li>
+                </ul>
             </li>
-            <li>
-                <a th:href="@{/documents}" th:classappend="${activeTab == 'documents'} ? 'active' : ''" class="nav-link">
-                    <span>📁</span> EMR Document Vault
+
+            <!-- Collapsible EMR Document Vault Group -->
+            <li class="nav-group">
+                <a href="javascript:void(0)" class="nav-link nav-group-toggle" th:classappend="${activeTab == 'documents' || activeTab == 'document-upload'} ? 'active' : ''" onclick="toggleNavGroup(this)">
+                    <span style="display: flex; align-items: center; gap: 0.75rem;">
+                        <span>📁</span> EMR Document Vault
+                    </span>
+                    <span class="toggle-icon" th:text="${activeTab == 'documents' || activeTab == 'document-upload'} ? '▼' : '▶'">▼</span>
                 </a>
+                <ul class="nav-sub-menu" th:style="${activeTab == 'documents' || activeTab == 'document-upload'} ? 'display: flex;' : 'display: none;'">
+                    <li>
+                        <a th:href="@{/documents}" th:classappend="${activeTab == 'documents'} ? 'active' : ''" class="nav-sub-link">
+                            <span>📑</span> Patient Documents
+                        </a>
+                    </li>
+                    <li>
+                        <a th:href="@{/documents/upload}" th:classappend="${activeTab == 'document-upload'} ? 'active' : ''" class="nav-sub-link">
+                            <span>➕</span> Upload New Document
+                        </a>
+                    </li>
+                </ul>
             </li>
-            <li>
-                <a th:href="@{/reports}" th:classappend="${activeTab == 'reports'} ? 'active' : ''" class="nav-link">
-                    <span>📈</span> Reports &amp; Analytics
+
+            <!-- Collapsible Reports & Analytics Group -->
+            <li class="nav-group">
+                <a href="javascript:void(0)" class="nav-link nav-group-toggle" th:classappend="${activeTab == 'reports-financial' || activeTab == 'reports-opd'} ? 'active' : ''" onclick="toggleNavGroup(this)">
+                    <span style="display: flex; align-items: center; gap: 0.75rem;">
+                        <span>📈</span> Reports &amp; Analytics
+                    </span>
+                    <span class="toggle-icon" th:text="${activeTab == 'reports-financial' || activeTab == 'reports-opd'} ? '▼' : '▶'">▼</span>
                 </a>
+                <ul class="nav-sub-menu" th:style="${activeTab == 'reports-financial' || activeTab == 'reports-opd'} ? 'display: flex;' : 'display: none;'">
+                    <li>
+                        <a th:href="@{/reports}" th:classappend="${activeTab == 'reports-financial'} ? 'active' : ''" class="nav-sub-link">
+                            <span>📊</span> Financial Analytics
+                        </a>
+                    </li>
+                    <li>
+                        <a th:href="@{/reports/opd}" th:classappend="${activeTab == 'reports-opd'} ? 'active' : ''" class="nav-sub-link">
+                            <span>👥</span> OPD Footfall Volume
+                        </a>
+                    </li>
+                </ul>
             </li>
 
             <!-- Collapsible Clinic Settings Group -->

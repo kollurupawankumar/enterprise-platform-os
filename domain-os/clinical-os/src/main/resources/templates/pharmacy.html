@@ -2,80 +2,63 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Pharmacy Inventory - Clinical OS Web Platform</title>
+    <title>Pharmacy Inventory - Clinical OS</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
 
     <div class="app-container">
-        <!-- Reusable Left Sidebar -->
+        <!-- Reusable Left Sidebar Navigation -->
         <aside th:replace="~{fragments/nav :: sidebar('pharmacy')}"></aside>
 
         <!-- Main Content Area -->
         <div class="main-wrapper">
             <!-- Reusable Top Header -->
-            <header th:replace="~{fragments/nav :: header('Pharmacy Stock &amp; POS Inventory')}"></header>
+            <header th:replace="~{fragments/nav :: header('Pharmacy Stock &amp; Medication Inventory')}"></header>
 
             <main class="content-container">
-                <!-- Add Stock Form -->
-                <div class="data-card">
-                    <div class="card-header">
-                        <h2>Add Medicine Stock</h2>
-                    </div>
-                    <form th:action="@{/pharmacy/add}" method="post" class="form-grid">
-                        <div class="form-group">
-                            <label class="form-label">Medicine Name</label>
-                            <input type="text" name="medicineName" class="form-control" placeholder="e.g. Paracetamol 500mg" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Category / Form</label>
-                            <input type="text" name="category" class="form-control" placeholder="e.g. Tablet / Syrup" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Selling Price (₹)</label>
-                            <input type="number" step="0.01" name="unitPrice" class="form-control" placeholder="Price" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Quantity in Stock</label>
-                            <input type="number" name="stockQuantity" class="form-control" placeholder="Quantity" required>
-                        </div>
-                        <div class="form-group align-end">
-                            <button type="submit" class="btn btn-primary w-100">+ Add Stock</button>
-                        </div>
-                    </form>
+                <!-- Success Alert Banner -->
+                <div th:if="${showSuccessAlert}" class="alert alert-success">
+                    <span>✅</span> New medicine item added to pharmacy inventory stock successfully!
                 </div>
 
-                <!-- Stock List Table -->
                 <div class="data-card">
                     <div class="card-header">
-                        <h2>Current Pharmacy Inventory</h2>
+                        <h2>
+                            Pharmacy Stock Directory
+                            <span class="badge badge-primary" th:text="${totalCount + ' Medicine Batches'}">3 Medicine Batches</span>
+                        </h2>
+
+                        <a th:href="@{/pharmacy/add}" class="btn btn-success">➕ Add Medicine Item</a>
                     </div>
 
                     <div class="table-responsive">
                         <table class="data-table">
                             <thead>
                                 <tr>
-                                    <th>Medicine Code</th>
+                                    <th>Item ID</th>
                                     <th>Medicine Name</th>
-                                    <th>Category</th>
-                                    <th>Selling Price</th>
-                                    <th>Available Stock</th>
+                                    <th>Therapeutic Category</th>
+                                    <th>Batch Number</th>
+                                    <th>Stock Units Available</th>
+                                    <th>Selling Price / Unit</th>
+                                    <th>Expiry Date</th>
                                     <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr th:each="med : ${medicines}">
-                                    <td><strong class="text-primary" th:text="${med.medicineCode != null ? med.medicineCode : 'MED-100'}">MED-101</strong></td>
-                                    <td><strong th:text="${med.medicineName}">Paracetamol 500mg</strong></td>
-                                    <td th:text="${med.category != null ? med.category : 'General'}">General</td>
-                                    <td th:text="${'₹' + (med.sellingPrice != null ? med.sellingPrice : 0.0)}">₹15.00</td>
-                                    <td th:text="${med.quantity}">150</td>
-                                    <td>
-                                        <span class="badge" th:classappend="${med.quantity > 20} ? 'badge-success' : 'badge-danger'" th:text="${med.quantity > 20} ? 'IN STOCK' : 'LOW STOCK'">IN STOCK</span>
-                                    </td>
+                                    <td><strong class="text-primary" th:text="${'MED-' + med.id}">MED-101</strong></td>
+                                    <td><strong th:text="${med.medicineName}">Tab. Paracetamol 650mg</strong></td>
+                                    <td><span class="badge badge-primary" th:text="${med.category}">Analgesic</span></td>
+                                    <td><code th:text="${med.batchNumber}">BAT-8801</code></td>
+                                    <td><strong style="font-size: 1.05rem;" th:text="${med.quantity + ' Units'}">500 Units</strong></td>
+                                    <td><strong class="text-success" th:text="${'₹ ' + med.sellingPrice}">₹ 2.50</strong></td>
+                                    <td th:text="${med.expiryDate}">2027-12-31</td>
+                                    <td><span class="badge badge-success">IN_STOCK</span></td>
                                 </tr>
                                 <tr th:if="${#lists.isEmpty(medicines)}">
-                                    <td colspan="6" class="table-empty">No medicine stock available.</td>
+                                    <td colspan="8" class="table-empty">No medicine inventory items recorded. Click "Add Medicine Item" above.</td>
                                 </tr>
                             </tbody>
                         </table>

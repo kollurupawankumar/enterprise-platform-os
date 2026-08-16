@@ -2,81 +2,70 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Lab Diagnostics - Clinical OS Web Platform</title>
+    <title>Lab Diagnostics - Clinical OS</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
 
     <div class="app-container">
-        <!-- Reusable Left Sidebar -->
+        <!-- Reusable Left Sidebar Navigation -->
         <aside th:replace="~{fragments/nav :: sidebar('lab')}"></aside>
 
         <!-- Main Content Area -->
         <div class="main-wrapper">
             <!-- Reusable Top Header -->
-            <header th:replace="~{fragments/nav :: header('Diagnostic Test Catalog &amp; Lab Orders')}"></header>
+            <header th:replace="~{fragments/nav :: header('Lab Diagnostics &amp; Test Orders Directory')}"></header>
 
             <main class="content-container">
-                <!-- Lab Catalog Table -->
-                <div class="data-card">
-                    <div class="card-header">
-                        <h2>Available Diagnostic Test Catalog</h2>
-                    </div>
-
-                    <div class="table-responsive">
-                        <table class="data-table">
-                            <thead>
-                                <tr>
-                                    <th>Test Code</th>
-                                    <th>Test Name</th>
-                                    <th>Category</th>
-                                    <th>Standard Rate</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr th:each="test : ${catalog}">
-                                    <td><strong class="text-primary" th:text="${test.testCode}">CBC-101</strong></td>
-                                    <td><strong th:text="${test.testName}">Complete Blood Count (CBC)</strong></td>
-                                    <td th:text="${test.category}">Hematology</td>
-                                    <td th:text="${'₹' + test.standardCost}">₹350.00</td>
-                                </tr>
-                                <tr th:if="${#lists.isEmpty(catalog)}">
-                                    <td colspan="4" class="table-empty">No diagnostic tests in catalog.</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                <!-- Success Alert Banner -->
+                <div th:if="${showSuccessAlert}" class="alert alert-success">
+                    <span>✅</span> New diagnostic lab test order created successfully!
                 </div>
 
-                <!-- Lab Orders Table -->
                 <div class="data-card">
                     <div class="card-header">
-                        <h2>Recent Diagnostic Lab Orders</h2>
+                        <h2>
+                            Diagnostic Test Orders Directory
+                            <span class="badge badge-primary" th:text="${totalCount + ' Test Orders'}">2 Test Orders</span>
+                        </h2>
+
+                        <a th:href="@{/lab/new}" class="btn btn-success">➕ Create Lab Order</a>
                     </div>
 
                     <div class="table-responsive">
                         <table class="data-table">
                             <thead>
                                 <tr>
-                                    <th>Order #</th>
-                                    <th>Patient ID</th>
+                                    <th>Order ID</th>
+                                    <th>Patient ID / Full Name</th>
+                                    <th>Diagnostic Test Name</th>
                                     <th>Ordering Doctor</th>
-                                    <th>Total Cost</th>
-                                    <th>Order Status</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Quick Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr th:each="order : ${orders}">
-                                    <td><strong class="text-primary" th:text="${order.orderId}">LAB-1001</strong></td>
-                                    <td th:text="${order.patientId}">PAT-1001</td>
-                                    <td th:text="${order.doctorName}">Dr. Pawan Kumar</td>
-                                    <td th:text="${'₹' + (order.totalAmount != null ? order.totalAmount : 0.0)}">₹350.00</td>
+                                <tr th:each="ord : ${orders}">
+                                    <td><strong class="text-primary" th:text="${ord.orderId}">LAB-2026-00201</strong></td>
                                     <td>
-                                        <span class="badge badge-success" th:text="${order.orderStatus != null ? order.orderStatus : 'COMPLETED'}">COMPLETED</span>
+                                        <strong th:text="${ord.patientId}">PAT-1001</strong>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-primary" th:text="${ord.testCode}">Complete Blood Count (CBC)</span>
+                                    </td>
+                                    <td>Dr. Suresh Kumar</td>
+                                    <td th:text="${ord.orderDate != null ? #temporals.format(ord.orderDate, 'dd-MMM-yyyy hh:mm a') : 'Today'}">16-Aug-2026</td>
+                                    <td><span class="badge badge-warning" th:text="${ord.status}">PENDING</span></td>
+                                    <td>
+                                        <div class="d-flex" style="gap: 0.4rem;">
+                                            <button type="button" class="btn btn-primary btn-sm" onclick="alert('Lab Results Entry Dialog triggered.')">🧪 Enter Results</button>
+                                            <a th:href="@{'/patients/' + ${ord.patientId}}" class="btn btn-primary btn-sm">📁 EMR File</a>
+                                        </div>
                                     </td>
                                 </tr>
                                 <tr th:if="${#lists.isEmpty(orders)}">
-                                    <td colspan="5" class="table-empty">No active lab orders found.</td>
+                                    <td colspan="7" class="table-empty">No lab orders recorded. Click "Create Lab Order" above.</td>
                                 </tr>
                             </tbody>
                         </table>
