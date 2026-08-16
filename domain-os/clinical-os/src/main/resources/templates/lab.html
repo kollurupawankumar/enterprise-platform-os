@@ -2,19 +2,19 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Lab Diagnostics - Clinical OS</title>
+    <title>Lab Diagnostic Orders - Clinical OS</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
 
     <div class="app-container">
         <!-- Reusable Left Sidebar Navigation -->
-        <aside th:replace="~{fragments/nav :: sidebar('lab')}"></aside>
+        <aside th:replace="~{fragments/nav :: sidebar('lab-orders')}"></aside>
 
         <!-- Main Content Area -->
         <div class="main-wrapper">
             <!-- Reusable Top Header -->
-            <header th:replace="~{fragments/nav :: header('Lab Diagnostics &amp; Test Orders Directory')}"></header>
+            <header th:replace="~{fragments/nav :: header('Diagnostic Orders &amp; Phlebotomy Sample Collection Queue')}"></header>
 
             <main class="content-container">
                 <!-- Success Alert Banner -->
@@ -25,11 +25,14 @@
                 <div class="data-card">
                     <div class="card-header">
                         <h2>
-                            Diagnostic Test Orders Directory
+                            Diagnostic Test Orders Queue
                             <span class="badge badge-primary" th:text="${totalCount + ' Test Orders'}">2 Test Orders</span>
                         </h2>
 
-                        <a th:href="@{/lab/new}" class="btn btn-success">➕ Create Lab Order</a>
+                        <div class="d-flex" style="gap: 0.5rem;">
+                            <a th:href="@{/lab/result-entry}" class="btn btn-primary">🧪 Result Entry Workstation</a>
+                            <a th:href="@{/lab/new}" class="btn btn-success">➕ Create Lab Order</a>
+                        </div>
                     </div>
 
                     <div class="table-responsive">
@@ -38,7 +41,7 @@
                                 <tr>
                                     <th>Order ID</th>
                                     <th>Patient ID / Full Name</th>
-                                    <th>Diagnostic Test Name</th>
+                                    <th>Diagnostic Investigation Test</th>
                                     <th>Ordering Doctor</th>
                                     <th>Date</th>
                                     <th>Status</th>
@@ -56,11 +59,13 @@
                                     </td>
                                     <td>Dr. Suresh Kumar</td>
                                     <td th:text="${ord.orderDate != null ? #temporals.format(ord.orderDate, 'dd-MMM-yyyy hh:mm a') : 'Today'}">16-Aug-2026</td>
-                                    <td><span class="badge badge-warning" th:text="${ord.status}">PENDING</span></td>
+                                    <td>
+                                        <span class="badge" th:classappend="${ord.status == 'COMPLETED'} ? 'badge-success' : 'badge-warning'" th:text="${ord.status}">PENDING</span>
+                                    </td>
                                     <td>
                                         <div class="d-flex" style="gap: 0.4rem;">
-                                            <button type="button" class="btn btn-primary btn-sm" onclick="alert('Lab Results Entry Dialog triggered.')">🧪 Enter Results</button>
-                                            <a th:href="@{'/patients/' + ${ord.patientId}}" class="btn btn-primary btn-sm">📁 EMR File</a>
+                                            <a th:href="@{'/lab/report/' + ${ord.orderId}}" class="btn btn-success btn-sm">📄 View Report</a>
+                                            <a th:href="@{/lab/result-entry}" class="btn btn-primary btn-sm">🧪 Result Entry</a>
                                         </div>
                                     </td>
                                 </tr>

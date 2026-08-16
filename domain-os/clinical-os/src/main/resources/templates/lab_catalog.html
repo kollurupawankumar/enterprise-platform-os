@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lab Test Catalog - Clinical OS</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Reusable Left Sidebar Navigation -->
+        <aside th:replace="~{fragments/nav :: sidebar('lab-catalog')}"></aside>
+
+        <!-- Main Content Area -->
+        <div class="main-wrapper">
+            <!-- Reusable Top Header -->
+            <header th:replace="~{fragments/nav :: header('Diagnostic Pathology Test Catalog &amp; Tariff Pricing')}"></header>
+
+            <main class="content-container">
+                <div class="data-card">
+                    <div class="card-header">
+                        <h2>Master Diagnostic Test Tariff List</h2>
+                        <a th:href="@{/lab/new}" class="btn btn-success">➕ Create New Lab Order</a>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Test Code</th>
+                                    <th>Test Name</th>
+                                    <th>Department</th>
+                                    <th>Sample Type</th>
+                                    <th>Biological Reference Interval</th>
+                                    <th>Standard Price (₹)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="cat : ${catalog}">
+                                    <td><strong class="text-primary" th:text="${cat.testCode}">CBC</strong></td>
+                                    <td><strong th:text="${cat.testName}">Complete Blood Count (CBC)</strong></td>
+                                    <td><span class="badge badge-primary" th:text="${cat.department != null ? cat.department : 'Hematology'}">Hematology</span></td>
+                                    <td th:text="${cat.sampleType != null ? cat.sampleType : 'EDTA Whole Blood'}">EDTA Whole Blood</td>
+                                    <td th:text="${cat.normalRange != null ? cat.normalRange : 'Hb: 13.0-17.0 g/dL'}">Hb: 13.0-17.0 g/dL</td>
+                                    <td><strong class="text-success" th:text="${'₹ ' + cat.price}">₹ 350.00</strong></td>
+                                </tr>
+                                <tr th:if="${#lists.isEmpty(catalog)}">
+                                    <td colspan="6" class="table-empty">No test catalog items configured.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+</body>
+</html>

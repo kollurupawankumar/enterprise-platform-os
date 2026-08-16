@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Official Diagnostic Pathology Report - Clinical OS</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        @media print {
+            .sidebar, .top-header, .btn-print-bar {
+                display: none !important;
+            }
+            .main-wrapper {
+                margin-left: 0 !important;
+                padding: 0 !important;
+            }
+            body {
+                background: #ffffff !important;
+            }
+            .letterhead-container {
+                box-shadow: none !important;
+                border: none !important;
+                padding: 0 !important;
+            }
+        }
+
+        .letterhead-container {
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            padding: 3rem;
+            max-width: 900px;
+            margin: 0 auto;
+            border: 1px solid var(--border-color);
+        }
+
+        .letterhead-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid var(--primary-color);
+            padding-bottom: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .hospital-brand-title {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--primary-color);
+        }
+
+        .patient-meta-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 1.25rem;
+            border: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+        }
+
+        .meta-item label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 700;
+            display: block;
+        }
+
+        .meta-item value {
+            font-weight: 700;
+            color: var(--text-color);
+            font-size: 0.95rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Reusable Left Sidebar Navigation -->
+        <aside th:replace="~{fragments/nav :: sidebar('lab-orders')}"></aside>
+
+        <!-- Main Content Area -->
+        <div class="main-wrapper">
+            <!-- Reusable Top Header -->
+            <header th:replace="~{fragments/nav :: header('Official Hospital Diagnostic Pathology Report')}"></header>
+
+            <main class="content-container">
+                <!-- Action Bar -->
+                <div class="d-flex justify-content-between align-center btn-print-bar" style="margin-bottom: 1.5rem; max-width: 900px; margin-left: auto; margin-right: auto;">
+                    <a th:href="@{/lab/orders}" class="btn btn-logout">⬅️ Return to Lab Orders</a>
+                    <button type="button" class="btn btn-primary" onclick="window.print()">🖨️ Print Diagnostic Pathology Report</button>
+                </div>
+
+                <!-- Printable Official Letterhead Container -->
+                <div class="letterhead-container">
+                    <div class="letterhead-header">
+                        <div>
+                            <div class="hospital-brand-title">Clinical OS Healthcare Network</div>
+                            <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">
+                                Department of Clinical Pathology &amp; Diagnostic Imaging<br>
+                                Gov Reg: CLINIC-REG-2026-HYD | Phone: +91 40 2345 6789
+                            </div>
+                        </div>
+                        <div style="text-align: right;">
+                            <span class="badge badge-success" style="font-size: 0.85rem; padding: 0.4rem 0.8rem;">VERIFIED REPORT</span>
+                            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.4rem;">
+                                Report ID: <strong th:text="${order != null ? order.orderId : 'LAB-2026-00201'}">LAB-2026-00201</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Patient Metadata Summary Box -->
+                    <div class="patient-meta-grid">
+                        <div class="meta-item">
+                            <label>Patient UHID</label>
+                            <value th:text="${order != null ? order.patientId : 'PAT-1001'}">PAT-1001</value>
+                        </div>
+                        <div class="meta-item">
+                            <label>Patient Full Name</label>
+                            <value>Rajesh Sharma</value>
+                        </div>
+                        <div class="meta-item">
+                            <label>Ordering Doctor</label>
+                            <value>Dr. Suresh Kumar</value>
+                        </div>
+                        <div class="meta-item">
+                            <label>Sample Date</label>
+                            <value th:text="${order != null &amp;&amp; order.orderDate != null ? #temporals.format(order.orderDate, 'dd-MMM-yyyy hh:mm a') : '16-Aug-2026'}">16-Aug-2026</value>
+                        </div>
+                    </div>
+
+                    <!-- Investigation Test Report Body -->
+                    <div style="margin-bottom: 2rem;">
+                        <h3 style="color: var(--primary-color); font-size: 1.2rem; margin-bottom: 1rem; border-bottom: 2px solid var(--border-color); padding-bottom: 0.5rem;" th:text="${'INVESTIGATION: ' + (order != null ? order.testCode : 'Complete Blood Count (CBC)')}">INVESTIGATION: Complete Blood Count (CBC)</h3>
+
+                        <table class="data-table" style="margin-top: 1rem;">
+                            <thead>
+                                <tr>
+                                    <th>Test Parameter</th>
+                                    <th>Observed Result Value</th>
+                                    <th>Unit of Measure</th>
+                                    <th>Biological Reference Range</th>
+                                    <th>Flag</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Hemoglobin (Hb)</strong></td>
+                                    <td><strong>14.2</strong></td>
+                                    <td>g/dL</td>
+                                    <td>13.0 - 17.0</td>
+                                    <td><span class="badge badge-success">NORMAL</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Total Leucocyte Count (TLC)</strong></td>
+                                    <td><strong>7,500</strong></td>
+                                    <td>/mcL</td>
+                                    <td>4,000 - 11,000</td>
+                                    <td><span class="badge badge-success">NORMAL</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Platelet Count</strong></td>
+                                    <td><strong>250,000</strong></td>
+                                    <td>/mcL</td>
+                                    <td>150,000 - 450,000</td>
+                                    <td><span class="badge badge-success">NORMAL</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Packed Cell Volume (PCV)</strong></td>
+                                    <td><strong>43.5</strong></td>
+                                    <td>%</td>
+                                    <td>40.0 - 50.0</td>
+                                    <td><span class="badge badge-success">NORMAL</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div style="background: #f8fafc; border-radius: 8px; padding: 1.25rem; border: 1px solid var(--border-color); margin-top: 1.5rem;">
+                            <div style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Pathologist Clinical Impression &amp; Remarks:</div>
+                            <div style="font-size: 1rem; margin-top: 0.5rem; font-weight: 600; color: var(--text-color);" th:text="${order != null &amp;&amp; order.result != null ? order.result : 'Complete Blood Count parameters are within normal biological limits. No hematological abnormalities detected.'}">Complete Blood Count parameters are within normal biological limits. No hematological abnormalities detected.</div>
+                        </div>
+                    </div>
+
+                    <!-- Sign-off Digital Signature Block -->
+                    <div class="d-flex justify-content-between align-end" style="margin-top: 3rem; border-top: 1px dashed var(--border-color); padding-top: 1.5rem;">
+                        <div>
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">Lab Technician Sign-off:</div>
+                            <div style="font-weight: 700; margin-top: 0.25rem;">Vikas Reddy, DMLT</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">Consultant Pathologist:</div>
+                            <div style="font-weight: 700; margin-top: 0.25rem; color: var(--primary-color);">Dr. Ananya Sharma, MD Pathology</div>
+                            <div style="font-size: 0.75rem; color: var(--text-muted);">Reg No: MCI-99410</div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+</body>
+</html>

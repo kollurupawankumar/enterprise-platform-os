@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lab Result Entry - Clinical OS</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Reusable Left Sidebar Navigation -->
+        <aside th:replace="~{fragments/nav :: sidebar('lab-result-entry')}"></aside>
+
+        <!-- Main Content Area -->
+        <div class="main-wrapper">
+            <!-- Reusable Top Header -->
+            <header th:replace="~{fragments/nav :: header('Pathology Technician Lab Result Entry Workstation')}"></header>
+
+            <main class="content-container">
+                <!-- Success Alert Banner -->
+                <div th:if="${showSuccessAlert}" class="alert alert-success">
+                    <span>✅</span> Lab diagnostic result saved and test report generated successfully!
+                </div>
+
+                <div class="data-card">
+                    <div class="card-header">
+                        <h2>Technician Diagnostic Result Entry Desk</h2>
+                        <a th:href="@{/lab/orders}" class="btn btn-logout">⬅️ Return to Orders Queue</a>
+                    </div>
+
+                    <form th:action="@{/lab/result/save}" method="post">
+                        <div class="form-section-card">
+                            <div class="section-title">🧪 Select Pending Lab Order &amp; Record Diagnostic Values</div>
+                            <div class="form-grid-3">
+                                <div class="form-group col-span-full">
+                                    <label class="form-label">Select Lab Order *</label>
+                                    <select name="orderId" class="form-control" required>
+                                        <option th:each="ord : ${orders}" th:value="${ord.orderId}" th:text="${ord.orderId + ' - Patient: ' + ord.patientId + ' - Test: ' + ord.testCode + ' (' + ord.status + ')'}">LAB-2026-00201</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group col-span-full">
+                                    <label class="form-label">Observed Clinical Result Value &amp; Interpretation *</label>
+                                    <textarea name="resultValue" class="form-control" rows="4" placeholder="e.g. Hemoglobin: 14.2 g/dL (Normal Range: 13.0 - 17.0 g/dL)&#10;RBC Count: 4.8 million/mcL&#10;WBC Count: 7,500 /mcL&#10;Platelets: 250,000 /mcL&#10;Impression: Normal Hematological Profile." required></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="form-group col-span-full d-flex justify-content-between align-end" style="margin-top: 1.5rem;">
+                            <a th:href="@{/lab/orders}" class="btn btn-logout">⬅️ Cancel Entry</a>
+                            <button type="submit" class="btn btn-success" style="padding: 0.75rem 1.75rem;">🧪 Validate &amp; Save Lab Report</button>
+                        </div>
+                    </form>
+                </div>
+            </main>
+        </div>
+    </div>
+
+</body>
+</html>
