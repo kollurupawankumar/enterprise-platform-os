@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Pharmacy Tax Invoice - Clinical OS</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        @media print {
+            .sidebar, .top-header, .btn-print-bar {
+                display: none !important;
+            }
+            .main-wrapper {
+                margin-left: 0 !important;
+                padding: 0 !important;
+            }
+            body {
+                background: #ffffff !important;
+            }
+            .letterhead-container {
+                box-shadow: none !important;
+                border: none !important;
+                padding: 0 !important;
+            }
+        }
+
+        .letterhead-container {
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            padding: 3rem;
+            max-width: 900px;
+            margin: 0 auto;
+            border: 1px solid var(--border-color);
+        }
+
+        .letterhead-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid var(--primary-color);
+            padding-bottom: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .hospital-brand-title {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--primary-color);
+        }
+
+        .patient-meta-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 1.25rem;
+            border: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+        }
+
+        .meta-item label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 700;
+            display: block;
+        }
+
+        .meta-item value {
+            font-weight: 700;
+            color: var(--text-color);
+            font-size: 0.95rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Reusable Left Sidebar Navigation -->
+        <aside th:replace="~{fragments/nav :: sidebar('pharmacy-bills')}"></aside>
+
+        <!-- Main Content Area -->
+        <div class="main-wrapper">
+            <!-- Reusable Top Header -->
+            <header th:replace="~{fragments/nav :: header('Official Pharmacy POS Cash Receipt &amp; Tax Invoice')}"></header>
+
+            <main class="content-container">
+                <!-- Action Bar -->
+                <div class="d-flex justify-content-between align-center btn-print-bar" style="margin-bottom: 1.5rem; max-width: 900px; margin-left: auto; margin-right: auto;">
+                    <a th:href="@{/pharmacy/bills}" class="btn btn-logout">⬅️ Return to Dispensed Bills</a>
+                    <button type="button" class="btn btn-primary" onclick="window.print()">🖨️ Print Pharmacy Tax Receipt</button>
+                </div>
+
+                <!-- Printable Official Letterhead Container -->
+                <div class="letterhead-container">
+                    <div class="letterhead-header">
+                        <div>
+                            <div class="hospital-brand-title">Clinical OS Healthcare Network</div>
+                            <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">
+                                In-House Hospital Pharmacy &amp; Retail Dispensary<br>
+                                Drug License No: DL-HYD-2026-8801 | GSTIN: 36AAAAA0000A1Z5<br>
+                                Phone: +91 40 2345 6789 | Email: pharmacy@clinical.os
+                            </div>
+                        </div>
+                        <div style="text-align: right;">
+                            <span class="badge badge-success" style="font-size: 0.85rem; padding: 0.4rem 0.8rem;">PHARMACY TAX INVOICE</span>
+                            <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.4rem;">
+                                Invoice ID: <strong class="text-primary" th:text="${invoice != null ? invoice.invoiceId : 'RX-2026-00101'}">RX-2026-00101</strong>
+                            </div>
+                            <div style="font-size: 0.75rem; color: var(--text-muted);" th:text="${invoice != null &amp;&amp; invoice.invoiceDate != null ? #temporals.format(invoice.invoiceDate, 'dd-MMM-yyyy hh:mm a') : '16-Aug-2026'}">16-Aug-2026</div>
+                        </div>
+                    </div>
+
+                    <!-- Patient Metadata Summary Box -->
+                    <div class="patient-meta-grid">
+                        <div class="meta-item">
+                            <label>Patient ID / Name</label>
+                            <value th:text="${invoice != null ? invoice.patientId : 'PAT-1001'}">PAT-1001</value>
+                        </div>
+                        <div class="meta-item">
+                            <label>Prescribing Doctor</label>
+                            <value th:text="${invoice != null ? invoice.doctorName : 'Dr. Suresh Kumar'}">Dr. Suresh Kumar</value>
+                        </div>
+                        <div class="meta-item">
+                            <label>Payment Mode</label>
+                            <value th:text="${invoice != null ? invoice.paymentMode : 'CASH'}">CASH</value>
+                        </div>
+                        <div class="meta-item">
+                            <label>Payment Status</label>
+                            <value><span class="badge badge-success" th:text="${invoice != null ? invoice.paymentStatus : 'PAID'}">PAID</span></value>
+                        </div>
+                    </div>
+
+                    <!-- Itemized Medication Bill Table -->
+                    <div style="margin-bottom: 2rem;">
+                        <h3 style="color: var(--primary-color); font-size: 1.1rem; margin-bottom: 1rem; border-bottom: 2px solid var(--border-color); padding-bottom: 0.5rem;">ITEMIZED MEDICATION DISPENSED BREAKDOWN</h3>
+
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Medication Item &amp; Strength</th>
+                                    <th>Batch Number</th>
+                                    <th>Quantity</th>
+                                    <th>Unit Selling Price</th>
+                                    <th>Line Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="item, iterStat : ${items}">
+                                    <td th:text="${iterStat.count}">1</td>
+                                    <td><strong th:text="${item.medicineName}">Tab. Paracetamol 650mg</strong></td>
+                                    <td><code th:text="${item.batchNumber}">BAT-8801</code></td>
+                                    <td th:text="${item.quantity + ' Units'}">10 Units</td>
+                                    <td th:text="${'₹ ' + item.unitPrice}">₹ 2.50</td>
+                                    <td><strong class="text-success" th:text="${'₹ ' + item.lineTotal}">₹ 25.00</strong></td>
+                                </tr>
+                                <tr th:if="${#lists.isEmpty(items)}">
+                                    <td>1</td>
+                                    <td><strong>Tab. Paracetamol 650mg</strong></td>
+                                    <td><code>BAT-8801</code></td>
+                                    <td>10 Units</td>
+                                    <td>₹ 2.50</td>
+                                    <td><strong class="text-success">₹ 25.00</strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Financial Summary & GST Tax Calculation -->
+                    <div class="d-flex justify-content-end" style="margin-top: 1.5rem;">
+                        <div style="width: 320px; background: #f8fafc; border-radius: 8px; padding: 1.25rem; border: 1px solid var(--border-color);">
+                            <div class="d-flex justify-content-between" style="margin-bottom: 0.5rem;">
+                                <span>Subtotal:</span>
+                                <strong th:text="${'₹ ' + (invoice != null &amp;&amp; invoice.subtotal != null ? invoice.subtotal : '23.81')}">₹ 23.81</strong>
+                            </div>
+                            <div class="d-flex justify-content-between" style="margin-bottom: 0.5rem; font-size: 0.85rem; color: var(--text-muted);">
+                                <span>CGST + SGST (5%):</span>
+                                <span th:text="${'₹ ' + (invoice != null &amp;&amp; invoice.taxAmount != null ? invoice.taxAmount : '1.19')}">₹ 1.19</span>
+                            </div>
+                            <div class="d-flex justify-content-between" style="border-top: 2px solid var(--border-color); padding-top: 0.5rem; font-size: 1.15rem; font-weight: 800; color: var(--success-color);">
+                                <span>Grand Total Billed:</span>
+                                <span th:text="${'₹ ' + (invoice != null &amp;&amp; invoice.totalAmount != null ? invoice.totalAmount : '25.00')}">₹ 25.00</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sign-off & Terms Footer -->
+                    <div class="d-flex justify-content-between align-end" style="margin-top: 3rem; border-top: 1px dashed var(--border-color); padding-top: 1.5rem;">
+                        <div style="font-size: 0.75rem; color: var(--text-muted); max-width: 450px;">
+                            * Medicines once sold will not be taken back or exchanged after 48 hours.<br>
+                            * Please store medications below 25°C away from direct sunlight.
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">Authorized Dispensing Pharmacist:</div>
+                            <div style="font-weight: 700; margin-top: 0.25rem; color: var(--primary-color);">Rajesh Rao, Registered Pharmacist</div>
+                            <div style="font-size: 0.75rem; color: var(--text-muted);">Reg No: PHARM-AP-44019</div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+</body>
+</html>

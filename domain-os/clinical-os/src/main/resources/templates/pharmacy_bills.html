@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dispensed Pharmacy Bills - Clinical OS</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Reusable Left Sidebar Navigation -->
+        <aside th:replace="~{fragments/nav :: sidebar('pharmacy-bills')}"></aside>
+
+        <!-- Main Content Area -->
+        <div class="main-wrapper">
+            <!-- Reusable Top Header -->
+            <header th:replace="~{fragments/nav :: header('Dispensed Pharmacy Bills &amp; Tax Invoices Directory')}"></header>
+
+            <main class="content-container">
+                <!-- Success Alert Banner -->
+                <div th:if="${showSuccessAlert}" class="alert alert-success">
+                    <span>✅</span> Prescription dispensed and pharmacy tax invoice recorded successfully!
+                </div>
+
+                <div class="data-card">
+                    <div class="card-header">
+                        <h2>
+                            Dispensed Pharmacy Sales &amp; Invoice Directory
+                            <span class="badge badge-primary" th:text="${totalCount + ' Invoices Issued'}">2 Invoices Issued</span>
+                        </h2>
+
+                        <a th:href="@{/pharmacy/dispense}" class="btn btn-success">🛒 New Counter Dispense</a>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Receipt ID</th>
+                                    <th>Patient Billed</th>
+                                    <th>Prescribing Doctor</th>
+                                    <th>Payment Mode</th>
+                                    <th>Total Amount</th>
+                                    <th>Status</th>
+                                    <th>Quick Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="inv : ${invoices}">
+                                    <td><strong class="text-primary" th:text="${inv.invoiceId}">RX-2026-00101</strong></td>
+                                    <td>
+                                        <strong th:text="${inv.patientId}">PAT-1001</strong>
+                                    </td>
+                                    <td th:text="${inv.doctorName}">Dr. Suresh Kumar</td>
+                                    <td><span class="badge badge-primary" th:text="${inv.paymentMode}">CASH</span></td>
+                                    <td><strong class="text-success" style="font-size: 1.05rem;" th:text="${'₹ ' + inv.totalAmount}">₹ 25.00</strong></td>
+                                    <td><span class="badge badge-success" th:text="${inv.paymentStatus}">PAID</span></td>
+                                    <td>
+                                        <div class="d-flex" style="gap: 0.4rem;">
+                                            <a th:href="@{'/pharmacy/receipt/' + ${inv.invoiceId}}" class="btn btn-primary btn-sm">📄 Print Bill / Receipt</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr th:if="${#lists.isEmpty(invoices)}">
+                                    <td colspan="7" class="table-empty">No pharmacy bills generated yet. Click "New Counter Dispense" above.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+</body>
+</html>

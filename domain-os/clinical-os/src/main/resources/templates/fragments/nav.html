@@ -127,16 +127,21 @@
 
             <!-- Collapsible Pharmacy Module Group -->
             <li class="nav-group">
-                <a href="javascript:void(0)" class="nav-link nav-group-toggle" th:classappend="${activeTab == 'pharmacy-dispense' || activeTab == 'pharmacy-stock' || activeTab == 'pharmacy-add' || activeTab == 'pharmacy-schedule-h1' || activeTab == 'pharmacy-reports'} ? 'active' : ''" onclick="toggleNavGroup(this)">
+                <a href="javascript:void(0)" class="nav-link nav-group-toggle" th:classappend="${activeTab == 'pharmacy-dispense' || activeTab == 'pharmacy-bills' || activeTab == 'pharmacy-stock' || activeTab == 'pharmacy-add' || activeTab == 'pharmacy-schedule-h1' || activeTab == 'pharmacy-reports'} ? 'active' : ''" onclick="toggleNavGroup(this)">
                     <span style="display: flex; align-items: center; gap: 0.75rem;">
                         <span>💊</span> Pharmacy Module
                     </span>
-                    <span class="toggle-icon" th:text="${activeTab == 'pharmacy-dispense' || activeTab == 'pharmacy-stock' || activeTab == 'pharmacy-add' || activeTab == 'pharmacy-schedule-h1' || activeTab == 'pharmacy-reports'} ? '▼' : '▶'">▼</span>
+                    <span class="toggle-icon" th:text="${activeTab == 'pharmacy-dispense' || activeTab == 'pharmacy-bills' || activeTab == 'pharmacy-stock' || activeTab == 'pharmacy-add' || activeTab == 'pharmacy-schedule-h1' || activeTab == 'pharmacy-reports'} ? '▼' : '▶'">▼</span>
                 </a>
-                <ul class="nav-sub-menu" th:style="${activeTab == 'pharmacy-dispense' || activeTab == 'pharmacy-stock' || activeTab == 'pharmacy-add' || activeTab == 'pharmacy-schedule-h1' || activeTab == 'pharmacy-reports'} ? 'display: flex;' : 'display: none;'">
+                <ul class="nav-sub-menu" th:style="${activeTab == 'pharmacy-dispense' || activeTab == 'pharmacy-bills' || activeTab == 'pharmacy-stock' || activeTab == 'pharmacy-add' || activeTab == 'pharmacy-schedule-h1' || activeTab == 'pharmacy-reports'} ? 'display: flex;' : 'display: none;'">
                     <li>
                         <a th:href="@{/pharmacy/dispense}" th:classappend="${activeTab == 'pharmacy-dispense'} ? 'active' : ''" class="nav-sub-link">
                             <span>🛒</span> OPD Dispensing Counter
+                        </a>
+                    </li>
+                    <li>
+                        <a th:href="@{/pharmacy/bills}" th:classappend="${activeTab == 'pharmacy-bills'} ? 'active' : ''" class="nav-sub-link">
+                            <span>📜</span> Dispensed Bills &amp; Receipts
                         </a>
                     </li>
                     <li>

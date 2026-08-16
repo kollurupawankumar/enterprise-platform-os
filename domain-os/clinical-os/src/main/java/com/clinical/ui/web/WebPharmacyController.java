@@ -3,16 +3,20 @@ package com.clinical.ui.web;
 import com.clinical.patient.entity.PatientEntity;
 import com.clinical.patient.service.PatientService;
 import com.clinical.pharmacy.entity.MedicineInventoryEntity;
+import com.clinical.pharmacy.entity.PharmacyInvoiceEntity;
+import com.clinical.pharmacy.entity.PharmacyInvoiceItemEntity;
 import com.clinical.pharmacy.repository.MedicineInventoryRepository;
 import com.clinical.pharmacy.service.PharmacyService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -77,13 +81,60 @@ public class WebPharmacyController {
                 : patientId;
 
         MedicineInventoryEntity med = inventoryRepository.findById(medicineId).orElse(null);
-        if (med != null && med.getQuantity() != null) {
-            int updated = Math.max(0, med.getQuantity() - quantity);
-            med.setQuantity(updated);
-            pharmacyService.addOrUpdateStock(med);
+
+        List<PharmacyInvoiceItemEntity> items = new ArrayList<>();
+        if (med != null) {
+            PharmacyInvoiceItemEntity item = new PharmacyInvoiceItemEntity();
+            item.setMedicineName(med.getMedicineName());
+            item.setBatchNumber(med.getBatchNumber());
+            item.setQuantity(quantity);
+            item.setUnitPrice(med.getSellingPrice() != null ? med.getSellingPrice() : BigDecimal.valueOf(2.50));
+            items.add(item);
         }
 
-        return "redirect:/pharmacy/dispense?dispensed=true";
+        String visitId = "VISIT-" + System.currentTimeMillis() % 10000;
+        PharmacyInvoiceEntity invoice = pharmacyService.createPharmacyInvoice(
+                targetPatient,
+                visitId,
+                "Dr. Suresh Kumar",
+                items,
+                BigDecimal.ZERO,
+                "PAID",
+                paymentMode
+        );
+
+        return "redirect:/pharmacy/receipt/" + invoice.getInvoiceId();
+    }
+
+    @GetMapping("/pharmacy/bills")
+    public String listDispensedBills(
+            @RequestParam(value = "dispensed", required = false) Boolean dispensed,
+            Model model) {
+        model.addAttribute("pageTitle", "Dispensed Pharmacy Bills & Invoices Directory");
+        model.addAttribute("activeTab", "pharmacy-bills");
+
+        List<PharmacyInvoiceEntity> invoices = pharmacyService.getAllInvoices();
+        model.addAttribute("invoices", invoices);
+        model.addAttribute("totalCount", invoices.size());
+        model.addAttribute("showSuccessAlert", Boolean.TRUE.equals(dispensed));
+
+        return "pharmacy_bills";
+    }
+
+    @GetMapping("/pharmacy/receipt/{invoiceId}")
+    public String viewPharmacyReceipt(@PathVariable("invoiceId") String invoiceId, Model model) {
+        model.addAttribute("pageTitle", "Printable Pharmacy POS Bill & Tax Invoice");
+
+        PharmacyInvoiceEntity invoice = pharmacyService.getAllInvoices().stream()
+                .filter(i -> invoiceId.equals(i.getInvoiceId()))
+                .findFirst().orElse(null);
+
+        List<PharmacyInvoiceItemEntity> items = pharmacyService.getInvoiceItems(invoiceId);
+
+        model.addAttribute("invoice", invoice);
+        model.addAttribute("items", items);
+
+        return "pharmacy_receipt";
     }
 
     @GetMapping("/pharmacy/add")
