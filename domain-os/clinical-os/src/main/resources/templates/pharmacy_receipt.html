@@ -108,7 +108,7 @@
                             <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.4rem;">
                                 Invoice ID: <strong class="text-primary" th:text="${invoice != null ? invoice.invoiceId : 'RX-2026-00101'}">RX-2026-00101</strong>
                             </div>
-                            <div style="font-size: 0.75rem; color: var(--text-muted);" th:text="${invoice != null &amp;&amp; invoice.invoiceDate != null ? #temporals.format(invoice.invoiceDate, 'dd-MMM-yyyy hh:mm a') : '16-Aug-2026'}">16-Aug-2026</div>
+                            <div style="font-size: 0.75rem; color: var(--text-muted);" th:text="${invoice != null &amp;&amp; invoice.createdAt != null ? #temporals.format(invoice.createdAt, 'dd-MMM-yyyy hh:mm a') : '16-Aug-2026'}">16-Aug-2026</div>
                         </div>
                     </div>
 
