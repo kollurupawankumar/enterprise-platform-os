@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Pharmacy Sales Reports - Clinical OS</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Reusable Left Sidebar Navigation -->
+        <aside th:replace="~{fragments/nav :: sidebar('pharmacy-reports')}"></aside>
+
+        <!-- Main Content Area -->
+        <div class="main-wrapper">
+            <!-- Reusable Top Header -->
+            <header th:replace="~{fragments/nav :: header('Pharmacy Counter Sales &amp; GST Audit Analytics')}"></header>
+
+            <main class="content-container">
+                <!-- Pharmacy Stats Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">💊</div>
+                        <div class="stat-info">
+                            <h3>Total Pharmacy Sales</h3>
+                            <div class="value text-success">₹ 1,250.00</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🛒</div>
+                        <div class="stat-info">
+                            <h3>Total Prescriptions Dispensed</h3>
+                            <div class="value text-primary">5 Prescriptions</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">⚠️</div>
+                        <div class="stat-info">
+                            <h3>Near-Expiry Batches (&lt;60 Days)</h3>
+                            <div class="value text-warning">1 Batch</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📦</div>
+                        <div class="stat-info">
+                            <h3>Low Stock Alerts (&lt;50 Units)</h3>
+                            <div class="value">0 Items</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="data-card">
+                    <div class="card-header">
+                        <h2>Top Dispensed Medications Summary</h2>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Medicine Name</th>
+                                    <th>Therapeutic Category</th>
+                                    <th>Total Units Dispensed</th>
+                                    <th>Gross Sales Revenue</th>
+                                    <th>GST Collected (12%)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Tab. Paracetamol 650mg</strong></td>
+                                    <td><span class="badge badge-primary">Analgesic</span></td>
+                                    <td>100 Units</td>
+                                    <td>₹ 250.00</td>
+                                    <td>₹ 30.00</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Cap. Amoxicillin 500mg</strong></td>
+                                    <td><span class="badge badge-primary">Antibiotics</span></td>
+                                    <td>50 Capsules</td>
+                                    <td>₹ 400.00</td>
+                                    <td>₹ 48.00</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Tab. Pantoprazole 40mg</strong></td>
+                                    <td><span class="badge badge-primary">Gastroenterology</span></td>
+                                    <td>60 Tablets</td>
+                                    <td>₹ 600.00</td>
+                                    <td>₹ 72.00</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+</body>
+</html>

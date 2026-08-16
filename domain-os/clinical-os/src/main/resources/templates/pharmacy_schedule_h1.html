@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Schedule H1 Register - Clinical OS</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Reusable Left Sidebar Navigation -->
+        <aside th:replace="~{fragments/nav :: sidebar('pharmacy-schedule-h1')}"></aside>
+
+        <!-- Main Content Area -->
+        <div class="main-wrapper">
+            <!-- Reusable Top Header -->
+            <header th:replace="~{fragments/nav :: header('Schedule H1 &amp; Restricted Narcotics Dispensing Register')}"></header>
+
+            <main class="content-container">
+                <div class="data-card">
+                    <div class="card-header">
+                        <h2>
+                            Government Regulatory Schedule H1 &amp; Narcotics Audit Log
+                            <span class="badge badge-warning">Strict Compliance</span>
+                        </h2>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Dispensed ID</th>
+                                    <th>Prescribing Doctor Name</th>
+                                    <th>Doctor MCI License</th>
+                                    <th>Patient UHID / Name</th>
+                                    <th>Restricted Drug Name</th>
+                                    <th>Batch No</th>
+                                    <th>Qty Dispensed</th>
+                                    <th>Dispensed Timestamp</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong class="text-primary">H1-2026-001</strong></td>
+                                    <td><strong>Dr. Suresh Kumar</strong></td>
+                                    <td>MCI-88902</td>
+                                    <td>PAT-1001 (Rajesh Sharma)</td>
+                                    <td><span class="badge badge-warning">Tab. Alprazolam 0.5mg</span></td>
+                                    <td><code>BAT-8801</code></td>
+                                    <td>10 Tablets</td>
+                                    <td>16-Aug-2026 10:45 AM</td>
+                                </tr>
+                                <tr>
+                                    <td><strong class="text-primary">H1-2026-002</strong></td>
+                                    <td><strong>Dr. Ananya Sharma</strong></td>
+                                    <td>MCI-99410</td>
+                                    <td>PAT-1002 (Sunita Patel)</td>
+                                    <td><span class="badge badge-warning">Inj. Tramadol 50mg</span></td>
+                                    <td><code>BAT-9120</code></td>
+                                    <td>2 Ampoules</td>
+                                    <td>16-Aug-2026 11:15 AM</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+</body>
+</html>

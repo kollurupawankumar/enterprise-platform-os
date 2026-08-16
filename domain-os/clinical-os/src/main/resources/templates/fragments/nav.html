@@ -125,23 +125,38 @@
                 </ul>
             </li>
 
-            <!-- Collapsible Pharmacy & Inventory Group -->
+            <!-- Collapsible Pharmacy Module Group -->
             <li class="nav-group">
-                <a href="javascript:void(0)" class="nav-link nav-group-toggle" th:classappend="${activeTab == 'pharmacy' || activeTab == 'pharmacy-add'} ? 'active' : ''" onclick="toggleNavGroup(this)">
+                <a href="javascript:void(0)" class="nav-link nav-group-toggle" th:classappend="${activeTab == 'pharmacy-dispense' || activeTab == 'pharmacy-stock' || activeTab == 'pharmacy-add' || activeTab == 'pharmacy-schedule-h1' || activeTab == 'pharmacy-reports'} ? 'active' : ''" onclick="toggleNavGroup(this)">
                     <span style="display: flex; align-items: center; gap: 0.75rem;">
-                        <span>💊</span> Pharmacy Stock
+                        <span>💊</span> Pharmacy Module
                     </span>
-                    <span class="toggle-icon" th:text="${activeTab == 'pharmacy' || activeTab == 'pharmacy-add'} ? '▼' : '▶'">▼</span>
+                    <span class="toggle-icon" th:text="${activeTab == 'pharmacy-dispense' || activeTab == 'pharmacy-stock' || activeTab == 'pharmacy-add' || activeTab == 'pharmacy-schedule-h1' || activeTab == 'pharmacy-reports'} ? '▼' : '▶'">▼</span>
                 </a>
-                <ul class="nav-sub-menu" th:style="${activeTab == 'pharmacy' || activeTab == 'pharmacy-add'} ? 'display: flex;' : 'display: none;'">
+                <ul class="nav-sub-menu" th:style="${activeTab == 'pharmacy-dispense' || activeTab == 'pharmacy-stock' || activeTab == 'pharmacy-add' || activeTab == 'pharmacy-schedule-h1' || activeTab == 'pharmacy-reports'} ? 'display: flex;' : 'display: none;'">
                     <li>
-                        <a th:href="@{/pharmacy}" th:classappend="${activeTab == 'pharmacy'} ? 'active' : ''" class="nav-sub-link">
-                            <span>📦</span> Inventory Stock
+                        <a th:href="@{/pharmacy/dispense}" th:classappend="${activeTab == 'pharmacy-dispense'} ? 'active' : ''" class="nav-sub-link">
+                            <span>🛒</span> OPD Dispensing Counter
+                        </a>
+                    </li>
+                    <li>
+                        <a th:href="@{/pharmacy/stock}" th:classappend="${activeTab == 'pharmacy-stock'} ? 'active' : ''" class="nav-sub-link">
+                            <span>📦</span> Inventory &amp; Expiry Track
                         </a>
                     </li>
                     <li>
                         <a th:href="@{/pharmacy/add}" th:classappend="${activeTab == 'pharmacy-add'} ? 'active' : ''" class="nav-sub-link">
-                            <span>➕</span> Add Medicine Item
+                            <span>➕</span> Add Inward Stock
+                        </a>
+                    </li>
+                    <li>
+                        <a th:href="@{/pharmacy/schedule-h1}" th:classappend="${activeTab == 'pharmacy-schedule-h1'} ? 'active' : ''" class="nav-sub-link">
+                            <span>📜</span> Schedule H1 &amp; Narcotics
+                        </a>
+                    </li>
+                    <li>
+                        <a th:href="@{/pharmacy/reports}" th:classappend="${activeTab == 'pharmacy-reports'} ? 'active' : ''" class="nav-sub-link">
+                            <span>📊</span> Pharmacy Sales &amp; GST
                         </a>
                     </li>
                 </ul>
