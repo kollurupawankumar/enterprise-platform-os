@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Accounts & Role Credentials - Clinical OS</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Reusable Left Sidebar Navigation -->
+        <aside th:replace="~{fragments/nav :: sidebar('settings-users')}"></aside>
+
+        <!-- Main Content Area -->
+        <div class="main-wrapper">
+            <!-- Reusable Top Header -->
+            <header th:replace="~{fragments/nav :: header('User Accounts, Roles &amp; Access Control Setup')}"></header>
+
+            <main class="content-container">
+                <!-- User Accounts Data Card -->
+                <div class="data-card">
+                    <div class="card-header">
+                        <h2>
+                            System User Accounts &amp; Role Access Directory
+                            <span class="badge badge-primary">7 Active System Roles</span>
+                        </h2>
+
+                        <a href="javascript:void(0)" class="btn btn-success" onclick="alert('User Account Provisioning dialog triggered.')">➕ Provision New System User</a>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>User ID</th>
+                                    <th>Full Name</th>
+                                    <th>Role / Access Level</th>
+                                    <th>Login Username / Email</th>
+                                    <th>Default Password</th>
+                                    <th>Status</th>
+                                    <th>Quick Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong class="text-primary">USR-101</strong></td>
+                                    <td><strong>Super Administrator</strong></td>
+                                    <td><span class="badge badge-danger">SUPER_ADMIN</span></td>
+                                    <td><code>admin@clinical.os</code></td>
+                                    <td><code>admin123</code></td>
+                                    <td><span class="badge badge-success">ACTIVE</span></td>
+                                    <td><button type="button" class="btn btn-primary btn-sm">🔑 Reset Password</button></td>
+                                </tr>
+                                <tr>
+                                    <td><strong class="text-primary">USR-102</strong></td>
+                                    <td><strong>Dr. Pawan Kumar</strong></td>
+                                    <td><span class="badge badge-primary">DOCTOR</span></td>
+                                    <td><code>dr.pawan@clinical.os</code></td>
+                                    <td><code>doc123</code></td>
+                                    <td><span class="badge badge-success">ACTIVE</span></td>
+                                    <td><button type="button" class="btn btn-primary btn-sm">🔑 Reset Password</button></td>
+                                </tr>
+                                <tr>
+                                    <td><strong class="text-primary">USR-103</strong></td>
+                                    <td><strong>Nurse Anjali Verma</strong></td>
+                                    <td><span class="badge badge-warning">NURSE_RECEPTIONSIST</span></td>
+                                    <td><code>nurse.reception@clinical.os</code></td>
+                                    <td><code>nurse123</code></td>
+                                    <td><span class="badge badge-success">ACTIVE</span></td>
+                                    <td><button type="button" class="btn btn-primary btn-sm">🔑 Reset Password</button></td>
+                                </tr>
+                                <tr>
+                                    <td><strong class="text-primary">USR-104</strong></td>
+                                    <td><strong>Pharmacist Rajesh Rao</strong></td>
+                                    <td><span class="badge badge-success">PHARMACIST</span></td>
+                                    <td><code>pharma.manager@clinical.os</code></td>
+                                    <td><code>pharma123</code></td>
+                                    <td><span class="badge badge-success">ACTIVE</span></td>
+                                    <td><button type="button" class="btn btn-primary btn-sm">🔑 Reset Password</button></td>
+                                </tr>
+                                <tr>
+                                    <td><strong class="text-primary">USR-105</strong></td>
+                                    <td><strong>Technician Vikas Reddy</strong></td>
+                                    <td><span class="badge badge-primary">LAB_TECHNICIAN</span></td>
+                                    <td><code>lab.tech@clinical.os</code></td>
+                                    <td><code>lab123</code></td>
+                                    <td><span class="badge badge-success">ACTIVE</span></td>
+                                    <td><button type="button" class="btn btn-primary btn-sm">🔑 Reset Password</button></td>
+                                </tr>
+                                <tr>
+                                    <td><strong class="text-primary">USR-106</strong></td>
+                                    <td><strong>Billing Cashier Kavita</strong></td>
+                                    <td><span class="badge badge-warning">BILLING_CASHIER</span></td>
+                                    <td><code>billing.desk@clinical.os</code></td>
+                                    <td><code>bill123</code></td>
+                                    <td><span class="badge badge-success">ACTIVE</span></td>
+                                    <td><button type="button" class="btn btn-primary btn-sm">🔑 Reset Password</button></td>
+                                </tr>
+                                <tr>
+                                    <td><strong class="text-primary">USR-107</strong></td>
+                                    <td><strong>Patient Portal Account</strong></td>
+                                    <td><span class="badge badge-primary">PATIENT</span></td>
+                                    <td><code>patient.user@clinical.os</code></td>
+                                    <td><code>patient123</code></td>
+                                    <td><span class="badge badge-success">ACTIVE</span></td>
+                                    <td><button type="button" class="btn btn-primary btn-sm">🔑 Reset Password</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+</body>
+</html>

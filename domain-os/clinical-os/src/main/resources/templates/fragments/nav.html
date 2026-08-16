@@ -111,10 +111,32 @@
                     <span>📈</span> Reports &amp; Analytics
                 </a>
             </li>
-            <li>
-                <a th:href="@{/settings}" th:classappend="${activeTab == 'settings'} ? 'active' : ''" class="nav-link">
-                    <span>⚙️</span> Clinic Settings
+
+            <!-- Collapsible Clinic Settings Group -->
+            <li class="nav-group">
+                <a href="javascript:void(0)" class="nav-link nav-group-toggle" th:classappend="${activeTab == 'settings-clinic' || activeTab == 'settings-users' || activeTab == 'settings-patterns'} ? 'active' : ''" onclick="toggleNavGroup(this)">
+                    <span style="display: flex; align-items: center; gap: 0.75rem;">
+                        <span>⚙️</span> Clinic Settings
+                    </span>
+                    <span class="toggle-icon" th:text="${activeTab == 'settings-clinic' || activeTab == 'settings-users' || activeTab == 'settings-patterns'} ? '▼' : '▶'">▼</span>
                 </a>
+                <ul class="nav-sub-menu" th:style="${activeTab == 'settings-clinic' || activeTab == 'settings-users' || activeTab == 'settings-patterns'} ? 'display: flex;' : 'display: none;'">
+                    <li>
+                        <a th:href="@{/settings/clinic}" th:classappend="${activeTab == 'settings-clinic'} ? 'active' : ''" class="nav-sub-link">
+                            <span>🏥</span> Hospital Info &amp; Logo
+                        </a>
+                    </li>
+                    <li>
+                        <a th:href="@{/settings/users}" th:classappend="${activeTab == 'settings-users'} ? 'active' : ''" class="nav-sub-link">
+                            <span>👤</span> Users &amp; Role Credentials
+                        </a>
+                    </li>
+                    <li>
+                        <a th:href="@{/settings/patterns}" th:classappend="${activeTab == 'settings-patterns'} ? 'active' : ''" class="nav-sub-link">
+                            <span>🔢</span> Auto Generated ID Patterns
+                        </a>
+                    </li>
+                </ul>
             </li>
         </ul>
 

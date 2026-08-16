@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Auto Generated ID Sequence Patterns - Clinical OS</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Reusable Left Sidebar Navigation -->
+        <aside th:replace="~{fragments/nav :: sidebar('settings-patterns')}"></aside>
+
+        <!-- Main Content Area -->
+        <div class="main-wrapper">
+            <!-- Reusable Top Header -->
+            <header th:replace="~{fragments/nav :: header('Auto Generated ID Sequence Patterns Setup')}"></header>
+
+            <main class="content-container">
+                <!-- Success Alert Banner if saved -->
+                <div th:if="${showSuccessAlert}" class="alert alert-success">
+                    <span>✅</span> Auto-generated ID sequence pattern configurations updated successfully!
+                </div>
+
+                <div class="data-card">
+                    <div class="card-header">
+                        <h2>🔢 Enterprise Auto ID Generation Patterns</h2>
+                    </div>
+
+                    <form th:action="@{/settings/patterns}" method="post">
+                        <div class="form-section-card">
+                            <div class="section-title">📄 Enterprise Unique Identification Patterns</div>
+                            <div class="form-grid-3">
+                                <div class="form-group">
+                                    <label class="form-label">Patient UHID Pattern *</label>
+                                    <input type="text" name="patientIdPattern" class="form-control" th:value="${patientIdPattern}" required>
+                                    <div style="font-size: 0.75rem; color: var(--text-muted);">Sample: <code>PAT-2026-000001</code></div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">OPD Token Queue Pattern *</label>
+                                    <input type="text" name="tokenPattern" class="form-control" th:value="${tokenPattern}" required>
+                                    <div style="font-size: 0.75rem; color: var(--text-muted);">Sample: <code>TOK-101</code></div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Doctor ID Pattern *</label>
+                                    <input type="text" name="doctorIdPattern" class="form-control" th:value="${doctorIdPattern}" required>
+                                    <div style="font-size: 0.75rem; color: var(--text-muted);">Sample: <code>DOC-101</code></div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Clinical Encounter ID Pattern *</label>
+                                    <input type="text" name="encounterIdPattern" class="form-control" th:value="${encounterIdPattern}" required>
+                                    <div style="font-size: 0.75rem; color: var(--text-muted);">Sample: <code>ENC-2026-8801</code></div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Master POS Invoice Pattern *</label>
+                                    <input type="text" name="invoiceIdPattern" class="form-control" th:value="${invoiceIdPattern}" required>
+                                    <div style="font-size: 0.75rem; color: var(--text-muted);">Sample: <code>INV-2026-00501</code></div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Pharmacy Order Pattern *</label>
+                                    <input type="text" name="pharmacyIdPattern" class="form-control" th:value="${pharmacyIdPattern}" required>
+                                    <div style="font-size: 0.75rem; color: var(--text-muted);">Sample: <code>RX-2026-00101</code></div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Lab Diagnostics Pattern *</label>
+                                    <input type="text" name="labIdPattern" class="form-control" th:value="${labIdPattern}" required>
+                                    <div style="font-size: 0.75rem; color: var(--text-muted);">Sample: <code>LAB-2026-00201</code></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="form-group col-span-full d-flex justify-content-between align-end" style="margin-top: 1.5rem;">
+                            <span></span>
+                            <button type="submit" class="btn btn-success" style="padding: 0.75rem 1.75rem;">💾 Save ID Pattern Rules</button>
+                        </div>
+                    </form>
+                </div>
+            </main>
+        </div>
+    </div>
+
+</body>
+</html>

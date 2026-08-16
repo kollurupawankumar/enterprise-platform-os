@@ -2,35 +2,116 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Practitioner Login - Clinical OS Web Platform</title>
+    <title>Enterprise Multi-Role Login - Clinical OS</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
-</head>
-<body style="display: flex; align-items: center; justify-content: center; min-height: 100vh; background-color: #f8fafc;">
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0284c7 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 1.5rem;
+        }
 
-    <div style="width: 100%; max-width: 420px; padding: 2rem; background: #ffffff; border-radius: 12px; border: 1px solid var(--border-color); box-shadow: var(--shadow-md); text-align: center;">
-        <div style="margin-bottom: 1.5rem;">
-            <h1 style="color: var(--primary-color); font-size: 1.8rem; font-weight: 700; margin-bottom: 0.5rem;">Clinical OS</h1>
-            <p style="color: var(--text-muted); font-size: 0.9rem;">Enterprise Clinical &amp; Practice Management Platform</p>
+        .login-card {
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+            width: 100%;
+            max-width: 520px;
+            padding: 2.5rem;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-brand-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-top: 0.5rem;
+        }
+
+        .role-pill-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin-bottom: 1.5rem;
+            justify-content: center;
+        }
+
+        .role-pill {
+            padding: 0.35rem 0.65rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border: 1px solid var(--border-color);
+            background: #f8fafc;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .role-pill:hover, .role-pill.active {
+            background: var(--primary-color);
+            color: #ffffff;
+            border-color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-card">
+        <div class="login-header">
+            <img th:src="@{/images/default_logo.png}" alt="Logo" style="width: 48px; height: 48px; border-radius: 10px;" onerror="this.style.display='none'">
+            <div class="login-brand-title">Clinical OS</div>
+            <div class="text-muted" style="font-size: 0.9rem; margin-top: 0.25rem;">Enterprise Multi-Role Healthcare Portal</div>
         </div>
 
-        <form th:action="@{/login}" method="post" style="display: flex; flex-direction: column; gap: 1.25rem; text-align: left;">
-            <div>
-                <label style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">Doctor / Staff Username</label>
-                <input type="text" name="username" class="form-control" value="dr.pawan" placeholder="Username" required>
+        <!-- Role Quick Selection Bar -->
+        <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); margin-bottom: 0.5rem; text-align: center;">SELECT DEMO ROLE CREDENTIALS:</div>
+        <div class="role-pill-grid">
+            <button type="button" class="role-pill active" onclick="fillRole('admin@clinical.os', 'admin123', this)">👑 Super Admin</button>
+            <button type="button" class="role-pill" onclick="fillRole('dr.pawan@clinical.os', 'doc123', this)">👨‍⚕️ Doctor</button>
+            <button type="button" class="role-pill" onclick="fillRole('nurse.reception@clinical.os', 'nurse123', this)">👩‍⚕️ Nurse / Receptionist</button>
+            <button type="button" class="role-pill" onclick="fillRole('pharma.manager@clinical.os', 'pharma123', this)">💊 Pharmacist</button>
+            <button type="button" class="role-pill" onclick="fillRole('lab.tech@clinical.os', 'lab123', this)">🔬 Lab Tech</button>
+            <button type="button" class="role-pill" onclick="fillRole('billing.desk@clinical.os', 'bill123', this)">💳 Cashier</button>
+            <button type="button" class="role-pill" onclick="fillRole('patient.user@clinical.os', 'patient123', this)">👤 Patient</button>
+        </div>
+
+        <form th:action="@{/login}" method="post">
+            <div class="form-group" style="margin-bottom: 1.25rem;">
+                <label class="form-label">Username / Official Email *</label>
+                <input type="text" id="usernameInput" name="username" class="form-control" value="admin@clinical.os" placeholder="e.g. admin@clinical.os" required>
             </div>
-            <div>
-                <label style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">Password</label>
-                <input type="password" name="password" class="form-control" value="password123" placeholder="Password" required>
+
+            <div class="form-group" style="margin-bottom: 1.5rem;">
+                <label class="form-label">Password *</label>
+                <input type="password" id="passwordInput" name="password" class="form-control" value="admin123" placeholder="••••••••" required>
             </div>
-            <button type="submit" class="btn btn-primary" style="padding: 0.75rem; justify-content: center; width: 100%; font-size: 1rem; margin-top: 0.5rem;">
-                🔓 Secure Practitioner Sign In
-            </button>
+
+            <button type="submit" class="btn btn-primary w-100" style="padding: 0.85rem; font-size: 1rem;">🔓 Sign In to Clinical OS</button>
         </form>
 
-        <div style="margin-top: 1.5rem; font-size: 0.75rem; color: var(--text-muted);">
-            Protected by Clinical OS Security Shield v1.0
+        <div class="text-center text-muted" style="font-size: 0.75rem; margin-top: 1.5rem;">
+            Clinical OS v1.0.0-SNAPSHOT | Multi-Facility Enterprise System
         </div>
     </div>
+
+    <script>
+        function fillRole(username, password, el) {
+            document.getElementById('usernameInput').value = username;
+            document.getElementById('passwordInput').value = password;
+            
+            const pills = document.querySelectorAll('.role-pill');
+            pills.forEach(p => p.classList.remove('active'));
+            if (el) el.classList.add('active');
+        }
+    </script>
 
 </body>
 </html>

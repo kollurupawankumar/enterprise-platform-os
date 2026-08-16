@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Hospital Info & Logo Setup - Clinical OS</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Reusable Left Sidebar Navigation -->
+        <aside th:replace="~{fragments/nav :: sidebar('settings-clinic')}"></aside>
+
+        <!-- Main Content Area -->
+        <div class="main-wrapper">
+            <!-- Reusable Top Header -->
+            <header th:replace="~{fragments/nav :: header('Hospital Profile, Branding &amp; Logo Configuration')}"></header>
+
+            <main class="content-container">
+                <!-- Success Alert Banner if saved -->
+                <div th:if="${showSuccessAlert}" class="alert alert-success">
+                    <span>✅</span> Hospital profile, contact details, and branding settings updated successfully!
+                </div>
+
+                <div class="data-card">
+                    <div class="card-header">
+                        <h2>🏥 Hospital &amp; Clinic Identity Setup</h2>
+                    </div>
+
+                    <form th:action="@{/settings/clinic}" method="post">
+                        <div class="form-section-card">
+                            <div class="section-title">🏥 Hospital General Details &amp; Registration</div>
+                            <div class="form-grid-3">
+                                <div class="form-group col-span-full">
+                                    <label class="form-label">Hospital / Clinic Official Name *</label>
+                                    <input type="text" name="clinicName" class="form-control" th:value="${clinicName}" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Government Registration / License No.</label>
+                                    <input type="text" name="registrationNumber" class="form-control" th:value="${registrationNumber}">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Primary Contact Telephone</label>
+                                    <input type="text" name="contactPhone" class="form-control" th:value="${contactPhone}">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Official Contact Email</label>
+                                    <input type="email" name="contactEmail" class="form-control" th:value="${contactEmail}">
+                                </div>
+
+                                <div class="form-group col-span-full">
+                                    <label class="form-label">Complete Physical Address</label>
+                                    <input type="text" name="address" class="form-control" th:value="${address}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Hospital Logo Branding Section -->
+                        <div class="form-section-card">
+                            <div class="section-title">🖼️ Official Hospital Logo &amp; Print Letterhead Header</div>
+                            <div class="d-flex" style="gap: 1.5rem; align-items: center;">
+                                <div style="width: 90px; height: 90px; border: 2px dashed var(--primary-color); border-radius: 12px; display: flex; align-items: center; justify-content: center; background-color: #f1f5f9; font-weight: 700; color: var(--primary-color); font-size: 0.8rem;">
+                                    LOGO PREVIEW
+                                </div>
+                                <div style="flex: 1;">
+                                    <label class="form-label">Upload Hospital Brand Logo (PNG / JPEG)</label>
+                                    <input type="file" class="form-control" style="padding: 0.45rem;">
+                                    <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.35rem;">Used on official case sheets, prescription prints, lab reports, and master POS invoices.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="form-group col-span-full d-flex justify-content-between align-end" style="margin-top: 1.5rem;">
+                            <span></span>
+                            <button type="submit" class="btn btn-success" style="padding: 0.75rem 1.75rem;">💾 Save Hospital Configuration</button>
+                        </div>
+                    </form>
+                </div>
+            </main>
+        </div>
+    </div>
+
+</body>
+</html>
