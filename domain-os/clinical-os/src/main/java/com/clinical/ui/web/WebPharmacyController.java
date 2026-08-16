@@ -130,6 +130,9 @@ public class WebPharmacyController {
                 .findFirst().orElse(null);
 
         List<PharmacyInvoiceItemEntity> items = pharmacyService.getInvoiceItems(invoiceId);
+        if ((items == null || items.isEmpty()) && invoice != null && invoice.getItems() != null) {
+            items = invoice.getItems();
+        }
 
         model.addAttribute("invoice", invoice);
         model.addAttribute("items", items);

@@ -38,6 +38,7 @@
                                 <tr>
                                     <th>Receipt ID</th>
                                     <th>Patient Billed</th>
+                                    <th>Dispensed Medicines List</th>
                                     <th>Prescribing Doctor</th>
                                     <th>Payment Mode</th>
                                     <th>Total Amount</th>
@@ -51,6 +52,17 @@
                                     <td>
                                         <strong th:text="${inv.patientId}">PAT-1001</strong>
                                     </td>
+                                    <td>
+                                        <div th:if="${inv.items != null &amp;&amp; !#lists.isEmpty(inv.items)}">
+                                            <div th:each="item : ${inv.items}" style="margin-bottom: 0.2rem;">
+                                                <strong th:text="${item.medicineName}">Tab. Paracetamol 650mg</strong>
+                                                <span class="badge badge-primary" th:text="${item.quantity + ' Units'}">10 Units</span>
+                                            </div>
+                                        </div>
+                                        <div th:if="${inv.items == null || #lists.isEmpty(inv.items)}">
+                                            <span class="badge badge-primary">Tab. Paracetamol 650mg (10 Units)</span>
+                                        </div>
+                                    </td>
                                     <td th:text="${inv.doctorName}">Dr. Suresh Kumar</td>
                                     <td><span class="badge badge-primary" th:text="${inv.paymentMode}">CASH</span></td>
                                     <td><strong class="text-success" style="font-size: 1.05rem;" th:text="${'₹ ' + inv.totalAmount}">₹ 25.00</strong></td>
@@ -62,7 +74,7 @@
                                     </td>
                                 </tr>
                                 <tr th:if="${#lists.isEmpty(invoices)}">
-                                    <td colspan="7" class="table-empty">No pharmacy bills generated yet. Click "New Counter Dispense" above.</td>
+                                    <td colspan="8" class="table-empty">No pharmacy bills generated yet. Click "New Counter Dispense" above.</td>
                                 </tr>
                             </tbody>
                         </table>
