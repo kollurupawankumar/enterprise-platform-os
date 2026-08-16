@@ -81,16 +81,50 @@
                 </ul>
             </li>
 
-            <li>
-                <a th:href="@{/doctors}" th:classappend="${activeTab == 'doctors'} ? 'active' : ''" class="nav-link">
-                    <span>🩺</span> Doctor Roster
+            <!-- Collapsible Doctor Roster Group -->
+            <li class="nav-group">
+                <a href="javascript:void(0)" class="nav-link nav-group-toggle" th:classappend="${activeTab == 'doctors' || activeTab == 'doctor-new'} ? 'active' : ''" onclick="toggleNavGroup(this)">
+                    <span style="display: flex; align-items: center; gap: 0.75rem;">
+                        <span>🩺</span> Doctor Roster
+                    </span>
+                    <span class="toggle-icon" th:text="${activeTab == 'doctors' || activeTab == 'doctor-new'} ? '▼' : '▶'">▼</span>
                 </a>
+                <ul class="nav-sub-menu" th:style="${activeTab == 'doctors' || activeTab == 'doctor-new'} ? 'display: flex;' : 'display: none;'">
+                    <li>
+                        <a th:href="@{/doctors}" th:classappend="${activeTab == 'doctors'} ? 'active' : ''" class="nav-sub-link">
+                            <span>👨‍⚕️</span> Consultant Directory
+                        </a>
+                    </li>
+                    <li>
+                        <a th:href="@{/doctors/new}" th:classappend="${activeTab == 'doctor-new'} ? 'active' : ''" class="nav-sub-link">
+                            <span>➕</span> Add New Doctor
+                        </a>
+                    </li>
+                </ul>
             </li>
-            <li>
-                <a th:href="@{/billing}" th:classappend="${activeTab == 'billing'} ? 'active' : ''" class="nav-link">
-                    <span>💳</span> Master POS Billing
+
+            <!-- Collapsible Master POS Billing Group -->
+            <li class="nav-group">
+                <a href="javascript:void(0)" class="nav-link nav-group-toggle" th:classappend="${activeTab == 'billing' || activeTab == 'billing-new'} ? 'active' : ''" onclick="toggleNavGroup(this)">
+                    <span style="display: flex; align-items: center; gap: 0.75rem;">
+                        <span>💳</span> Master POS Billing
+                    </span>
+                    <span class="toggle-icon" th:text="${activeTab == 'billing' || activeTab == 'billing-new'} ? '▼' : '▶'">▼</span>
                 </a>
+                <ul class="nav-sub-menu" th:style="${activeTab == 'billing' || activeTab == 'billing-new'} ? 'display: flex;' : 'display: none;'">
+                    <li>
+                        <a th:href="@{/billing}" th:classappend="${activeTab == 'billing'} ? 'active' : ''" class="nav-sub-link">
+                            <span>📜</span> Billing &amp; Invoices
+                        </a>
+                    </li>
+                    <li>
+                        <a th:href="@{/billing/new}" th:classappend="${activeTab == 'billing-new'} ? 'active' : ''" class="nav-sub-link">
+                            <span>➕</span> Create POS Invoice
+                        </a>
+                    </li>
+                </ul>
             </li>
+
             <li>
                 <a th:href="@{/pharmacy}" th:classappend="${activeTab == 'pharmacy'} ? 'active' : ''" class="nav-link">
                     <span>💊</span> Pharmacy Stock

@@ -8,88 +8,71 @@
 <body>
 
     <div class="app-container">
-        <!-- Reusable Left Sidebar -->
+        <!-- Reusable Left Sidebar Navigation -->
         <aside th:replace="~{fragments/nav :: sidebar('billing')}"></aside>
 
         <!-- Main Content Area -->
         <div class="main-wrapper">
             <!-- Reusable Top Header -->
-            <header th:replace="~{fragments/nav :: header('Master OPD POS Billing Workstation')}"></header>
+            <header th:replace="~{fragments/nav :: header('Master POS Billing &amp; Invoices Directory')}"></header>
 
             <main class="content-container">
-                <!-- Create Bill Form Card -->
-                <div class="data-card">
-                    <div class="card-header">
-                        <h2>Generate Consolidated OPD Invoice</h2>
-                    </div>
-                    <form th:action="@{/billing/create}" method="post" class="form-grid">
-                        <div class="form-group">
-                            <label class="form-label">Select Patient</label>
-                            <select name="patientId" class="form-control" required>
-                                <option th:each="p : ${patients}" th:value="${p.patientId}" th:text="${p.firstName + ' ' + (p.lastName != null ? p.lastName : '') + ' (' + p.patientId + ')'}">Patient</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Consultation Fee (₹)</label>
-                            <input type="number" step="0.01" name="consultationFee" class="form-control" value="500.00" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Lab Tests Fee (₹)</label>
-                            <input type="number" step="0.01" name="labFee" class="form-control" value="0.00">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Pharmacy Medicines Fee (₹)</label>
-                            <input type="number" step="0.01" name="pharmacyFee" class="form-control" value="0.00">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Payment Mode</label>
-                            <select name="paymentMode" class="form-control">
-                                <option value="CASH">Cash</option>
-                                <option value="UPI">UPI / QR Code</option>
-                                <option value="CARD">Credit / Debit Card</option>
-                            </select>
-                        </div>
-                        <div class="form-group align-end">
-                            <button type="submit" class="btn btn-success w-100">💳 Generate &amp; Pay Bill</button>
-                        </div>
-                    </form>
+                
+                <!-- Success Alert Banner if redirected from creating bill -->
+                <div th:if="${showSuccessAlert}" class="alert alert-success">
+                    <span>✅</span> Master POS Invoice generated and billing transaction completed successfully!
                 </div>
 
-                <!-- Invoices Table Card -->
+                <!-- Billing History Data Card -->
                 <div class="data-card">
                     <div class="card-header">
-                        <h2>Generated Invoices &amp; Realized Revenue</h2>
+                        <h2>
+                            Master Invoice &amp; Payment Transactions
+                            <span class="badge badge-primary" th:text="${totalCount + ' Invoices Issued'}">2 Invoices Issued</span>
+                        </h2>
+
+                        <a th:href="@{/billing/new}" class="btn btn-success">➕ Create POS Invoice</a>
                     </div>
 
                     <div class="table-responsive">
                         <table class="data-table">
                             <thead>
                                 <tr>
-                                    <th>Invoice #</th>
-                                    <th>Patient ID</th>
-                                    <th>Consultation</th>
-                                    <th>Lab Fee</th>
-                                    <th>Pharmacy</th>
-                                    <th>Total Net Amount</th>
+                                    <th>Invoice ID</th>
+                                    <th>Patient ID / Full Name</th>
+                                    <th>Transaction Date</th>
                                     <th>Payment Mode</th>
-                                    <th>Status</th>
+                                    <th>Total Billed Amount</th>
+                                    <th>Payment Status</th>
+                                    <th>Quick Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr th:each="inv : ${invoices}">
-                                    <td><strong class="text-primary" th:text="${inv.invoiceId}">INV-1001</strong></td>
-                                    <td th:text="${inv.patientId}">PAT-1001</td>
-                                    <td th:text="${'₹' + inv.consultationFee}">₹500.00</td>
-                                    <td th:text="${'₹' + inv.labFee}">₹0.00</td>
-                                    <td th:text="${'₹' + inv.pharmacyFee}">₹0.00</td>
-                                    <td><strong class="text-success" th:text="${'₹' + inv.totalAmount}">₹500.00</strong></td>
-                                    <td th:text="${inv.paymentMode}">CASH</td>
+                                    <td><strong class="text-primary" th:text="${inv.invoiceId}">INV-2026-00501</strong></td>
                                     <td>
-                                        <span class="badge badge-success" th:text="${inv.paymentStatus}">PAID</span>
+                                        <strong th:text="${inv.patientName}">Rajesh Sharma</strong>
+                                        <div style="font-size: 0.75rem; color: var(--text-muted);" th:text="${'ID: ' + inv.patientId}">ID: PAT-1001</div>
+                                    </td>
+                                    <td th:text="${inv.invoiceDate != null ? #temporals.format(inv.invoiceDate, 'dd-MMM-yyyy hh:mm a') : 'Today'}">16-Aug-2026</td>
+                                    <td>
+                                        <span class="badge badge-primary" th:text="${inv.paymentMode}">CASH</span>
+                                    </td>
+                                    <td>
+                                        <strong class="text-success" style="font-size: 1.05rem;" th:text="${'₹ ' + inv.totalAmount}">₹ 1,500.00</strong>
+                                    </td>
+                                    <td>
+                                        <span class="badge" th:classappend="${inv.status == 'PAID'} ? 'badge-success' : 'badge-warning'" th:text="${inv.status}">PAID</span>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex" style="gap: 0.4rem;">
+                                            <button type="button" class="btn btn-primary btn-sm" onclick="window.print()">📄 Print Bill</button>
+                                            <a th:href="@{'/patients/' + ${inv.patientId}}" class="btn btn-primary btn-sm">📁 EMR File</a>
+                                        </div>
                                     </td>
                                 </tr>
                                 <tr th:if="${#lists.isEmpty(invoices)}">
-                                    <td colspan="8" class="table-empty">No OPD invoices generated yet.</td>
+                                    <td colspan="7" class="table-empty">No invoices generated yet. Click "Create POS Invoice" above.</td>
                                 </tr>
                             </tbody>
                         </table>

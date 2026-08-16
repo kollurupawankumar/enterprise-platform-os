@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add New Doctor - Clinical OS Web Platform</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Reusable Left Sidebar Navigation -->
+        <aside th:replace="~{fragments/nav :: sidebar('doctor-new')}"></aside>
+
+        <!-- Main Content Area -->
+        <div class="main-wrapper">
+            <!-- Reusable Top Header -->
+            <header th:replace="~{fragments/nav :: header('Add New Consultant Physician &amp; Specialist')}"></header>
+
+            <main class="content-container">
+                <!-- Dedicated Onboarding Card Container -->
+                <div class="data-card">
+                    <div class="card-header">
+                        <h2>Onboard Consultant Physician to Clinic Roster</h2>
+                        <a th:href="@{/doctors}" class="btn btn-logout">⬅️ Return to Doctor Roster</a>
+                    </div>
+
+                    <form th:action="@{/doctors/register}" method="post">
+                        <div class="form-section-card">
+                            <div class="section-title">🩺 Doctor Professional &amp; Academic Information</div>
+                            <div class="form-grid-3">
+                                <div class="form-group">
+                                    <label class="form-label">Doctor Full Name *</label>
+                                    <input type="text" name="name" class="form-control" placeholder="e.g. Dr. Rajesh Patel" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Department / Specialization *</label>
+                                    <select name="specialization" class="form-control" required>
+                                        <option value="Cardiology">Cardiology</option>
+                                        <option value="General Medicine">General Medicine</option>
+                                        <option value="Pediatrics">Pediatrics</option>
+                                        <option value="Orthopedics">Orthopedics</option>
+                                        <option value="Dermatology">Dermatology</option>
+                                        <option value="Neurology">Neurology</option>
+                                        <option value="Gynecology">Gynecology</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Degrees &amp; Qualifications</label>
+                                    <input type="text" name="qualification" class="form-control" placeholder="e.g. MBBS, MD (Internal Medicine)">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Medical Council Registration / License No.</label>
+                                    <input type="text" name="licenseNumber" class="form-control" placeholder="e.g. MCI-88902">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Contact Mobile Number *</label>
+                                    <input type="text" name="phone" class="form-control" placeholder="+91 98765 43210" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">OPD Consultation Fee (₹)</label>
+                                    <input type="number" class="form-control" placeholder="500" value="500">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="form-group col-span-full d-flex justify-content-between align-end" style="margin-top: 1.5rem;">
+                            <a th:href="@{/doctors}" class="btn btn-logout">⬅️ Cancel &amp; Return to Roster</a>
+                            <button type="submit" class="btn btn-success" style="padding: 0.75rem 1.75rem;">🩺 Save &amp; Onboard Doctor</button>
+                        </div>
+                    </form>
+                </div>
+            </main>
+        </div>
+    </div>
+
+</body>
+</html>

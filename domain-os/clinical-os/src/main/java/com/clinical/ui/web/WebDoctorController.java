@@ -20,14 +20,25 @@ public class WebDoctorController {
     }
 
     @GetMapping("/doctors")
-    public String listDoctors(Model model) {
-        model.addAttribute("pageTitle", "Doctor Roster & Onboarding");
+    public String listDoctors(
+            @RequestParam(value = "added", required = false) Boolean added,
+            Model model) {
+        model.addAttribute("pageTitle", "Doctor Roster Directory");
         model.addAttribute("activeTab", "doctors");
 
         List<DoctorEntity> doctors = doctorService.getAllDoctors();
         model.addAttribute("doctors", doctors);
+        model.addAttribute("totalCount", doctors.size());
+        model.addAttribute("showSuccessAlert", Boolean.TRUE.equals(added));
 
         return "doctors";
+    }
+
+    @GetMapping("/doctors/new")
+    public String newDoctorForm(Model model) {
+        model.addAttribute("pageTitle", "Add New Doctor & Specialist Profile");
+        model.addAttribute("activeTab", "doctor-new");
+        return "doctor_new";
     }
 
     @PostMapping("/doctors/register")
@@ -41,11 +52,11 @@ public class WebDoctorController {
         DoctorEntity doc = new DoctorEntity();
         doc.setName(name.trim());
         doc.setSpecialization(specialization.trim());
-        doc.setQualification(qualification != null ? qualification.trim() : "MBBS");
+        doc.setQualification(qualification != null ? qualification.trim() : "MBBS, MD");
         doc.setLicenseNumber(licenseNumber != null ? licenseNumber.trim() : "MCI-" + System.currentTimeMillis() % 10000);
         doc.setPhone(phone != null ? phone.trim() : "+91 98765 43210");
 
         doctorService.registerDoctor(doc);
-        return "redirect:/doctors";
+        return "redirect:/doctors?added=true";
     }
 }

@@ -25,17 +25,29 @@ public class WebBillingController {
     }
 
     @GetMapping("/billing")
-    public String listBilling(Model model) {
-        model.addAttribute("pageTitle", "Master POS Billing Workstation");
+    public String listBilling(
+            @RequestParam(value = "created", required = false) Boolean created,
+            Model model) {
+        model.addAttribute("pageTitle", "Master POS Billing & Invoices");
         model.addAttribute("activeTab", "billing");
 
         List<InvoiceEntity> invoices = billingService.getAllInvoices();
         model.addAttribute("invoices", invoices);
+        model.addAttribute("totalCount", invoices.size());
+        model.addAttribute("showSuccessAlert", Boolean.TRUE.equals(created));
+
+        return "billing";
+    }
+
+    @GetMapping("/billing/new")
+    public String newBillingForm(Model model) {
+        model.addAttribute("pageTitle", "Create Master POS Invoice");
+        model.addAttribute("activeTab", "billing-new");
 
         List<PatientEntity> patients = patientService.getAllPatients();
         model.addAttribute("patients", patients);
 
-        return "billing";
+        return "billing_new";
     }
 
     @PostMapping("/billing/create")
@@ -56,20 +68,21 @@ public class WebBillingController {
             } catch (Exception ignored) {}
         }
 
-        if (p != null) {
-            billingService.generateMasterOpdInvoice(
-                    "OPD-WEB-VISIT",
-                    p.getPatientId(),
-                    "Dr. Pawan Kumar",
-                    BigDecimal.valueOf(consultationFee),
-                    BigDecimal.valueOf(labFee),
-                    BigDecimal.valueOf(pharmacyFee),
-                    BigDecimal.ZERO,
-                    paymentMode,
-                    "Web Master OPD Invoice"
-            );
-        }
+        String targetPatientId = p != null ? p.getPatientId() : patientIdStr;
+        String visitId = "VISIT-" + System.currentTimeMillis() % 10000;
 
-        return "redirect:/billing";
+        billingService.generateMasterOpdInvoice(
+                visitId,
+                targetPatientId,
+                "Dr. Suresh Kumar",
+                BigDecimal.valueOf(consultationFee),
+                BigDecimal.valueOf(labFee),
+                BigDecimal.valueOf(pharmacyFee),
+                BigDecimal.ZERO,
+                paymentMode,
+                "Master POS Billing Transaction"
+        );
+
+        return "redirect:/billing?created=true";
     }
 }
