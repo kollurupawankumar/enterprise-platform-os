@@ -52,9 +52,15 @@ public class WebLabController {
 
     @PostMapping("/lab/order")
     public String createLabOrder(
-            @RequestParam("patientId") String patientId,
+            @RequestParam(value = "patientType", defaultValue = "REGISTERED") String patientType,
+            @RequestParam(value = "patientId", defaultValue = "PAT-WALKIN") String patientId,
+            @RequestParam(value = "walkinName", required = false) String walkinName,
             @RequestParam("testCode") String testCode,
             @RequestParam(value = "doctorName", defaultValue = "Dr. Suresh Kumar") String doctorName) {
+
+        String targetPatient = "WALKIN".equalsIgnoreCase(patientType) && walkinName != null && !walkinName.isBlank()
+                ? "WALKIN: " + walkinName.trim()
+                : patientId;
 
         String visitId = "VISIT-" + System.currentTimeMillis() % 10000;
         labDiagnosticsService.createLabOrder(visitId, testCode);

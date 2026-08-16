@@ -65,10 +65,16 @@ public class WebPharmacyController {
 
     @PostMapping("/pharmacy/dispense")
     public String processDispensing(
-            @RequestParam("patientId") String patientId,
+            @RequestParam(value = "patientType", defaultValue = "REGISTERED") String patientType,
+            @RequestParam(value = "patientId", defaultValue = "PAT-WALKIN") String patientId,
+            @RequestParam(value = "walkinName", required = false) String walkinName,
             @RequestParam("medicineId") Long medicineId,
             @RequestParam(value = "quantity", defaultValue = "1") Integer quantity,
             @RequestParam(value = "paymentMode", defaultValue = "CASH") String paymentMode) {
+
+        String targetPatient = "WALKIN".equalsIgnoreCase(patientType) && walkinName != null && !walkinName.isBlank()
+                ? "WALKIN: " + walkinName.trim()
+                : patientId;
 
         MedicineInventoryEntity med = inventoryRepository.findById(medicineId).orElse(null);
         if (med != null && med.getQuantity() != null) {

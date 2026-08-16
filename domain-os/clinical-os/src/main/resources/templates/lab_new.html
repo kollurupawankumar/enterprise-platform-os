@@ -20,23 +20,53 @@
                 <div class="data-card">
                     <div class="card-header">
                         <h2>Order Diagnostic Lab &amp; Imaging Investigation</h2>
-                        <a th:href="@{/lab}" class="btn btn-logout">⬅️ Return to Test Orders Directory</a>
+                        <a th:href="@{/lab/orders}" class="btn btn-logout">⬅️ Return to Test Orders Directory</a>
                     </div>
 
                     <form th:action="@{/lab/order}" method="post">
-                        <!-- Patient Selection -->
+                        
+                        <!-- Patient Mode Selection (Registered EMR vs Direct Walk-in) -->
                         <div class="form-section-card">
-                            <div class="section-title">👤 Patient Selection</div>
-                            <div class="form-grid-3">
+                            <div class="section-title">👤 Section 1: Patient Selection (Registered EMR or Direct Walk-in)</div>
+                            
+                            <div class="d-flex" style="gap: 1.5rem; margin-bottom: 1.25rem; background: #f8fafc; padding: 0.85rem 1.25rem; border-radius: 8px; border: 1px solid var(--border-color);">
+                                <label style="font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.4rem;">
+                                    <input type="radio" name="patientType" value="REGISTERED" checked onclick="togglePatientType('REGISTERED')">
+                                    <span>Registered EMR Patient</span>
+                                </label>
+                                <label style="font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.4rem; color: var(--primary-color);">
+                                    <input type="radio" name="patientType" value="WALKIN" onclick="togglePatientType('WALKIN')">
+                                    <span>🚶 Direct Walk-in Patient</span>
+                                </label>
+                            </div>
+
+                            <!-- Mode A: Registered EMR Patient Selection -->
+                            <div id="registeredPatientSection" class="form-grid-3">
                                 <div class="form-group col-span-full">
-                                    <label class="form-label">Select Patient *</label>
+                                    <label class="form-label">Select Registered EMR Patient *</label>
                                     <div class="d-flex" style="gap: 0.75rem;">
-                                        <input type="hidden" id="selectedPatientId" name="patientId" required>
-                                        <input type="text" id="selectedPatientDisplay" class="form-control" placeholder="Click 'Lookup Patient' to search by Name, Phone, or ID..." readonly required style="background-color: #ffffff; cursor: pointer;" onclick="openPatientModal()">
+                                        <input type="hidden" id="selectedPatientId" name="patientId" value="PAT-WALKIN">
+                                        <input type="text" id="selectedPatientDisplay" class="form-control" placeholder="Click 'Lookup Patient' to search by Name, Phone, or ID..." readonly style="background-color: #ffffff; cursor: pointer;" onclick="openPatientModal()">
                                         <button type="button" class="btn btn-primary" onclick="openPatientModal()" style="white-space: nowrap; padding: 0.65rem 1.35rem;">
                                             🔍 Lookup / Search Patient
                                         </button>
                                     </div>
+                                </div>
+                            </div>
+
+                            <!-- Mode B: Direct Walk-in Patient Input Fields -->
+                            <div id="walkinPatientSection" class="form-grid-3" style="display: none;">
+                                <div class="form-group">
+                                    <label class="form-label">Walk-in Patient Full Name *</label>
+                                    <input type="text" name="walkinName" class="form-control" placeholder="e.g. Sunita Verma">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Contact Phone Number</label>
+                                    <input type="text" name="walkinPhone" class="form-control" placeholder="+91 98765 43210">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Gender / Age</label>
+                                    <input type="text" name="walkinGenderAge" class="form-control" placeholder="e.g. Female / 38 Yrs">
                                 </div>
                             </div>
                         </div>
@@ -59,15 +89,15 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label class="form-label">Ordering Doctor Name</label>
-                                    <input type="text" name="doctorName" class="form-control" value="Dr. Suresh Kumar">
+                                    <label class="form-label">Ordering / Referring Doctor Name</label>
+                                    <input type="text" name="doctorName" class="form-control" value="Dr. Suresh Kumar" placeholder="e.g. Self / Dr. Suresh Kumar">
                                 </div>
                             </div>
                         </div>
 
                         <!-- Action Buttons -->
                         <div class="form-group col-span-full d-flex justify-content-between align-end" style="margin-top: 1.5rem;">
-                            <a th:href="@{/lab}" class="btn btn-logout">⬅️ Cancel &amp; Return to Lab Directory</a>
+                            <a th:href="@{/lab/orders}" class="btn btn-logout">⬅️ Cancel &amp; Return to Lab Queue</a>
                             <button type="submit" class="btn btn-success" style="padding: 0.75rem 1.75rem;">🔬 Issue Diagnostic Lab Order</button>
                         </div>
                     </form>
@@ -84,13 +114,11 @@
                 <button type="button" class="modal-close-btn" onclick="closePatientModal()">&times;</button>
             </div>
             <div class="modal-body">
-                <!-- Instant Live Filter Bar -->
                 <div class="form-group" style="margin-bottom: 1.25rem;">
                     <label class="form-label">Search Patient by Name, Mobile Number, or Patient ID</label>
                     <input type="text" id="modalPatientSearch" class="form-control" placeholder="Type name, phone (e.g. 98765), or PAT-1001..." onkeyup="filterPatientTable(this.value)">
                 </div>
 
-                <!-- Patient Selection Table -->
                 <div class="table-responsive">
                     <table class="data-table">
                         <thead>
@@ -133,6 +161,17 @@
 
     <!-- Client-side Interactive Scripts -->
     <script>
+        function togglePatientType(type) {
+            if (type === 'WALKIN') {
+                document.getElementById('registeredPatientSection').style.display = 'none';
+                document.getElementById('walkinPatientSection').style.display = 'grid';
+                document.getElementById('selectedPatientId').value = 'PAT-WALKIN';
+            } else {
+                document.getElementById('registeredPatientSection').style.display = 'grid';
+                document.getElementById('walkinPatientSection').style.display = 'none';
+            }
+        }
+
         function openPatientModal() {
             document.getElementById('patientLookupModal').style.display = 'flex';
             document.getElementById('modalPatientSearch').focus();
