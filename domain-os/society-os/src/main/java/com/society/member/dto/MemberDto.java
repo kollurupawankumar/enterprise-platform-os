@@ -34,4 +34,14 @@ public record MemberDto(
         List<JointOwnerDto> jointOwners,
         List<NomineeDto> nominees
 ) {
+    @Override
+    public String toString() {
+        String full = (firstName != null ? firstName : "") + " " + (lastName != null ? lastName : "");
+        full = full.trim();
+        String num = (membershipNumber != null && !membershipNumber.isBlank()) ? membershipNumber : memberNumber;
+        if (num != null && !num.isBlank()) {
+            return (full.isEmpty() ? "Member" : full) + " (" + num + ")";
+        }
+        return full.isEmpty() ? "Member #" + id : full;
+    }
 }

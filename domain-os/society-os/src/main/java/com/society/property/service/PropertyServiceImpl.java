@@ -47,7 +47,7 @@ public class PropertyServiceImpl implements PropertyService {
     @Override
     @Transactional(readOnly = true)
     public Optional<PropertyEntity> getPropertyById(Integer id) {
-        return propertyRepository.findById(id);
+        return propertyRepository.findByIdWithOwner(id);
     }
 
     @Override

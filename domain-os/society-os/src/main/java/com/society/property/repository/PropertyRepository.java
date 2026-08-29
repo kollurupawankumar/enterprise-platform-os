@@ -14,6 +14,9 @@ public interface PropertyRepository extends JpaRepository<PropertyEntity, Intege
     @Query("SELECT p FROM PropertyEntity p LEFT JOIN FETCH p.currentOwner")
     List<PropertyEntity> findAllWithOwners();
 
+    @Query("SELECT p FROM PropertyEntity p LEFT JOIN FETCH p.currentOwner WHERE p.id = :id")
+    Optional<PropertyEntity> findByIdWithOwner(@org.springframework.data.repository.query.Param("id") Integer id);
+
     Optional<PropertyEntity> findByPropertyNumber(String propertyNumber);
     boolean existsByPropertyNumberIgnoreCaseAndBlockIgnoreCaseAndTypeIgnoreCase(String propertyNumber, String block, String type);
     List<PropertyEntity> findByCurrentOwnerId(Integer memberId);
