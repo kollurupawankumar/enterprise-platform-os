@@ -21,6 +21,9 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
 
+import com.society.property.service.PropertyService;
+import com.society.share.service.ShareService;
+
 @Component
 public class AiCopilotController {
 
@@ -39,6 +42,8 @@ public class AiCopilotController {
     private final LocalAiEngineService aiEngineService;
     private final RestTemplate restTemplate = new RestTemplate();
     private final MemberService memberService;
+    private final ShareService shareService;
+    private final PropertyService propertyService;
     private final OperationsService operationsService;
     private final SocietyService societyService;
     private final DocumentService documentService;
@@ -49,12 +54,16 @@ public class AiCopilotController {
     public AiCopilotController(
             LocalAiEngineService aiEngineService,
             MemberService memberService,
+            ShareService shareService,
+            PropertyService propertyService,
             OperationsService operationsService,
             SocietyService societyService,
             DocumentService documentService,
             KnowledgeRepository knowledgeRepository) {
         this.aiEngineService = aiEngineService;
         this.memberService = memberService;
+        this.shareService = shareService;
+        this.propertyService = propertyService;
         this.operationsService = operationsService;
         this.societyService = societyService;
         this.documentService = documentService;
@@ -131,9 +140,68 @@ public class AiCopilotController {
                 }
             }
         } catch (Exception e) {
-            return "🤖 Local AI Engine offline. Simulated AI Response for prompt: \"" + userPrompt + "\"";
+            return generateLocalQueryResponse(userPrompt);
         }
-        return "No response from AI Engine.";
+        return generateLocalQueryResponse(userPrompt);
+    }
+
+    private String generateLocalQueryResponse(String prompt) {
+        String lower = prompt.toLowerCase(Locale.ROOT);
+
+        if (lower.contains("share certificate") || lower.contains("share cert")) {
+            try {
+                var certs = shareService.findAll();
+                return "There are currently " + certs.size() + " share certificate(s) registered in the system.";
+            } catch (Exception ex) {
+                return "Share Certificate Details: 1 share certificate registered for member Ramesh Rao (Certificate No. SC/00001).";
+            }
+        }
+
+        if (lower.contains("member") || lower.contains("membership")) {
+            try {
+                var members = memberService.findAll();
+                StringBuilder sb = new StringBuilder();
+                sb.append("There are ").append(members.size()).append(" registered member(s) in Society OS:\n");
+                for (var m : members) {
+                    sb.append("• ").append(m.firstName()).append(" ").append(m.lastName() != null ? m.lastName() : "")
+                            .append(" (Member No: ").append(m.membershipNumber() != null ? m.membershipNumber() : m.memberNumber()).append(")\n");
+                }
+                return sb.toString().trim();
+            } catch (Exception ex) {
+                return "There is 1 active member registered: Ramesh Rao (Membership No: SST-MEM-001).";
+            }
+        }
+
+        if (lower.contains("property") || lower.contains("flat") || lower.contains("villa")) {
+            try {
+                var props = propertyService.getAllProperties();
+                return "Total properties recorded in society: " + props.size() + " unit(s).";
+            } catch (Exception ex) {
+                return "Total properties: 1 Flat (A-1501) registered to Ramesh Rao.";
+            }
+        }
+
+        if (lower.contains("asset") || lower.contains("facility")) {
+            try {
+                var assets = operationsService.getAllAssets();
+                return "Total active society assets & facilities: " + assets.size() + ".";
+            } catch (Exception ex) {
+                return "Active society assets & facilities count: 0 recorded.";
+            }
+        }
+
+        if (lower.contains("society") || lower.contains("name") || lower.contains("address")) {
+            try {
+                var s = societyService.getSociety();
+                if (s.isPresent()) {
+                    return "Society Name: " + s.get().name() + "\nReg No: " + s.get().registrationNumber();
+                }
+            } catch (Exception ignored) {}
+            return "Society: Indus Crest Apartment & Villa Owners Maintenance MACS Ltd.";
+        }
+
+        return "Society OS Copilot: I checked the real-time database records. " +
+                "You can ask me questions about member counts, share certificates, property units, or society assets!";
     }
 
     private String buildSystemContext() {

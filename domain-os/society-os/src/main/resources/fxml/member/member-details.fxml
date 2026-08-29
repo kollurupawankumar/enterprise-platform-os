@@ -60,26 +60,29 @@
                     <Label text="Last Name:" style="-fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
                     <Label fx:id="lastNameVal" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
 
-                    <Label text="Gender:" style="-fx-font-weight: bold;" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
-                    <Label fx:id="genderVal" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
+                    <Label text="Father / Guardian Name:" style="-fx-font-weight: bold;" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+                    <Label fx:id="fatherOrSpouseVal" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
 
-                    <Label text="Date of Birth:" style="-fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-                    <Label fx:id="dobVal" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                    <Label text="Gender:" style="-fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                    <Label fx:id="genderVal" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
 
-                    <Label text="Occupation:" style="-fx-font-weight: bold;" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
-                    <Label fx:id="occupationVal" GridPane.columnIndex="3" GridPane.rowIndex="2"/>
+                    <Label text="Date of Birth:" style="-fx-font-weight: bold;" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
+                    <Label fx:id="dobVal" GridPane.columnIndex="3" GridPane.rowIndex="2"/>
 
-                    <Label text="Mobile Number:" style="-fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
-                    <Label fx:id="mobileVal" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                    <Label text="Occupation:" style="-fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                    <Label fx:id="occupationVal" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
 
-                    <Label text="Email:" style="-fx-font-weight: bold;" GridPane.columnIndex="2" GridPane.rowIndex="3"/>
-                    <Label fx:id="emailVal" GridPane.columnIndex="3" GridPane.rowIndex="3"/>
+                    <Label text="Mobile Number:" style="-fx-font-weight: bold;" GridPane.columnIndex="2" GridPane.rowIndex="3"/>
+                    <Label fx:id="mobileVal" GridPane.columnIndex="3" GridPane.rowIndex="3"/>
 
-                    <Label text="Emergency Contact Name:" style="-fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
-                    <Label fx:id="emergencyNameVal" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+                    <Label text="Email:" style="-fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+                    <Label fx:id="emailVal" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
 
-                    <Label text="Emergency Phone:" style="-fx-font-weight: bold;" GridPane.columnIndex="2" GridPane.rowIndex="4"/>
-                    <Label fx:id="emergencyPhoneVal" GridPane.columnIndex="3" GridPane.rowIndex="4"/>
+                    <Label text="Emergency Contact Name:" style="-fx-font-weight: bold;" GridPane.columnIndex="2" GridPane.rowIndex="4"/>
+                    <Label fx:id="emergencyNameVal" GridPane.columnIndex="3" GridPane.rowIndex="4"/>
+
+                    <Label text="Emergency Phone:" style="-fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+                    <Label fx:id="emergencyPhoneVal" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
                 </GridPane>
             </Tab>
 

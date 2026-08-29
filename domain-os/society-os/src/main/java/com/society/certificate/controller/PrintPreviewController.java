@@ -3,15 +3,12 @@ package com.society.certificate.controller;
 import com.society.member.dto.MemberDto;
 import com.society.share.dto.ShareCertificateDto;
 import javafx.fxml.FXML;
-import javafx.print.PageLayout;
-import javafx.print.Printer;
-import javafx.print.PrinterJob;
-import javafx.scene.Node;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
-import javafx.scene.transform.Scale;
+import javafx.scene.web.WebView;
 import org.springframework.stereotype.Component;
 
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -19,151 +16,116 @@ import java.time.format.DateTimeFormatter;
 public class PrintPreviewController {
 
     @FXML
-    private Label certNoLabel;
-
-    @FXML
-    private Label shareCertNoLabel;
-
-    @FXML
-    private Label memberNameLabel;
-
-    @FXML
-    private Label relationLabel;
-
-    @FXML
-    private Label flatNoLabel;
-
-    @FXML
-    private Label sharesWordsLabel;
-
-    @FXML
-    private Label faceValueWordsLabel;
-
-    @FXML
-    private Label totalAmountWordsLabel;
-
-    @FXML
-    private Label issueDayLabel;
-
-    @FXML
-    private Label issueMonthLabel;
-
-    @FXML
-    private Label issueYearLabel;
-
-    @FXML
-    private Label membershipNoLabel;
-
-    @FXML
-    private Label shareRangeLabel;
-
-    @FXML
-    private Label totalSharesLabel;
-
-    @FXML
-    private Label faceValueLabel;
-
-    @FXML
-    private Label totalFaceValueLabel;
-
-    @FXML
-    private Label admissionDateLabel;
-
-    @FXML
-    private Label issueDateLabel;
+    private WebView certificateWebView;
 
     public void setCertificateData(ShareCertificateDto certificate, MemberDto member) {
-
-        // Remove cert prefix if already stored
-        String cleanNo = certificate.certificateNumber().replace("SC-", "");
-        certNoLabel.setText(cleanNo);
-        shareCertNoLabel.setText(cleanNo);
-
-        String fullName = "";
-        if (member != null) {
-            fullName = (member.firstName() + " " + (member.lastName() != null ? member.lastName() : "")).trim();
-            membershipNoLabel.setText(member.membershipNumber() != null ? member.membershipNumber() : "");
-            flatNoLabel.setText(member.membershipNumber() != null ? member.membershipNumber() : "B0403");
-        } else {
-            fullName = certificate.memberName();
-            membershipNoLabel.setText("");
-            flatNoLabel.setText("B0403");
-        }
-
-        memberNameLabel.setText(fullName);
-        relationLabel.setText("N/A");
-
-        int sharesCount = certificate.totalShares();
-        String sharesWord = convertNumberToWords(sharesCount);
-        sharesWordsLabel.setText(sharesWord + " (" + String.format("%02d", sharesCount) + ")");
-
-        double faceVal = certificate.faceValuePerShare();
-        faceValueWordsLabel.setText(""); // Face value is already present on the template
-
-        double totalVal = certificate.totalAmount();
-        String totalWord = convertNumberToWords((int) totalVal);
-        totalAmountWordsLabel.setText(totalWord); // "Only" is already printed on the template
-
-        LocalDate date = certificate.issueDate() != null ? certificate.issueDate() : LocalDate.now();
-        issueDayLabel.setText(getOrdinalDay(date.getDayOfMonth()));
-        issueMonthLabel.setText(date.getMonth().name());
-        issueYearLabel.setText(String.valueOf(date.getYear()));
-
-        shareRangeLabel.setText(certificate.fromShareNumber() + " to " + certificate.toShareNumber());
-        totalSharesLabel.setText(sharesCount + " (" + sharesWord + ")");
-        faceValueLabel.setText("₹ " + String.format("%.0f", faceVal) + "/- each");
-        totalFaceValueLabel.setText("₹ " + String.format("%.0f", totalVal) + "/-");
-
-        DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        admissionDateLabel.setText(date.format(dateFmt));
-        issueDateLabel.setText(date.format(dateFmt));
-
+        setCertificateData(certificate, member, null);
     }
 
-    public void print(Node node) {
-
-        PrinterJob job = PrinterJob.createPrinterJob();
-
-        if (job != null) {
-
-            boolean proceed = job.showPrintDialog(node.getScene().getWindow());
-
-            if (proceed) {
-
-                Printer printer = job.getPrinter();
-                PageLayout pageLayout = job.getJobSettings().getPageLayout();
-
-                double printableWidth = pageLayout.getPrintableWidth();
-                double printableHeight = pageLayout.getPrintableHeight();
-
-                double nodeWidth = node.getBoundsInLocal().getWidth();
-                double nodeHeight = node.getBoundsInLocal().getHeight();
-
-                // Scale node to fit the A4 page layout
-                double scaleX = printableWidth / nodeWidth;
-                double scaleY = printableHeight / nodeHeight;
-                double scale = Math.min(scaleX, scaleY);
-
-                Scale scaleTransform = new Scale(scale, scale);
-                node.getTransforms().add(scaleTransform);
-
-                boolean success = job.printPage(node);
-
-                node.getTransforms().remove(scaleTransform);
-
-                if (success) {
-                    job.endJob();
-                    showInformation("Certificate sent to printer successfully.");
-                } else {
-                    showError("Printing failed.");
-                }
-
+    public void setCertificateData(ShareCertificateDto certificate, MemberDto member, String propertyNumber) {
+        try {
+            InputStream is = getClass().getResourceAsStream("/templates/indus_crest_editable_certificate_final.html");
+            if (is == null) {
+                showError("Share certificate template not found!");
+                return;
             }
 
-        } else {
-            showError("Could not create print job. Check your printer installation.");
-        }
+            String html = new String(is.readAllBytes(), StandardCharsets.UTF_8);
 
+            String memberNo = (member != null && member.membershipNumber() != null && !member.membershipNumber().isBlank())
+                    ? member.membershipNumber()
+                    : certificate.certificateNumber().replace("SC-", "");
+
+            String fullName = "";
+            String guardianName = "";
+            String flatVal = (propertyNumber != null && !propertyNumber.isBlank()) ? propertyNumber : "101";
+
+            if (member != null) {
+                fullName = (member.firstName() + " " + (member.lastName() != null ? member.lastName() : "")).trim();
+                if (member.fatherOrSpouseName() != null && !member.fatherOrSpouseName().isBlank()) {
+                    guardianName = member.fatherOrSpouseName();
+                }
+            } else {
+                fullName = certificate.memberName();
+            }
+
+            int sharesCount = certificate.totalShares();
+            String sharesWord = convertNumberToWords(sharesCount);
+
+            double totalVal = certificate.totalAmount();
+            String totalWord = convertNumberToWords((int) totalVal);
+
+            double faceVal = certificate.faceValuePerShare();
+
+            LocalDate date = certificate.issueDate() != null ? certificate.issueDate() : LocalDate.now();
+            DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            String admDate = (member != null && member.admissionDate() != null && !member.admissionDate().isBlank())
+                    ? member.admissionDate()
+                    : date.format(dateFmt);
+
+            String shareRange = certificate.fromShareNumber() + " to " + certificate.toShareNumber();
+
+            String certNoDisplay = (member != null && member.membershipNumber() != null && !member.membershipNumber().isBlank())
+                    ? member.membershipNumber()
+                    : certificate.certificateNumber().replace("SC-", "");
+            String shareCertNoDisplay = certificate.certificateNumber().replace("SC-", "").replace("SH/", "");
+
+            // Inject dynamic data into the template without underlines
+            html = html.replace("<span class=\"red\">ICSC/</span> ____________", "<span class=\"red\"><b>" + certNoDisplay + "</b></span>")
+                    .replace("<span class=\"red\">SH/</span> __________", "<span class=\"red\"><b>" + shareCertNoDisplay + "</b></span>")
+                    .replace("____________________________________________,", "<b>" + fullName + "</b>,")
+                    .replace("________________________________________,", "<b>" + (guardianName.isEmpty() ? "" : guardianName) + "</b>,")
+                    .replace("________,", "<b>" + flatVal + "</b>,")
+                    .replace("<span class=\"red\"><b>Two (02) Shares</b></span>", "<span class=\"red\"><b>" + sharesWord + " (" + String.format("%02d", sharesCount) + ") Shares</b></span>")
+                    .replace("<span class=\"red\"><b>₹100/-</b></span>", "<span class=\"red\"><b>₹" + String.format("%.0f", faceVal) + "/-</b></span>")
+                    .replace("<span class=\"red\"><b>₹200/-</b></span>", "<span class=\"red\"><b>₹" + String.format("%.0f", totalVal) + "/-</b></span>")
+                    .replace("(Rupees Two Hundred Only)", "(Rupees " + totalWord + " Only)")
+                    .replace("<input value=\"________________\"></td></tr>\n    <tr><td>Share No.</td><td><input value=\"________________\"></td></tr>\n    <tr><td>No. of Shares</td><td><span class=\"red\">2 (Two Shares)</span></td></tr>\n    <tr><td>Face Value</td><td><span class=\"red\">₹100/- each</span></td></tr>\n    <tr><td>Total Face Value</td><td><span class=\"red\">₹200/-</span></td></tr>\n    <tr><td>Date of Admission</td><td><input value=\"________________\"></td></tr>\n    <tr><td>Date of Issue</td><td><input value=\"________________\"></td></tr>",
+                             "<b>" + memberNo + "</b></td></tr>\n    <tr><td>Share No.</td><td><b>" + shareRange + "</b></td></tr>\n    <tr><td>No. of Shares</td><td><span class=\"red\"><b>" + sharesCount + " (" + sharesWord + " Shares)</b></span></td></tr>\n    <tr><td>Face Value</td><td><span class=\"red\"><b>₹" + String.format("%.0f", faceVal) + "/- each</b></span></td></tr>\n    <tr><td>Total Face Value</td><td><span class=\"red\"><b>₹" + String.format("%.0f", totalVal) + "/-</b></span></td></tr>\n    <tr><td>Date of Admission</td><td><b>" + admDate + "</b></td></tr>\n    <tr><td>Date of Issue</td><td><b>" + date.format(dateFmt) + "</b></td></tr>")
+                    .replace("_____ day of ______________ 20____.", "<b>" + getOrdinalDay(date.getDayOfMonth()) + "</b> day of <b>" + date.getMonth().name() + "</b> 20<b>" + String.valueOf(date.getYear()).substring(2) + "</b>.");
+
+            this.renderedHtmlContent = html;
+            certificateWebView.getEngine().loadContent(html);
+
+        } catch (Exception ex) {
+            showError("Failed to load certificate preview: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+    }
+
+    private String renderedHtmlContent = "";
+
+    public void print() {
+        if (certificateWebView != null && certificateWebView.getEngine() != null) {
+            try {
+                certificateWebView.getEngine().print(null);
+            } catch (Exception ex) {
+                // JavaFX PrinterJob fallback if no active printer service is configured on OS
+                saveHtmlPdf();
+            }
+        }
+    }
+
+    public void saveHtmlPdf() {
+        if (renderedHtmlContent == null || renderedHtmlContent.isBlank()) return;
+
+        javafx.stage.FileChooser fileChooser = new javafx.stage.FileChooser();
+        fileChooser.setTitle("Save Share Certificate PDF / HTML Document");
+        fileChooser.setInitialFileName("Share_Certificate_" + System.currentTimeMillis() + ".html");
+        fileChooser.getExtensionFilters().addAll(
+                new javafx.stage.FileChooser.ExtensionFilter("HTML Web Document / Print-ready PDF (*.html)", "*.html"),
+                new javafx.stage.FileChooser.ExtensionFilter("All Files (*.*)", "*.*")
+        );
+
+        java.io.File file = fileChooser.showSaveDialog(certificateWebView.getScene().getWindow());
+        if (file != null) {
+            try {
+                java.nio.file.Files.writeString(file.toPath(), renderedHtmlContent);
+                showInformation("Certificate document saved successfully to:\n" + file.getAbsolutePath());
+            } catch (Exception ex) {
+                showError("Failed to save certificate: " + ex.getMessage());
+            }
+        }
     }
 
     private String getOrdinalDay(int day) {

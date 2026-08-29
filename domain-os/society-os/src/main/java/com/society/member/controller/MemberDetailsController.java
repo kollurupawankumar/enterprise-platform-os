@@ -39,6 +39,7 @@ public class MemberDetailsController extends BaseController {
     @FXML private Label firstNameVal;
     @FXML private Label middleNameVal;
     @FXML private Label lastNameVal;
+    @FXML private Label fatherOrSpouseVal;
     @FXML private Label genderVal;
     @FXML private Label dobVal;
     @FXML private Label occupationVal;
@@ -140,6 +141,7 @@ public class MemberDetailsController extends BaseController {
         firstNameVal.setText(valOrDash(m.firstName()));
         middleNameVal.setText(valOrDash(m.middleName()));
         lastNameVal.setText(valOrDash(m.lastName()));
+        fatherOrSpouseVal.setText(valOrDash(m.fatherOrSpouseName()));
         genderVal.setText(valOrDash(m.gender()));
         dobVal.setText(valOrDash(m.dob()));
         occupationVal.setText(valOrDash(m.occupation()));

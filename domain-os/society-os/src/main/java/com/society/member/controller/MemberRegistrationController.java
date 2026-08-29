@@ -43,6 +43,7 @@ public class MemberRegistrationController extends BaseController {
     @FXML private TextField firstNameField;
     @FXML private TextField middleNameField;
     @FXML private TextField lastNameField;
+    @FXML private TextField fatherOrSpouseNameField;
     @FXML private ComboBox<String> genderComboBox;
     @FXML private DatePicker dobDatePicker;
     @FXML private TextField occupationField;
@@ -160,6 +161,7 @@ public class MemberRegistrationController extends BaseController {
         firstNameField.setText(dto.firstName());
         middleNameField.setText(dto.middleName());
         lastNameField.setText(dto.lastName());
+        fatherOrSpouseNameField.setText(dto.fatherOrSpouseName());
         if (dto.gender() != null) genderComboBox.getSelectionModel().select(dto.gender());
         if (dto.dob() != null && !dto.dob().isBlank()) {
             try { dobDatePicker.setValue(LocalDate.parse(dto.dob(), DATE_FORMATTER)); } catch (Exception ignored) {}
@@ -415,6 +417,7 @@ public class MemberRegistrationController extends BaseController {
                 trimOrNull(firstNameField.getText()),
                 trimOrNull(middleNameField.getText()),
                 trimOrNull(lastNameField.getText()),
+                trimOrNull(fatherOrSpouseNameField.getText()),
                 trimOrNull(mobileNumberField.getText()),
                 trimOrNull(emailField.getText()),
                 genderComboBox.getValue(),

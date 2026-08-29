@@ -37,6 +37,7 @@ public class MemberMapper {
                 entity.getFirstName(),
                 entity.getMiddleName(),
                 entity.getLastName(),
+                entity.getFatherOrSpouseName(),
                 entity.getMobileNumber(),
                 entity.getEmail(),
                 entity.getGender(),
@@ -74,6 +75,7 @@ public class MemberMapper {
         entity.setFirstName(dto.firstName());
         entity.setMiddleName(dto.middleName());
         entity.setLastName(dto.lastName());
+        entity.setFatherOrSpouseName(dto.fatherOrSpouseName());
         entity.setMobileNumber(dto.mobileNumber());
         entity.setEmail(dto.email());
         entity.setGender(dto.gender());

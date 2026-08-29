@@ -5,6 +5,7 @@ import com.society.common.controller.BaseController;
 import com.society.common.navigation.NavigationManager;
 import com.society.member.dto.MemberDto;
 import com.society.member.service.MemberService;
+import com.society.property.service.PropertyService;
 import com.society.share.dto.ShareCertificateDto;
 import com.society.share.service.ShareService;
 import javafx.beans.property.SimpleStringProperty;
@@ -32,6 +33,7 @@ public class CertificateController extends BaseController {
 
     private final ShareService shareService;
     private final MemberService memberService;
+    private final PropertyService propertyService;
     private final FXMLLoaderFactory loaderFactory;
 
     @FXML
@@ -68,11 +70,13 @@ public class CertificateController extends BaseController {
             NavigationManager navigationManager,
             ShareService shareService,
             MemberService memberService,
+            PropertyService propertyService,
             FXMLLoaderFactory loaderFactory) {
 
         super(navigationManager);
         this.shareService = shareService;
         this.memberService = memberService;
+        this.propertyService = propertyService;
         this.loaderFactory = loaderFactory;
     }
 
@@ -167,10 +171,12 @@ public class CertificateController extends BaseController {
 
             PrintPreviewController previewController = loader.getController();
 
-            // Fetch member details
+            // Fetch member details & property
             MemberDto member = memberService.findById(selected.memberId());
+            List<com.society.property.entity.PropertyEntity> props = propertyService.getPropertiesByOwner(selected.memberId());
+            String propNo = (props != null && !props.isEmpty()) ? props.get(0).getPropertyNumber() : null;
 
-            previewController.setCertificateData(selected, member);
+            previewController.setCertificateData(selected, member, propNo);
 
             // Open in a modal window
             Stage dialogStage = new Stage();
@@ -178,17 +184,26 @@ public class CertificateController extends BaseController {
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.initOwner(shareTable.getScene().getWindow());
 
-            // Build layout with printable node and Print button
+            // Build layout with printable node, Print button, and Save PDF button
+            javafx.scene.layout.HBox btnBox = new javafx.scene.layout.HBox(15);
+            btnBox.setAlignment(javafx.geometry.Pos.CENTER);
+
+            Button printBtn = new Button("🖨 Print Certificate");
+            printBtn.getStyleClass().add("button-primary");
+            printBtn.setOnAction(e -> previewController.print());
+
+            Button savePdfBtn = new Button("💾 Save as PDF / HTML");
+            savePdfBtn.getStyleClass().add("button-secondary");
+            savePdfBtn.setOnAction(e -> previewController.saveHtmlPdf());
+
+            btnBox.getChildren().addAll(printBtn, savePdfBtn);
+
             javafx.scene.layout.VBox layout = new javafx.scene.layout.VBox(10);
             layout.setPadding(new Insets(10));
             layout.setAlignment(javafx.geometry.Pos.CENTER);
             layout.setStyle("-fx-background-color: #E2E8F0;");
 
-            Button printBtn = new Button("Print Certificate");
-            printBtn.getStyleClass().add("button-primary");
-            printBtn.setOnAction(e -> previewController.print(root));
-
-            layout.getChildren().addAll(root, printBtn);
+            layout.getChildren().addAll(root, btnBox);
 
             Scene scene = new Scene(layout);
             scene.getStylesheets().add(getClass().getResource("/css/application.css").toExternalForm());

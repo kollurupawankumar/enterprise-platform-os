@@ -10,6 +10,7 @@ public record MemberDto(
         String firstName,
         String middleName,
         String lastName,
+        String fatherOrSpouseName,
         String mobileNumber,
         String email,
         String gender,

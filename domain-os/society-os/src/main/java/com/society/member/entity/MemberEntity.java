@@ -55,6 +55,9 @@ public class MemberEntity {
     @Column(name = "middle_name", length = 100)
     private String middleName;
 
+    @Column(name = "father_or_spouse_name", length = 150)
+    private String fatherOrSpouseName;
+
     @Column(name = "gender", length = 20)
     private String gender;
 
@@ -245,8 +248,21 @@ public class MemberEntity {
         this.updatedAt = updatedAt;
     }
 
-    public String getMiddleName() { return middleName; }
-    public void setMiddleName(String middleName) { this.middleName = middleName; }
+    public String getMiddleName() {
+        return middleName;
+    }
+
+    public void setMiddleName(String middleName) {
+        this.middleName = middleName;
+    }
+
+    public String getFatherOrSpouseName() {
+        return fatherOrSpouseName;
+    }
+
+    public void setFatherOrSpouseName(String fatherOrSpouseName) {
+        this.fatherOrSpouseName = fatherOrSpouseName;
+    }
 
     public String getGender() { return gender; }
     public void setGender(String gender) { this.gender = gender; }

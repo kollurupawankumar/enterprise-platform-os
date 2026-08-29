@@ -320,7 +320,7 @@ public class MemberController extends BaseController {
                                 null,
                                 mNo.isEmpty() ? null : mNo,
                                 msNo.isEmpty() ? null : msNo,
-                                fn, mn, ln, mob, email, gen, dobParsed, occ,
+                                fn, mn, ln, null, mob, email, gen, dobParsed, occ,
                                 null, null, mType, admDateParsed, resNo, resDateParsed, permAddr, corrAddr,
                                 null, null, null, null, null,
                                 com.society.member.entity.MemberStatus.ACTIVE, true,
